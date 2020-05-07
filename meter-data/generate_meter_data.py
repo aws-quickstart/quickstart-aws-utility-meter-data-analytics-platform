@@ -11,6 +11,15 @@ reading_types_map = [
     {'reading_type': 'kW', 'value_type': 'INCREMENTAL'}
 ]
 
+# unique identifier of each register in a meter
+OBIS_CODES = {
+    # Registers holding continuous incrementing values
+    'INT_REGISTERS': [ '1.8.0', '1.8.1', '1.8.2', '1.8.3' ],
+    # Registers holding consumption/aggregate values
+    'AGG_REGISTERS': [ '2.8.0', '2.8.1', '2.8.2', '2.8.3' ]
+}
+
+
 # -------------------------------------------
 # FILE WRITER
 # -------------------------------------------
@@ -95,7 +104,7 @@ def get_random(min, max):
     return random.randint(min, max+1)
 
 # -------------------------------------------
-# Meter DB
+# Load (Create or load) Meter DB
 # -------------------------------------------
 
 def load_db():
@@ -112,9 +121,11 @@ def load_db():
         meterids = getall_meterids_shuffled(1, 5)
         for mid in meterids:
             meter = {
-                'meter_id': mid,
-                'meter_reading': 0
+                'meter_id': mid
             }
+            for register_type in OBIS_CODES:
+                for register in OBIS_CODES[register_type]:
+                    meter[register] = 0
             meters.append(meter)
         
         fh = open("db.json", 'w')
@@ -131,32 +142,11 @@ def save_db(data):
     fh = open("db.json", 'w')
     json.dump(data, fh)
 
-#load_db()
+# load_db()
 
 # -------------------------------------------
-# Testing different scenarios
+# Generate register reads data files
 # -------------------------------------------
-
-def test_scenarios():
-    meterids = getall_meterids_shuffled(1,6)
-    rtime = get_reading_time()
-    for mid in meterids:
-        print(mid, ';', rtime)
-
-#test_scenarios()
-
-# -------------------------------------------
-# MAIN
-# -------------------------------------------
-
-# main
-def main():
-    #print(get_datetime())
-    #print(get_reading_value(5.45, 10000.40))
-    row = [get_meter_id(), get_service_point_id(), get_reading_type(), get_reading_quality(), get_reading_time(), get_reading_value(5.45, 10000.40), get_obis_code(), get_ansi_code(), get_service_multiplier(), get_dst_flag(), get_account_number(), get_source_quality_codes()]
-    print(row)
-
-#main()
 
 def generate_records():
     start_time = dt.now()
@@ -179,28 +169,38 @@ def generate_records():
         consumption_rows = []
         combined_list = []
         print('Timestamp: '+ start_time.strftime('%Y-%m-%d %H:%M:%S'))
+        
         for meter in meterlist:
-            unit_consumed = get_random(meter_reading_min_increment, meter_reading_max_increment)
-            # increment meter reading value by random increment.
-            # reset the value if incrementing the meter reading value makes it go past max value.
-            new_reading_value = meter['meter_reading'] + unit_consumed
-            if new_reading_value > meter_reading_max:
-                new_reading_value = new_reading_value - meter_reading_max
+            # Assuming there is 1:1 mapping between INT and AGG registers,
+            # get the count of INT registers and generate values for both
+            # register types
+            int_register_list = OBIS_CODES['INT_REGISTERS']
+            agg_register_list = OBIS_CODES['AGG_REGISTERS']
+            register_count = len(int_register_list)
+            for i in range(0, register_count):
+                unit_consumed = get_random(meter_reading_min_increment, meter_reading_max_increment)
+                
+                # increment register reading value by randomly generated units consumed.
+                # reset the value if incrementing the meter reading value makes it go past max value.
+                new_reading_value = meter[int_register_list[i]] + unit_consumed
+                if new_reading_value > meter_reading_max:
+                    new_reading_value = new_reading_value - meter_reading_max
 
-            print('Meter id: {}, units consumed: {}, last reading: {}, new reading: {}'.format(meter['meter_id'], unit_consumed, meter['meter_reading'], new_reading_value))
+                print('Meter id: {}, INT register: {}, AGG register: {}, units consumed: {}, last reading: {}, new reading: {}'.format(meter['meter_id'], int_register_list[i], agg_register_list[i], unit_consumed, meter[int_register_list[i]], new_reading_value))
             
-            # Add fields into an appropriate list
-            # meter_id, reading_time, reading_value, reading_type
-            register_read_row = [meter['meter_id'], start_time.strftime('%Y%m%d%H24%M%S'), new_reading_value, register_read_type]
-            consumption_row = [meter['meter_id'], start_time.strftime('%Y%m%d%H24%M%S'), unit_consumed, consumption_type]
-            meter['meter_reading'] = new_reading_value
+                # Add fields into an appropriate list
+                # meter_id, register, reading_time, reading_value, reading_type
+                register_read_row = [meter['meter_id'], int_register_list[i], start_time.strftime('%Y%m%d%H24%M%S'), new_reading_value, register_read_type]
+                consumption_row = [meter['meter_id'], agg_register_list[i], start_time.strftime('%Y%m%d%H24%M%S'), unit_consumed, consumption_type]
+                meter[int_register_list[i]] = new_reading_value
+                meter[agg_register_list[i]] = unit_consumed
 
-            print(register_read_row)
-            register_read_rows.append(register_read_row)
-            combined_list.append(register_read_row)
-            print(consumption_row)
-            consumption_rows.append(consumption_row)
-            combined_list.append(consumption_row)
+                print(register_read_row)
+                register_read_rows.append(register_read_row)
+                combined_list.append(register_read_row)
+                print(consumption_row)
+                consumption_rows.append(consumption_row)
+                combined_list.append(consumption_row)
         
         print('---------------')
         start_time = start_time + timedelta(minutes=read_interval_minutes)
