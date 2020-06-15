@@ -1,0 +1,241 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Creates Glue tables"
+
+Resources:    
+    GlueTableCleanZone:
+        Type: "AWS::Glue::Table"
+        Properties:
+            DatabaseName: !Ref DBName
+            CatalogId: !Ref "AWS::AccountId"
+            TableInput: 
+                Name: "meter_clean_zone"
+                Owner: "owner"
+                TableType: "EXTERNAL_TABLE"
+                Parameters: 
+                    CrawlerSchemaDeserializerVersion: "1.0"
+                    CrawlerSchemaSerializerVersion: "1.0"
+                    classification: "parquet"
+                    compressionType: "none"
+                    typeOfData: "file"
+                StorageDescriptor: 
+                    Columns: 
+                      - 
+                        Name: "meter_id"
+                        Type: "string"
+                      - 
+                        Name: "reading_time"
+                        Type: "string"
+                      - 
+                        Name: "reading_value"
+                        Type: "double"
+                      - 
+                        Name: "obis_code"
+                        Type: "string"
+                      - 
+                        Name: "time_str"
+                        Type: "string"
+                      - 
+                        Name: "reading_type"
+                        Type: "string"
+                      - 
+                        Name: "week_of_year"
+                        Type: "int"
+                      - 
+                        Name: "date_str"
+                        Type: "string"
+                      - 
+                        Name: "day_of_month"
+                        Type: "int"
+                      - 
+                        Name: "month"
+                        Type: "int"
+                      - 
+                        Name: "year"
+                        Type: "int"
+                      - 
+                        Name: "hour"
+                        Type: "int"
+                      - 
+                        Name: "minute"
+                        Type: "int"
+                    Location: !Sub "s3://${CleanZoneS3Bucket}/"
+                    InputFormat: "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
+                    OutputFormat: "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
+                    Compressed: false
+                    NumberOfBuckets: -1
+                    SerdeInfo: 
+                        SerializationLibrary: "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
+                        Parameters: 
+                            "serialization.format": "1"
+                    Parameters: 
+                        CrawlerSchemaDeserializerVersion: "1.0"
+                        CrawlerSchemaSerializerVersion: "1.0"
+                        classification: "parquet"
+                        compressionType: "none"
+                        typeOfData: "file"
+                    StoredAsSubDirectories: false
+                Retention: 0
+
+    GlueTableLandingZone:
+        Type: "AWS::Glue::Table"
+        Properties:
+            DatabaseName: !Ref DBName
+            CatalogId: !Ref "AWS::AccountId"
+            TableInput: 
+                Name: "meter_landing_zone"
+                Owner: "owner"
+                TableType: "EXTERNAL_TABLE"
+                Parameters: 
+                    CrawlerSchemaDeserializerVersion: "1.0"
+                    CrawlerSchemaSerializerVersion: "1.0"
+                    classification: "csv"
+                    columnsOrdered: "true"
+                    compressionType: "none"
+                    delimiter: ";"
+                    typeOfData: "file"
+                StorageDescriptor: 
+                    Columns: 
+                      - 
+                        Name: "col0"
+                        Type: "bigint"
+                      - 
+                        Name: "col1"
+                        Type: "string"
+                      - 
+                        Name: "col2"
+                        Type: "bigint"
+                      - 
+                        Name: "col3"
+                        Type: "bigint"
+                      - 
+                        Name: "col4"
+                        Type: "string"
+                      - 
+                        Name: "col5"
+                        Type: "string"
+                      - 
+                        Name: "col6"
+                        Type: "string"
+                      - 
+                        Name: "col7"
+                        Type: "string"
+                      - 
+                        Name: "col8"
+                        Type: "string"
+                      - 
+                        Name: "col9"
+                        Type: "string"
+                      - 
+                        Name: "col10"
+                        Type: "string"
+                      - 
+                        Name: "col11"
+                        Type: "string"
+                    Location: !Sub "s3://${LandingZoneS3Bucket}/"
+                    InputFormat: "org.apache.hadoop.mapred.TextInputFormat"
+                    OutputFormat: "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+                    Compressed: false
+                    NumberOfBuckets: -1
+                    SerdeInfo: 
+                        SerializationLibrary: "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+                        Parameters: 
+                            "field.delim": ";"
+                    Parameters: 
+                        CrawlerSchemaDeserializerVersion: "1.0"
+                        CrawlerSchemaSerializerVersion: "1.0"
+                        areColumnsQuoted: "false"
+                        classification: "csv"
+                        columnsOrdered: "true"
+                        compressionType: "none"
+                        delimiter: ";"
+                        typeOfData: "file"
+                    StoredAsSubDirectories: false
+                Retention: 0
+    
+    GlueTableDaily:
+        Type: "AWS::Glue::Table"
+        Properties:
+            DatabaseName: !Ref DBName
+            CatalogId: !Ref "AWS::AccountId"
+            TableInput: 
+                Name: "daily"
+                TableType: "EXTERNAL_TABLE"
+                Parameters: 
+                    CrawlerSchemaDeserializerVersion: "1.0"
+                    CrawlerSchemaSerializerVersion: "1.0"
+                    classification: "parquet"
+                    compressionType: "none"
+                    typeOfData: "file"
+                StorageDescriptor: 
+                    Columns: 
+                      - 
+                        Name: "meter_id"
+                        Type: "string"
+                      - 
+                        Name: "obis_code"
+                        Type: "string"
+                      - 
+                        Name: "reading_time"
+                        Type: "string"
+                      - 
+                        Name: "reading_value"
+                        Type: "double"
+                      - 
+                        Name: "time_str"
+                        Type: "string"
+                      - 
+                        Name: "week_of_year"
+                        Type: "int"
+                      - 
+                        Name: "day_of_month"
+                        Type: "int"
+                      - 
+                        Name: "month"
+                        Type: "int"
+                      - 
+                        Name: "year"
+                        Type: "int"
+                      - 
+                        Name: "hour"
+                        Type: "int"
+                      - 
+                        Name: "minute"
+                        Type: "int"
+                    Location: !Sub "s3://${BusinessZoneS3Bucket}/daily/"
+                    InputFormat: "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
+                    OutputFormat: "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
+                    Compressed: false
+                    NumberOfBuckets: -1
+                    SerdeInfo: 
+                        SerializationLibrary: "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
+                        Parameters: 
+                            "serialization.format": "1"
+                    Parameters: 
+                        CrawlerSchemaDeserializerVersion: "1.0"
+                        CrawlerSchemaSerializerVersion: "1.0"
+                        classification: "parquet"
+                        compressionType: "none"
+                        typeOfData: "file"
+                    StoredAsSubDirectories: false
+                PartitionKeys: 
+                  - 
+                    Name: "reading_type"
+                    Type: "string"
+                  - 
+                    Name: "date_str"
+                    Type: "string"
+                Retention: 0
+
+Parameters:
+  BusinessZoneS3Bucket:
+    Type: String
+
+  LandingZoneS3Bucket:
+    Type: String
+  
+  CleanZoneS3Bucket:
+    Type: String
+
+  DBName:
+    Type: String
+    Default: meter-data
