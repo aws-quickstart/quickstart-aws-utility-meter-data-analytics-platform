@@ -1,3 +1,5 @@
 taskcat_outputs
 .taskcat
 .DS_STORE
+*.iml
+.idea
