@@ -101,13 +101,13 @@ Resources:
     GlueJob:
         Type: "AWS::Glue::Job"
         Properties:
-            Name: "business_aggregate_daily"
+            Name: "business_aggregate_daily.py"
             Role: !GetAtt IAMRole.Arn
             ExecutionProperty: 
                 MaxConcurrentRuns: 1
             Command: 
                 Name: "glueetl"
-                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_aggregate_daily"
+                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_aggregate_daily.py"
                 PythonVersion: "3"
             DefaultArguments: 
                 --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
@@ -127,13 +127,13 @@ Resources:
     GlueJob2:
         Type: "AWS::Glue::Job"
         Properties:
-            Name: "business_aggregate_monthly"
+            Name: "business_aggregate_monthly.py"
             Role: !GetAtt IAMRole.Arn
             ExecutionProperty: 
                 MaxConcurrentRuns: 1
             Command: 
                 Name: "glueetl"
-                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_aggregate_monthly"
+                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_aggregate_monthly.py"
                 PythonVersion: "3"
             DefaultArguments: 
                 --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
@@ -153,13 +153,13 @@ Resources:
     GlueJob3:
         Type: "AWS::Glue::Job"
         Properties:
-            Name: "business_aggregate_weekly"
+            Name: "business_aggregate_weekly.py"
             Role: !GetAtt IAMRole.Arn
             ExecutionProperty: 
                 MaxConcurrentRuns: 1
             Command: 
                 Name: "glueetl"
-                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_aggregate_weekly"
+                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_aggregate_weekly.py"
                 PythonVersion: "3"
             DefaultArguments: 
                 --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
@@ -179,13 +179,13 @@ Resources:
     GlueJob4:
         Type: "AWS::Glue::Job"
         Properties:
-            Name: "business_daily_to_redshift"
+            Name: "business_daily_to_redshift.py"
             Role: !GetAtt IAMRole.Arn
             ExecutionProperty: 
                 MaxConcurrentRuns: 1
             Command: 
                 Name: "glueetl"
-                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_daily_to_redshift"
+                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_daily_to_redshift.py"
                 PythonVersion: "3"
             DefaultArguments: 
                 --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
@@ -208,13 +208,13 @@ Resources:
     GlueJob5:
         Type: "AWS::Glue::Job"
         Properties:
-            Name: "transform_clean_to_business_partition"
+            Name: "transform_clean_to_business_partition.py"
             Role: !GetAtt IAMRole.Arn
             ExecutionProperty: 
                 MaxConcurrentRuns: 1
             Command: 
                 Name: "glueetl"
-                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/transform_clean_to_business_partition"
+                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/transform_clean_to_business_partition.py"
                 PythonVersion: "3"
             DefaultArguments: 
                 --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
@@ -235,13 +235,13 @@ Resources:
     GlueJob6:
         Type: "AWS::Glue::Job"
         Properties:
-            Name: "transform_raw_to_clean"
+            Name: "transform_raw_to_clean.py"
             Role: !GetAtt IAMRole.Arn
             ExecutionProperty: 
                 MaxConcurrentRuns: 1
             Command: 
                 Name: "glueetl"
-                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/transform_raw_to_clean"
+                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/transform_raw_to_clean.py"
                 PythonVersion: "3"
             DefaultArguments: 
                 --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
