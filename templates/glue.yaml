@@ -114,10 +114,10 @@ Resources:
                 --enable-metrics: ""
                 --enable-continuous-cloudwatch-log: "true"
                 --enable-continuous-log-filter: "true"
-                --job-bookmark-option: "job-bookmark-enable"
                 --job-language: "python"
                 --db_name: !Ref DBName
                 --business_zone_bucket: !Ref BusinessZoneS3Bucket
+                --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
             MaxRetries: 0
             #AllocatedCapacity: 5
             Timeout: 2880
@@ -140,10 +140,10 @@ Resources:
                 --enable-metrics: ""
                 --enable-continuous-cloudwatch-log: "true"
                 --enable-continuous-log-filter: "true"
-                --job-bookmark-option: "job-bookmark-enable"
                 --job-language: "python"
                 --db_name: !Ref DBName
                 --business_zone_bucket: !Ref BusinessZoneS3Bucket
+                --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
             MaxRetries: 0
             #AllocatedCapacity: 5
             Timeout: 2880
@@ -166,10 +166,10 @@ Resources:
                 --enable-metrics: ""
                 --enable-continuous-cloudwatch-log: "true"
                 --enable-continuous-log-filter: "true"
-                --job-bookmark-option: "job-bookmark-enable"
                 --job-language: "python"
                 --db_name: !Ref DBName
                 --business_zone_bucket: !Ref BusinessZoneS3Bucket
+                --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
             MaxRetries: 0
             #AllocatedCapacity: 5
             Timeout: 2880
@@ -226,6 +226,7 @@ Resources:
                 --db_name: !Ref DBName
                 --table_name: "meter_clean_zone"
                 --business_zone_bucket: !Ref BusinessZoneS3Bucket
+                --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
             MaxRetries: 0
             #AllocatedCapacity: 5
             Timeout: 2880
