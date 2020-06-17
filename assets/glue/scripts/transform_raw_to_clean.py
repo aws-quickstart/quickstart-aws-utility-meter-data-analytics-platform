@@ -6,9 +6,10 @@ from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue.dynamicframe import DynamicFrame
 from pyspark.sql.functions import *
+import boto3
 
 ## @params: [JOB_NAME]
-args = getResolvedOptions(sys.argv, ['JOB_NAME', 'db_name', 'table_name', 'clean_data_bucket'])
+args = getResolvedOptions(sys.argv, ['JOB_NAME', 'db_name', 'table_name', 'clean_data_bucket', 'temp_workflow_bucket'])
 
 sc = SparkContext()
 glueContext = GlueContext(sc)
@@ -47,7 +48,15 @@ mappedReadings = mappedReadings.withColumn("week_of_year", weekofyear(date)) \
           .withColumn("hour", hour(time)) \
           .withColumn("minute", minute(time)) 
 
+# get the distinct date value and store them in a temp S3 bucket to now which aggregation data need to be
+# calculated later on
+distinctDates = mappedReadings.select('date_str').distinct().collect()
+distinctDatesStrList = ','.join(value['date_str'] for value in distinctDates)
 
+s3 = boto3.resource('s3')
+s3.Object(args['temp_workflow_bucket'], 'glue_workflow_distinct_dates').put(Body=distinctDatesStrList)
+
+# write data to S3
 filteredMeterReads = DynamicFrame.fromDF(mappedReadings, glueContext, "filteredMeterReads")
 
 s3_clean_path = "s3://" + args['clean_data_bucket']

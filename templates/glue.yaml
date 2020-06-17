@@ -253,6 +253,7 @@ Resources:
                 --db_name: !Ref DBName
                 --table_name: "meter_landing_zone"
                 --clean_data_bucket: !Ref CleanZoneS3Bucket
+                --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
             MaxRetries: 0
             #AllocatedCapacity: 5
             Timeout: 2880
@@ -475,6 +476,7 @@ Resources:
                                 "arn:aws:s3:::${BusinessZoneS3Bucket}",
                                 "arn:aws:s3:::${LandingZoneS3Bucket}",
                                 "arn:aws:s3:::${CleanZoneS3Bucket}",
+                                "arn:aws:s3:::${TempWorkflowS3Bucket}",
                                 "arn:aws:s3:::${GlueScriptsS3Bucket}",
                                 "arn:aws:s3:::${GlueTempS3Bucket}"
                             ]
@@ -501,6 +503,9 @@ Resources:
         Type: "AWS::S3::Bucket"
 
     CleanZoneS3Bucket:
+        Type: "AWS::S3::Bucket"
+
+    TempWorkflowS3Bucket:
         Type: "AWS::S3::Bucket"
 
     GlueDatabase:
@@ -567,6 +572,8 @@ Outputs:
     Value: !Ref LandingZoneS3Bucket
   CleanZoneS3Bucket:
     Value: !Ref CleanZoneS3Bucket
+  TempWorkflowS3Bucket:
+    Value: !Ref TempWorkflowS3Bucket
   BusinessZoneS3Bucket:
     Value: !Ref BusinessZoneS3Bucket
   GlueWorkflow:
