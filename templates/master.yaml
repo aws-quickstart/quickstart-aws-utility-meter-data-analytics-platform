@@ -89,7 +89,6 @@ Resources:
           BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
           LandingZoneS3Bucket: !GetAtt GlueStack.Outputs.LandingZoneS3Bucket
           CleanZoneS3Bucket: !GetAtt GlueStack.Outputs.CleanZoneS3Bucket
-          TempWorkflowS3Bucket: !GetAtt GlueStack.Outputs.TempWorkflowS3Bucket
           DBName: !Ref DBName
 
 Outputs:

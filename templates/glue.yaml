@@ -196,6 +196,7 @@ Resources:
                 --job-language: "python"
                 --db_name: !Ref DBName
                 --redshift_connection: !Ref GlueConnection
+                --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
             Connections: 
                 Connections: 
                   - !Ref GlueConnection

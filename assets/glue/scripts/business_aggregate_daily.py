@@ -1,6 +1,5 @@
 import sys
 import boto3
-import datetime
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
@@ -19,13 +18,14 @@ job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
 # read date information to know which data should be aggregated or re-aggregated
-tempDataFile = s3.Object('glue-workflow-temp', 'glue_workflow_distinct_dates')
+s3 = boto3.resource('s3')
+tempDataFile = s3.Object(args['temp_workflow_bucket'], 'glue_workflow_distinct_dates')
 dateList = tempDataFile.get()['Body'].read().decode().split(",")
 
 business_zone_bucket_path_daily = "s3://" + args['business_zone_bucket'] + "/aggregated/daily"
 
 for dateStr in dateList:
-    cleanedMeterDataSource = glueContext.create_dynamic_frame.from_catalog(database = "meter-data", table_name = "daily", transformation_ctx = "cleanedMeterDataSource", push_down_predicate = "(reading_type == 'INT' and date_str == '{}')".format(dateStr))
+    cleanedMeterDataSource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = "daily", transformation_ctx = "cleanedMeterDataSource", push_down_predicate = "(reading_type == 'INT' and date_str == '{}')".format(dateStr))
 
     dailyAggregatedIntervalReads = cleanedMeterDataSource.toDF() \
         .groupby('meter_id', 'date_str') \
