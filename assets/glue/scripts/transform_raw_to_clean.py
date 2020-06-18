@@ -19,10 +19,10 @@ job.init(args['JOB_NAME'], args)
 
 datasource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = args['table_name'], transformation_ctx = "datasource")
 applymapping1 = ApplyMapping.apply(frame = datasource, mappings = [\
-    ("col0", "long", "meter_id", "long"), \
+    ("col0", "long", "meter_id", "string"), \
     ("col1", "string", "obis_code", "string"), \
     ("col2", "long", "reading_time", "string"), \
-    ("col3", "long", "reading_value", "long"), \
+    ("col3", "long", "reading_value", "double"), \
     ("col4", "string", "reading_type", "string") \
     ], transformation_ctx = "applymapping1")
     
