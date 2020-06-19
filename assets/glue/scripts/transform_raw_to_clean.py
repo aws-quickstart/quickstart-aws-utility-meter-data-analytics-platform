@@ -1,4 +1,7 @@
 import sys
+import boto3
+from datetime import datetime
+from botocore.errorfactory import ClientError
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
@@ -6,9 +9,35 @@ from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue.dynamicframe import DynamicFrame
 from pyspark.sql.functions import *
-import boto3
 
-## @params: [JOB_NAME]
+
+def check_if_file_exist(bucket, key):
+    s3client = boto3.client('s3')
+    fileExists = True
+    try:
+        s3client.head_object(Bucket=bucket, Key=key)
+    except ClientError:
+        fileExists = False
+        pass
+
+    return fileExists
+
+
+def move_temp_file(bucket, key):
+    dt = datetime.now()
+    dt.microsecond
+
+    s3 = boto3.resource('s3')
+    newFileName = str(dt.microsecond) + '_' + key
+    s3.Object(args['temp_workflow_bucket'], newFileName).copy_from(CopySource="{}/{}".format(bucket, key))
+    s3.Object(args['temp_workflow_bucket'], key).delete()
+
+
+def cleanup_temp_folder(bucket, key):
+    if check_if_file_exist(bucket, key):
+        move_temp_file(bucket, key)
+
+
 args = getResolvedOptions(sys.argv, ['JOB_NAME', 'db_name', 'table_name', 'clean_data_bucket', 'temp_workflow_bucket'])
 
 sc = SparkContext()
@@ -16,6 +45,8 @@ glueContext = GlueContext(sc)
 spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
+
+cleanup_temp_folder(args['temp_workflow_bucket'], 'glue_workflow_distinct_dates')
 
 datasource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = args['table_name'], transformation_ctx = "datasource")
 applymapping1 = ApplyMapping.apply(frame = datasource, mappings = [\
@@ -69,3 +100,6 @@ glueContext.write_dynamic_frame.from_options(
     transformation_ctx = "s3CleanDatasink")
 
 job.commit()
+
+
+

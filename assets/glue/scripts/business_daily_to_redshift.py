@@ -1,6 +1,4 @@
 import sys
-import boto3
-from datetime import datetime
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
@@ -27,15 +25,5 @@ glueContext.write_dynamic_frame.from_jdbc_conf(frame = allAggWeekly, catalog_con
 
 allAggMonthly = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = "aggregated_monthly", transformation_ctx = "allDaily")
 glueContext.write_dynamic_frame.from_jdbc_conf(frame = allAggMonthly, catalog_connection = args['redshift_connection'], connection_options = {"dbtable": "aggregated_monthly", "database": args['db_name']}, redshift_tmp_dir = args["TempDir"], transformation_ctx = "allAggMonthly")
-
-# cleanup s3 temp folder
-dt = datetime.now()
-dt.microsecond
-
-s3 = boto3.resource('s3')
-tempFileName = 'glue_workflow_distinct_dates'
-newFileName = str(dt.microsecond) + '_' + tempFileName
-s3.Object(args['temp_workflow_bucket'], newFileName).copy_from(CopySource="{}/{}".format(args['temp_workflow_bucket'], tempFileName))
-s3.Object(args['temp_workflow_bucket'], tempFileName).delete()
 
 job.commit()

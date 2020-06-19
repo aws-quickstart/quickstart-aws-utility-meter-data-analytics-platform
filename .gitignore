@@ -3,3 +3,4 @@ taskcat_outputs
 .DS_STORE
 *.iml
 .idea
+venv
