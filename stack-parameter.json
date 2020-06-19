@@ -1,0 +1,50 @@
+[
+  {
+    "ParameterKey": "MasterUsername",
+    "ParameterValue": "meteradmin"
+  },
+  {
+    "ParameterKey": "MasterUserPassword",
+    "ParameterValue": "MeterAdmin2020!"
+  },
+  {
+    "ParameterKey": "ClusterName",
+    "ParameterValue": "redshift-meter-cluster"
+  },
+  {
+    "ParameterKey": "Subnet1ID",
+    "ParameterValue": "subnet-92a772cd"
+  },
+  {
+    "ParameterKey": "Subnet2ID",
+    "ParameterValue": "subnet-413bf227"
+  },
+  {
+    "ParameterKey": "VPCID",
+    "ParameterValue": "vpc-59769324"
+  },
+  {
+    "ParameterKey": "RemoteAccessCIDR",
+    "ParameterValue": "52.4.0.0/14"
+  },
+  {
+    "ParameterKey": "QSS3BucketName",
+    "ParameterValue": "cf-meter-data"
+  },
+  {
+    "ParameterKey": "QSS3KeyPrefix",
+    "ParameterValue": "temp/"
+  },
+  {
+    "ParameterKey": "QSS3BucketRegion",
+    "ParameterValue": "us-east-1"
+  },
+  {
+    "ParameterKey": "VPCRouteTableId",
+    "ParameterValue": "rtb-43f5953d"
+  },
+  {
+    "ParameterKey": "AvailabilityZone",
+    "ParameterValue": "us-east-1a"
+  }
+]
