@@ -16,7 +16,7 @@ Resources:
         MasterUserPassword: !Ref MasterUserPassword
         NodeType: dc2.large
         NumberOfNodes: 2
-        PubliclyAccessible: true
+        PubliclyAccessible: false
         VpcSecurityGroupIds: 
           - !Ref RedshiftSecurityGroup
         ClusterParameterGroupName: !Ref RedshiftClusterParameterGroup
