@@ -55,34 +55,6 @@ Resources:
                 DeleteBehavior: "DEPRECATE_IN_DATABASE"
             TablePrefix: "aggregated_"
 
-    GlueCrawler4:
-        Type: "AWS::Glue::Crawler"
-        Properties:
-            Name: "meter-data-business-daily-crawler"
-            Role: !Sub "service-role/${IAMRole}"
-            Targets: 
-                S3Targets: 
-                  - 
-                    Path: !Sub "s3://${BusinessZoneS3Bucket}/daily"
-            DatabaseName: !Ref DBName
-            SchemaChangePolicy: 
-                UpdateBehavior: "UPDATE_IN_DATABASE"
-                DeleteBehavior: "DEPRECATE_IN_DATABASE"
-
-    GlueCrawler5:
-        Type: "AWS::Glue::Crawler"
-        Properties:
-            Name: "meter-data-clean-crawler"
-            Role: !Sub "service-role/${IAMRole}"
-            Targets: 
-                S3Targets: 
-                  - 
-                    Path: !Sub "s3://${CleanZoneS3Bucket}"
-            DatabaseName: !Ref DBName
-            SchemaChangePolicy: 
-                UpdateBehavior: "UPDATE_IN_DATABASE"
-                DeleteBehavior: "DEPRECATE_IN_DATABASE"
-
     GlueCrawler6:
         Type: "AWS::Glue::Crawler"
         Properties:
@@ -271,22 +243,6 @@ Resources:
             Type: "ON_DEMAND"
             WorkflowName: !Ref GlueWorkflow
 
-    GlueTrigger2:
-        Type: "AWS::Glue::Trigger"
-        Properties:
-            Actions:
-              - CrawlerName: !Ref GlueCrawler5
-            Name: "clean-data-crawler"
-            Type: "CONDITIONAL"
-            StartOnCreation: true
-            WorkflowName: !Ref GlueWorkflow
-            Predicate: 
-                Conditions: 
-                  - 
-                    LogicalOperator: "EQUALS"
-                    JobName: !Ref GlueJob6
-                    State: "SUCCEEDED"
-
     GlueTrigger3:
         Type: "AWS::Glue::Trigger"
         Properties:
@@ -301,8 +257,8 @@ Resources:
                 Conditions: 
                   - 
                     LogicalOperator: "EQUALS"
-                    CrawlerName: !Ref GlueCrawler4
-                    CrawlState: "SUCCEEDED"
+                    JobName: !Ref GlueJob5
+                    State: "SUCCEEDED"
                   - 
                     LogicalOperator: "EQUALS"
                     CrawlerName: !Ref GlueCrawler
@@ -315,22 +271,6 @@ Resources:
                     LogicalOperator: "EQUALS"
                     CrawlerName: !Ref GlueCrawler2
                     CrawlState: "SUCCEEDED"
-
-    GlueTrigger4:
-        Type: "AWS::Glue::Trigger"
-        Properties:
-            Name: "trigger-business-daily-crawler"
-            Type: "CONDITIONAL"
-            StartOnCreation: true
-            WorkflowName: !Ref GlueWorkflow
-            Actions:
-              - CrawlerName: !Ref GlueCrawler4
-            Predicate: 
-                Conditions: 
-                  - 
-                    LogicalOperator: "EQUALS"
-                    JobName: !Ref GlueJob5
-                    State: "SUCCEEDED"
 
     GlueTrigger5:
         Type: "AWS::Glue::Trigger"
@@ -345,8 +285,8 @@ Resources:
                 Conditions: 
                   - 
                     LogicalOperator: "EQUALS"
-                    CrawlerName: !Ref GlueCrawler5
-                    CrawlState: "SUCCEEDED"
+                    JobName: !Ref GlueJob6
+                    State: "SUCCEEDED"
 
     GlueTrigger6:
         Type: "AWS::Glue::Trigger"
@@ -377,8 +317,8 @@ Resources:
                 Conditions: 
                   - 
                     LogicalOperator: "EQUALS"
-                    CrawlerName: !Ref GlueCrawler4
-                    CrawlState: "SUCCEEDED"
+                    JobName: !Ref GlueJob5
+                    State: "SUCCEEDED"
 
     GlueTrigger8:
         Type: "AWS::Glue::Trigger"
@@ -409,8 +349,8 @@ Resources:
                 Conditions: 
                   - 
                     LogicalOperator: "EQUALS"
-                    CrawlerName: !Ref GlueCrawler4
-                    CrawlState: "SUCCEEDED"
+                    JobName: !Ref GlueJob5
+                    State: "SUCCEEDED"
 
     GlueTrigger10:
         Type: "AWS::Glue::Trigger"
@@ -457,8 +397,8 @@ Resources:
                 Conditions: 
                   - 
                     LogicalOperator: "EQUALS"
-                    CrawlerName: !Ref GlueCrawler4
-                    CrawlState: "SUCCEEDED"
+                    JobName: !Ref GlueJob5
+                    State: "SUCCEEDED"
 
     IAMManagedPolicy:
         Type: "AWS::IAM::ManagedPolicy"
