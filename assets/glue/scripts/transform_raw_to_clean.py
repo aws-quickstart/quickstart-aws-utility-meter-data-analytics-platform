@@ -63,12 +63,11 @@ dropnullfields = DropNullFields.apply(frame = resolvechoice2, transformation_ctx
 
 mappedReadings = DynamicFrame.toDF(dropnullfields)
 
-# reading_time could not be passed, so splitting date and time fields manually 
+# reading_time could not be passed, so splitting date and time fields manually
 mappedReadings = mappedReadings.withColumn("date_str", col("reading_time").substr(1,8))
-mappedReadings = mappedReadings.withColumn("time_str", col("reading_time").substr(9,16))
-mappedReadings = mappedReadings.withColumn("time_str", regexp_replace(col("time_str"), "24", ""))
 
-time = to_timestamp(col("time_str"), "HHmmss")
+timeStr = regexp_replace(col("reading_time").substr(9,16), "24", "")
+time = to_timestamp(timeStr, "HHmmss")
 date = to_date(col("date_str"), "yyyyMMdd")
 
 # add separate date and time fields
