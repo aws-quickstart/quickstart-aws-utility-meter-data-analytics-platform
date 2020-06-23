@@ -1,0 +1,110 @@
+{
+  "Comment": "",
+  "StartAt": "Prepare batches",
+  "States": {
+    "Prepare batches": {
+      "Parameters": {
+        "FunctionName.$": "${LambdaResultFunctionName}",
+        "Payload": {
+          "S3_bucket.$": ${WorkingBucket}",
+          "Meter_start.$": "$.Meter_start",
+          "Meter_end.$": "$.Meter_end",
+          "Batch_size.$": "$.Batch_size"
+        }
+      },
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Type": "Task",
+      "ResultPath": "$.batchdetail",
+      "Next": "Process batches"
+    },
+    "Process batches": {
+      "Type": "Map",
+      "Next": "Finish",
+      "InputPath": "$",
+      "ItemsPath": "$.batchdetail.Payload",
+      "Parameters": {
+        "LambdaPrepareFunctionName.$": "${LambdaPrepareFunctionName}",
+        "LambdaResultFunctionName.$": "${LambdaResultFunctionName}",
+        "ModelName.$": "$.ModelName",
+        "Athen_bucket.$": "${AthenaQueryBucket}",
+        "S3_bucket.$": ${WorkingBucket}",
+        "Data_start.$": "$.Data_start",
+        "Data_end.$": "$.Data_end",
+        "Batch_info.$": "$$.Map.Item.Value",
+        "Forecast_period.$": "$.Forecast_period"
+      },
+      "Iterator": {
+        "StartAt": "Prepare dataset",
+        "States": {
+          "Prepare dataset": {
+            "Parameters": {
+              "FunctionName.$": "${LambdaPrepareFunctionName}",
+              "Payload": {
+                "Athen_bucket.$": "${AthenaQueryBucket}",
+                "S3_bucket.$": ${WorkingBucket}",
+                "Batch_start.$": "$.Batch_info.Batch_start",
+                "Batch_end.$": "$.Batch_info.Batch_end",
+                "Data_start.$": "$.Data_start",
+                "Data_end.$": "$.Data_end",
+                "Forecast_period.$": "$.Forecast_period"
+              }
+            },
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Type": "Task",
+            "ResultPath": null,
+            "Next": "Transform Input Dataset"
+          },
+          "Transform Input Dataset": {
+            "Resource": "arn:aws:states:::sagemaker:createTransformJob.sync",
+            "Parameters": {
+              "TransformJobName.$": "$.Batch_info.Batch_job",
+              "ModelName.$": "$.ModelName",
+              "TransformInput": {
+                "DataSource": {
+                  "S3DataSource": {
+                    "S3DataType": "S3Prefix",
+                    "S3Uri.$": "$.Batch_info.Batch_input"
+                  }
+                },
+                "ContentType": "application/jsonlines",
+                "SplitType": "Line"
+              },
+              "TransformOutput": {
+                "S3OutputPath.$": "$.Batch_info.Batch_output",
+                "AssembleWith": "Line"
+              },
+              "TransformResources": {
+                "InstanceCount": 1,
+                "InstanceType": "ml.m4.xlarge"
+              }
+            },
+            "Type": "Task",
+            "ResultPath": null,
+            "Next": "Store Results"
+          },
+          "Store Results": {
+            "Parameters": {
+              "FunctionName.$": "${LambdaResultFunctionName}",
+              "Payload": {
+                "Athen_bucket.$": "${AthenaQueryBucket}",
+                "S3_bucket.$": ${WorkingBucket}",
+                "Batch_start.$": "$.Batch_info.Batch_start",
+                "Batch_end.$": "$.Batch_info.Batch_end",
+                "Data_start.$": "$.Data_start",
+                "Data_end.$": "$.Data_end",
+                "Forecast_period.$": "$.Forecast_period"
+              }
+            },
+            "ResultPath": "$.mytask",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Type": "Task",
+            "End": true
+          }
+        }
+      }
+    },
+    "Finish": {
+      "Type": "Succeed"
+    }
+  }
+}

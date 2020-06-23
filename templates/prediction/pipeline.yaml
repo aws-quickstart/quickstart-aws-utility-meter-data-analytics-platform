@@ -1,0 +1,332 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Meter Data Lake prediction pipeline'
+Resources:
+
+  AthenaQueryBucket:
+    Type: AWS::S3::Bucket
+
+  WorkingBucket:
+    Type: AWS::S3::Bucket
+
+  # Step functions state machine
+  StateMachineOnboardingInstall:
+    Type: 'AWS::StepFunctions::StateMachine'
+    Properties:
+      RoleArn: !GetAtt 'ExecuteStateMachineRole.Arn'
+      DefinitionUri: statemachine/state-machine.asl.json
+      DefinitionSubstitutions:
+        AthenaQueryBucket: !Ref AthenaQueryBucket
+        WorkingBucket: !Ref WorkingBucket
+        LambdaSplitFunctionName: !Ref SplitBatchFunction
+        LambdaPrepareFunctionName: !Ref PrepareBatchFunction
+        LambdaResultFunctionName: !Ref UploadResultFunction
+
+
+
+  #
+  # Lambda functions
+  #
+
+  SplitBatchFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Code:
+        ZipFile: |
+          '''
+          sample step function input
+          {
+             "ModelName": "deepar-electricity-demo-2020-05-23-01-32-11-018",
+             "LambdaSplitFunctionName": "SplitBatchFunction",
+             "LambdaPrepareFunctionName": "PrepareBatchFunction",
+             "LambdaResultFunctionName": "UploadResultFunction",
+             "Athen_bucket":"aws-athena-query-results-539553300585-us-east-1",
+             "S3_bucket":"meter-analytics",
+             "Data_start":"2013-06-01",
+             "Data_end":"2014-01-01",
+             "Meter_start":1,
+             "Meter_end":100,
+             "Batch_size":20,
+             "Forecast_period":7
+          }
+
+          sample lambda input
+          {
+            "Meter_start": 1,
+            "Meter_end": 100,
+            "Batch_size": 20,
+            "S3_bucket": "juayu-meter-analytics"
+          }
+
+          '''
+          import json
+          import uuid
+
+          def lambda_handler(event, context):
+              start       = event['Meter_start']
+              end         = event['Meter_end']
+              batchsize   = event['Batch_size']
+              s3_bucket   = event['S3_bucket']
+
+              id = uuid.uuid4().hex
+              batchdetail = []
+              for a in range(start, end, batchsize):
+                  job = {}
+                  meter_start = 'MAC{}'.format(str(a).zfill(6))
+                  meter_end = 'MAC{}'.format(str(a+batchsize-1).zfill(6))
+                  # Sagemaker transform job name cannot be more than 64 characters.
+                  job['Batch_job'] = 'job-{}-{}-{}'.format(id, meter_start, meter_end)
+                  job['Batch_start'] = meter_start
+                  job['Batch_end'] = meter_end
+                  job['Batch_input'] = 's3://{}/smartmeter/input/batch_{}_{}'.format(s3_bucket, meter_start, meter_end)
+                  job['Batch_output'] = 's3://{}/smartmeter/inference/batch_{}_{}'.format(s3_bucket, meter_start, meter_end)
+                  batchdetail.append(job)
+
+              # TODO implement
+              return batchdetail
+      Handler: 'SplitBatchFunction.lambda_handler'
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Runtime: 'python3.7'
+
+  PrepareBatchFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Code:
+        ZipFile: |
+          '''
+          Input event payload expected to be in the following format:
+
+          {
+            "Athen_bucket": "aws-athena-query-results-us-east-1-849779837104",
+            "S3_bucket": "temp-meter-data-bucket",
+            "Batch_start": "MAC000001",
+            "Batch_end": "MAC000010",
+            "Data_start": "2013-06-01",
+            "Data_end": "2014-01-01",
+            "Forecast_period": 7
+          }
+
+          do we want to batch data by index
+          select meterid, cat1, cat2 from (
+            select meterid, stdortou as cat1, acorn_grouped as cat2,
+            (row_number() over(order by meterid) ) as row_num
+            from ml.acorn_data
+          )
+          where row_num between 1 and 50;
+          '''
+
+          import sys
+
+          import boto3, os
+          import json
+          import numpy as np
+          import pandas as pd
+
+          from pyathena import connect
+
+          def write_dicts_to_file(path, data):
+              with open(path, 'wb') as fp:
+                  for d in data:
+                      fp.write(json.dumps(d).encode("utf-8"))
+                      fp.write("\n".encode('utf-8'))
+
+          def get_feature(connection, start):
+              weather_data = '''select date_parse(time,'%%Y-%%m-%%d %%H:%%i:%%s') as datetime, temperature,
+              dewpoint, pressure, apparenttemperature, windspeed, humidity
+              from "meter-data".weather_hourly_london
+              where time >= '%s'
+              order by 1;
+              ''' % start
+              df_feature = pd.read_sql(weather_data, connection)
+              df_feature = df_feature.set_index('datetime')
+              return df_feature
+
+          def get_meters(connection, start, end):
+              selected_households = '''select meterid, stdortou as cat1, acorn_grouped as cat2
+                  from "meter-data".london_acorn_data where meterid between '%s' and '%s' order by meterid;
+                  ''' % (start, end)
+
+              df = pd.read_sql(selected_households, connection)
+              hh_dict = {}
+              # make sure convert numbers to int first, otherwise json serializer cannot recognize int64 type
+              for i in df.index:
+                  hh_dict[df['meterid'][i]] = [int(df['cat1'][i]), int(df['cat2'][i])]
+              return hh_dict
+
+          def lambda_handler(event, context):
+              ATHENA_OUTPUT_BUCKET = event['Athen_bucket']
+              S3_BUCKET = event['S3_bucket']
+              BATCH_START = event['Batch_start']
+              BATCH_END = event['Batch_end']
+              DATA_START = event['Data_start']
+              DATA_END = event['Data_end']
+              FORECAST_PERIOD = event['Forecast_period']
+              prediction_length = FORECAST_PERIOD * 24
+
+
+              region = 'us-east-1'
+              connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
+
+              df_feature = get_feature(connection, DATA_START)
+              hh_dict = get_meters(connection, BATCH_START, BATCH_END)
+
+              # test data
+              todo_query = '''select date_trunc('HOUR', datetime) as datetime, meterid, sum(kwh) from "meter-data".london_meter_data
+              where meterid in ('%s')
+              and datetime >= timestamp '%s'
+              and datetime < timestamp '%s'
+              group by 2, 1
+              ;''' %  ("','".join(hh_dict.keys()), DATA_START, DATA_END)
+
+              batch_job = pd.read_sql(todo_query, connection)
+              batch_job = batch_job.set_index('datetime')
+              print("read meter data from data lake")
+
+              batchseries = {}
+              for meterid in hh_dict.keys():
+                  data_kw = batch_job[batch_job['meterid'] == meterid].resample('1H').sum()
+                  batchseries[meterid] = np.trim_zeros(data_kw.iloc[:,0], trim='f')
+
+              freq = 'H'
+              start_dataset = pd.Timestamp(DATA_START, freq=freq)
+              end_training = pd.Timestamp(DATA_END, freq=freq) - pd.Timedelta(1, unit='H')
+              end_prediction = end_training + pd.Timedelta(prediction_length, unit='H')
+
+              batch_data = [
+                {
+                    "start": str(start_dataset),
+                    "target": ts[start_dataset:end_training - pd.Timedelta(1, unit='H')].tolist(),  # We use -1, because pandas indexing includes the upper bound
+                    "cat": hh_dict[meterid],
+                    "dynamic_feat": [df_feature['temperature'][start_dataset:end_prediction].tolist(),
+                                     df_feature['humidity'][start_dataset:end_prediction].tolist(),
+                                     df_feature['apparenttemperature'][start_dataset:end_prediction].tolist()]
+                }
+                for meterid, ts in batchseries.items()
+              ]
+
+              write_dicts_to_file("/tmp/batch.json", batch_data)
+              print("generated JSON training data")
+
+              boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(os.path.join('smartmeter', 'input/batch_%s_%s/batch.json' % (BATCH_START, BATCH_END))).upload_file('/tmp/batch.json')
+
+              print('Finished preparing batch data from %s, %s' % (BATCH_START, BATCH_END))
+      Handler: 'PrepareBatchFunction.lambda_handler'
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Runtime: 'python3.7'
+
+  UploadResultFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Code:
+        ZipFile: |
+          '''
+          Input event payload expected to be in the following format:
+
+          {
+            "Athen_bucket": "aws-athena-query-results-us-east-1-849779837104",
+            "S3_bucket": "temp-meter-data-bucket",
+            "Batch_start": "MAC000001",
+            "Batch_end": "MAC000010",
+            "Data_start": "2013-06-01",
+            "Data_end": "2014-01-01",
+            "Forecast_period": 7
+          }
+
+          '''
+
+          import boto3, os
+          import json
+          import pandas as pd
+          import numpy as np
+
+          from pyathena import connect
+
+          def get_meters(connection, start, end):
+              selected_households = '''select meterid
+                  from "meter-data".london_acorn_data where meterid between '%s' and '%s' order by meterid;
+                  ''' % (start, end)
+
+              df = pd.read_sql(selected_households, connection)
+              return df['meterid'].tolist()
+
+          def lambda_handler(event, context):
+              ATHENA_OUTPUT_BUCKET = event['Athen_bucket']
+              S3_BUCKET = event['S3_bucket']
+              BATCH_START = event['Batch_start']
+              BATCH_END = event['Batch_end']
+              FORECAST_START = event['Data_end']
+              FORECAST_PERIOD = event['Forecast_period']
+              prediction_length = FORECAST_PERIOD * 24
+
+              region = 'us-east-1'
+              connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
+
+              output = 'smartmeter/inference/batch_%s_%s/batch.json.out' % (BATCH_START, BATCH_END)
+              boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(output).download_file('/tmp/batch.out.json')
+              print('get inference result')
+
+              freq = 'H'
+              prediction_time = pd.Timestamp(FORECAST_START, freq=freq)
+              prediction_index = pd.date_range(start=prediction_time, end=prediction_time+pd.Timedelta(prediction_length-1, unit='H'), freq=freq)
+              quantile_list = []
+              dict_of_samples = {}
+
+              meterids = get_meters(connection, BATCH_START, BATCH_END)
+              print('get meter ids')
+
+              results = pd.DataFrame(columns = ['meterid', 'datetime', 'kwh'])
+              i = 0
+              with open('/tmp/batch.out.json') as fp:
+                  for line in fp:
+                      df = pd.DataFrame(data={**json.loads(line)['quantiles'],
+                                            **dict_of_samples}, index=prediction_index)
+                      dataframe=pd.DataFrame({'meterid': np.array([meterids[i] for x in range(df['0.9'].count())]),
+                                      'datetime':df.index.values,
+                                      'kwh':df['0.9'].values})
+                      i = i+1
+                      results = results.append(dataframe)
+
+              results.to_csv('/tmp/forecast.csv', index=False)
+              boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(os.path.join('smartmeter', 'forecast/batch_%s_%s.csv' % (BATCH_START, BATCH_END))).upload_file('/tmp/forecast.csv')
+
+              print('uploaded forecast')
+      Handler: 'UploadResultFunction.lambda_handler'
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Runtime: 'python3.7'
+
+  # IAM roles
+  ExecuteStateMachineRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: !Sub 'states.${AWS::Region}.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: lambda
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action: 'lambda:InvokeFunction'
+                Resource:
+                  - !GetAtt 'ExecuteLambdaRole.Arn'
+
+  ExecuteLambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 'lambda.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
+
