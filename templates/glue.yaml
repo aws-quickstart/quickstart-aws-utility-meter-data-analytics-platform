@@ -21,7 +21,7 @@ Resources:
                         Path: !Sub "s3://${BusinessZoneS3Bucket}/aggregated/daily"
             DatabaseName: !Ref DBName
             SchemaChangePolicy:
-                UpdateBehavior: "LOG"
+                UpdateBehavior: "UPDATE_IN_DATABASE"
                 DeleteBehavior: "DEPRECATE_IN_DATABASE"
             TablePrefix: "aggregated_"
 
@@ -36,7 +36,7 @@ Resources:
                         Path: !Sub "s3://${BusinessZoneS3Bucket}/aggregated/monthly"
             DatabaseName: !Ref DBName
             SchemaChangePolicy:
-                UpdateBehavior: "LOG"
+                UpdateBehavior: "UPDATE_IN_DATABASE"
                 DeleteBehavior: "DEPRECATE_IN_DATABASE"
             TablePrefix: "aggregated_"
 
@@ -51,7 +51,7 @@ Resources:
                         Path: !Sub "s3://${BusinessZoneS3Bucket}/aggregated/weekly"
             DatabaseName: !Ref DBName
             SchemaChangePolicy:
-                UpdateBehavior: "LOG"
+                UpdateBehavior: "UPDATE_IN_DATABASE"
                 DeleteBehavior: "DEPRECATE_IN_DATABASE"
             TablePrefix: "aggregated_"
 
@@ -497,6 +497,7 @@ Resources:
                 - !Ref IAMManagedPolicy
                 - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
                 - "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+                - "arn:aws:iam::aws:policy/AmazonRedshiftFullAccess"
 
     BusinessZoneS3Bucket:
         Type: "AWS::S3::Bucket"
@@ -527,6 +528,7 @@ Resources:
                     SubnetId: !Ref Subnet1ID
                     SecurityGroupIdList:
                         - !GetAtt GlueSecurityGroup.GroupId
+                        - !Ref RedshiftSecurityGroupId
                     AvailabilityZone: !Ref AvailabilityZone
                 ConnectionProperties:
                     "JDBC_CONNECTION_URL": !Sub "jdbc:redshift://${RedshiftClusterEndpoint}/${DBName}"
@@ -539,7 +541,7 @@ Resources:
     GlueSecurityGroup:
         Type: 'AWS::EC2::SecurityGroup'
         Properties:
-            GroupDescription: Security group for Redshift cluster
+            GroupDescription: Security group for Glue
             VpcId: !Ref VPCID
             SecurityGroupIngress:
                 - IpProtocol: tcp
@@ -589,6 +591,9 @@ Parameters:
         Type: String
 
     RedshiftClusterEndpoint:
+        Type: String
+
+    RedshiftSecurityGroupId:
         Type: String
 
     RedshiftPort:

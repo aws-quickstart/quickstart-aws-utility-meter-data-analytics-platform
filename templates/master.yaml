@@ -61,6 +61,7 @@ Resources:
           MasterUsername: !Ref MasterUsername
           MasterUserPassword: !Ref MasterUserPassword
           RedshiftClusterEndpoint: !GetAtt RedshiftStack.Outputs.RedshiftClusterEndpoint
+          RedshiftSecurityGroupId: !GetAtt RedshiftStack.Outputs.RedshiftSecurityGroupId
           RedshiftPort: !Ref RedshiftPort
           ClusterName: !Ref ClusterName
           DBName: !Ref DBName

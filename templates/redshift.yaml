@@ -138,6 +138,9 @@ Outputs:
     Value: !Sub '${RedshiftCluster}'
     Export:
       Name: !Sub '${AWS::StackName}-RedshiftCluster'
+  RedshiftSecurityGroupId:
+    Description: Redshifit SecurityGroupId
+    Value: !GetAtt RedshiftSecurityGroup.GroupId
 
 Parameters:
   MasterUsername:
