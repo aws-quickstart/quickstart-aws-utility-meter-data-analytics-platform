@@ -2,3 +2,6 @@ meter-data/data/
 taskcat_outputs
 .taskcat
 .DS_STORE
+*.iml
+.idea
+venv

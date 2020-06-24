@@ -61,6 +61,7 @@ Resources:
           MasterUsername: !Ref MasterUsername
           MasterUserPassword: !Ref MasterUserPassword
           RedshiftClusterEndpoint: !GetAtt RedshiftStack.Outputs.RedshiftClusterEndpoint
+          RedshiftSecurityGroupId: !GetAtt RedshiftStack.Outputs.RedshiftSecurityGroupId
           RedshiftPort: !Ref RedshiftPort
           ClusterName: !Ref ClusterName
           DBName: !Ref DBName
@@ -110,6 +111,9 @@ Outputs:
   CleanZoneS3Bucket:
     Description: Clean zone S3 bucket name
     Value: !GetAtt GlueStack.Outputs.CleanZoneS3Bucket
+  TempWorkflowS3Bucket:
+    Description: Clean zone S3 bucket name
+    Value: !GetAtt GlueStack.Outputs.TempWorkflowS3Bucket
   BusinessZoneS3Bucket:
     Description: Business zone S3 bucket name
     Value: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket

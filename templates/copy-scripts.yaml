@@ -20,12 +20,12 @@ Resources:
         SourceBucket: !Ref 'QSS3BucketName'
         Prefix: !Sub '${QSS3KeyPrefix}assets/glue/scripts/'
         Objects:
-          - business_aggregate_daily
-          - business_aggregate_monthly
-          - business_aggregate_weekly
-          - business_daily_to_redshift
-          - transform_clean_to_business_partition
-          - transform_raw_to_clean
+          - business_aggregate_daily.py
+          - business_aggregate_monthly.py
+          - business_aggregate_weekly.py
+          - business_daily_to_redshift.py
+          - transform_clean_to_business_partition.py
+          - transform_raw_to_clean.py
 
     CopyArtifactsRole:
       Type: AWS::IAM::Role

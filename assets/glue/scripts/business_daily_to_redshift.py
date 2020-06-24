@@ -6,7 +6,7 @@ from awsglue.context import GlueContext
 from awsglue.job import Job
 
 ## @params: [TempDir, JOB_NAME]
-args = getResolvedOptions(sys.argv, ['TempDir','JOB_NAME', 'db_name', 'redshift_connection'])
+args = getResolvedOptions(sys.argv, ['TempDir','JOB_NAME', 'db_name', 'redshift_connection', 'temp_workflow_bucket'])
 
 sc = SparkContext()
 glueContext = GlueContext(sc)

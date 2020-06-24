@@ -31,10 +31,7 @@ Resources:
                       - 
                         Name: "obis_code"
                         Type: "string"
-                      - 
-                        Name: "time_str"
-                        Type: "string"
-                      - 
+                      -
                         Name: "reading_type"
                         Type: "string"
                       - 
@@ -180,10 +177,7 @@ Resources:
                       - 
                         Name: "reading_value"
                         Type: "double"
-                      - 
-                        Name: "time_str"
-                        Type: "string"
-                      - 
+                      -
                         Name: "week_of_year"
                         Type: "int"
                       - 
