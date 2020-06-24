@@ -4,9 +4,10 @@
   "States": {
     "Prepare batches": {
       "Parameters": {
-        "FunctionName.$": "${LambdaResultFunctionName}",
+        "FunctionName": "${LambdaSplitFunctionName}",
         "Payload": {
-          "S3_bucket.$": ${WorkingBucket}",
+          "S3_bucket": "${WorkingBucket}",
+          "Athena_bucket": "${AthenaQueryBucket}",
           "Meter_start.$": "$.Meter_start",
           "Meter_end.$": "$.Meter_end",
           "Batch_size.$": "$.Batch_size"
@@ -23,11 +24,11 @@
       "InputPath": "$",
       "ItemsPath": "$.batchdetail.Payload",
       "Parameters": {
-        "LambdaPrepareFunctionName.$": "${LambdaPrepareFunctionName}",
-        "LambdaResultFunctionName.$": "${LambdaResultFunctionName}",
+        "LambdaPrepareFunctionName": "${LambdaPrepareFunctionName}",
+        "LambdaResultFunctionName": "${LambdaResultFunctionName}",
         "ModelName.$": "$.ModelName",
-        "Athen_bucket.$": "${AthenaQueryBucket}",
-        "S3_bucket.$": ${WorkingBucket}",
+        "Athena_bucket": "${AthenaQueryBucket}",
+        "S3_bucket": "${WorkingBucket}",
         "Data_start.$": "$.Data_start",
         "Data_end.$": "$.Data_end",
         "Batch_info.$": "$$.Map.Item.Value",
@@ -38,10 +39,10 @@
         "States": {
           "Prepare dataset": {
             "Parameters": {
-              "FunctionName.$": "${LambdaPrepareFunctionName}",
+              "FunctionName": "${LambdaPrepareFunctionName}",
               "Payload": {
-                "Athen_bucket.$": "${AthenaQueryBucket}",
-                "S3_bucket.$": ${WorkingBucket}",
+                "Athena_bucket": "${AthenaQueryBucket}",
+                "S3_bucket": "${WorkingBucket}",
                 "Batch_start.$": "$.Batch_info.Batch_start",
                 "Batch_end.$": "$.Batch_info.Batch_end",
                 "Data_start.$": "$.Data_start",
@@ -84,10 +85,10 @@
           },
           "Store Results": {
             "Parameters": {
-              "FunctionName.$": "${LambdaResultFunctionName}",
+              "FunctionName": "${LambdaResultFunctionName}",
               "Payload": {
-                "Athen_bucket.$": "${AthenaQueryBucket}",
-                "S3_bucket.$": ${WorkingBucket}",
+                "Athena_bucket": "${AthenaQueryBucket}",
+                "S3_bucket": "${WorkingBucket}",
                 "Batch_start.$": "$.Batch_info.Batch_start",
                 "Batch_end.$": "$.Batch_info.Batch_end",
                 "Data_start.$": "$.Data_start",
