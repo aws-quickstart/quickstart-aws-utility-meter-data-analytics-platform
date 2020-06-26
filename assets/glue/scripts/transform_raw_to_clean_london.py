@@ -49,34 +49,34 @@ job.init(args['JOB_NAME'], args)
 cleanup_temp_folder(args['temp_workflow_bucket'], 'glue_workflow_distinct_dates')
 
 datasource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = args['table_name'], transformation_ctx = "datasource")
-applymapping1 = ApplyMapping.apply(frame = datasource, mappings = [\
-    ("col0", "long", "meter_id", "string"), \
-    ("col1", "string", "obis_code", "string"), \
-    ("col2", "long", "reading_time", "string"), \
-    ("col3", "long", "reading_value", "double"), \
-    ("col4", "string", "reading_type", "string") \
-    ], transformation_ctx = "applymapping1")
-    
-resolvechoice2 = ResolveChoice.apply(frame = applymapping1, choice = "make_struct", transformation_ctx = "resolvechoice2")
+
+applymapping1 = ApplyMapping.apply(frame = datasource, mappings = [("lclid", "string", "meter_id", "string"), \
+                                                                    ("datetime", "string", "reading_time", "string"), \
+                                                                    ("KWH/hh (per half hour)", "double", "reading_value", "double")], \
+                                                                    transformation_ctx = "applymapping1")
+
+
+resolvechoice2 = ResolveChoice.apply(frame = applymapping1, choice = "make_struct", \
+                                     transformation_ctx = "resolvechoice2")
 
 dropnullfields = DropNullFields.apply(frame = resolvechoice2, transformation_ctx = "dropnullfields")
 
 mappedReadings = DynamicFrame.toDF(dropnullfields)
 
-# reading_time could not be passed, so splitting date and time fields manually
-mappedReadings = mappedReadings.withColumn("date_str", col("reading_time").substr(1,8))
+mappedReadings = mappedReadings.withColumn("obis_code", lit(""))
+mappedReadings = mappedReadings.withColumn("reading_type", lit("INT"))
 
-timeStr = regexp_replace(col("reading_time").substr(9,16), "24", "")
-time = to_timestamp(timeStr, "HHmmss")
-date = to_date(col("date_str"), "yyyyMMdd")
+reading_time = to_timestamp(col("reading_time"), "yyyy-MM-dd HH:mm:ss")
+mappedReadings = mappedReadings \
+    .withColumn("week_of_year", weekofyear(reading_time)) \
+    .withColumn("date_str", regexp_replace(col("reading_time").substr(1,10), "-", "")) \
+    .withColumn("day_of_month", dayofmonth(reading_time)) \
+    .withColumn("month", month(reading_time)) \
+    .withColumn("year", year(reading_time)) \
+    .withColumn("hour", hour(reading_time)) \
+    .withColumn("minute", minute(reading_time))
 
-# add separate date and time fields
-mappedReadings = mappedReadings.withColumn("week_of_year", weekofyear(date)) \
-          .withColumn("day_of_month", dayofmonth(date)) \
-          .withColumn("month", month(date)) \
-          .withColumn("year", year(date)) \
-          .withColumn("hour", hour(time)) \
-          .withColumn("minute", minute(time)) 
+filteredMeterReads = DynamicFrame.fromDF(mappedReadings, glueContext, "filteredMeterReads")
 
 # get the distinct date value and store them in a temp S3 bucket to now which aggregation data need to be
 # calculated later on
@@ -93,7 +93,7 @@ s3_clean_path = "s3://" + args['clean_data_bucket']
 
 glueContext.write_dynamic_frame.from_options(
     frame = filteredMeterReads,
-    connection_type = "s3",    
+    connection_type = "s3",
     connection_options = {"path": s3_clean_path},
     format = "parquet",
     transformation_ctx = "s3CleanDatasink")

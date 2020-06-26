@@ -26,6 +26,7 @@ Resources:
           - business_daily_to_redshift.py
           - transform_clean_to_business_partition.py
           - transform_raw_to_clean.py
+          - transform_raw_to_clean_london.py
 
     CopyArtifactsRole:
       Type: AWS::IAM::Role
