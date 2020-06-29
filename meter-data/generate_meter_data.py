@@ -53,7 +53,7 @@ logging.basicConfig(filename=log_filename,level=logging.INFO,format='%(levelname
 # -------------------------------------------
 
 # upload all objects in a given directory locally, to a given S3 bucket
-def upload_to_s3(dir, s3bucket):
+def upload_to_s3(dir, s3bucket, s3path):
     s3client = boto3.client('s3')
     
     filenames = listdir(dir)
@@ -63,7 +63,7 @@ def upload_to_s3(dir, s3bucket):
         response = s3client.put_object(
             Body=local_file_path,
             Bucket=s3bucket,
-            Key=file)
+            Key=s3path+'/'+file)
 
 # -------------------------------------------
 # FILE WRITER
@@ -122,28 +122,37 @@ def get_random(min, max):
 # Get a random meter read error code
 # -------------------------------------------
 ERROR_METER_IDS = []
-NO_OF_ERROR_RECORDS = 50
 ERROR_CODES = [11, 12, 13, 14, 15, 21, 22, 31]
+ERROR_START_TIME = dt.fromisoformat('2010-04-20T09:15:00')
+ERROR_END_TIME = dt.fromisoformat('2010-04-20T15:25:00')
 
-# Initialize list of meter ids for which error records will be generated
-def initialize_error_record_generation():
+# Initialize list of meter ids for which error records will be generated, and
+# start and end time between which error records needs to be generated.
+# meter ids and time, both are inclusive of start and end values
+def initialize_error_record_generation(m_start, m_end, start_time, end_time):
     global ERROR_METER_IDS
-    seed(1)
-    # generate meter ids for which error record needs to be returned, randomly between meter id
-    # 1 and 499 inclusive.
-    ERROR_METER_IDS = randint(1, 500, NO_OF_ERROR_RECORDS)
-    ERROR_METER_IDS = ERROR_METER_IDS.tolist()
+    global ERROR_START_TIME
+    global ERROR_END_TIME
+    # set start and end times to the global variables
+    ERROR_START_TIME = start_time
+    ERROR_END_TIME = end_time
+    # add meter ids between starting meter no. (m_start) and ending meter no. (m_end)
+    # into the list of error meter ids
+    for i in range(m_start, m_end+1):
+        ERROR_METER_IDS.append(i)
     logging.debug("List of meter ids for which error record will exist - {}".format(ERROR_METER_IDS))
 
-# If the given meter_id exist in the error_meter_ids list, return error no. and
-# remove that meter id from the error_meter_ids list.
-def get_error_code(meter_id):
+# If the given meter_id exist in the error_meter_ids list, and
+# the given datetime is within error start and end time, then return error no.
+def get_error_code(meter_id, current_dt):
+    global ERROR_START_TIME
+    global ERROR_END_TIME
     global ERROR_METER_IDS
-    for i in ERROR_METER_IDS:
-        if (meter_id == i):
-            ERROR_METER_IDS.remove(meter_id)
+
+    if ERROR_START_TIME <= current_dt <= ERROR_END_TIME:
+        if (meter_id in ERROR_METER_IDS):
             error_code = random.choice(ERROR_CODES)
-            logging.debug("Error code generated for meter id {} is {}".format(meter_id, error_code))
+            logging.debug("Error code generated for meter id {} is {} at {}".format(meter_id, error_code, current_dt))
             return error_code
     return -1
 
@@ -247,9 +256,6 @@ def generate_records(first_meter_no, last_meter_no, start_time, end_time, data_d
     # load db
     meterlist = create_db(first_meter_no, last_meter_no)
 
-    # Error record generation initialization
-    initialize_error_record_generation()
-
     while start_time <= end_time:
         register_read_rows = []
         consumption_rows = []
@@ -286,7 +292,7 @@ def generate_records(first_meter_no, last_meter_no, start_time, end_time, data_d
                 meter[int_register_list[i]] = new_reading_value
                 meter[agg_register_list[i]] = unit_consumed
                 
-                error_code = get_error_code(meter['meter_id'])
+                error_code = get_error_code(meter['meter_id'], start_time)
                 # If Valid error code is returned, create a error record.
                 # Make a record as error record by replacing the register_read_type value to error code,
                 # instead of AGG or INT
@@ -317,7 +323,7 @@ def generate_records(first_meter_no, last_meter_no, start_time, end_time, data_d
         # create the filename of the format below
         # [directory]/cd-[meter-no]-[register-read-time].csv
         # e.g. data/cd-34-2020-12-28-03-55-43.csv
-        data_filename = data_dir + '/cd-' + str(meter['meter_id']) + '-' + str(start_time.strftime('%Y-%m-%d-%H-%M-%S')) + '.csv'
+        data_filename = data_dir + '/cd-' + str(start_time.strftime('%Y-%m-%d-%H-%M-%S')) + '-M' + str(first_meter_no) + '-M' + str(last_meter_no) + '.csv'
         random.shuffle(combined_list)
         write_in_chunks(data_filename, combined_list)
         logging.info("Finished writing records for meters {} to {} for time {}".format(first_meter_no, last_meter_no, start_time))
@@ -334,21 +340,25 @@ def main():
     # total meter count - make sure this number is fully divisible by batch size i.e.
     # total_meter_count/batch_size shouldn't be a float value. Otherwise some meters
     # will be left without any data generated.
-    total_meter_count = 4
-    start_date = dt(2020,1,1) #YYYY,MM,DD
-    end_date = dt(2020,1,2)
+    total_meter_count = 6
+    start_date = dt(2010,1,1) #YYYY,MM,DD
+    end_date = dt(2010,1,10)
 
     local_dir = 'data'
     s3bucket = 'fake-meter-data'
     # generate and upload data in a batch size of below
     batch_size = 2
 
+    # Error record generation initialization
+    initialize_error_record_generation(2, 3, dt.fromisoformat('2010-01-03T09:15:00'), dt.fromisoformat('2010-01-03T15:25:00'))
+
     starting_meter_no = 1
     ending_meter_no = batch_size
     while ending_meter_no <= total_meter_count:
         generate_records(starting_meter_no, ending_meter_no, start_date, end_date, local_dir)
         logging.info('Records generated for meter {} to {}'.format(starting_meter_no, ending_meter_no))
-        #upload_to_s3(local_dir, s3bucket)
+        s3path = 'm' + str(starting_meter_no) + '-' + str(ending_meter_no)
+        upload_to_s3(local_dir, s3bucket, s3path)
         empty_dir(local_dir)
         
         starting_meter_no = ending_meter_no + 1
