@@ -1,8 +1,10 @@
-import csv, random, json
+import csv, random, json, os
 from datetime import datetime as dt
 from datetime import timedelta
 from numpy.random import seed
 from numpy.random import randint
+import logging, boto3
+from os import listdir
 
 # -------------------------------------------
 # Constants / Mappings
@@ -36,6 +38,33 @@ METER_READ_FILE_COUNT = 0
 # No of records to be saved in each meter read file
 NO_OF_RECORDS_PER_FILE = 15000
 
+
+# -------------------------------------------
+# LOGGING SETUP
+# -------------------------------------------
+
+# setup logging
+log_filename = 'datagen.log'
+logging.basicConfig(filename=log_filename,level=logging.INFO,format='%(levelname)s:%(message)s')
+
+
+# -------------------------------------------
+# S3 UPLOAD
+# -------------------------------------------
+
+# upload all objects in a given directory locally, to a given S3 bucket
+def upload_to_s3(dir, s3bucket):
+    s3client = boto3.client('s3')
+    
+    filenames = listdir(dir)
+    for file in filenames:
+        logging.debug(file)
+        local_file_path = dir + '/' + file
+        response = s3client.put_object(
+            Body=local_file_path,
+            Bucket=s3bucket,
+            Key=file)
+
 # -------------------------------------------
 # FILE WRITER
 # -------------------------------------------
@@ -61,6 +90,13 @@ def chunks(lst, n):
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
+# empty given directory locally
+def empty_dir(dirname):
+    filenames = listdir(dirname)
+    for file in filenames:
+        local_file_path = dirname + '/' + file
+        os.remove(local_file_path)
+
 # -------------------------------------------
 # Functions to generate different values for various fields
 # -------------------------------------------
@@ -77,58 +113,6 @@ def getall_meterids_shuffled(low, high):
     meterids = list(range(low, high+1))
     random.shuffle(meterids)
     return meterids
-
-# generate meter id
-def get_meter_id():
-    numbers = range(1, 10000)
-    return random.sample(numbers, 1)[0]
-
-# generate servicePointId - ignored
-def get_service_point_id():
-    numbers = range(1, 10000)
-    return random.sample(numbers, 1)[0]
-
-# generate reading_type
-def get_reading_type():
-    return 'kWh'
-
-# generate reading quality - ignored
-def get_reading_quality():
-    return ''
-
-# generate reading time
-def get_reading_time():
-    return dt.now().strftime('%Y%m%d%H24%M%S')
-
-# generate reading value
-def get_reading_value(greaterThan, lessThan):
-    digits = 2
-    return round(random.uniform(greaterThan, lessThan), digits)
-
-# generate obis code - ignored
-def get_obis_code():
-    return ''
-
-# generate ansi code - ignored
-def get_ansi_code():
-    return ''
-
-# generate service multiplier - ignored
-def get_service_multiplier():
-    return ''
-
-# generate dst flag - ignored
-def get_dst_flag():
-    return ''
-
-# generate account number
-def get_account_number():
-    numbers = range(10000000, 90000000)
-    return random.sample(numbers, 1)[0]
-
-# generate source quality codes - ignored
-def get_source_quality_codes():
-    return ''
 
 # get random integer between min and max inclusive
 def get_random(min, max):
@@ -149,7 +133,7 @@ def initialize_error_record_generation():
     # 1 and 499 inclusive.
     ERROR_METER_IDS = randint(1, 500, NO_OF_ERROR_RECORDS)
     ERROR_METER_IDS = ERROR_METER_IDS.tolist()
-    print("List of meter ids for which error record will exist - {}".format(ERROR_METER_IDS))
+    logging.debug("List of meter ids for which error record will exist - {}".format(ERROR_METER_IDS))
 
 # If the given meter_id exist in the error_meter_ids list, return error no. and
 # remove that meter id from the error_meter_ids list.
@@ -159,7 +143,7 @@ def get_error_code(meter_id):
         if (meter_id == i):
             ERROR_METER_IDS.remove(meter_id)
             error_code = random.choice(ERROR_CODES)
-            print("Error code generated for meter id {} is {}".format(meter_id, error_code))
+            logging.debug("Error code generated for meter id {} is {}".format(meter_id, error_code))
             return error_code
     return -1
 
@@ -167,6 +151,7 @@ def get_error_code(meter_id):
 # initialize_error_record_generation()
 # for i in range(0, 500):
 #     get_error_code(i)
+
 
 # -------------------------------------------
 # Load (Create or load) Meter DB with given
@@ -180,7 +165,7 @@ def load_db(no_of_meters):
 
     # If db file is empty, generate meterids and write it to db
     if len(db) == 0:
-        print("Database file is empty!")
+        logging.debug("Database file is empty!")
         
         # generate meterids and write it to the file
         meters = []
@@ -198,31 +183,57 @@ def load_db(no_of_meters):
         json.dump(meters, fh)
         db = meters
     
-    print("####### Database entries ########")
-    print(db)
-    print('#################################')
+    logging.debug("####### Database entries ########")
+    logging.debug(db)
+    logging.debug('#################################')
     return db
 
-def save_db(data):
+def save_db(data, filename):
     # Open db file for writing
-    fh = open("db.json", 'w')
+    fh = open(filename, 'w')
     json.dump(data, fh)
 
 # load_db()
+
+# create meter db file named in the format db-1-599.json,
+# where 1 is first meter no. and 599 is last meter no.
+def get_meter_db_filename(m1st, mlast):
+    return 'db-' + str(m1st) + '-' + str(mlast) + '.json'
+
+def create_db(first_meter_no, last_meter_no):
+    # Generate meter records
+    logging.debug("Generating meter records from {} to {}".format(first_meter_no, last_meter_no))
+    
+    # generate meterids and meter records
+    meters = []
+    meterids = getall_meterids_shuffled(first_meter_no, last_meter_no)
+    for mid in meterids:
+        meter = {
+            'meter_id': mid
+        }
+        for register_type in OBIS_CODES:
+            for register in OBIS_CODES[register_type]:
+                meter[register] = 0
+        meters.append(meter)
+    
+    # write meter records in the db file, locally
+    db_filename = get_meter_db_filename(first_meter_no, last_meter_no)
+    fh = open(db_filename, 'w')
+    json.dump(meters, fh)
+    db = meters
+
+    logging.debug("####### Database entries ########")
+    logging.debug(db)
+    logging.debug('#################################')
+    return db
 
 # -------------------------------------------
 # Generate register reads data files
 # -------------------------------------------
 
-def generate_records():
-    firstdayoftheyear = dt(dt.today().year, 1, 1)
-    lastdayoftheyear = dt(dt.today().year, 12, 31)
-    start_time = firstdayoftheyear
-    end_time = start_time + timedelta(days=1)
 
-    # start_time = dt.now()
-    # end_time = dt.now() + timedelta(minutes=60)
-    read_interval_minutes = 15
+def generate_records(first_meter_no, last_meter_no, start_time, end_time, data_dir):
+    read_interval_minutes = 60
     
     meter_reading_min = 0
     meter_reading_max = 999999999
@@ -233,10 +244,8 @@ def generate_records():
     register_read_type = READING_TYPE['INT'] #kW
     consumption_type = READING_TYPE['AGG'] #kWH
 
-    METER_COUNT = 500
-
     # load db
-    meterlist = load_db(METER_COUNT)
+    meterlist = create_db(first_meter_no, last_meter_no)
 
     # Error record generation initialization
     initialize_error_record_generation()
@@ -246,7 +255,7 @@ def generate_records():
         consumption_rows = []
         combined_list = []
         error_record_rows = []
-        print('Timestamp: '+ start_time.strftime('%Y-%m-%d %H:%M:%S'))
+        logging.debug('Timestamp: '+ start_time.strftime('%Y-%m-%d %H:%M:%S'))
         
         for meter in meterlist:
             # Assuming there is 1:1 mapping between INT and AGG registers,
@@ -264,7 +273,7 @@ def generate_records():
                 if new_reading_value > meter_reading_max:
                     new_reading_value = new_reading_value - meter_reading_max
 
-                print('Meter id: {}, INT register: {}, AGG register: {}, units consumed: {}, last reading: {}, new reading: {}'.format(meter['meter_id'], int_register_list[i], agg_register_list[i], unit_consumed, meter[int_register_list[i]], new_reading_value))
+                logging.debug('Meter id: {}, INT register: {}, AGG register: {}, units consumed: {}, last reading: {}, new reading: {}'.format(meter['meter_id'], int_register_list[i], agg_register_list[i], unit_consumed, meter[int_register_list[i]], new_reading_value))
             
                 # Add fields into an appropriate list
                 # meter_id, register, reading_time, reading_value, reading_type
@@ -285,35 +294,84 @@ def generate_records():
                     register_read_row[4] = error_code
                     error_record_rows.append(register_read_row)
 
-                print(register_read_row)
+                logging.debug(register_read_row)
                 register_read_rows.append(register_read_row)
                 combined_list.append(register_read_row)
-                print(consumption_row)
+                logging.debug(consumption_row)
                 consumption_rows.append(consumption_row)
                 combined_list.append(consumption_row)
         
-        print('---------------')
+        logging.debug('---------------')
         start_time = start_time + timedelta(minutes=read_interval_minutes)
-        # shuffle the rows and write to file
-        random.shuffle(register_read_rows)
-        write('data/register_reads.csv', register_read_rows)
-        write('data/error_register_reads.csv', error_record_rows)
-        random.shuffle(consumption_rows)
-        write('data/consumption.csv', consumption_rows)
-        # shuffle combined records in the list and write to file
+        
+        # # shuffle the rows and write to file
+        # random.shuffle(register_read_rows)
+        # write('data/register_reads.csv', register_read_rows)
+        # write('data/error_register_reads.csv', error_record_rows)
+        # random.shuffle(consumption_rows)
+        # write('data/consumption.csv', consumption_rows)
+        # # shuffle combined records in the list and write to file
+        # random.shuffle(combined_list)
+        # write('data/combined_data.csv', combined_list)
+        
+        # create the filename of the format below
+        # [directory]/cd-[meter-no]-[register-read-time].csv
+        # e.g. data/cd-34-2020-12-28-03-55-43.csv
+        data_filename = data_dir + '/cd-' + str(meter['meter_id']) + '-' + str(start_time.strftime('%Y-%m-%d-%H-%M-%S')) + '.csv'
         random.shuffle(combined_list)
-        write('data/combined_data.csv', combined_list)
-        write_in_chunks('data/combined_data.csv', combined_list)
+        write_in_chunks(data_filename, combined_list)
+        logging.info("Finished writing records for meters {} to {} for time {}".format(first_meter_no, last_meter_no, start_time))
 
     # write updated readings into meter db
-    save_db(meterlist)
+    save_db(meterlist, get_meter_db_filename(first_meter_no, last_meter_no))
+
+
+## ------------- main function orchestrating different function execution ------------- ##
+def main():
+    
+    # set variable for data generation
+
+    # total meter count - make sure this number is fully divisible by batch size i.e.
+    # total_meter_count/batch_size shouldn't be a float value. Otherwise some meters
+    # will be left without any data generated.
+    total_meter_count = 4
+    start_date = dt(2020,1,1) #YYYY,MM,DD
+    end_date = dt(2020,1,2)
+
+    local_dir = 'data'
+    s3bucket = 'fake-meter-data'
+    # generate and upload data in a batch size of below
+    batch_size = 2
+
+    starting_meter_no = 1
+    ending_meter_no = batch_size
+    while ending_meter_no <= total_meter_count:
+        generate_records(starting_meter_no, ending_meter_no, start_date, end_date, local_dir)
+        logging.info('Records generated for meter {} to {}'.format(starting_meter_no, ending_meter_no))
+        #upload_to_s3(local_dir, s3bucket)
+        empty_dir(local_dir)
+        
+        starting_meter_no = ending_meter_no + 1
+        ending_meter_no = ending_meter_no + batch_size
 
 #### Uncomment below line to generate meter read records
-generate_records()    
+main()
+
 
 # Playing with date times
-# print(type(dt.now()))
+# logging.debug(type(dt.now()))
 # firstday = dt(dt.today().year, 1, 1)
 # lastday = dt(dt.today().year, 12, 31)
-# print(firstday)
-# print(lastday)
+# logging.debug(firstday)
+# logging.debug(lastday)
+# upload_to_s3('data', 'fake-meter-data')
+
+    # firstdayoftheyear = dt(dt.today().year, 1, 1)
+    # lastdayoftheyear = dt(dt.today().year, 12, 31)
+    # start_time = firstdayoftheyear
+    # end_time = start_time + timedelta(days=1)
+    # end_time = dt(2020,1,2)
+
+    # start_time = dt.now()
+    # end_time = dt.now() + timedelta(minutes=60)
+    
