@@ -72,6 +72,7 @@ Resources:
           GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
           VPCRouteTableId: !Ref VPCRouteTableId
           AvailabilityZone: !Ref AvailabilityZone
+          LandingzoneTransformer: !Ref LandingzoneTransformer
 
     GlueTablesStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -149,7 +150,15 @@ Parameters:
     Type: String
     Default: 0.0.0.0/0
     Description: CIDR block from where access to the Redshift cluster is allowed
-  
+
+  LandingzoneTransformer:
+    Type: String
+    Default: default
+    Description: Defines the Transformer for the input data in the Landing Zone
+    AllowedValues:
+      - default
+      - london
+
   QSS3BucketName:
     Type: String
     Default: aws-quickstart
@@ -208,6 +217,7 @@ Metadata:
           - QSS3BucketName
           - QSS3KeyPrefix
           - QSS3BucketRegion
+          - LandingzoneTransformer
     ParameterLabels:
       MasterUsername:
         default: Master username
@@ -237,3 +247,5 @@ Metadata:
         default: Quick Start S3 Bucket Key Prefix
       QSS3BucketRegion:
         default: Quick Start S3 Bucket AWS Region
+      LandingzoneTransformer:
+        default: Transformer that reads the landing zone data

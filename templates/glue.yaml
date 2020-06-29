@@ -1,5 +1,13 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Creates Glue resources"
+
+Mappings:
+    LandingzoneTransformerMap:
+        default:
+            script: "transform_raw_to_clean.py"
+        london:
+            script: "transform_raw_to_clean_london.py"
+
 Resources:
     GlueWorkflow:
         Type: AWS::Glue::Workflow
@@ -243,7 +251,9 @@ Resources:
                 MaxConcurrentRuns: 1
             Command:
                 Name: "glueetl"
-                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/transform_raw_to_clean.py"
+                ScriptLocation: !Sub
+                        - s3://${GlueScriptsS3Bucket}/admin/${script}
+                        - {script: !FindInMap [LandingzoneTransformerMap, !Ref LandingzoneTransformer, "script"]}
                 PythonVersion: "3"
             DefaultArguments:
                 --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
@@ -627,3 +637,6 @@ Parameters:
 
     AvailabilityZone:
         Type: AWS::EC2::AvailabilityZone::Name
+
+    LandingzoneTransformer:
+        Type: String

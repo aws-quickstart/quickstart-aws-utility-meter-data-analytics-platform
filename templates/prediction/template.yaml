@@ -1,0 +1,115 @@
+Transform: AWS::Serverless-2016-10-31
+Description: 'Meter Data Lake prediction pipeline'
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+
+Resources:
+
+  AthenaQueryBucket:
+    Type: AWS::S3::Bucket
+
+  WorkingBucket:
+    Type: AWS::S3::Bucket
+
+  # Step functions state machine
+  PredictionPipelineStateMachine:
+    Type: 'AWS::Serverless::StateMachine'
+    Properties:
+      DefinitionUri: '../../assets/statemachine/state-machine-prediction-pipeline.asl.json'
+      DefinitionSubstitutions:
+        AthenaQueryBucket: !Ref AthenaQueryBucket
+        WorkingBucket: !Ref WorkingBucket
+        LambdaSplitFunctionName: !Ref SplitBatchFunction
+        LambdaPrepareFunctionName: !Ref PrepareBatchFunction
+        LambdaResultFunctionName: !Ref UploadResultFunction
+      Policies:
+        - Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Action:
+                - events:PutTargets
+                - events:PutRule
+                - events:DescribeRule
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                  - sagemaker:CreateTransformJob
+                  - sagemaker:DescribeTransformJob
+                  - sagemaker:StopTransformJob
+                  - sagemaker:CreateTrainingJob
+                  - sagemaker:DescribeTrainingJob
+                  - sagemaker:StopTrainingJob
+                  - sagemaker:CreateHyperParameterTuningJob
+                  - sagemaker:DescribeHyperParameterTuningJob
+                  - sagemaker:StopHyperParameterTuningJob
+                  - sagemaker:CreateModel
+                  - sagemaker:CreateEndpointConfig
+                  - sagemaker:CreateEndpoint
+                  - sagemaker:DeleteEndpointConfig
+                  - sagemaker:DeleteEndpoint
+                  - sagemaker:UpdateEndpoint
+                  - sagemaker:ListTags
+              Resource: "arn:aws:sagemaker:*:*:*"
+        - LambdaInvokePolicy:
+            FunctionName: !Ref SplitBatchFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref PrepareBatchFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref UploadResultFunction
+
+  #
+  # Lambda functions
+  #
+  SplitBatchFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      CodeUri: ../../assets/functions/split_batch
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+
+  PrepareBatchFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      CodeUri: ../../assets/functions/prepare_batch
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+
+  UploadResultFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      CodeUri: ../../assets/functions/upload_result
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+
+  #
+  # IAM roles
+  #
+  ExecuteLambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 'lambda.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
+
+Parameters:
+  QSS3BucketName:
+    Type: String
+    Default: cf-meter-data
+    Description: AWS Quick Start S3 bucket name where the Quick Start assets are hosted
+
+  QSS3KeyPrefix:
+    Type: String
+    Default: temp/
+    Description: S3 bucket key prefix for the AWS Quick Start assets
