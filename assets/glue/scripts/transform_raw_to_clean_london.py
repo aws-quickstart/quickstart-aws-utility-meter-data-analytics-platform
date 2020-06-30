@@ -48,7 +48,8 @@ job.init(args['JOB_NAME'], args)
 
 cleanup_temp_folder(args['temp_workflow_bucket'], 'glue_workflow_distinct_dates')
 
-datasource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = args['table_name'], transformation_ctx = "datasource")
+tableName = args['table_name'].replace("-", "_")
+datasource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = tableName, transformation_ctx = "datasource")
 
 applymapping1 = ApplyMapping.apply(frame = datasource, mappings = [("lclid", "string", "meter_id", "string"), \
                                                                     ("datetime", "string", "reading_time", "string"), \

@@ -18,50 +18,6 @@ Resources:
     LogsLogGroup:
         Type: "AWS::Logs::LogGroup"
 
-    GlueCrawler:
-        Type: "AWS::Glue::Crawler"
-        Properties:
-            Name: "meter-data-business-aggregated-daily"
-            Role: !Sub "service-role/${IAMRole}"
-            Targets:
-                S3Targets:
-                    -
-                        Path: !Sub "s3://${BusinessZoneS3Bucket}/aggregated/daily"
-            DatabaseName: !Ref DBName
-            SchemaChangePolicy:
-                UpdateBehavior: "UPDATE_IN_DATABASE"
-                DeleteBehavior: "DEPRECATE_IN_DATABASE"
-            TablePrefix: "aggregated_"
-
-    GlueCrawler2:
-        Type: "AWS::Glue::Crawler"
-        Properties:
-            Name: "meter-data-business-aggregated-monthly"
-            Role: !Sub "service-role/${IAMRole}"
-            Targets:
-                S3Targets:
-                    -
-                        Path: !Sub "s3://${BusinessZoneS3Bucket}/aggregated/monthly"
-            DatabaseName: !Ref DBName
-            SchemaChangePolicy:
-                UpdateBehavior: "UPDATE_IN_DATABASE"
-                DeleteBehavior: "DEPRECATE_IN_DATABASE"
-            TablePrefix: "aggregated_"
-
-    GlueCrawler3:
-        Type: "AWS::Glue::Crawler"
-        Properties:
-            Name: "meter-data-business-aggregated-weekly"
-            Role: !Sub "service-role/${IAMRole}"
-            Targets:
-                S3Targets:
-                    -
-                        Path: !Sub "s3://${BusinessZoneS3Bucket}/aggregated/weekly"
-            DatabaseName: !Ref DBName
-            SchemaChangePolicy:
-                UpdateBehavior: "UPDATE_IN_DATABASE"
-                DeleteBehavior: "DEPRECATE_IN_DATABASE"
-            TablePrefix: "aggregated_"
 
     GlueCrawler4:
         Type: "AWS::Glue::Crawler"
@@ -105,84 +61,6 @@ Resources:
                 UpdateBehavior: "UPDATE_IN_DATABASE"
                 DeleteBehavior: "DEPRECATE_IN_DATABASE"
             Configuration: "{\"Version\":1.0,\"CrawlerOutput\":{\"Partitions\":{\"AddOrUpdateBehavior\":\"InheritFromTable\"}},\"Grouping\":{\"TableGroupingPolicy\":\"CombineCompatibleSchemas\"}}"
-
-    GlueJob:
-        Type: "AWS::Glue::Job"
-        Properties:
-            Name: "business_aggregate_daily.py"
-            Role: !GetAtt IAMRole.Arn
-            ExecutionProperty:
-                MaxConcurrentRuns: 1
-            Command:
-                Name: "glueetl"
-                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_aggregate_daily.py"
-                PythonVersion: "3"
-            DefaultArguments:
-                --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
-                --enable-metrics: ""
-                --enable-continuous-cloudwatch-log: "true"
-                --enable-continuous-log-filter: "true"
-                --job-language: "python"
-                --db_name: !Ref DBName
-                --business_zone_bucket: !Ref BusinessZoneS3Bucket
-                --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
-            MaxRetries: 0
-            #AllocatedCapacity: 5
-            Timeout: 2880
-            GlueVersion: "1.0"
-            MaxCapacity: 5
-
-    GlueJob2:
-        Type: "AWS::Glue::Job"
-        Properties:
-            Name: "business_aggregate_monthly.py"
-            Role: !GetAtt IAMRole.Arn
-            ExecutionProperty:
-                MaxConcurrentRuns: 1
-            Command:
-                Name: "glueetl"
-                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_aggregate_monthly.py"
-                PythonVersion: "3"
-            DefaultArguments:
-                --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
-                --enable-metrics: ""
-                --enable-continuous-cloudwatch-log: "true"
-                --enable-continuous-log-filter: "true"
-                --job-language: "python"
-                --db_name: !Ref DBName
-                --business_zone_bucket: !Ref BusinessZoneS3Bucket
-                --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
-            MaxRetries: 0
-            #AllocatedCapacity: 5
-            Timeout: 2880
-            GlueVersion: "1.0"
-            MaxCapacity: 5
-
-    GlueJob3:
-        Type: "AWS::Glue::Job"
-        Properties:
-            Name: "business_aggregate_weekly.py"
-            Role: !GetAtt IAMRole.Arn
-            ExecutionProperty:
-                MaxConcurrentRuns: 1
-            Command:
-                Name: "glueetl"
-                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_aggregate_weekly.py"
-                PythonVersion: "3"
-            DefaultArguments:
-                --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
-                --enable-metrics: ""
-                --enable-continuous-cloudwatch-log: "true"
-                --enable-continuous-log-filter: "true"
-                --job-language: "python"
-                --db_name: !Ref DBName
-                --business_zone_bucket: !Ref BusinessZoneS3Bucket
-                --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
-            MaxRetries: 0
-            #AllocatedCapacity: 5
-            Timeout: 2880
-            GlueVersion: "1.0"
-            MaxCapacity: 5
 
     GlueJob4:
         Type: "AWS::Glue::Job"
@@ -233,7 +111,7 @@ Resources:
                 --job-bookmark-option: "job-bookmark-enable"
                 --job-language: "python"
                 --db_name: !Ref DBName
-                --table_name: "meter_clean_zone"
+                --table_name: !Ref CleanZoneS3Bucket
                 --business_zone_bucket: !Ref BusinessZoneS3Bucket
                 --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
             MaxRetries: 0
@@ -263,7 +141,7 @@ Resources:
                 --job-bookmark-option: "job-bookmark-enable"
                 --job-language: "python"
                 --db_name: !Ref DBName
-                --table_name: "meter_landing_zone"
+                --table_name: !Ref LandingZoneS3Bucket
                 --clean_data_bucket: !Ref CleanZoneS3Bucket
                 --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
             MaxRetries: 0
@@ -313,18 +191,6 @@ Resources:
                         LogicalOperator: "EQUALS"
                         CrawlerName: !Ref GlueCrawler4
                         CrawlState: "SUCCEEDED"
-                    -
-                        LogicalOperator: "EQUALS"
-                        CrawlerName: !Ref GlueCrawler
-                        CrawlState: "SUCCEEDED"
-                    -
-                        LogicalOperator: "EQUALS"
-                        CrawlerName: !Ref GlueCrawler3
-                        CrawlState: "SUCCEEDED"
-                    -
-                        LogicalOperator: "EQUALS"
-                        CrawlerName: !Ref GlueCrawler2
-                        CrawlState: "SUCCEEDED"
 
     GlueTrigger4:
         Type: "AWS::Glue::Trigger"
@@ -358,69 +224,6 @@ Resources:
                         CrawlerName: !Ref GlueCrawler5
                         CrawlState: "SUCCEEDED"
 
-    GlueTrigger6:
-        Type: "AWS::Glue::Trigger"
-        Properties:
-            Name: "trigger-daily-agg-crawler"
-            Type: "CONDITIONAL"
-            StartOnCreation: true
-            WorkflowName: !Ref GlueWorkflow
-            Actions:
-                - CrawlerName: !Ref GlueCrawler
-            Predicate:
-                Conditions:
-                    -
-                        LogicalOperator: "EQUALS"
-                        JobName: !Ref GlueJob
-                        State: "SUCCEEDED"
-
-    GlueTrigger7:
-        Type: "AWS::Glue::Trigger"
-        Properties:
-            Name: "trigger-daily-aggregate"
-            Type: "CONDITIONAL"
-            StartOnCreation: true
-            WorkflowName: !Ref GlueWorkflow
-            Actions:
-                - JobName: !Ref GlueJob
-            Predicate:
-                Conditions:
-                    -
-                        LogicalOperator: "EQUALS"
-                        CrawlerName: !Ref GlueCrawler4
-                        CrawlState: "SUCCEEDED"
-
-    GlueTrigger8:
-        Type: "AWS::Glue::Trigger"
-        Properties:
-            Name: "trigger-monthly-agg-crawler"
-            Type: "CONDITIONAL"
-            StartOnCreation: true
-            WorkflowName: !Ref GlueWorkflow
-            Actions:
-                - CrawlerName: !Ref GlueCrawler2
-            Predicate:
-                Conditions:
-                    -
-                        LogicalOperator: "EQUALS"
-                        JobName: !Ref GlueJob2
-                        State: "SUCCEEDED"
-
-    GlueTrigger9:
-        Type: "AWS::Glue::Trigger"
-        Properties:
-            Name: "trigger-monthly-aggregate"
-            Type: "CONDITIONAL"
-            StartOnCreation: true
-            WorkflowName: !Ref GlueWorkflow
-            Actions:
-                - JobName: !Ref GlueJob2
-            Predicate:
-                Conditions:
-                    -
-                        LogicalOperator: "EQUALS"
-                        CrawlerName: !Ref GlueCrawler4
-                        CrawlState: "SUCCEEDED"
 
     GlueTrigger10:
         Type: "AWS::Glue::Trigger"
@@ -436,38 +239,6 @@ Resources:
                     -
                         LogicalOperator: "EQUALS"
                         CrawlerName: !Ref GlueCrawler6
-                        CrawlState: "SUCCEEDED"
-
-    GlueTrigger11:
-        Type: "AWS::Glue::Trigger"
-        Properties:
-            Name: "trigger-weekly-agg-crawler"
-            Type: "CONDITIONAL"
-            StartOnCreation: true
-            WorkflowName: !Ref GlueWorkflow
-            Actions:
-                - CrawlerName: !Ref GlueCrawler3
-            Predicate:
-                Conditions:
-                    -
-                        LogicalOperator: "EQUALS"
-                        JobName: !Ref GlueJob3
-                        State: "SUCCEEDED"
-
-    GlueTrigger12:
-        Type: "AWS::Glue::Trigger"
-        Properties:
-            Name: "trigger-weekly-aggregate"
-            Type: "CONDITIONAL"
-            StartOnCreation: true
-            WorkflowName: !Ref GlueWorkflow
-            Actions:
-                - JobName: !Ref GlueJob3
-            Predicate:
-                Conditions:
-                    -
-                        LogicalOperator: "EQUALS"
-                        CrawlerName: !Ref GlueCrawler4
                         CrawlState: "SUCCEEDED"
 
     IAMManagedPolicy:

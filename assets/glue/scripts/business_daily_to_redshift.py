@@ -17,13 +17,13 @@ job.init(args['JOB_NAME'], args)
 allDaily = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = "daily", transformation_ctx = "allDaily")
 glueContext.write_dynamic_frame.from_jdbc_conf(frame = allDaily, catalog_connection = args['redshift_connection'], connection_options = {"dbtable": "daily", "database": args['db_name']}, redshift_tmp_dir = args["TempDir"], transformation_ctx = "allDaily")
 
-allAggDaily = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = "aggregated_daily", transformation_ctx = "allDaily")
-glueContext.write_dynamic_frame.from_jdbc_conf(frame = allAggDaily, catalog_connection = args['redshift_connection'], connection_options = {"dbtable": "aggregated_daily", "database": args['db_name']}, redshift_tmp_dir = args["TempDir"], transformation_ctx = "allAggDaily")
+# allAggDaily = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = "aggregated_daily", transformation_ctx = "allDaily")
+# glueContext.write_dynamic_frame.from_jdbc_conf(frame = allAggDaily, catalog_connection = args['redshift_connection'], connection_options = {"dbtable": "aggregated_daily", "database": args['db_name']}, redshift_tmp_dir = args["TempDir"], transformation_ctx = "allAggDaily")
 
-allAggWeekly = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = "aggregated_weekly", transformation_ctx = "allDaily")
-glueContext.write_dynamic_frame.from_jdbc_conf(frame = allAggWeekly, catalog_connection = args['redshift_connection'], connection_options = {"dbtable": "aggregated_weekly", "database": args['db_name']}, redshift_tmp_dir = args["TempDir"], transformation_ctx = "allAggWeekly")
+# allAggWeekly = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = "aggregated_weekly", transformation_ctx = "allDaily")
+# glueContext.write_dynamic_frame.from_jdbc_conf(frame = allAggWeekly, catalog_connection = args['redshift_connection'], connection_options = {"dbtable": "aggregated_weekly", "database": args['db_name']}, redshift_tmp_dir = args["TempDir"], transformation_ctx = "allAggWeekly")
 
-allAggMonthly = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = "aggregated_monthly", transformation_ctx = "allDaily")
-glueContext.write_dynamic_frame.from_jdbc_conf(frame = allAggMonthly, catalog_connection = args['redshift_connection'], connection_options = {"dbtable": "aggregated_monthly", "database": args['db_name']}, redshift_tmp_dir = args["TempDir"], transformation_ctx = "allAggMonthly")
+# allAggMonthly = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = "aggregated_monthly", transformation_ctx = "allDaily")
+# glueContext.write_dynamic_frame.from_jdbc_conf(frame = allAggMonthly, catalog_connection = args['redshift_connection'], connection_options = {"dbtable": "aggregated_monthly", "database": args['db_name']}, redshift_tmp_dir = args["TempDir"], transformation_ctx = "allAggMonthly")
 
 job.commit()
