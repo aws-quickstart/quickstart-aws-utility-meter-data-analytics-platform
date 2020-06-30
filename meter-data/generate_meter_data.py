@@ -5,6 +5,7 @@ from numpy.random import seed
 from numpy.random import randint
 import logging, boto3
 from os import listdir
+from botocore.config import Config
 
 # -------------------------------------------
 # Constants / Mappings
@@ -51,19 +52,17 @@ logging.basicConfig(filename=log_filename,level=logging.INFO,format='%(levelname
 # -------------------------------------------
 # S3 UPLOAD
 # -------------------------------------------
+s3 = boto3.resource('s3', region_name='us-east-1')
 
 # upload all objects in a given directory locally, to a given S3 bucket
 def upload_to_s3(dir, s3bucket, s3path):
-    s3client = boto3.client('s3')
-    
     filenames = listdir(dir)
     for file in filenames:
         logging.debug(file)
         local_file_path = dir + '/' + file
-        response = s3client.put_object(
-            Body=local_file_path,
-            Bucket=s3bucket,
-            Key=s3path+'/'+file)
+        response = s3.meta.client.upload_file(
+            local_file_path, s3bucket, s3path+'/'+file
+        )
 
 # -------------------------------------------
 # FILE WRITER
@@ -242,7 +241,7 @@ def create_db(first_meter_no, last_meter_no):
 
 
 def generate_records(first_meter_no, last_meter_no, start_time, end_time, data_dir):
-    read_interval_minutes = 60
+    read_interval_minutes = 15
     
     meter_reading_min = 0
     meter_reading_max = 999999999
@@ -325,7 +324,8 @@ def generate_records(first_meter_no, last_meter_no, start_time, end_time, data_d
         # e.g. data/cd-34-2020-12-28-03-55-43.csv
         data_filename = data_dir + '/cd-' + str(start_time.strftime('%Y-%m-%d-%H-%M-%S')) + '-M' + str(first_meter_no) + '-M' + str(last_meter_no) + '.csv'
         random.shuffle(combined_list)
-        write_in_chunks(data_filename, combined_list)
+        write(data_filename, combined_list)
+        # write_in_chunks(data_filename, combined_list)
         logging.info("Finished writing records for meters {} to {} for time {}".format(first_meter_no, last_meter_no, start_time))
 
     # write updated readings into meter db
@@ -342,7 +342,7 @@ def main():
     # will be left without any data generated.
     total_meter_count = 6
     start_date = dt(2010,1,1) #YYYY,MM,DD
-    end_date = dt(2010,1,10)
+    end_date = dt(2010,1,5)
 
     local_dir = 'data'
     s3bucket = 'fake-meter-data'
@@ -353,7 +353,7 @@ def main():
     initialize_error_record_generation(2, 3, dt.fromisoformat('2010-01-03T09:15:00'), dt.fromisoformat('2010-01-03T15:25:00'))
 
     starting_meter_no = 1
-    ending_meter_no = batch_size
+    ending_meter_no = starting_meter_no + (batch_size-1)
     while ending_meter_no <= total_meter_count:
         generate_records(starting_meter_no, ending_meter_no, start_date, end_date, local_dir)
         logging.info('Records generated for meter {} to {}'.format(starting_meter_no, ending_meter_no))
