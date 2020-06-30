@@ -24,7 +24,7 @@ dateList = tempDataFile.get()['Body'].read().decode().split(",")
 
 business_zone_bucket_path = "s3://" + args['business_zone_bucket'] + "/aggregated/weekly"
 
-if not dateList:
+if dateList:
     for dateStr in dateList:
         cleanedMeterDataSource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = "daily", transformation_ctx = "cleanedMeterDataSource", push_down_predicate = "(reading_type == 'INT' and date_str == '{}')".format(dateStr))
 
