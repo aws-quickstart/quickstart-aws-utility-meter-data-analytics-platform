@@ -9,6 +9,7 @@ from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue.dynamicframe import DynamicFrame
 from pyspark.sql.functions import *
+from pyspark.sql.types import *
 
 
 def check_if_file_exist(bucket, key):
@@ -36,6 +37,10 @@ def move_temp_file(bucket, key):
 def cleanup_temp_folder(bucket, key):
     if check_if_file_exist(bucket, key):
         move_temp_file(bucket, key)
+
+
+def parseDateString(timestampStr):
+    return datetime.strptime(timestampStr, "%Y%m%d%H24%M%S")
 
 
 args = getResolvedOptions(sys.argv, ['JOB_NAME', 'db_name', 'table_name', 'clean_data_bucket', 'temp_workflow_bucket'])
@@ -71,13 +76,17 @@ timeStr = regexp_replace(col("reading_time").substr(9,16), "24", "")
 time = to_timestamp(timeStr, "HHmmss")
 date = to_date(col("date_str"), "yyyyMMdd")
 
+udfParseDateString = udf(parseDateString, TimestampType())
+
 # add separate date and time fields
 mappedReadings = mappedReadings.withColumn("week_of_year", weekofyear(date)) \
           .withColumn("day_of_month", dayofmonth(date)) \
           .withColumn("month", month(date)) \
           .withColumn("year", year(date)) \
           .withColumn("hour", hour(time)) \
-          .withColumn("minute", minute(time)) 
+          .withColumn("minute", minute(time)) \
+          .withColumn("reading_date_time", udfParseDateString("reading_time")) \
+          .drop("reading_time")
 
 # get the distinct date value and store them in a temp S3 bucket to now which aggregation data need to be
 # calculated later on

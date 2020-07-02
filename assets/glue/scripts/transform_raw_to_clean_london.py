@@ -56,7 +56,6 @@ applymapping1 = ApplyMapping.apply(frame = datasource, mappings = [("lclid", "st
                                                                     ("KWH/hh (per half hour)", "double", "reading_value", "double")], \
                                                                     transformation_ctx = "applymapping1")
 
-
 resolvechoice2 = ResolveChoice.apply(frame = applymapping1, choice = "make_struct", \
                                      transformation_ctx = "resolvechoice2")
 
@@ -75,7 +74,9 @@ mappedReadings = mappedReadings \
     .withColumn("month", month(reading_time)) \
     .withColumn("year", year(reading_time)) \
     .withColumn("hour", hour(reading_time)) \
-    .withColumn("minute", minute(reading_time))
+    .withColumn("minute", minute(reading_time)) \
+    .withColumn("reading_date_time", reading_time) \
+    .drop("reading_time")
 
 filteredMeterReads = DynamicFrame.fromDF(mappedReadings, glueContext, "filteredMeterReads")
 
