@@ -25,8 +25,8 @@ Resources:
                         Name: "obis_code"
                         Type: "string"
                       - 
-                        Name: "reading_time"
-                        Type: "string"
+                        Name: "reading_date_time"
+                        Type: "timestamp"
                       - 
                         Name: "reading_value"
                         Type: "double"
