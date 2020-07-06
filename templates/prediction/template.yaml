@@ -11,6 +11,47 @@ Resources:
   WorkingBucket:
     Type: AWS::S3::Bucket
 
+  # init training statemachine
+  InitialTrainingStateMachine:
+    Type: 'AWS::Serverless::StateMachine'
+    Properties:
+      DefinitionUri: '../../assets/statemachine/state-machine-training.asl.json'
+      DefinitionSubstitutions:
+        AthenaQueryBucket: !Ref AthenaQueryBucket
+        WorkingBucket: !Ref WorkingBucket
+        LambdaPrepareTrainingName: !Ref PrepareTrainingFunction
+      Policies:
+        - Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Action:
+                - events:PutTargets
+                - events:PutRule
+                - events:DescribeRule
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - sagemaker:CreateTransformJob
+                - sagemaker:DescribeTransformJob
+                - sagemaker:StopTransformJob
+                - sagemaker:CreateTrainingJob
+                - sagemaker:DescribeTrainingJob
+                - sagemaker:StopTrainingJob
+                - sagemaker:CreateHyperParameterTuningJob
+                - sagemaker:DescribeHyperParameterTuningJob
+                - sagemaker:StopHyperParameterTuningJob
+                - sagemaker:CreateModel
+                - sagemaker:CreateEndpointConfig
+                - sagemaker:CreateEndpoint
+                - sagemaker:DeleteEndpointConfig
+                - sagemaker:DeleteEndpoint
+                - sagemaker:UpdateEndpoint
+                - sagemaker:ListTags
+              Resource: "arn:aws:sagemaker:*:*:*"
+        - LambdaInvokePolicy:
+            FunctionName: !Ref PrepareTrainingFunction
+
+
   # Step functions state machine
   PredictionPipelineStateMachine:
     Type: 'AWS::Serverless::StateMachine'
@@ -60,6 +101,14 @@ Resources:
   #
   # Lambda functions
   #
+  PrepareTrainingFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      CodeUri: ../../assets/functions/prepare_training
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+
   SplitBatchFunction:
     Type: 'AWS::Serverless::Function'
     Properties:

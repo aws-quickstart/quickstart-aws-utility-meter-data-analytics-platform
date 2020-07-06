@@ -1,0 +1,121 @@
+{
+  "StartAt": "Prepare training dataset",
+  "States": {
+    "Prepare training dataset": {
+      "Parameters": {
+        "FunctionName": "${LambdaPrepareTrainingName}",
+        "Payload": {
+          "Athena_bucket": "${AthenaQueryBucket}",
+          "S3_bucket": "${WorkingBucket}",
+          "Batch_start.$": "$.Batch_start",
+          "Batch_end.$": "$.Batch_end",
+          "Training_samples.$": "$.Training_samples",
+          "Data_start.$": "$.Data_start",
+          "Data_end.$": "$.Data_end",
+          "Forecast_period.$": "$.Forecast_period"
+        }
+      },
+      "ResultPath": null,
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Type": "Task",
+      "Next": "Model Training"
+    },
+    "Model Training": {
+      "ResultPath": "$.TrainingOutput",
+      "Resource": "arn:aws:states:::sagemaker:createTrainingJob.sync",
+      "Parameters": {
+        "AlgorithmSpecification": {
+          "TrainingImage": "522234722520.dkr.ecr.us-east-1.amazonaws.com/forecasting-deepar:1",
+          "TrainingInputMode": "File"
+        },
+        "OutputDataConfig": {
+          "S3OutputPath": "s3://${WorkingBucket}/smartmeter/sagemaker/model"
+        },
+        "StoppingCondition": {
+          "MaxRuntimeInSeconds": 86400
+        },
+        "ResourceConfig": {
+          "InstanceCount": 1,
+          "InstanceType": "ml.c4.2xlarge",
+          "VolumeSizeInGB": 30
+        },
+        "RoleArn": "arn:aws:iam::849779837104:role/service-role/AWSGlueServiceSageMakerNotebookRole-meterdata-transformation",
+        "InputDataConfig": [
+          {
+            "DataSource": {
+              "S3DataSource": {
+                "S3DataType": "S3Prefix",
+                "S3Uri": "s3://${WorkingBucket}/smartmeter/sagemaker/train/",
+                "S3DataDistributionType": "FullyReplicated"
+              }
+            },
+            "ChannelName": "train"
+          },
+          {
+            "DataSource": {
+              "S3DataSource": {
+                "S3DataType": "S3Prefix",
+                "S3Uri": "s3://${WorkingBucket}/smartmeter/sagemaker/test/",
+                "S3DataDistributionType": "FullyReplicated"
+              }
+            },
+            "ChannelName": "test"
+          }
+        ],
+        "HyperParameters": {
+          "time_freq": "1H",
+          "epochs": "400",
+          "early_stopping_patience": "40",
+          "mini_batch_size": "48",
+          "learning_rate": "5E-4",
+          "context_length": "168",
+          "prediction_length": "168"
+        },
+        "TrainingJobName.$": "$.Training_job_name"
+      },
+      "Type": "Task",
+      "Next": "Save Model"
+    },
+    "Save Model": {
+      "ResultPath": null,
+      "Parameters": {
+        "ExecutionRoleArn": "arn:aws:iam::849779837104:role/service-role/AWSGlueServiceSageMakerNotebookRole-meterdata-transformation",
+        "ModelName.$": "$.ML_model_name",
+        "PrimaryContainer": {
+          "Environment": {},
+          "Image": "522234722520.dkr.ecr.us-east-1.amazonaws.com/forecasting-deepar:1",
+          "ModelDataUrl.$": "$['TrainingOutput']['ModelArtifacts']['S3ModelArtifacts']"
+        }
+      },
+      "Resource": "arn:aws:states:::sagemaker:createModel",
+      "Type": "Task",
+      "Next": "Create Model Endpoint Config"
+    },
+    "Create Model Endpoint Config": {
+      "ResultPath": null,
+      "Resource": "arn:aws:states:::sagemaker:createEndpointConfig",
+      "Parameters": {
+        "EndpointConfigName.$": "$.ML_model_name",
+        "ProductionVariants": [
+          {
+            "InitialInstanceCount": 1,
+            "InstanceType": "ml.m4.xlarge",
+            "ModelName.$": "$.ML_model_name",
+            "VariantName": "AllTraffic"
+          }
+        ]
+      },
+      "Type": "Task",
+      "Next": "Update Model Endpoint"
+    },
+    "Update Model Endpoint": {
+      "Resource": "arn:aws:states:::sagemaker:createEndpoint",
+      "Parameters": {
+        "EndpointConfigName.$": "$.ML_model_name",
+        "EndpointName.$": "$.ML_endpoint_name"
+      },
+      "Type": "Task",
+      "End": true
+    }
+  }
+}
