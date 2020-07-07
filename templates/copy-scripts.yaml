@@ -27,6 +27,7 @@ Resources:
           - transform_clean_to_business_partition.py
           - transform_raw_to_clean.py
           - transform_raw_to_clean_london.py
+          - cis_to_redshift.py
 
     CopyArtifactsRole:
       Type: AWS::IAM::Role
