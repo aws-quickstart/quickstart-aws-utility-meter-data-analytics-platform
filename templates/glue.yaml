@@ -291,7 +291,7 @@ Resources:
                                 "arn:aws:s3:::${CleanZoneS3Bucket}",
                                 "arn:aws:s3:::${TempWorkflowS3Bucket}",
                                 "arn:aws:s3:::${GlueScriptsS3Bucket}",
-                                "arn:aws:s3:::${GlueTempS3Bucket}"
+                                "arn:aws:s3:::${GlueTempS3Bucket}",
                                 "arn:aws:s3:::${CisS3Bucket}"
                             ]
                         }
