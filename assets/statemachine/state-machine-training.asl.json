@@ -7,12 +7,11 @@
         "Payload": {
           "Athena_bucket": "${AthenaQueryBucket}",
           "S3_bucket": "${WorkingBucket}",
-          "Batch_start.$": "$.Batch_start",
-          "Batch_end.$": "$.Batch_end",
           "Training_samples.$": "$.Training_samples",
           "Data_start.$": "$.Data_start",
           "Data_end.$": "$.Data_end",
-          "Forecast_period.$": "$.Forecast_period"
+          "Forecast_period.$": "$.Forecast_period",
+          "With_weather_data.$": "$.With_weather_data"
         }
       },
       "ResultPath": null,
@@ -39,7 +38,7 @@
           "InstanceType": "ml.c4.2xlarge",
           "VolumeSizeInGB": 30
         },
-        "RoleArn": "arn:aws:iam::849779837104:role/service-role/AWSGlueServiceSageMakerNotebookRole-meterdata-transformation",
+        "RoleArn": "arn:aws:iam::${AccountId}:role/service-role/AWSGlueServiceSageMakerNotebookRole-meterdata-transformation",
         "InputDataConfig": [
           {
             "DataSource": {
@@ -79,7 +78,7 @@
     "Save Model": {
       "ResultPath": null,
       "Parameters": {
-        "ExecutionRoleArn": "arn:aws:iam::849779837104:role/service-role/AWSGlueServiceSageMakerNotebookRole-meterdata-transformation",
+        "ExecutionRoleArn": "arn:aws:iam::${AccountId}:role/service-role/AWSGlueServiceSageMakerNotebookRole-meterdata-transformation",
         "ModelName.$": "$.ML_model_name",
         "PrimaryContainer": {
           "Environment": {},

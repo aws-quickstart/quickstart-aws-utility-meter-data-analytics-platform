@@ -20,6 +20,7 @@ Resources:
         AthenaQueryBucket: !Ref AthenaQueryBucket
         WorkingBucket: !Ref WorkingBucket
         LambdaPrepareTrainingName: !Ref PrepareTrainingFunction
+        AccountId: !Sub ${AWS::AccountId}
       Policies:
         - Version: 2012-10-17
           Statement:
@@ -28,6 +29,10 @@ Resources:
                 - events:PutTargets
                 - events:PutRule
                 - events:DescribeRule
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - "iam:PassRole"
               Resource: "*"
             - Effect: Allow
               Action:
@@ -104,6 +109,7 @@ Resources:
   PrepareTrainingFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
+      Timeout: 3000
       CodeUri: ../../assets/functions/prepare_training
       Handler: app.lambda_handler
       Runtime: python3.7
