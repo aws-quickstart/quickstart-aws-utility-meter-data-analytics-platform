@@ -35,19 +35,19 @@ import pandas as pd
 from pyathena import connect
 
 def get_weather(connection, start):
-    weather_data = '''select date_parse(time,'%%Y-%%m-%%d %%H:%%i:%%s') as datetime, temperature, 
+    weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, temperature, 
     dewpoint, pressure, apparenttemperature, windspeed, humidity 
     from "meter-data".weather_hourly_london
-    where time >= '%s'
+    where time >= '{}'
     order by 1;
-    ''' % start
+    '''.format(start)
     df_weather = pd.read_sql(weather_data, connection)
     df_weather = df_weather.set_index('datetime')
     return df_weather
 
 def get_meters(connection, samples):
-    selected_households = '''select distinct meter_id 
-        from "meter-data".daily limit %d;''' % samples
+    selected_households = '''select distinct meter_id
+        from "meter-data".daily limit {};'''.format(samples)
 
     df_meters = pd.read_sql(selected_households, connection)
     return df_meters['meter_id'].tolist()
@@ -61,7 +61,7 @@ def write_upload_file(bucket, path, data):
     boto3.Session().resource('s3').Bucket(bucket).Object(path).put(Body=jsonBuffer.getvalue())
 
 def lambda_handler(event, context):
-    ATHENA_OUTPUT_BUCKET = event['Athena_bucket']
+    ATHENA_OUTPUT_BUCKET = event['Athen_bucket']
     S3_BUCKET = event['S3_bucket']
     TRAINING_SAMPLES = event['Training_samples']
     USE_WEATHER_DATA = event['With_weather_data']
@@ -69,8 +69,6 @@ def lambda_handler(event, context):
     DATA_END = event['Data_end']
     FORECAST_PERIOD = event['Forecast_period']
     prediction_length = FORECAST_PERIOD * 24
-
-    print(USE_WEATHER_DATA)
 
     # region should be an environment variable
     region = 'us-east-1'
@@ -105,14 +103,14 @@ def lambda_handler(event, context):
         df_weather = get_weather(connection, DATA_START)
 
         training_data = [
-            {
-                "start": str(start_dataset),
-                "target": ts[start_dataset:end_training].tolist(),  # We use -1, because pandas indexing includes the upper bound
-                "dynamic_feat": [df_weather['temperature'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist(),
-                                 df_weather['humidity'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist(),
-                                 df_weather['apparenttemperature'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist()]
-            }
-            for meterid, ts in timeseries.items()
+          {
+              "start": str(start_dataset),
+              "target": ts[start_dataset:end_training].tolist(),  # We use -1, because pandas indexing includes the upper bound
+              "dynamic_feat": [df_weather['temperature'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist(),
+                               df_weather['humidity'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist(),
+                               df_weather['apparenttemperature'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist()]
+          }
+          for meterid, ts in timeseries.items()
         ]
 
         # there could be missing data, so use actual timeseries size
@@ -129,11 +127,11 @@ def lambda_handler(event, context):
         ]
     else:
         training_data = [
-            {
-                "start": str(start_dataset),
-                "target": ts[start_dataset:end_training].tolist()  # We use -1, because pandas indexing includes the upper bound
-            }
-            for meterid, ts in timeseries.items()
+          {
+              "start": str(start_dataset),
+              "target": ts[start_dataset:end_training].tolist()  # We use -1, because pandas indexing includes the upper bound
+          }
+          for meterid, ts in timeseries.items()
         ]
 
         testing_data = [
