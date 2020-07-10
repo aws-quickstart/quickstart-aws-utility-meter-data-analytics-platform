@@ -35,8 +35,8 @@ import pandas as pd
 from pyathena import connect
 
 def get_weather(connection, start):
-    weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, temperature, 
-    dewpoint, pressure, apparenttemperature, windspeed, humidity 
+    weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, temperature,
+    dewpoint, pressure, apparenttemperature, windspeed, humidity
     from "meter-data".weather_hourly_london
     where time >= '{}'
     order by 1;
@@ -143,5 +143,5 @@ def lambda_handler(event, context):
             for meterid, ts in timeseries.items()
         ]
 
-    write_upload_file(S3_BUCKET, 'smartmeter/sagemaker/train/training.json', training_data)
-    write_upload_file(S3_BUCKET, 'smartmeter/sagemaker/test/testing.json', testing_data)
+    write_upload_file(S3_BUCKET, 'meteranalytics/train/training.json', training_data)
+    write_upload_file(S3_BUCKET, 'meteranalytics/test/testing.json', testing_data)
