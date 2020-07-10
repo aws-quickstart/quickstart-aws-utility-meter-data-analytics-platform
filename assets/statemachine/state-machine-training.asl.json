@@ -28,7 +28,7 @@
           "TrainingInputMode": "File"
         },
         "OutputDataConfig": {
-          "S3OutputPath": "s3://${WorkingBucket}/smartmeter/sagemaker/model"
+          "S3OutputPath": "s3://${WorkingBucket}/meteranalytics/model"
         },
         "StoppingCondition": {
           "MaxRuntimeInSeconds": 86400
@@ -38,13 +38,13 @@
           "InstanceType": "ml.c4.2xlarge",
           "VolumeSizeInGB": 30
         },
-        "RoleArn": "arn:aws:iam::${AccountId}:role/service-role/AWSGlueServiceSageMakerNotebookRole-meterdata-transformation",
+        "RoleArn": "arn:aws:iam::${AccountId}:role/service-role/AWSGlueServiceSageMakerNotebookRole-testnb-role",
         "InputDataConfig": [
           {
             "DataSource": {
               "S3DataSource": {
                 "S3DataType": "S3Prefix",
-                "S3Uri": "s3://${WorkingBucket}/smartmeter/sagemaker/train/",
+                "S3Uri": "s3://${WorkingBucket}/meteranalytics/train/",
                 "S3DataDistributionType": "FullyReplicated"
               }
             },
@@ -54,7 +54,7 @@
             "DataSource": {
               "S3DataSource": {
                 "S3DataType": "S3Prefix",
-                "S3Uri": "s3://${WorkingBucket}/smartmeter/sagemaker/test/",
+                "S3Uri": "s3://${WorkingBucket}/meteranalytics/test/",
                 "S3DataDistributionType": "FullyReplicated"
               }
             },
@@ -78,7 +78,7 @@
     "Save Model": {
       "ResultPath": null,
       "Parameters": {
-        "ExecutionRoleArn": "arn:aws:iam::${AccountId}:role/service-role/AWSGlueServiceSageMakerNotebookRole-meterdata-transformation",
+        "ExecutionRoleArn": "arn:aws:iam::${AccountId}:role/service-role/AWSGlueServiceSageMakerNotebookRole-testnb-role",
         "ModelName.$": "$.ML_model_name",
         "PrimaryContainer": {
           "Environment": {},
