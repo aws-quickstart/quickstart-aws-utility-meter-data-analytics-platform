@@ -21,7 +21,7 @@ Resources:
         WorkingBucket: !Ref WorkingBucket
         LambdaPrepareTrainingName: !Ref PrepareTrainingFunction
         AccountId: !Sub ${AWS::AccountId}
-        SageMakerRole: !Ref SageMakerRole
+        SageMakerRole: !GetAtt SageMakerRole.Arn
       Policies:
         - Version: 2012-10-17
           Statement:

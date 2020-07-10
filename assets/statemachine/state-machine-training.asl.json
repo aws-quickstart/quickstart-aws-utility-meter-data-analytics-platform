@@ -38,7 +38,7 @@
           "InstanceType": "ml.c4.2xlarge",
           "VolumeSizeInGB": 30
         },
-        "RoleArn": "arn:aws:iam::${AccountId}:role/service-role/AWSGlueServiceSageMakerNotebookRole-testnb-role",
+        "RoleArn": "${SageMakerRole}",
         "InputDataConfig": [
           {
             "DataSource": {
@@ -78,7 +78,7 @@
     "Save Model": {
       "ResultPath": null,
       "Parameters": {
-        "ExecutionRoleArn": "arn:aws:iam::${AccountId}:role/service-role/AWSGlueServiceSageMakerNotebookRole-testnb-role",
+        "ExecutionRoleArn": "${SageMakerRole}",
         "ModelName.$": "$.ML_model_name",
         "PrimaryContainer": {
           "Environment": {},
