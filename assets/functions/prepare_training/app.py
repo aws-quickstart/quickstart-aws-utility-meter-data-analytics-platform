@@ -61,7 +61,7 @@ def write_upload_file(bucket, path, data):
     boto3.Session().resource('s3').Bucket(bucket).Object(path).put(Body=jsonBuffer.getvalue())
 
 def lambda_handler(event, context):
-    ATHENA_OUTPUT_BUCKET = event['Athen_bucket']
+    ATHENA_OUTPUT_BUCKET = event['Athena_bucket']
     S3_BUCKET = event['S3_bucket']
     TRAINING_SAMPLES = event['Training_samples']
     USE_WEATHER_DATA = event['With_weather_data']
