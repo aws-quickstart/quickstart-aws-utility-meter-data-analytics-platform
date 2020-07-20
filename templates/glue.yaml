@@ -157,6 +157,36 @@ Resources:
             GlueVersion: "1.0"
             MaxCapacity: 5
 
+    GlueJobCisDataToRedshift:
+        Type: "AWS::Glue::Job"
+        Properties:
+            Name: "cis_to_redshift.py"
+            Role: !GetAtt IAMRole.Arn
+            ExecutionProperty:
+                MaxConcurrentRuns: 1
+            Command:
+                Name: "glueetl"
+                ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/cis_to_redshift.py"
+                PythonVersion: "3"
+            DefaultArguments:
+                --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
+                --enable-metrics: ""
+                --enable-continuous-cloudwatch-log: "true"
+                --enable-continuous-log-filter: "true"
+                --job-bookmark-option: "job-bookmark-enable"
+                --job-language: "python"
+                --db_name: !Ref DBName
+                --redshift_connection: !Ref GlueConnection
+                --cis-bucket: !Ref CisS3Bucket
+            Connections:
+                Connections:
+                    - !Ref GlueConnection
+            MaxRetries: 0
+            #AllocatedCapacity: 5
+            Timeout: 2880
+            GlueVersion: "1.0"
+            MaxCapacity: 5
+
     GlueTrigger:
         Type: "AWS::Glue::Trigger"
         Properties:
@@ -320,6 +350,9 @@ Resources:
         Type: "AWS::S3::Bucket"
 
     TempWorkflowS3Bucket:
+        Type: "AWS::S3::Bucket"
+
+    CisS3Bucket:
         Type: "AWS::S3::Bucket"
 
     GlueDatabase:

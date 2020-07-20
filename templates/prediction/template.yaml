@@ -20,6 +20,8 @@ Resources:
         AthenaQueryBucket: !Ref AthenaQueryBucket
         WorkingBucket: !Ref WorkingBucket
         LambdaPrepareTrainingName: !Ref PrepareTrainingFunction
+        AccountId: !Sub ${AWS::AccountId}
+        SageMakerRole: !GetAtt SageMakerRole.Arn
       Policies:
         - Version: 2012-10-17
           Statement:
@@ -28,6 +30,10 @@ Resources:
                 - events:PutTargets
                 - events:PutRule
                 - events:DescribeRule
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - "iam:PassRole"
               Resource: "*"
             - Effect: Allow
               Action:
@@ -104,10 +110,13 @@ Resources:
   PrepareTrainingFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
+      Timeout: 180
       CodeUri: ../../assets/functions/prepare_training
       Handler: app.lambda_handler
       Runtime: python3.7
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Layers:
+        - !Ref DependencyLayer
 
   SplitBatchFunction:
     Type: 'AWS::Serverless::Function'
@@ -116,6 +125,8 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.7
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Layers:
+        - !Ref DependencyLayer
 
   PrepareBatchFunction:
     Type: 'AWS::Serverless::Function'
@@ -124,6 +135,8 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.7
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Layers:
+        - !Ref DependencyLayer
 
   UploadResultFunction:
     Type: 'AWS::Serverless::Function'
@@ -132,7 +145,21 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.7
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Layers:
+        - !Ref DependencyLayer
 
+  DependencyLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: sam-app-dependencies
+      Description: Dependencies for sam app [temp-units-conv]
+      ContentUri: ../../assets/functions/dependencies/
+      CompatibleRuntimes:
+        - python3.7
+      LicenseInfo: 'MIT'
+      RetentionPolicy: Retain
+    Metadata:
+      BuildMethod: python3.7
   #
   # IAM roles
   #
@@ -148,6 +175,21 @@ Resources:
             Action: 'sts:AssumeRole'
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
+
+  SageMakerRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 'sagemaker.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
         - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'

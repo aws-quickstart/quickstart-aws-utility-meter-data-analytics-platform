@@ -37,8 +37,8 @@ def lambda_handler(event, context):
         job['Batch_job'] = 'job-{}-{}-{}'.format(id, meter_start, meter_end)
         job['Batch_start'] = meter_start
         job['Batch_end'] = meter_end
-        job['Batch_input'] = 's3://{}/smartmeter/input/batch_{}_{}'.format(s3_bucket, meter_start, meter_end)
-        job['Batch_output'] = 's3://{}/smartmeter/inference/batch_{}_{}'.format(s3_bucket, meter_start, meter_end)
+        job['Batch_input'] = 's3://{}/meteranalytics/input/batch_{}_{}'.format(s3_bucket, meter_start, meter_end)
+        job['Batch_output'] = 's3://{}/meteranalytics/inference/batch_{}_{}'.format(s3_bucket, meter_start, meter_end)
         batchdetail.append(job)
 
     # TODO implement

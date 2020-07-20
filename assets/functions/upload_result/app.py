@@ -19,12 +19,12 @@ import numpy as np
 from pyathena import connect
 
 def get_meters(connection, start, end):
-    selected_households = '''select meterid
-                  from "meter-data".london_acorn_data where meterid between '%s' and '%s' order by meterid;
-                  ''' % (start, end)
+    selected_households = '''select distinct meter_id
+                  from "meter-data".daily where meter_id between '{}' and '{}' order by meter_id;
+                  '''.format(start, end)
 
-    df = pd.read_sql(selected_households, connection)
-    return df['meterid'].tolist()
+    df_meters = pd.read_sql(selected_households, connection)
+    return df_meters['meter_id'].tolist()
 
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = event['Athena_bucket']
@@ -38,7 +38,7 @@ def lambda_handler(event, context):
     region = 'us-east-1'
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
 
-    output = 'smartmeter/inference/batch_%s_%s/batch.json.out' % (BATCH_START, BATCH_END)
+    output = 'meteranalytics/inference/batch_%s_%s/batch.json.out' % (BATCH_START, BATCH_END)
     boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(output).download_file('/tmp/batch.out.json')
     print('get inference result')
 
@@ -56,13 +56,13 @@ def lambda_handler(event, context):
         for line in fp:
             df = pd.DataFrame(data={**json.loads(line)['quantiles'],
                                     **dict_of_samples}, index=prediction_index)
-            dataframe=pd.DataFrame({'meterid': np.array([meterids[i] for x in range(df['0.9'].count())]),
+            dataframe=pd.DataFrame({'meter_id': np.array([meterids[i] for x in range(df['0.9'].count())]),
                                     'datetime':df.index.values,
-                                    'kwh':df['0.9'].values})
+                                    'consumption':df['0.9'].values})
             i = i+1
             results = results.append(dataframe)
 
     results.to_csv('/tmp/forecast.csv', index=False)
-    boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(os.path.join('smartmeter', 'forecast/batch_%s_%s.csv' % (BATCH_START, BATCH_END))).upload_file('/tmp/forecast.csv')
+    boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(os.path.join('meteranalytics', 'forecast/batch_{}_{}.csv'.format(BATCH_START, BATCH_END))).upload_file('/tmp/forecast.csv')
 
     print('uploaded forecast')
