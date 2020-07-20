@@ -2,6 +2,12 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: "Master template to deploy Meter data analytics platform"
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+Rules:
+  LZS3BucketNameProvided:
+    RuleCondition: !Equals [!Ref CreateLandingZoneS3Bucket, 'No']
+    Assertions:
+      - Assert: !Not [!Equals [!Ref LandingZoneS3BucketName, '']]
+        AssertDescription: Must provide a value for 'Landing Zone S3Bucket Name' when value of 'Create Landing Zone S3Bucket' is NO.
 
 Resources:
     RedshiftStack:
@@ -73,6 +79,8 @@ Resources:
           VPCRouteTableId: !Ref VPCRouteTableId
           AvailabilityZone: !Ref AvailabilityZone
           LandingzoneTransformer: !Ref LandingzoneTransformer
+          CreateLandingZoneS3Bucket: !Ref CreateLandingZoneS3Bucket
+          LandingZoneS3BucketName: !Ref LandingZoneS3BucketName
 
     GlueTablesStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -158,6 +166,19 @@ Parameters:
     AllowedValues:
       - default
       - london
+  
+  CreateLandingZoneS3Bucket:
+    Type: String
+    Default: 'Yes'
+    Description: Select 'No' if you have an existing S3 bucket with raw meter data which you would like to use. Otherwise leave default value as 'Yes'. You must provide a value for 'Landing zone S3 bucket' parameter if you select 'No'.
+    AllowedValues:
+      - 'Yes'
+      - 'No'
+  
+  LandingZoneS3BucketName:
+    Type: String
+    Default: ""
+    Description: (Conditional) You must provide a value if you select 'No' for 'Create Landing Zone bucket' parameter above.
 
   QSS3BucketName:
     Type: String
@@ -212,6 +233,12 @@ Metadata:
           - RemoteAccessCIDR
           - VPCRouteTableId
       - Label:
+          default: 'Glue Configurations'
+        Parameters:
+          - LandingzoneTransformer
+          - CreateLandingZoneS3Bucket
+          - LandingZoneS3BucketName
+      - Label:
           default: 'Quick Start Configuration'
         Parameters:
           - QSS3BucketName
@@ -249,3 +276,7 @@ Metadata:
         default: Quick Start S3 Bucket AWS Region
       LandingzoneTransformer:
         default: Transformer that reads the landing zone data
+      CreateLandingZoneS3Bucket:
+        default: Create landing zone bucket
+      LandingZoneS3BucketName:
+        default: Landing zone S3 bucket

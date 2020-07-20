@@ -1,6 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Creates Glue resources"
-
+Conditions:
+  CreateLZS3BucketCondition: !Equals [!Ref CreateLandingZoneS3Bucket, 'Yes']
 Mappings:
     LandingzoneTransformerMap:
         default:
@@ -55,7 +56,10 @@ Resources:
             Targets:
                 S3Targets:
                     -
-                        Path: !Sub "s3://${LandingZoneS3Bucket}"
+                        Path: !If 
+                            - CreateLZS3BucketCondition
+                            - !Sub "s3://${LandingZoneS3Bucket}"
+                            - !Sub "s3://${LandingZoneS3BucketName}"
             DatabaseName: !Ref DBName
             SchemaChangePolicy:
                 UpdateBehavior: "UPDATE_IN_DATABASE"
@@ -141,7 +145,10 @@ Resources:
                 --job-bookmark-option: "job-bookmark-enable"
                 --job-language: "python"
                 --db_name: !Ref DBName
-                --table_name: !Ref LandingZoneS3Bucket
+                --table_name: !If 
+                    - CreateLZS3BucketCondition
+                    - !Ref LandingZoneS3Bucket
+                    - !Ref LandingZoneS3BucketName
                 --clean_data_bucket: !Ref CleanZoneS3Bucket
                 --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
             MaxRetries: 0
@@ -246,26 +253,48 @@ Resources:
         Properties:
             ManagedPolicyName: "MeterData-S3Bucket-Access-Policy"
             Path: "/service-role/"
-            PolicyDocument: !Sub |
-                {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Effect": "Allow",
-                            "Action": [
-                                "s3:*"
-                            ],
-                            "Resource": [
-                                "arn:aws:s3:::${BusinessZoneS3Bucket}",
-                                "arn:aws:s3:::${LandingZoneS3Bucket}",
-                                "arn:aws:s3:::${CleanZoneS3Bucket}",
-                                "arn:aws:s3:::${TempWorkflowS3Bucket}",
-                                "arn:aws:s3:::${GlueScriptsS3Bucket}",
-                                "arn:aws:s3:::${GlueTempS3Bucket}"
-                            ]
-                        }
-                    ]
-                }
+            PolicyDocument: !If 
+                - CreateLZS3BucketCondition
+                - !Sub |
+                    {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "s3:*"
+                                ],
+                                "Resource": [
+                                    "arn:aws:s3:::${BusinessZoneS3Bucket}",
+                                    "arn:aws:s3:::${LandingZoneS3Bucket}",
+                                    "arn:aws:s3:::${CleanZoneS3Bucket}",
+                                    "arn:aws:s3:::${TempWorkflowS3Bucket}",
+                                    "arn:aws:s3:::${GlueScriptsS3Bucket}",
+                                    "arn:aws:s3:::${GlueTempS3Bucket}"
+                                ]
+                            }
+                        ]
+                    }
+                - !Sub |
+                    {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "s3:*"
+                                ],
+                                "Resource": [
+                                    "arn:aws:s3:::${BusinessZoneS3Bucket}",
+                                    "arn:aws:s3:::${LandingZoneS3BucketName}",
+                                    "arn:aws:s3:::${CleanZoneS3Bucket}",
+                                    "arn:aws:s3:::${TempWorkflowS3Bucket}",
+                                    "arn:aws:s3:::${GlueScriptsS3Bucket}",
+                                    "arn:aws:s3:::${GlueTempS3Bucket}"
+                                ]
+                            }
+                        ]
+                    }
 
     IAMRole:
         Type: "AWS::IAM::Role"
@@ -285,6 +314,7 @@ Resources:
 
     LandingZoneS3Bucket:
         Type: "AWS::S3::Bucket"
+        Condition: CreateLZS3BucketCondition
 
     CleanZoneS3Bucket:
         Type: "AWS::S3::Bucket"
@@ -354,7 +384,10 @@ Resources:
 
 Outputs:
     LandingZoneS3Bucket:
-        Value: !Ref LandingZoneS3Bucket
+        Value: !If 
+            - CreateLZS3BucketCondition
+            - !Ref LandingZoneS3Bucket
+            - !Ref LandingZoneS3BucketName
     CleanZoneS3Bucket:
         Value: !Ref CleanZoneS3Bucket
     TempWorkflowS3Bucket:
@@ -411,3 +444,16 @@ Parameters:
 
     LandingzoneTransformer:
         Type: String
+
+    CreateLandingZoneS3Bucket:
+        Type: String
+        Default: 'Yes'
+        Description: Select 'No' if you have an existing S3 bucket with raw meter data which you would like to use. Otherwise leave default value as 'Yes'.
+        AllowedValues:
+        - 'Yes'
+        - 'No'
+    
+    LandingZoneS3BucketName:
+        Type: String
+        Default: ""
+        Description: (Conditional) You must provide a value if you select 'No' for 'Create Landing Zone bucket' parameter above.
