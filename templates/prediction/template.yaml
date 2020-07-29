@@ -3,6 +3,13 @@ Description: 'Meter Data Lake prediction pipeline'
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 
+Globals:
+  Function:
+    Runtime: python3.7
+    Environment:
+      Variables:
+        Db_schema: meter-data
+
 Resources:
 
   AthenaQueryBucket:
@@ -113,7 +120,6 @@ Resources:
       Timeout: 180
       CodeUri: ../../assets/functions/prepare_training
       Handler: app.lambda_handler
-      Runtime: python3.7
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
@@ -123,7 +129,6 @@ Resources:
     Properties:
       CodeUri: ../../assets/functions/split_batch
       Handler: app.lambda_handler
-      Runtime: python3.7
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
@@ -133,7 +138,6 @@ Resources:
     Properties:
       CodeUri: ../../assets/functions/prepare_batch
       Handler: app.lambda_handler
-      Runtime: python3.7
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
@@ -143,7 +147,6 @@ Resources:
     Properties:
       CodeUri: ../../assets/functions/upload_result
       Handler: app.lambda_handler
-      Runtime: python3.7
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer

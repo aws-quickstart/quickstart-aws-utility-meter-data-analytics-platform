@@ -20,8 +20,8 @@ from pyathena import connect
 
 def get_meters(connection, start, end):
     selected_households = '''select distinct meter_id
-                  from "meter-data".daily where meter_id between '{}' and '{}' order by meter_id;
-                  '''.format(start, end)
+                  from "{}".daily where meter_id between '{}' and '{}' order by meter_id;
+                  '''.format(DB_SCHEMA, start, end)
 
     df_meters = pd.read_sql(selected_households, connection)
     return df_meters['meter_id'].tolist()
@@ -34,6 +34,7 @@ def lambda_handler(event, context):
     FORECAST_START = event['Data_end']
     FORECAST_PERIOD = event['Forecast_period']
     prediction_length = FORECAST_PERIOD * 24
+    DB_SCHEMA = environ['Db_schema']
 
     region = 'us-east-1'
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
