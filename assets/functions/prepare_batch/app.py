@@ -21,9 +21,8 @@ Input event payload expected to be in the following format:
       where row_num between 1 and 50;
 '''
 
-import boto3, os, io
+import boto3, io
 import json
-import numpy as np
 import pandas as pd
 
 from pyathena import connect

@@ -14,7 +14,6 @@ Testing event
 import boto3
 import pandas as pd 
 import numpy as np
-import time
 import json
 from pyathena import connect 
     
