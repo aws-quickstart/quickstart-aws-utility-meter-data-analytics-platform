@@ -130,8 +130,6 @@ Resources:
       CodeUri: ../../assets/functions/split_batch
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
-      Layers:
-        - !Ref DependencyLayer
 
   PrepareBatchFunction:
     Type: 'AWS::Serverless::Function'
@@ -151,16 +149,6 @@ Resources:
       Layers:
         - !Ref DependencyLayer
 
-  BatchAnomalyDetectionFunction:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      CodeUri: ../../assets/functions/batch_anomaly_detection
-      Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
-      Layers:
-        - !Ref DependencyLayer
-        - !Ref AnomalyDetectionDependencyLayer
-
   DependencyLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
@@ -172,16 +160,6 @@ Resources:
       RetentionPolicy: Retain
     Metadata:
       BuildMethod: python3.7
-
-  AnomalyDetectionDependencyLayer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      LayerName: ml-app-dependencies
-      ContentUri: ../../assets/functions/dependencies/anomaly_detection/layer.zip
-      CompatibleRuntimes:
-        - python3.7
-      LicenseInfo: 'MIT'
-      RetentionPolicy: Retain
 
   #
   # IAM roles

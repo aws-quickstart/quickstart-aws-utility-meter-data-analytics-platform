@@ -1,2 +1,0 @@
-fbprophet==0.5
-pystan==2.18
