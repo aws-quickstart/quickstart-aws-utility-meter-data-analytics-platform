@@ -1,21 +1,10 @@
 '''
-sample step function input
-{
-    "ModelName": "deepar-electricity-demo-2020-05-23-01-32-11-018",
-    "Data_start":"2013-06-01",
-    "Data_end":"2014-01-01",
-    "Meter_start":1,
-    "Meter_end":100,
-    "Batch_size":20,
-    "Forecast_period":7
-}
-
 sample lambda input
 {
     "Meter_start": 1,
     "Meter_end": 100,
     "Batch_size": 20,
-    "S3_bucket": "juayu-meter-analytics"
+    "S3_bucket": "meter-analytics"
 }
 
 '''

@@ -2,27 +2,20 @@
 Input event payload expected to be in the following format:
 
 {
-  "Athena_bucket": "aws-athena-query-results-us-east-1-849779837104",
-  "S3_bucket": "temp-meter-data-bucket",
+  "Athena_bucket": "aws-athena-query-results",
+  "S3_bucket": "meter-data-bucket",
   "Data_start": "2013-06-01",
   "Data_end": "2014-01-01",
   "Forecast_period": 7,
   "Training_samples": 50,
   "With_weather_data": 1,
   "Training_instance_type": "ml.c4.2xlarge",
-  "Training_job_name": "ml-training-6132fffb71ad463fbb7aaa4f62911227",
-  "ML_model_name": "ml-model-6132fffb71ad463fbb7aaa4f62911227",
+  "Training_job_name": "ml-training-job",
+  "ML_model_name": "ml-model",
   "Endpoint_instance_type": "ml.m4.xlarge",
-  "ML_endpoint_name": "ml-endpoint-6132fffb71ad463fbb7aaa4f62911227"
+  "ML_endpoint_name": "ml-endpoint"
 }
 
-          do we want to batch data by index
-          select meterid, cat1, cat2 from (
-            select meterid, stdortou as cat1, acorn_grouped as cat2,
-            (row_number() over(order by meterid) ) as row_num
-            from ml.acorn_data
-          )
-          where row_num between 1 and 50;
 '''
 
 import boto3, os, io

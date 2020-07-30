@@ -9,16 +9,9 @@ Input event payload expected to be in the following format:
 "Data_start": "2013-06-01",
 "Data_end": "2014-01-01",
 "Forecast_period": 7,
-"With_weather_data": 0
+"With_weather_data": 1
 }
 
-      do we want to batch data by index
-      select meterid, cat1, cat2 from (
-        select meterid, stdortou as cat1, acorn_grouped as cat2,
-        (row_number() over(order by meterid) ) as row_num
-        from ml.acorn_data
-      )
-      where row_num between 1 and 50;
 '''
 
 import boto3, io, os

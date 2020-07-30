@@ -1,15 +1,15 @@
 '''
-          Input event payload expected to be in the following format:
+Input event payload expected to be in the following format:
 
-          {
-            "Batch_start": "MAC000001",
-            "Batch_end": "MAC000010",
-            "Data_start": "2013-06-01",
-            "Data_end": "2014-01-01",
-            "Forecast_period": 7
-          }
+{
+"Batch_start": "MAC000001",
+"Batch_end": "MAC000010",
+"Data_start": "2013-06-01",
+"Data_end": "2014-01-01",
+"Forecast_period": 7
+}
 
-          '''
+'''
 
 import boto3, os
 import json
