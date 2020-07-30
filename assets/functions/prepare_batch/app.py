@@ -21,7 +21,7 @@ Input event payload expected to be in the following format:
       where row_num between 1 and 50;
 '''
 
-import boto3, io
+import boto3, io, os
 import json
 import pandas as pd
 
@@ -35,21 +35,21 @@ def write_upload_file(bucket, path, data):
 
     boto3.Session().resource('s3').Bucket(bucket).Object(path).put(Body=jsonBuffer.getvalue())
 
-def get_weather(connection, start):
+def get_weather(connection, start, db_schema):
     weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, temperature,
                     dewpoint, pressure, apparenttemperature, windspeed, humidity
                     from "{}".weather
                     where time >= '{}'
                     order by 1;
-                    '''.format(DB_SCHEMA, start)
+                    '''.format(db_schema, start)
     df_weather = pd.read_sql(weather_data, connection)
     df_weather = df_weather.set_index('datetime')
     return df_weather
 
-def get_meters(connection, start, end):
+def get_meters(connection, start, end, db_schema):
     selected_households = '''select distinct meter_id
                   from "{}".daily where meter_id between '{}' and '{}' order by meter_id;
-                  '''.format(DB_SCHEMA, start, end)
+                  '''.format(db_schema, start, end)
 
     df_meters = pd.read_sql(selected_households, connection)
     return df_meters['meter_id'].tolist()
@@ -64,13 +64,13 @@ def lambda_handler(event, context):
     DATA_END = event['Data_end']
     FORECAST_PERIOD = event['Forecast_period']
     prediction_length = FORECAST_PERIOD * 24
-    DB_SCHEMA = environ['Db_schema']
+    DB_SCHEMA = os.environ['Db_schema']
 
 
     region = 'us-east-1'
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
 
-    meter_samples = get_meters(connection, BATCH_START, BATCH_END)
+    meter_samples = get_meters(connection, BATCH_START, BATCH_END, DB_SCHEMA)
 
     # test data
     q = '''select date_trunc('HOUR', reading_date_time) as datetime, meter_id, sum(reading_value) as consumption
@@ -96,7 +96,7 @@ def lambda_handler(event, context):
     end_prediction = end_training + pd.Timedelta(prediction_length, unit='H')
 
     if USE_WEATHER_DATA == 1:
-        df_weather = get_weather(connection, DATA_START)
+        df_weather = get_weather(connection, DATA_START, DB_SCHEMA)
         batch_data = [
             {
                 "start": str(start_dataset),
