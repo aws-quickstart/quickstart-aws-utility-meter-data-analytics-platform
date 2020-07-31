@@ -19,7 +19,7 @@ from pyathena import connect
     
 def get_weather(connection, start, db_schema):
     weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, temperature,
-    dewpoint, pressure, apparenttemperature, windspeed, humidity
+    apparenttemperature, humidity
     from "{}".weather
     where time >= '{}'
     order by 1;
@@ -85,11 +85,11 @@ def lambda_handler(event, context):
     timeseries = data_kw.iloc[:,0]  #np.trim_zeros(data_kw.iloc[:,0], trim='f')
     
     freq = 'H'
-    runtime= boto3.client('runtime.sagemaker')
     df_weather = None
     if USE_WEATHER_DATA == 1:
         df_weather = get_weather(connection, DATA_START, DB_SCHEMA)
-        df_weather = df_weather.loc
+
+    runtime= boto3.client('runtime.sagemaker')
     response = runtime.invoke_endpoint(EndpointName=ML_ENDPOINT_NAME,
                                        ContentType='application/json',
                                        Body=encode_request(timeseries[:], df_weather))
