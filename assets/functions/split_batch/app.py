@@ -18,6 +18,10 @@ def lambda_handler(event, context):
 
     id = uuid.uuid4().hex
     batchdetail = []
+
+    # Cap the batch size to 100 so the lambda function doesn't timeout
+    if batchsize > 100:
+        batchsize = 100
     for a in range(start, end, batchsize):
         job = {}
         meter_start = 'MAC{}'.format(str(a).zfill(6))

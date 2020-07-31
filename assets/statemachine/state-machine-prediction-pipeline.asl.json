@@ -32,11 +32,30 @@
         "Data_start.$": "$.Data_start",
         "Data_end.$": "$.Data_end",
         "Batch_info.$": "$$.Map.Item.Value",
+        "With_weather_data.$": "$.With_weather_data",
         "Forecast_period.$": "$.Forecast_period"
       },
       "Iterator": {
-        "StartAt": "Prepare dataset",
+        "StartAt": "Anomaly detecton",
         "States": {
+          "Anomaly detecton": {
+            "Parameters": {
+              "FunctionName": "${LambdaAnomalyFunctionName}",
+              "Payload": {
+                "Athena_bucket": "${AthenaQueryBucket}",
+                "S3_bucket": "${WorkingBucket}",
+                "Batch_start.$": "$.Batch_info.Batch_start",
+                "Batch_end.$": "$.Batch_info.Batch_end",
+                "Data_start.$": "$.Data_start",
+                "Data_end.$": "$.Data_end",
+                "Forecast_period.$": "$.Forecast_period"
+              }
+            },
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Type": "Task",
+            "ResultPath": null,
+            "Next": "Prepare dataset"
+          },
           "Prepare dataset": {
             "Parameters": {
               "FunctionName": "${LambdaPrepareFunctionName}",
@@ -47,6 +66,7 @@
                 "Batch_end.$": "$.Batch_info.Batch_end",
                 "Data_start.$": "$.Data_start",
                 "Data_end.$": "$.Data_end",
+                "With_weather_data.$": "$.With_weather_data",
                 "Forecast_period.$": "$.Forecast_period"
               }
             },

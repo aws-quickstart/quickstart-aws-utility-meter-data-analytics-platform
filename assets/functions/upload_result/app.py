@@ -63,4 +63,4 @@ def lambda_handler(event, context):
             results = results.append(dataframe)
 
     results.to_csv('/tmp/forecast.csv', index=False)
-    boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(os.path.join('meteranalytics', 'forecast/batch_{}_{}.csv'.format(BATCH_START, BATCH_END))).upload_file('/tmp/forecast.csv')
+    boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(os.path.join('meteranalytics', 'forecast/{}/batch_{}_{}.csv'.format(FORECAST_START, BATCH_START, BATCH_END))).upload_file('/tmp/forecast.csv')

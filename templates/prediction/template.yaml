@@ -117,7 +117,8 @@ Resources:
   PrepareTrainingFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Timeout: 180
+      MemorySize: 512
+      Timeout: 600
       CodeUri: ../../assets/functions/prepare_training
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
@@ -127,6 +128,7 @@ Resources:
   SplitBatchFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
+      Timeout: 180
       CodeUri: ../../assets/functions/split_batch
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
@@ -134,6 +136,7 @@ Resources:
   PrepareBatchFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
+      Timeout: 300
       CodeUri: ../../assets/functions/prepare_batch
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
@@ -143,6 +146,7 @@ Resources:
   UploadResultFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
+      Timeout: 180
       CodeUri: ../../assets/functions/upload_result
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'

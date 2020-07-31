@@ -64,8 +64,8 @@ Resources:
         Bucket: !Ref QSS3BucketName
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/batch_anomaly_detection/lambda.zip'
-      Timeout: 300
-      MemorySize: 512
+      MemorySize: 2048
+      Timeout: 600
       Environment:
         Variables:
           Db_schema: meter-data

@@ -13,9 +13,7 @@ def weekend(ds):
         return 1
     else:
         return 0
-def get_batch_data(meter_start, meter_end, data_end, athena_output_bucket, db_schema):
-    connection = connect(s3_staging_dir='s3://{}/'.format(athena_output_bucket), region_name=region)
-
+def get_batch_data(meter_start, meter_end, data_end, db_schema, connection):
     query = '''select meter_id, date_trunc('day', reading_date_time) as ds, sum(reading_value) as y 
   from "{}".daily
     where meter_id between '{}' and '{}'
@@ -56,14 +54,14 @@ def fit_predict_model(meter, timeseries):
     return forecast
 
 
-def process_batch(meter_start, meter_end, data_end, athena_output_bucket, db_schema):
+def process_batch(meter_start, meter_end, data_end, db_schema, connection):
     query = '''select meter_id, max(ds) as ds from "{}".anomaly
                where meter_id between '{}' and '{}' group by 1;
         '''.format(db_schema, meter_start, meter_end)
     df_anomaly = pd.read_sql(query, connection)
     anomaly_meters = df_anomaly.meter_id.tolist()
 
-    df_timeseries = get_batch_data(meter_start, meter_end, data_end)
+    df_timeseries = get_batch_data(meter_start, meter_end, data_end, db_schema, connection)
     meters = df_timeseries.meter_id.unique()
     column_list=['meter_id', 'ds', 'consumption', 'yhat_lower', 'yhat_upper', 'anomaly', 'importance']
     df_result = pd.DataFrame(columns=column_list)
@@ -94,8 +92,9 @@ def lambda_handler(event, context):
     DATA_END = event['Data_end']
     DB_SCHEMA = os.environ['Db_schema']
 
-    result = process_batch(BATCH_START, BATCH_END, DATA_END, ATHENA_OUTPUT_BUCKET, DB_SCHEMA)
+    connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
+    result = process_batch(BATCH_START, BATCH_END, DATA_END, DB_SCHEMA, connection)
 
     result.to_csv('/tmp/anomaly.csv', index=False)
-    boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(os.path.join('meteranalytics', 'anomaly/batch_{}_{}.csv'.format(BATCH_START, BATCH_END))).upload_file('/tmp/anomaly.csv')
+    boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(os.path.join('meteranalytics', 'anomaly/{}/batch_{}_{}.csv'.format(DATA_END,BATCH_START, BATCH_END))).upload_file('/tmp/anomaly.csv')
 
