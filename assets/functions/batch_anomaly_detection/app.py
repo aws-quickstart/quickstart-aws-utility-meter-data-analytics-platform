@@ -13,17 +13,17 @@ def weekend(ds):
         return 1
     else:
         return 0
-def get_batch_data(meter_start, meter_end, athena_output_bucket, db_schema):
+def get_batch_data(meter_start, meter_end, data_end, athena_output_bucket, db_schema):
     connection = connect(s3_staging_dir='s3://{}/'.format(athena_output_bucket), region_name=region)
 
     query = '''select meter_id, date_trunc('day', reading_date_time) as ds, sum(reading_value) as y 
   from "{}".daily
     where meter_id between '{}' and '{}'
-  and reading_date_time >= timestamp '2013-01-01 00:00:00.000'
-  and reading_date_time < timestamp '2014-02-01 00:00:00.000' 
+  and reading_date_time > date_add('year', -1, timestamp '{}')
+  and reading_date_time <= timestamp '{}'
     group by 2,1
     order by 2,1;
-    '''.format(db_schema,meter_start, meter_end)
+    '''.format(db_schema,meter_start, meter_end, data_end, data_end)
 
     df_daily = pd.read_sql(query, connection)
     df_daily['weekend'] = df_daily['ds'].apply(weekend)
@@ -56,15 +56,34 @@ def fit_predict_model(meter, timeseries):
     return forecast
 
 
-def process_batch(meter_start, meter_end, athena_output_bucket, db_schema):
-    df_timeseries = get_batch_data(meter_start, meter_end, athena_output_bucket, db_schema)
+def process_batch(meter_start, meter_end, data_end, athena_output_bucket, db_schema):
+    query = '''select meter_id, max(ds) as ds from "{}".anomaly
+               where meter_id between '{}' and '{}' group by 1;
+        '''.format(db_schema, meter_start, meter_end)
+    df_anomaly = pd.read_sql(query, connection)
+    anomaly_meters = df_anomaly.meter_id.tolist()
+
+    df_timeseries = get_batch_data(meter_start, meter_end, data_end)
     meters = df_timeseries.meter_id.unique()
     column_list=['meter_id', 'ds', 'consumption', 'yhat_lower', 'yhat_upper', 'anomaly', 'importance']
     df_result = pd.DataFrame(columns=column_list)
     for meter in meters:
         df_meter = df_timeseries[df_timeseries.meter_id == meter]
-        df_forecast = fit_predict_model(meter, df_meter)
-        df_result = df_result.append(df_forecast[column_list], ignore_index = True)
+        # Run anomaly detection only if it's not done before or there are new data added
+        if meter not in anomaly_meters:
+            print("process anomaly for meter", meter)
+            df_forecast = fit_predict_model(meter, df_meter)
+            df_result = df_result.append(df_forecast[column_list], ignore_index = True)
+        else:
+            latest = pd.to_datetime(df_anomaly[df_anomaly.meter_id == meter]['ds'].iloc[0])
+            if df_meter.ds.max() > latest:
+                print("process anomaly for meter {} from {}".format(meter, latest))
+                df_forecast = fit_predict_model(meter, df_meter)
+                df_new_anomaly = df_forecast[df_forecast.ds > latest]
+                df_result = df_result.append(df_new_anomaly[column_list], ignore_index = True)
+            else:
+                print("skip meter", meter)
+
     return df_result
 
 def lambda_handler(event, context):
@@ -72,12 +91,10 @@ def lambda_handler(event, context):
     S3_BUCKET = event['S3_bucket']
     BATCH_START = event['Batch_start']
     BATCH_END = event['Batch_end']
+    DATA_END = event['Data_end']
     DB_SCHEMA = os.environ['Db_schema']
 
-    #BATCH_START = 'MAC002734'
-    #BATCH_END = 'MAC002834'
-
-    result = process_batch(BATCH_START, BATCH_END, ATHENA_OUTPUT_BUCKET, DB_SCHEMA)
+    result = process_batch(BATCH_START, BATCH_END, DATA_END, ATHENA_OUTPUT_BUCKET, DB_SCHEMA)
 
     result.to_csv('/tmp/anomaly.csv', index=False)
     boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(os.path.join('meteranalytics', 'anomaly/batch_{}_{}.csv'.format(BATCH_START, BATCH_END))).upload_file('/tmp/anomaly.csv')

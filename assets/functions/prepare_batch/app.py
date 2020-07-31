@@ -30,7 +30,7 @@ def write_upload_file(bucket, path, data):
 
 def get_weather(connection, start, db_schema):
     weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, temperature,
-                    dewpoint, pressure, apparenttemperature, windspeed, humidity
+                    apparenttemperature, humidity
                     from "{}".weather
                     where time >= '{}'
                     order by 1;
