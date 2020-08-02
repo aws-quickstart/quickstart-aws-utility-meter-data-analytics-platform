@@ -1,4 +1,5 @@
-Transform: AWS::Serverless-2016-10-31
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
 Description: 'Meter Data Lake prediction pipeline'
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
@@ -22,7 +23,10 @@ Resources:
   InitialTrainingStateMachine:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
-      DefinitionUri: '../../assets/statemachine/state-machine-training.asl.json'
+      DefinitionUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-training.asl.json'
       DefinitionSubstitutions:
         AthenaQueryBucket: !Ref AthenaQueryBucket
         WorkingBucket: !Ref WorkingBucket
@@ -69,7 +73,10 @@ Resources:
   PredictionPipelineStateMachine:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
-      DefinitionUri: '../../assets/statemachine/state-machine-prediction-pipeline.asl.json'
+      DefinitionUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-prediction-pipeline.asl.json'
       DefinitionSubstitutions:
         AthenaQueryBucket: !Ref AthenaQueryBucket
         WorkingBucket: !Ref WorkingBucket
@@ -176,7 +183,7 @@ Resources:
       CodeUri:
         Bucket: !Ref QSS3BucketName
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/batch_anomaly_detection/lambda.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/batch_anomaly_detection.zip'
       MemorySize: 2048
       Timeout: 600
       Environment:
