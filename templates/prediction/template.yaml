@@ -183,6 +183,9 @@ Resources:
       Layers:
         - !Ref BatchAnomalyDependencyLayer
 
+  #
+  # Lambda Dependency Layer
+  #
   BatchAnomalyDependencyLayer:
     Type: 'AWS::Serverless::LayerVersion'
     Properties:
@@ -227,7 +230,7 @@ Resources:
         - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
+        - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
 
   SageMakerRole:
     Type: 'AWS::IAM::Role'
@@ -242,7 +245,7 @@ Resources:
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
+        - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
 
 Metadata:
   AWS::CloudFormation::Interface:
