@@ -157,13 +157,14 @@ Resources:
     Type: AWS::Serverless::LayerVersion
     Properties:
       LayerName: common-app-dependencies
-      ContentUri: ../../assets/functions/dependencies/common
+      ContentUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/dependencies/common/common-layer.zip'
       CompatibleRuntimes:
         - python3.7
       LicenseInfo: 'MIT'
       RetentionPolicy: Retain
-    Metadata:
-      BuildMethod: python3.7
 
   #
   # IAM roles
