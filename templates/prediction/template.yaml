@@ -76,6 +76,7 @@ Resources:
         LambdaSplitFunctionName: !Ref SplitBatchFunction
         LambdaPrepareFunctionName: !Ref PrepareBatchFunction
         LambdaResultFunctionName: !Ref UploadResultFunction
+        LambdaAnomalyFunctionName: !Ref BatchAnomalyDetection
       Policies:
         - Version: 2012-10-17
           Statement:
@@ -106,6 +107,8 @@ Resources:
               Resource: "arn:aws:sagemaker:*:*:*"
         - LambdaInvokePolicy:
             FunctionName: !Ref SplitBatchFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref BatchAnomalyDetection
         - LambdaInvokePolicy:
             FunctionName: !Ref PrepareBatchFunction
         - LambdaInvokePolicy:
