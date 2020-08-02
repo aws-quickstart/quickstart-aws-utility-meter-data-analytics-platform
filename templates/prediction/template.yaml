@@ -119,7 +119,10 @@ Resources:
     Properties:
       MemorySize: 512
       Timeout: 600
-      CodeUri: ../../assets/functions/prepare_training
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/prepare_training.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
@@ -129,7 +132,10 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       Timeout: 180
-      CodeUri: ../../assets/functions/split_batch
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/split_batch.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
 
@@ -137,7 +143,10 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       Timeout: 300
-      CodeUri: ../../assets/functions/prepare_batch
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/prepare_batch.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
@@ -147,11 +156,46 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       Timeout: 180
-      CodeUri: ../../assets/functions/upload_result
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/upload_result.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
+
+  BatchAnomalyDetection:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/batch_anomaly_detection/lambda.zip'
+      MemorySize: 2048
+      Timeout: 600
+      Environment:
+        Variables:
+          Db_schema: meter-data
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Layers:
+        - !Ref BatchAnomalyDependencyLayer
+
+  BatchAnomalyDependencyLayer:
+    Type: 'AWS::Serverless::LayerVersion'
+    Properties:
+      LayerName: ml-app-dependencies
+      Description: Dependencies for sam app
+      ContentUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/dependencies/anomaly_detection/layer.zip'
+      CompatibleRuntimes:
+        - python3.7
+      LicenseInfo: 'Available under the MIT-0 license.'
+      RetentionPolicy: Retain
 
   DependencyLayer:
     Type: AWS::Serverless::LayerVersion
@@ -200,13 +244,39 @@ Resources:
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
         - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
 
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: AWS Quick Start configuration
+        Parameters:
+          - QSS3BucketName
+          - QSS3KeyPrefix
+    ParameterLabels:
+      QSS3BucketName:
+        default: Quick Start S3 bucket name
+      QSS3KeyPrefix:
+        default: Quick Start S3 key prefix
 Parameters:
   QSS3BucketName:
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription: >-
+      Quick Start bucket name can include numbers, lowercase letters, uppercase
+      letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Default: aws-quickstart
+    Description: >-
+      S3 bucket name for the Quick Start assets.
+      Only change this value if you customize or extend the Quick Start for your own use.
+      This string can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
     Type: String
-    Default: cf-meter-data
-    Description: AWS Quick Start S3 bucket name where the Quick Start assets are hosted
-
   QSS3KeyPrefix:
+    AllowedPattern: '^[0-9a-zA-Z-/]*[/]$'
+    ConstraintDescription: >-
+      Quick Start key prefix can include numbers, lowercase letters, uppercase
+      letters, hyphens (-), and forward slash (/) and must terminate in a forward slash.
+    Default: quickstart-aws-utility-meter-data-analytics-platform/
     Type: String
-    Default: temp/
-    Description: S3 bucket key prefix for the AWS Quick Start assets
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
