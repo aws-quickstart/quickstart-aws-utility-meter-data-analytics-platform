@@ -202,7 +202,9 @@ Resources:
             Actions:
                 - CrawlerName: !Ref GlueCrawler5
             Name: "clean-data-crawler"
-            Type: "CONDITIONAL"
+            Type: SCHEDULED
+            Description: "Scheduled trigger, 9am each day"
+            Schedule: cron(0 */9 * * ? *)
             StartOnCreation: true
             WorkflowName: !Ref GlueWorkflow
             Predicate:
