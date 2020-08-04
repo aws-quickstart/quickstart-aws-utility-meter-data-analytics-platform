@@ -1,16 +1,79 @@
 {
   "Comment": "",
-  "StartAt": "Prepare batches",
+  "StartAt": "trigger anomaly crawler",
   "States": {
+    "trigger anomaly crawler": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${LambdaTriggerCrawlerFunctionName}",
+        "Payload": {
+          "crawler_name": "${AnomalyCrawler}",
+          "ModelName.$": "$.ModelName",
+          "Meter_start.$": "$.Meter_start",
+          "Meter_end.$": "$.Meter_end",
+          "Data_start.$": "$.Data_start",
+          "Data_end.$": "$.Data_end",
+          "Batch_size.$": "$.Batch_size",
+          "With_weather_data.$": "$.With_weather_data",
+          "Forecast_period.$": "$.Forecast_period"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Next": "wait for crawler"
+    },
+    "wait for crawler": {
+      "Type": "Wait",
+      "Seconds": 10,
+      "Next": "get crawler state"
+    },
+    "get crawler state": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${LambdaGetCrawlerStateFunctionName}",
+        "Payload": {
+          "crawler_name": "${AnomalyCrawler}",
+          "ModelName.$": "$.ModelName",
+          "Meter_start.$": "$.Meter_start",
+          "Meter_end.$": "$.Meter_end",
+          "Data_start.$": "$.Data_start",
+          "Data_end.$": "$.Data_end",
+          "Batch_size.$": "$.Batch_size",
+          "With_weather_data.$": "$.With_weather_data",
+          "Forecast_period.$": "$.Forecast_period"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Next": "is crawler ready"
+    },
+    "is crawler ready": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Not": {
+            "Variable": "$.crawler_state",
+            "StringEquals": "READY"
+          },
+          "Next": "wait for crawler"
+        }
+      ],
+      "Default": "Prepare batches"
+    },
     "Prepare batches": {
       "Parameters": {
         "FunctionName": "${LambdaSplitFunctionName}",
         "Payload": {
           "S3_bucket": "${WorkingBucket}",
           "Athena_bucket": "${AthenaQueryBucket}",
+          "ModelName.$": "$.ModelName",
           "Meter_start.$": "$.Meter_start",
           "Meter_end.$": "$.Meter_end",
-          "Batch_size.$": "$.Batch_size"
+          "Data_start.$": "$.Data_start",
+          "Data_end.$": "$.Data_end",
+          "Batch_size.$": "$.Batch_size",
+          "With_weather_data.$": "$.With_weather_data",
+          "Forecast_period.$": "$.Forecast_period"
         }
       },
       "Resource": "arn:aws:states:::lambda:invoke",
