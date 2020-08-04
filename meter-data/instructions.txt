@@ -1,0 +1,33 @@
+
+ssh -A ec2-user@ec2-35-170-74-133.compute-1.amazonaws.com
+sudo -s;
+mkdir qs;
+cd qs;
+mkdir data;
+vi generate_meter_data.py
+vi start_generation.sh
+chmod +x generate_meter_data.py start_generation.sh
+sudo yum install python37
+curl -O https://bootstrap.pypa.io/get-pip.py
+pip3 install numpy boto3
+
+vi start_generation.sh
+Set the range in the script, save and exit
+./start_generation.sh
+
+
+cd data
+rm -f data-*;
+cd ..;
+rm -f db-*;
+rm -f datagen.log
+
+
+./start_generation.sh 46001 46500
+./start_generation.sh 46501 47000
+./start_generation.sh 47001 47500
+./start_generation.sh 47501 48000
+./start_generation.sh 48001 48500
+./start_generation.sh 48501 49000
+./start_generation.sh 49001 49500
+./start_generation.sh 49501 50000

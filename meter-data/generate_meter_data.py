@@ -1,4 +1,4 @@
-import csv, random, json, os
+import csv, random, json, os, argparse, sys
 from datetime import datetime as dt
 from datetime import timedelta
 from numpy.random import seed
@@ -323,6 +323,8 @@ def generate_records(first_meter_no, last_meter_no, start_time, end_time, data_d
         # [directory]/cd-[meter-no]-[register-read-time].csv
         # e.g. data/cd-34-2020-12-28-03-55-43.csv
         data_filename = data_dir + '/cd-' + str(start_time.strftime('%Y-%m-%d-%H-%M-%S')) + '-M' + str(first_meter_no) + '-M' + str(last_meter_no) + '.csv'
+        # Overwrite filename, to generate less no. of files, but larger in size
+        data_filename = data_dir + '/data' + '-M' + str(first_meter_no) + '-M' + str(last_meter_no) + '.csv'
         random.shuffle(combined_list)
         write(data_filename, combined_list)
         # write_in_chunks(data_filename, combined_list)
@@ -333,39 +335,51 @@ def generate_records(first_meter_no, last_meter_no, start_time, end_time, data_d
 
 
 ## ------------- main function orchestrating different function execution ------------- ##
-def main():
+def main(start, count):
     
     # set variable for data generation
 
     # total meter count - make sure this number is fully divisible by batch size i.e.
     # total_meter_count/batch_size shouldn't be a float value. Otherwise some meters
     # will be left without any data generated.
-    total_meter_count = 6
-    start_date = dt(2010,1,1) #YYYY,MM,DD
-    end_date = dt(2010,1,5)
+    total_meter_count = count
+    start_date = dt(2017,1,1) #YYYY,MM,DD
+    end_date = dt(2018,12,31)
 
     local_dir = 'data'
-    s3bucket = 'fake-meter-data'
+    s3bucket = 'fake-meter-data-partitioned'
     # generate and upload data in a batch size of below
-    batch_size = 2
+    batch_size = 1
 
     # Error record generation initialization
-    initialize_error_record_generation(2, 3, dt.fromisoformat('2010-01-03T09:15:00'), dt.fromisoformat('2010-01-03T15:25:00'))
+    initialize_error_record_generation(2, 3, dt.fromisoformat('2017-01-03T09:15:00'), dt.fromisoformat('2017-01-03T15:25:00'))
 
-    starting_meter_no = 1
+    starting_meter_no = start
     ending_meter_no = starting_meter_no + (batch_size-1)
     while ending_meter_no <= total_meter_count:
         generate_records(starting_meter_no, ending_meter_no, start_date, end_date, local_dir)
         logging.info('Records generated for meter {} to {}'.format(starting_meter_no, ending_meter_no))
         s3path = 'm' + str(starting_meter_no) + '-' + str(ending_meter_no)
-        upload_to_s3(local_dir, s3bucket, s3path)
-        empty_dir(local_dir)
+        # upload_to_s3(local_dir, s3bucket, s3path)
+        # empty_dir(local_dir)
         
         starting_meter_no = ending_meter_no + 1
         ending_meter_no = ending_meter_no + batch_size
 
 #### Uncomment below line to generate meter read records
-main()
+#main()
+
+### Get command line arguments, and use that for data generation
+s_meter = 1
+m_count = 1
+# Initialize parser 
+parser = argparse.ArgumentParser(description='Generate meter data')
+parser.add_argument('start', type=int, help='starting meter number')
+parser.add_argument('count', type=int, help='total number of meters')
+args = parser.parse_args()
+print('Starting meter no.: ', args.start)
+print('Meter count: ', args.count)
+main(args.start, args.count)
 
 
 # Playing with date times
