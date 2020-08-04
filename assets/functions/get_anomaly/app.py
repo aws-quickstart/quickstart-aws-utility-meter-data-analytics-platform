@@ -1,8 +1,8 @@
 import boto3, os
-import json
 import pandas as pd
 
 from pyathena import connect
+
 
 def lambda_handler(event, context):
     print(event)
