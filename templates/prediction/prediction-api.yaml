@@ -54,8 +54,8 @@ Resources:
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
         - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
-  
-  PredictionApi:
+
+  AnomalyPredictionApi:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: app.lambda_handler
@@ -63,7 +63,29 @@ Resources:
       CodeUri:
         Bucket: !Ref QSS3BucketName
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/meter_forecast/lambda.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/get_anomaly.zip'
+      Description: Lambda function to get anomaly for certain meter
+      MemorySize: 128
+      Timeout: 180
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Layers:
+        - !Ref DependencyLayer
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: post
+            Path: /
+
+  MeterForcastPredictionApi:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/meter_forecast.zip'
       Description: Lambda function to get meter consumption forecast
       MemorySize: 128
       Timeout: 180
@@ -95,10 +117,13 @@ Resources:
     Type: 'AWS::Lambda::Permission'
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref PredictionApi
+      FunctionName: !Ref MeterForcastPredictionApi
       Principal: apigateway.amazonaws.com
 
 Outputs:
-  PredictionApi:
+  MeterForcastPredictionApi:
     Description: Prediction function.
-    Value: !Ref PredictionApi
+    Value: !Ref MeterForcastPredictionApi
+  AnomalyPredictionApi:
+    Description: Anomaly API.
+    Value: !Ref AnomalyPredictionApi

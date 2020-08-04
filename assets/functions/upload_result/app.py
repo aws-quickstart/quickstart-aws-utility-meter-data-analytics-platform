@@ -1,15 +1,15 @@
 '''
-          Input event payload expected to be in the following format:
+Input event payload expected to be in the following format:
 
-          {
-            "Batch_start": "MAC000001",
-            "Batch_end": "MAC000010",
-            "Data_start": "2013-06-01",
-            "Data_end": "2014-01-01",
-            "Forecast_period": 7
-          }
+{
+"Batch_start": "MAC000001",
+"Batch_end": "MAC000010",
+"Data_start": "2013-06-01",
+"Data_end": "2014-01-01",
+"Forecast_period": 7
+}
 
-          '''
+'''
 
 import boto3, os
 import json
@@ -18,10 +18,10 @@ import numpy as np
 
 from pyathena import connect
 
-def get_meters(connection, start, end):
+def get_meters(connection, start, end, db_schema):
     selected_households = '''select distinct meter_id
-                  from "meter-data".daily where meter_id between '{}' and '{}' order by meter_id;
-                  '''.format(start, end)
+                  from "{}".daily where meter_id between '{}' and '{}' order by meter_id;
+                  '''.format(db_schema, start, end)
 
     df_meters = pd.read_sql(selected_households, connection)
     return df_meters['meter_id'].tolist()
@@ -34,6 +34,7 @@ def lambda_handler(event, context):
     FORECAST_START = event['Data_end']
     FORECAST_PERIOD = event['Forecast_period']
     prediction_length = FORECAST_PERIOD * 24
+    DB_SCHEMA = os.environ['Db_schema']
 
     region = 'us-east-1'
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
@@ -47,8 +48,7 @@ def lambda_handler(event, context):
     prediction_index = pd.date_range(start=prediction_time, end=prediction_time+pd.Timedelta(prediction_length-1, unit='H'), freq=freq)
     dict_of_samples = {}
 
-    meterids = get_meters(connection, BATCH_START, BATCH_END)
-    print('get meter ids')
+    meterids = get_meters(connection, BATCH_START, BATCH_END, DB_SCHEMA)
 
     results = pd.DataFrame(columns = ['meterid', 'datetime', 'kwh'])
     i = 0
@@ -63,6 +63,4 @@ def lambda_handler(event, context):
             results = results.append(dataframe)
 
     results.to_csv('/tmp/forecast.csv', index=False)
-    boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(os.path.join('meteranalytics', 'forecast/batch_{}_{}.csv'.format(BATCH_START, BATCH_END))).upload_file('/tmp/forecast.csv')
-
-    print('uploaded forecast')
+    boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(os.path.join('meteranalytics', 'forecast/{}/batch_{}_{}.csv'.format(FORECAST_START, BATCH_START, BATCH_END))).upload_file('/tmp/forecast.csv')

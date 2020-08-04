@@ -1,10 +1,17 @@
-Transform: AWS::Serverless-2016-10-31
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
 Description: 'Meter Data Lake prediction pipeline'
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 
-Resources:
+Globals:
+  Function:
+    Runtime: python3.7
+    Environment:
+      Variables:
+        Db_schema: meter-data
 
+Resources:
   AthenaQueryBucket:
     Type: AWS::S3::Bucket
 
@@ -15,7 +22,10 @@ Resources:
   InitialTrainingStateMachine:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
-      DefinitionUri: '../../assets/statemachine/state-machine-training.asl.json'
+      DefinitionUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-training.asl.json'
       DefinitionSubstitutions:
         AthenaQueryBucket: !Ref AthenaQueryBucket
         WorkingBucket: !Ref WorkingBucket
@@ -62,13 +72,20 @@ Resources:
   PredictionPipelineStateMachine:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
-      DefinitionUri: '../../assets/statemachine/state-machine-prediction-pipeline.asl.json'
+      DefinitionUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-prediction-pipeline.asl.json'
       DefinitionSubstitutions:
         AthenaQueryBucket: !Ref AthenaQueryBucket
         WorkingBucket: !Ref WorkingBucket
+        AnomalyCrawler: !Ref AnomalyCrawler
         LambdaSplitFunctionName: !Ref SplitBatchFunction
         LambdaPrepareFunctionName: !Ref PrepareBatchFunction
         LambdaResultFunctionName: !Ref UploadResultFunction
+        LambdaAnomalyFunctionName: !Ref BatchAnomalyDetection
+        LambdaTriggerCrawlerFunctionName: !Ref TriggerGlueCrawlerFunction
+        LambdaGetCrawlerStateFunctionName: !Ref GetGlueCrawlerStateFunction
       Policies:
         - Version: 2012-10-17
           Statement:
@@ -100,9 +117,15 @@ Resources:
         - LambdaInvokePolicy:
             FunctionName: !Ref SplitBatchFunction
         - LambdaInvokePolicy:
+            FunctionName: !Ref BatchAnomalyDetection
+        - LambdaInvokePolicy:
             FunctionName: !Ref PrepareBatchFunction
         - LambdaInvokePolicy:
             FunctionName: !Ref UploadResultFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref TriggerGlueCrawlerFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref GetGlueCrawlerStateFunction
 
   #
   # Lambda functions
@@ -110,10 +133,13 @@ Resources:
   PrepareTrainingFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Timeout: 180
-      CodeUri: ../../assets/functions/prepare_training
+      MemorySize: 512
+      Timeout: 600
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/prepare_training.zip'
       Handler: app.lambda_handler
-      Runtime: python3.7
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
@@ -121,19 +147,23 @@ Resources:
   SplitBatchFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      CodeUri: ../../assets/functions/split_batch
+      Timeout: 180
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/split_batch.zip'
       Handler: app.lambda_handler
-      Runtime: python3.7
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
-      Layers:
-        - !Ref DependencyLayer
 
   PrepareBatchFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      CodeUri: ../../assets/functions/prepare_batch
+      Timeout: 300
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/prepare_batch.zip'
       Handler: app.lambda_handler
-      Runtime: python3.7
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
@@ -141,28 +171,116 @@ Resources:
   UploadResultFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      CodeUri: ../../assets/functions/upload_result
+      Timeout: 180
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/upload_result.zip'
       Handler: app.lambda_handler
-      Runtime: python3.7
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
+  BatchAnomalyDetection:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/batch_anomaly_detection.zip'
+      MemorySize: 2048
+      Timeout: 600
+      Environment:
+        Variables:
+          Db_schema: meter-data
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Layers:
+        - !Ref BatchAnomalyDependencyLayer
+
+  TriggerGlueCrawlerFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Timeout: 60
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/crawler_trigger_glue_crawler.zip'
+      Handler: app.lambda_handler
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+
+  GetGlueCrawlerStateFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Timeout: 60
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/crawler_get_glue_crawler_state.zip'
+      Handler: app.lambda_handler
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+
+  #
+  # Lambda Dependency Layer
+  #
+  BatchAnomalyDependencyLayer:
+    Type: 'AWS::Serverless::LayerVersion'
+    Properties:
+      LayerName: ml-app-dependencies
+      Description: Dependencies for sam app
+      ContentUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/dependencies/anomaly_detection/layer.zip'
+      CompatibleRuntimes:
+        - python3.7
+      LicenseInfo: 'Available under the MIT-0 license.'
+      RetentionPolicy: Retain
+
   DependencyLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      LayerName: sam-app-dependencies
-      Description: Dependencies for sam app [temp-units-conv]
-      ContentUri: ../../assets/functions/dependencies/
+      LayerName: common-app-dependencies
+      ContentUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/dependencies/common/common-layer.zip'
       CompatibleRuntimes:
         - python3.7
       LicenseInfo: 'MIT'
       RetentionPolicy: Retain
-    Metadata:
-      BuildMethod: python3.7
+
+  #
+  # Crawler
+  #
+  AnomalyCrawler:
+    Type: "AWS::Glue::Crawler"
+    Properties:
+      Name: "meter-data-anomaly-crawler"
+      Role: !Sub "service-role/${CrawlerRole}"
+      Targets:
+        S3Targets:
+          - Path: !Sub "${WorkingBucket}/meteranalytics/anomaly"
+      DatabaseName: !Ref DBName
+      SchemaChangePolicy:
+        UpdateBehavior: "UPDATE_IN_DATABASE"
+        DeleteBehavior: "DEPRECATE_IN_DATABASE"
+
   #
   # IAM roles
   #
+  CrawlerRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      Path: "/service-role/"
+      RoleName: "AWSGlueServiceRole-Meter-Anomaly-Crawler"
+      AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"glue.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+      MaxSessionDuration: 3600
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+        - "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+
   ExecuteLambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -175,9 +293,10 @@ Resources:
             Action: 'sts:AssumeRole'
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - 'arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole'
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
+        - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
 
   SageMakerRole:
     Type: 'AWS::IAM::Role'
@@ -192,15 +311,49 @@ Resources:
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
+        - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
 
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: AWS Quick Start configuration
+        Parameters:
+          - QSS3BucketName
+          - QSS3KeyPrefix
+          - DBName
+    ParameterLabels:
+      QSS3BucketName:
+        default: Quick Start S3 bucket name
+      QSS3KeyPrefix:
+        default: Quick Start S3 key prefix
+      DBName:
+        default: Glue data catalog database name
 Parameters:
   QSS3BucketName:
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription: >-
+      Quick Start bucket name can include numbers, lowercase letters, uppercase
+      letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Default: aws-quickstart
+    Description: >-
+      S3 bucket name for the Quick Start assets.
+      Only change this value if you customize or extend the Quick Start for your own use.
+      This string can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
     Type: String
-    Default: cf-meter-data
-    Description: AWS Quick Start S3 bucket name where the Quick Start assets are hosted
-
   QSS3KeyPrefix:
+    AllowedPattern: '^[0-9a-zA-Z-/]*[/]$'
+    ConstraintDescription: >-
+      Quick Start key prefix can include numbers, lowercase letters, uppercase
+      letters, hyphens (-), and forward slash (/) and must terminate in a forward slash.
+    Default: quickstart-aws-utility-meter-data-analytics-platform/
     Type: String
-    Default: temp/
-    Description: S3 bucket key prefix for the AWS Quick Start assets
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
+  DBName:
+    ConstraintDescription: >-
+      Name of the glue data catalog database
+    Default: meter-data
+    Type: String

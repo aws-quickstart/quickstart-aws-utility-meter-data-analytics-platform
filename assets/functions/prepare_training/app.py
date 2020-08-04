@@ -2,52 +2,42 @@
 Input event payload expected to be in the following format:
 
 {
-  "Athena_bucket": "aws-athena-query-results-us-east-1-849779837104",
-  "S3_bucket": "temp-meter-data-bucket",
+  "Athena_bucket": "aws-athena-query-results",
+  "S3_bucket": "meter-data-bucket",
   "Data_start": "2013-06-01",
   "Data_end": "2014-01-01",
   "Forecast_period": 7,
   "Training_samples": 50,
-  "With_weather_data": 0,
+  "With_weather_data": 1,
   "Training_instance_type": "ml.c4.2xlarge",
-  "Training_job_name": "ml-training-6132fffb71ad463fbb7aaa4f62911227",
-  "ML_model_name": "ml-model-6132fffb71ad463fbb7aaa4f62911227",
+  "Training_job_name": "ml-training-job",
+  "ML_model_name": "ml-model",
   "Endpoint_instance_type": "ml.m4.xlarge",
-  "ML_endpoint_name": "ml-endpoint-6132fffb71ad463fbb7aaa4f62911227"
+  "ML_endpoint_name": "ml-endpoint"
 }
 
-          do we want to batch data by index
-          select meterid, cat1, cat2 from (
-            select meterid, stdortou as cat1, acorn_grouped as cat2,
-            (row_number() over(order by meterid) ) as row_num
-            from ml.acorn_data
-          )
-          where row_num between 1 and 50;
 '''
-
-import sys
 
 import boto3, os, io
 import json
-import numpy as np
 import pandas as pd
 
 from pyathena import connect
 
 def get_weather(connection, start):
-    weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, temperature,
-    dewpoint, pressure, apparenttemperature, windspeed, humidity
-    from "meter-data".weather_hourly_london
+    weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, 
+    temperature, apparenttemperature,  humidity
+    from "{}".weather
     where time >= '{}'
     order by 1;
-    '''.format(start)
+    '''.format(os.environ['Db_schema'], start)
     df_weather = pd.read_sql(weather_data, connection)
     df_weather = df_weather.set_index('datetime')
     return df_weather
 
 def get_meters(connection, samples):
     selected_households = '''select distinct meter_id
-        from "meter-data".daily limit {};'''.format(samples)
+        from "{}".daily limit {};'''.format(os.environ['Db_schema'], samples)
 
     df_meters = pd.read_sql(selected_households, connection)
     return df_meters['meter_id'].tolist()
@@ -78,12 +68,12 @@ def lambda_handler(event, context):
 
     q = '''
             select date_trunc('HOUR', reading_date_time) as datetime, meter_id, sum(reading_value) as consumption
-                from "meter-data".daily
+                from "{}".daily
                 where meter_id in ('{}')
                 and reading_date_time >= timestamp '{}'
                 and reading_date_time < timestamp '{}'
                 group by 2, 1
-        '''.format("','".join(meter_samples), DATA_START, DATA_END)
+        '''.format(os.environ['Db_schema'], "','".join(meter_samples), DATA_START, DATA_END)
 
     result = pd.read_sql(q, connection)
     result = result.set_index('datetime')
@@ -103,14 +93,14 @@ def lambda_handler(event, context):
         df_weather = get_weather(connection, DATA_START)
 
         training_data = [
-          {
-              "start": str(start_dataset),
-              "target": ts[start_dataset:end_training].tolist(),  # We use -1, because pandas indexing includes the upper bound
-              "dynamic_feat": [df_weather['temperature'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist(),
-                               df_weather['humidity'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist(),
-                               df_weather['apparenttemperature'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist()]
-          }
-          for meterid, ts in timeseries.items()
+            {
+                "start": str(start_dataset),
+                "target": ts[start_dataset:end_training].tolist(),  # We use -1, because pandas indexing includes the upper bound
+                "dynamic_feat": [df_weather['temperature'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist(),
+                                 df_weather['humidity'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist(),
+                                 df_weather['apparenttemperature'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist()]
+            }
+            for meterid, ts in timeseries.items()
         ]
 
         # there could be missing data, so use actual timeseries size
@@ -127,11 +117,11 @@ def lambda_handler(event, context):
         ]
     else:
         training_data = [
-          {
-              "start": str(start_dataset),
-              "target": ts[start_dataset:end_training].tolist()  # We use -1, because pandas indexing includes the upper bound
-          }
-          for meterid, ts in timeseries.items()
+            {
+                "start": str(start_dataset),
+                "target": ts[start_dataset:end_training].tolist()  # We use -1, because pandas indexing includes the upper bound
+            }
+            for meterid, ts in timeseries.items()
         ]
 
         testing_data = [

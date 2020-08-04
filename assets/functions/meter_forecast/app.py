@@ -1,40 +1,43 @@
 '''
 Testing event
 {
-  "Athena_bucket": "prediction-pipeline-athenaquerybucket-zz0r25pys2a5",
+  "Athena_bucket": "athenaquerybucket",
   "Data_start": "2013-06-01",
   "Data_end": "2014-01-01",
   "Forecast_period": 7,
   "Meter_id": "MAC004534",
-  "With_weather_data": 0,
+  "With_weather_data": 1,
   "ML_endpoint_name": "ml-endpoint-0001"
 }
 '''
 
-import boto3
+import boto3, os
 import pandas as pd 
 import numpy as np
-import time
 import json
 from pyathena import connect 
     
-def get_weather(connection, start):
+def get_weather(connection, start, db_schema):
     weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, temperature,
-    dewpoint, pressure, apparenttemperature, windspeed, humidity
-    from "meter-data".weather_hourly_london
+    apparenttemperature, humidity
+    from "{}".weather
     where time >= '{}'
     order by 1;
-    '''.format(start)
+    '''.format(db_schema, start)
     df_weather = pd.read_sql(weather_data, connection)
     df_weather = df_weather.set_index('datetime')
     return df_weather
     
-def encode_request(ts):
-    # Todo, Add option for weather data
+def encode_request(ts, weather):
     instance = {
           "start": str(ts.index[0]),
           "target": [x if np.isfinite(x) else "NaN" for x in ts]    
         }
+    if weather is not None:
+        instance["dynamic_feat"] = [weather['temperature'].tolist(),
+                                  weather['humidity'].tolist(),
+                                  weather['apparenttemperature'].tolist()]
+
     configuration = {
         "num_samples": 100,
         "output_types": ["quantiles"] ,
@@ -49,8 +52,6 @@ def encode_request(ts):
     return json.dumps(http_request_data).encode('utf-8')
 
 def decode_response(response, freq, prediction_time):
-    # we only sent one time series so we only receive one in return
-    # however, if possible one will pass multiple time series as predictions will then be faster
     predictions = json.loads(response.decode('utf-8'))['predictions'][0]
     prediction_length = len(next(iter(predictions['quantiles'].values())))
     prediction_index = pd.date_range(start=prediction_time, end=prediction_time + pd.Timedelta(prediction_length-1, unit='H'), freq=freq)
@@ -67,15 +68,16 @@ def lambda_handler(event, context):
     DATA_END = event['Data_end']
     FORECAST_PERIOD = event['Forecast_period']
     prediction_length = FORECAST_PERIOD * 24
+    DB_SCHEMA = os.environ['Db_schema']
 
     region = 'us-east-1'
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
     query = '''select date_trunc('HOUR', reading_date_time) as datetime, sum(reading_value) as consumption
-                from "meter-data".daily 
+                from "{}".daily
                 where meter_id = '{}' and reading_date_time >= timestamp '{}'
                 and  reading_date_time < timestamp '{}'
                 group by 1;
-                '''.format(METER_ID, DATA_START, DATA_END) 
+                '''.format(DB_SCHEMA, METER_ID, DATA_START, DATA_END)
     result = pd.read_sql(query, connection)
     result = result.set_index('datetime')
 
@@ -83,14 +85,17 @@ def lambda_handler(event, context):
     timeseries = data_kw.iloc[:,0]  #np.trim_zeros(data_kw.iloc[:,0], trim='f')
     
     freq = 'H'
+    df_weather = None
+    if USE_WEATHER_DATA == 1:
+        df_weather = get_weather(connection, DATA_START, DB_SCHEMA)
+
     runtime= boto3.client('runtime.sagemaker')
     response = runtime.invoke_endpoint(EndpointName=ML_ENDPOINT_NAME,
                                        ContentType='application/json',
-                                       Body=encode_request(timeseries[:]))
+                                       Body=encode_request(timeseries[:], df_weather))
     prediction_time = timeseries.index[-1] + pd.Timedelta(1, unit='H')
     df_prediction = decode_response(response['Body'].read(), freq, prediction_time)
 
     df_prediction.columns = ['consumption']
-    #print("return forecast result:", df_prediction)
     return df_prediction.to_json()
     

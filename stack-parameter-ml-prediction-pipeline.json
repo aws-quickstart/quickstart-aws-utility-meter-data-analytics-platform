@@ -1,0 +1,10 @@
+[
+  {
+    "ParameterKey": "QSS3BucketName",
+    "ParameterValue": "cf-meter-data"
+  },
+  {
+    "ParameterKey": "QSS3KeyPrefix",
+    "ParameterValue": "temp/"
+  }
+]
