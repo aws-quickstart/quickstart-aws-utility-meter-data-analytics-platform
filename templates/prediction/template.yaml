@@ -268,6 +268,48 @@ Resources:
         DeleteBehavior: "DEPRECATE_IN_DATABASE"
 
   #
+  # glue database
+  #
+  GlueTableAnomaly:
+    Type: "AWS::Glue::Table"
+    Properties:
+      DatabaseName: !Ref DBName
+      CatalogId: !Ref "AWS::AccountId"
+      TableInput:
+        Name: "anomaly"
+        TableType: "EXTERNAL_TABLE"
+        StorageDescriptor:
+          Columns:
+            - Name: "meter_id"
+              Type: "string"
+            - Name: "ds"
+              Type: "string"
+            - Name: "consumption"
+              Type: "double"
+            - Name: "yhat_lower"
+              Type: "double"
+            - Name: "yhat_upper"
+              Type: "double"
+            - Name: "anomaly"
+              Type: "bigint"
+            - Name: "importance"
+              Type: "double"
+          Location: !Sub "s3://${WorkingBucket}/meteranalytics/anomaly/"
+          InputFormat: "org.apache.hadoop.mapred.TextInputFormat"
+          OutputFormat: "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+          Compressed: false
+          NumberOfBuckets: -1
+          SerdeInfo:
+            SerializationLibrary: "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+            Parameters:
+              "field.delim": ","
+          Parameters:
+            CrawlerSchemaDeserializerVersion: "1.0"
+            CrawlerSchemaSerializerVersion: "1.0"
+            areColumnsQuoted: "false"
+            UPDATED_BY_CRAWLER: !Ref AnomalyCrawler
+
+  #
   # IAM roles
   #
   CrawlerRole:
