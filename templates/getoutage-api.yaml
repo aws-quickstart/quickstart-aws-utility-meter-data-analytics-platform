@@ -1,6 +1,34 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Create lambda function and API to get meter outage info"
 Resources:
+    GeoDataCrawler:
+      Type: "AWS::Glue::Crawler"
+      Properties:
+          Role: !Sub "service-role/${CrawlerIAMRole}"
+          Targets:
+              S3Targets:
+                  - Path: !Sub "s3://${SourceS3Bucket}/geodata"
+          DatabaseName: !Ref DBName
+          SchemaChangePolicy:
+              UpdateBehavior: "LOG"
+              DeleteBehavior: "DEPRECATE_IN_DATABASE"
+    
+    CrawlerIAMRole:
+        Type: "AWS::IAM::Role"
+        Properties:
+          Path: "/service-role/"
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Principal:
+                  Service: 'glue.amazonaws.com'
+                Action: 'sts:AssumeRole'
+          ManagedPolicyArns:
+            - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+            - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
+            - "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+
     ExecuteLambdaRole:
       Type: 'AWS::IAM::Role'
       Properties:
@@ -112,3 +140,16 @@ Parameters:
     Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).
+  SourceS3Bucket:
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription: >-
+      Source S3 bucket name can include numbers, lowercase letters, uppercase
+      letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Description: >-
+      S3 bucket name where the meter geolocation data is stored. NOTE: For crawler to
+      work correctly, geolcation data should be at the following S3 path s3://<Bucketname>/geodata/
+    Type: String
+  DBName:
+    Type: String
+    Default: meter-data
+    Description: Glue catalog database name
