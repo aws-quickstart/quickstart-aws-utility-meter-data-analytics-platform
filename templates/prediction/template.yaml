@@ -80,6 +80,7 @@ Resources:
         AthenaQueryBucket: !Ref AthenaQueryBucket
         WorkingBucket: !Ref WorkingBucket
         AnomalyCrawler: !Ref AnomalyCrawler
+        ForcastCrawler: !Ref ForcastCrawler
         LambdaSplitFunctionName: !Ref SplitBatchFunction
         LambdaPrepareFunctionName: !Ref PrepareBatchFunction
         LambdaResultFunctionName: !Ref UploadResultFunction
@@ -254,6 +255,19 @@ Resources:
   #
   # Crawler
   #
+  ForcastCrawler:
+    Type: "AWS::Glue::Crawler"
+    Properties:
+      Name: "meter-data-forcast-crawler"
+      Role: !Sub "service-role/${CrawlerRole}"
+      Targets:
+        S3Targets:
+          - Path: !Sub "${WorkingBucket}/meteranalytics/forecast"
+      DatabaseName: !Ref DBName
+      SchemaChangePolicy:
+        UpdateBehavior: "UPDATE_IN_DATABASE"
+        DeleteBehavior: "DEPRECATE_IN_DATABASE"
+
   AnomalyCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:

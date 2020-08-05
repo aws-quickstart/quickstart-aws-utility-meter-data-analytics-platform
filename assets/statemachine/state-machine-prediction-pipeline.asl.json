@@ -83,7 +83,7 @@
     },
     "Process batches": {
       "Type": "Map",
-      "Next": "Finish",
+      "Next": "trigger forcast crawler",
       "InputPath": "$",
       "ItemsPath": "$.batchdetail.Payload",
       "Parameters": {
@@ -186,6 +186,48 @@
           }
         }
       }
+    },
+    "trigger forcast crawler": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${LambdaTriggerCrawlerFunctionName}",
+        "Payload": {
+          "crawler_name": "${ForcastCrawler}"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Next": "wait for forcast crawler"
+    },
+    "wait for forcast crawler": {
+      "Type": "Wait",
+      "Seconds": 10,
+      "Next": "get forcast crawler state"
+    },
+    "get forcast crawler state": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${LambdaGetCrawlerStateFunctionName}",
+        "Payload": {
+          "crawler_name": "${ForcastCrawler}"
+        }
+      },
+      "OutputPath": "$.Payload",
+      "Next": "is forcast crawler ready"
+    },
+    "is forcast crawler ready": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Not": {
+            "Variable": "$.crawler_state",
+            "StringEquals": "READY"
+          },
+          "Next": "wait for forcast crawler"
+        }
+      ],
+      "Default": "Finish"
     },
     "Finish": {
       "Type": "Succeed"
