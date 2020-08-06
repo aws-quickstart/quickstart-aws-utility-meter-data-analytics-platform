@@ -121,22 +121,22 @@ Resources:
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
           DBName: !Ref DBName
 
-    #PredictionApiStack:
-    #  Type: 'AWS::CloudFormation::Stack'
-    #  Properties:
-    #    TemplateURL: !Sub
-    #      - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/prediction/prediction-api.yaml'
-    #      - S3Region:
-    #          !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-    #        S3Bucket:
-    #          !If [
-    #            UsingDefaultBucket,
-    #            !Sub '${QSS3BucketName}-${AWS::Region}',
-    #            !Ref QSS3BucketName,
-    #          ]
-    #    Parameters:
-    #      QSS3BucketName: !Ref QSS3BucketName
-    #      QSS3KeyPrefix: !Ref QSS3KeyPrefix
+    PredictionApiStack:
+      Type: 'AWS::CloudFormation::Stack'
+      Properties:
+        TemplateURL: !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/prediction/prediction-api.yaml'
+          - S3Region:
+              !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket:
+              !If [
+                UsingDefaultBucket,
+                !Sub '${QSS3BucketName}-${AWS::Region}',
+                !Ref QSS3BucketName,
+              ]
+        Parameters:
+          QSS3BucketName: !Ref QSS3BucketName
+          QSS3KeyPrefix: !Ref QSS3KeyPrefix
 
 Outputs:
   StackName:
