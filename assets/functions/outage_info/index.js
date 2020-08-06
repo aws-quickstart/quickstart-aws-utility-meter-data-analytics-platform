@@ -8,16 +8,6 @@ const AthenaExpress = require("athena-express"),
     /* has the necessary permission to execute Athena queries 
     /* and store the result in Amazon S3 bucket */
 
-const athenaExpressConfig = {
-	aws,
-	db: "meter-data",
-	getStats: true
-};
-const athenaExpress = new AthenaExpress(athenaExpressConfig);
-
-// TODO: Change following to correct error code
-const errorCode = 'INT';
-
 exports.handler = async (event, context, callback) => {
 	
 	let requestBody = {};
@@ -41,6 +31,18 @@ exports.handler = async (event, context, callback) => {
 		}
 	} 
 	
+	let dbname = process.env.DB_NAME
+	const athenaExpressConfig = {
+		aws,
+		db: dbname,
+		getStats: true
+	};
+	const athenaExpress = new AthenaExpress(athenaExpressConfig);
+	
+	// TODO: Change following to correct error code
+	const errorCode = 'INT';
+
+
 	console.log(requestBody);
 	let startDateTime = requestBody.startDateTime;
     let endDateTime = requestBody.endDateTime;
@@ -64,4 +66,6 @@ exports.handler = async (event, context, callback) => {
 
 API Gateway console test
 {"startDateTime": "2010-01-03 09:00:01","endDateTime": "2010-01-03 10:59:59"}
+London data
+{"startDateTime": "2013-01-03 09:00:01","endDateTime": "2013-01-03 10:59:59"}
 */

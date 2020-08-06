@@ -103,6 +103,9 @@ Resources:
             Code: 
                 S3Bucket: !Ref QSS3BucketName
                 S3Key: !Sub '${QSS3KeyPrefix}assets/functions/packages/outage_info/lambda.zip'
+            Environment:
+              Variables:
+                DB_NAME: !Ref DBName
             MemorySize: 128
             Role: !GetAtt 'ExecuteLambdaRole.Arn'
             Runtime: "nodejs12.x"
