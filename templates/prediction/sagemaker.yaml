@@ -4,7 +4,7 @@ Parameters:
   Session:
     Type: String
     Description: Session name must satisfy regular expression pattern ^[a-zA-Z0-9](-*[a-zA-Z0-9])*
-    Default: "demo"
+    Default: "meter-data-demo"
 Resources:
   SageMakerRole:
     Type: AWS::IAM::Role

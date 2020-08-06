@@ -192,8 +192,10 @@ Resources:
         Properties:
             Actions:
                 - CrawlerName: !Ref GlueCrawler6
-            Name: "OnDemandStart"
-            Type: "ON_DEMAND"
+            Name: "ScheduledStart"
+            Type: SCHEDULED
+            Description: "Scheduled trigger, 9am each day"
+            Schedule: cron(0 */9 * * ? *)
             WorkflowName: !Ref GlueWorkflow
 
     GlueTrigger2:
@@ -202,9 +204,7 @@ Resources:
             Actions:
                 - CrawlerName: !Ref GlueCrawler5
             Name: "clean-data-crawler"
-            Type: SCHEDULED
-            Description: "Scheduled trigger, 9am each day"
-            Schedule: cron(0 */9 * * ? *)
+            Type: "CONDITIONAL"
             StartOnCreation: true
             WorkflowName: !Ref GlueWorkflow
             Predicate:

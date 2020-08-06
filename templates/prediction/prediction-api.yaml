@@ -75,7 +75,7 @@ Resources:
           Type: Api
           Properties:
             Method: post
-            Path: /
+            Path: /anomaly
 
   MeterForcastPredictionApi:
     Type: 'AWS::Serverless::Function'
@@ -97,17 +97,17 @@ Resources:
           Type: Api
           Properties:
             Method: post
-            Path: /
+            Path: /forcast
   
   DependencyLayer:
     Type: 'AWS::Serverless::LayerVersion'
     Properties:
-      LayerName: sam-app-dependencies
+      LayerName: api-dependencies
       Description: Dependencies for sam app
       ContentUri:
         Bucket: !Ref QSS3BucketName
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/dependencies/lambda.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/dependencies/common/common-layer.zip'
       CompatibleRuntimes:
         - python3.7
       LicenseInfo: 'Available under the MIT-0 license.'

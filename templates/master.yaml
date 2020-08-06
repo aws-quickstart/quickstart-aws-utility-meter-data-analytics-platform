@@ -1,4 +1,5 @@
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
 Description: "Master template to deploy Meter data analytics platform"
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
@@ -100,6 +101,42 @@ Resources:
           LandingZoneS3Bucket: !GetAtt GlueStack.Outputs.LandingZoneS3Bucket
           CleanZoneS3Bucket: !GetAtt GlueStack.Outputs.CleanZoneS3Bucket
           DBName: !Ref DBName
+
+    PredictionStack:
+      DependsOn: GlueStack
+      Type: 'AWS::CloudFormation::Stack'
+      Properties:
+        TemplateURL: !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/prediction/prediction.yaml'
+          - S3Region:
+              !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket:
+              !If [
+                UsingDefaultBucket,
+                !Sub '${QSS3BucketName}-${AWS::Region}',
+                !Ref QSS3BucketName,
+              ]
+        Parameters:
+          QSS3BucketName: !Ref QSS3BucketName
+          QSS3KeyPrefix: !Ref QSS3KeyPrefix
+          DBName: !Ref DBName
+
+    PredictionApiStack:
+      Type: 'AWS::CloudFormation::Stack'
+      Properties:
+        TemplateURL: !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/prediction/prediction-api.yaml'
+          - S3Region:
+              !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket:
+              !If [
+                UsingDefaultBucket,
+                !Sub '${QSS3BucketName}-${AWS::Region}',
+                !Ref QSS3BucketName,
+              ]
+        Parameters:
+          QSS3BucketName: !Ref QSS3BucketName
+          QSS3KeyPrefix: !Ref QSS3KeyPrefix
 
 Outputs:
   StackName:
