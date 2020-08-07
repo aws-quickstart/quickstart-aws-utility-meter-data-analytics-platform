@@ -98,7 +98,7 @@ Resources:
         Type: "AWS::Lambda::Function"
         Properties:
             Description: ""
-            FunctionName: "mdaGetOutageDetails"
+            FunctionName: !Sub "mdaGetOutageDetails-${AWS::Region}"
             Handler: "index.handler"
             Code: 
                 S3Bucket: !Ref QSS3BucketName

@@ -13,7 +13,7 @@ Resources:
     GlueWorkflow:
         Type: AWS::Glue::Workflow
         Properties:
-            Name: meter-data-pipeline
+            Name: !Sub 'meter-data-pipeline-${AWS::Region}'
             Description: Workflow for manufactured meter data analytics
 
     LogsLogGroup:
@@ -23,7 +23,7 @@ Resources:
     GlueCrawler4:
         Type: "AWS::Glue::Crawler"
         Properties:
-            Name: "meter-data-business-daily-crawler"
+            Name: !Sub 'meter-data-business-daily-crawler-${AWS::Region}'
             Role: !Sub "service-role/${IAMRole}"
             Targets:
                 S3Targets:
@@ -37,7 +37,7 @@ Resources:
     GlueCrawler5:
         Type: "AWS::Glue::Crawler"
         Properties:
-            Name: "meter-data-clean-crawler"
+            Name: !Sub "meter-data-clean-crawler-${AWS::Region}"
             Role: !Sub "service-role/${IAMRole}"
             Targets:
                 S3Targets:
@@ -51,7 +51,7 @@ Resources:
     GlueCrawler6:
         Type: "AWS::Glue::Crawler"
         Properties:
-            Name: "meter-data-raw-crawler"
+            Name: !Sub "meter-data-raw-crawler-${AWS::Region}"
             Role: !Sub "service-role/${IAMRole}"
             Targets:
                 S3Targets:
@@ -69,7 +69,7 @@ Resources:
     GlueJob4:
         Type: "AWS::Glue::Job"
         Properties:
-            Name: "business_daily_to_redshift.py"
+            Name: !Sub "business_daily_to_redshift-${AWS::Region}"
             Role: !GetAtt IAMRole.Arn
             ExecutionProperty:
                 MaxConcurrentRuns: 1
@@ -91,15 +91,15 @@ Resources:
                 Connections:
                     - !Ref GlueConnection
             MaxRetries: 0
-            #AllocatedCapacity: 5
+            #AllocatedCapacity: !Ref DPU
+            MaxCapacity: !Ref DPU
             Timeout: 2880
             GlueVersion: "1.0"
-            MaxCapacity: 5
 
     GlueJob5:
         Type: "AWS::Glue::Job"
         Properties:
-            Name: "transform_clean_to_business_partition.py"
+            Name: !Sub "transform_clean_to_business_partition-${AWS::Region}"
             Role: !GetAtt IAMRole.Arn
             ExecutionProperty:
                 MaxConcurrentRuns: 1
@@ -119,15 +119,15 @@ Resources:
                 --business_zone_bucket: !Ref BusinessZoneS3Bucket
                 --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
             MaxRetries: 0
-            #AllocatedCapacity: 5
+            #AllocatedCapacity: !Ref DPU
+            MaxCapacity: !Ref DPU
             Timeout: 2880
             GlueVersion: "1.0"
-            MaxCapacity: 5
 
     GlueJob6:
         Type: "AWS::Glue::Job"
         Properties:
-            Name: "transform_raw_to_clean.py"
+            Name: !Sub "transform_raw_to_clean-${AWS::Region}"
             Role: !GetAtt IAMRole.Arn
             ExecutionProperty:
                 MaxConcurrentRuns: 1
@@ -152,15 +152,15 @@ Resources:
                 --clean_data_bucket: !Ref CleanZoneS3Bucket
                 --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
             MaxRetries: 0
-            #AllocatedCapacity: 5
             Timeout: 2880
             GlueVersion: "1.0"
-            MaxCapacity: 5
+            #AllocatedCapacity: !Ref DPU
+            MaxCapacity: !Ref DPU
 
     GlueJobCisDataToRedshift:
         Type: "AWS::Glue::Job"
         Properties:
-            Name: "cis_to_redshift.py"
+            Name: !Sub "cis_to_redshift-${AWS::Region}"
             Role: !GetAtt IAMRole.Arn
             ExecutionProperty:
                 MaxConcurrentRuns: 1
@@ -182,17 +182,17 @@ Resources:
                 Connections:
                     - !Ref GlueConnection
             MaxRetries: 0
-            #AllocatedCapacity: 5
             Timeout: 2880
             GlueVersion: "1.0"
-            MaxCapacity: 5
+            #AllocatedCapacity: !Ref DPU
+            MaxCapacity: !Ref DPU
 
     GlueTrigger:
         Type: "AWS::Glue::Trigger"
         Properties:
             Actions:
                 - CrawlerName: !Ref GlueCrawler6
-            Name: "ScheduledStart"
+            Name: !Sub "ScheduledStart-${AWS::Region}"
             Type: SCHEDULED
             Description: "Scheduled trigger, 9am each day"
             Schedule: cron(0 */9 * * ? *)
@@ -203,7 +203,7 @@ Resources:
         Properties:
             Actions:
                 - CrawlerName: !Ref GlueCrawler5
-            Name: "clean-data-crawler"
+            Name: !Sub "clean-data-crawler-${AWS::Region}"
             Type: "CONDITIONAL"
             StartOnCreation: true
             WorkflowName: !Ref GlueWorkflow
@@ -217,7 +217,7 @@ Resources:
     GlueTrigger3:
         Type: "AWS::Glue::Trigger"
         Properties:
-            Name: "export-to-redshift"
+            Name: !Sub "export-to-redshift-${AWS::Region}"
             Type: "CONDITIONAL"
             StartOnCreation: true
             WorkflowName: !Ref GlueWorkflow
@@ -234,7 +234,7 @@ Resources:
     GlueTrigger4:
         Type: "AWS::Glue::Trigger"
         Properties:
-            Name: "trigger-business-daily-crawler"
+            Name: !Sub "trigger-business-daily-crawler-${AWS::Region}"
             Type: "CONDITIONAL"
             StartOnCreation: true
             WorkflowName: !Ref GlueWorkflow
@@ -250,7 +250,7 @@ Resources:
     GlueTrigger5:
         Type: "AWS::Glue::Trigger"
         Properties:
-            Name: "trigger-clean-to-business"
+            Name: !Sub "trigger-clean-to-business-${AWS::Region}"
             Type: "CONDITIONAL"
             StartOnCreation: true
             WorkflowName: !Ref GlueWorkflow
@@ -267,7 +267,7 @@ Resources:
     GlueTrigger10:
         Type: "AWS::Glue::Trigger"
         Properties:
-            Name: "trigger-raw-to-clean"
+            Name: !Sub "trigger-raw-to-clean-${AWS::Region}"
             Type: "CONDITIONAL"
             StartOnCreation: true
             WorkflowName: !Ref GlueWorkflow
@@ -283,7 +283,7 @@ Resources:
     IAMManagedPolicy:
         Type: "AWS::IAM::ManagedPolicy"
         Properties:
-            ManagedPolicyName: "MeterData-S3Bucket-Access-Policy"
+            ManagedPolicyName: !Sub "MeterData-S3Bucket-Access-Policy-${AWS::Region}"
             Path: "/service-role/"
             PolicyDocument: !If 
                 - CreateLZS3BucketCondition
@@ -332,7 +332,6 @@ Resources:
         Type: "AWS::IAM::Role"
         Properties:
             Path: "/service-role/"
-            RoleName: "AWSGlueServiceRole-Meter-LandingZone"
             AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"glue.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
             MaxSessionDuration: 3600
             ManagedPolicyArns:
@@ -492,3 +491,8 @@ Parameters:
         Type: String
         Default: ""
         Description: (Conditional) You must provide a value if you select 'No' for 'Create Landing Zone bucket' parameter above.
+    
+    DPU:
+        Type: String
+        Description: No. of DPUs for Glue Job
+        Default: 10

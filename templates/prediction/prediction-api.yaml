@@ -102,7 +102,7 @@ Resources:
   DependencyLayer:
     Type: 'AWS::Serverless::LayerVersion'
     Properties:
-      LayerName: api-dependencies
+      LayerName: !Sub "api-dependencies-${AWS::Region}"
       Description: Dependencies for sam app
       ContentUri:
         Bucket: !Ref QSS3BucketName

@@ -82,6 +82,7 @@ Resources:
           LandingzoneTransformer: !Ref LandingzoneTransformer
           CreateLandingZoneS3Bucket: !Ref CreateLandingZoneS3Bucket
           LandingZoneS3BucketName: !Ref LandingZoneS3BucketName
+          DPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
 
     GlueTablesStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -137,6 +138,13 @@ Resources:
         Parameters:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
+
+Mappings: 
+  MeterCountMap: 
+    "1-50000": 
+      "DPU": 100
+    "50001-and-more": 
+      "DPU": 200
 
 Outputs:
   StackName:
@@ -248,6 +256,14 @@ Parameters:
   AvailabilityZone:
     Type: AWS::EC2::AvailabilityZone::Name
     Description: AWS Availability Zone for Subnet 1
+  
+  NoOfMeters:
+    Type: String
+    Description: Approximate No. of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure appropriate no. of DPUs for the Glue Job.
+    AllowedValues:
+      - "1-50000"
+      - "50001-and-more"
+    Default: "1-50000"
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -275,13 +291,14 @@ Metadata:
           - LandingzoneTransformer
           - CreateLandingZoneS3Bucket
           - LandingZoneS3BucketName
+          - NoOfMeters
+          - LandingzoneTransformer
       - Label:
           default: 'Quick Start Configuration'
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
           - QSS3BucketRegion
-          - LandingzoneTransformer
     ParameterLabels:
       MasterUsername:
         default: Master username
@@ -317,3 +334,5 @@ Metadata:
         default: Create landing zone bucket
       LandingZoneS3BucketName:
         default: Landing zone S3 bucket
+      NoOfMeters:
+        default: No. of meters

@@ -24,7 +24,7 @@ Resources:
         - arn:aws:iam::aws:policy/AWSGlueConsoleSageMakerNotebookFullAccess
       Path: /service-role/
       Policies:
-        - PolicyName: SagemakerExecution
+        - PolicyName: !Sub "SagemakerExecution-${AWS::Region}"
           PolicyDocument:
             Version: '2012-10-17'
             Statement:

@@ -228,7 +228,7 @@ Resources:
   BatchAnomalyDependencyLayer:
     Type: 'AWS::Serverless::LayerVersion'
     Properties:
-      LayerName: ml-app-dependencies
+      LayerName: !Sub "ml-app-dependencies-${AWS::Region}"
       Description: Dependencies for sam app
       ContentUri:
         Bucket: !Ref QSS3BucketName
@@ -242,7 +242,7 @@ Resources:
   DependencyLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      LayerName: common-app-dependencies
+      LayerName: !Sub "common-app-dependencies-${AWS::Region}"
       ContentUri:
         Bucket: !Ref QSS3BucketName
         Key:
@@ -258,7 +258,7 @@ Resources:
   ForcastCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
-      Name: "meter-data-forcast-crawler"
+      Name: !Sub "meter-data-forcast-crawler-${AWS::Region}"
       Role: !Sub "service-role/${CrawlerRole}"
       Targets:
         S3Targets:
@@ -271,7 +271,7 @@ Resources:
   AnomalyCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
-      Name: "meter-data-anomaly-crawler"
+      Name: !Sub "meter-data-anomaly-crawler-${AWS::Region}"
       Role: !Sub "service-role/${CrawlerRole}"
       Targets:
         S3Targets:
@@ -330,7 +330,6 @@ Resources:
     Type: "AWS::IAM::Role"
     Properties:
       Path: "/service-role/"
-      RoleName: "AWSGlueServiceRole-Meter-Anomaly-Crawler"
       AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"glue.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
       MaxSessionDuration: 3600
       ManagedPolicyArns:
