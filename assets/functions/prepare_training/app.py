@@ -2,18 +2,12 @@
 Input event payload expected to be in the following format:
 
 {
-  "Athena_bucket": "aws-athena-query-results",
   "S3_bucket": "meter-data-bucket",
   "Data_start": "2013-06-01",
   "Data_end": "2014-01-01",
   "Forecast_period": 7,
   "Training_samples": 50,
-  "With_weather_data": 1,
-  "Training_instance_type": "ml.c4.2xlarge",
-  "Training_job_name": "ml-training-job",
-  "ML_model_name": "ml-model",
-  "Endpoint_instance_type": "ml.m4.xlarge",
-  "ML_endpoint_name": "ml-endpoint"
+  "With_weather_data": 1
 }
 
 '''
@@ -24,20 +18,20 @@ import pandas as pd
 
 from pyathena import connect
 
-def get_weather(connection, start):
+def get_weather(connection, start, schema):
     weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, 
     temperature, apparenttemperature,  humidity
     from "{}".weather
     where time >= '{}'
     order by 1;
-    '''.format(os.environ['Db_schema'], start)
+    '''.format(schema, start)
     df_weather = pd.read_sql(weather_data, connection)
     df_weather = df_weather.set_index('datetime')
     return df_weather
 
-def get_meters(connection, samples):
+def get_meters(connection, samples, schema):
     selected_households = '''select distinct meter_id
-        from "{}".daily limit {};'''.format(os.environ['Db_schema'], samples)
+        from "{}".daily limit {};'''.format(schema, samples)
 
     df_meters = pd.read_sql(selected_households, connection)
     return df_meters['meter_id'].tolist()
@@ -51,7 +45,7 @@ def write_upload_file(bucket, path, data):
     boto3.Session().resource('s3').Bucket(bucket).Object(path).put(Body=jsonBuffer.getvalue())
 
 def lambda_handler(event, context):
-    ATHENA_OUTPUT_BUCKET = event['Athena_bucket']
+    ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
     S3_BUCKET = event['S3_bucket']
     TRAINING_SAMPLES = event['Training_samples']
     USE_WEATHER_DATA = event['With_weather_data']
@@ -59,12 +53,13 @@ def lambda_handler(event, context):
     DATA_END = event['Data_end']
     FORECAST_PERIOD = event['Forecast_period']
     prediction_length = FORECAST_PERIOD * 24
+    DB_SCHEMA = os.environ['Db_schema']
 
     # region should be an environment variable
     region = 'us-east-1'
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
 
-    meter_samples = get_meters(connection, TRAINING_SAMPLES)
+    meter_samples = get_meters(connection, TRAINING_SAMPLES, DB_SCHEMA)
 
     q = '''
             select date_trunc('HOUR', reading_date_time) as datetime, meter_id, sum(reading_value) as consumption
@@ -73,7 +68,7 @@ def lambda_handler(event, context):
                 and reading_date_time >= timestamp '{}'
                 and reading_date_time < timestamp '{}'
                 group by 2, 1
-        '''.format(os.environ['Db_schema'], "','".join(meter_samples), DATA_START, DATA_END)
+        '''.format(DB_SCHEMA, "','".join(meter_samples), DATA_START, DATA_END)
 
     result = pd.read_sql(q, connection)
     result = result.set_index('datetime')
@@ -90,7 +85,7 @@ def lambda_handler(event, context):
     end_training = end_dataset - pd.Timedelta(prediction_length * num_test_windows, unit='H')
 
     if USE_WEATHER_DATA == 1:
-        df_weather = get_weather(connection, DATA_START)
+        df_weather = get_weather(connection, DATA_START, DB_SCHEMA)
 
         training_data = [
             {

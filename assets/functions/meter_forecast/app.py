@@ -1,7 +1,6 @@
 '''
 Testing event
 {
-  "Athena_bucket": "athenaquerybucket",
   "Data_start": "2013-06-01",
   "Data_end": "2014-01-01",
   "Forecast_period": 7,
@@ -60,7 +59,7 @@ def decode_response(response, freq, prediction_time):
 
 
 def lambda_handler(event, context):
-    ATHENA_OUTPUT_BUCKET = event['Athena_bucket']
+    ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
     METER_ID = event['Meter_id']
     ML_ENDPOINT_NAME = event['ML_endpoint_name']
     USE_WEATHER_DATA = event['With_weather_data']

@@ -10,6 +10,7 @@ Globals:
     Environment:
       Variables:
         Db_schema: meter-data
+        Athena_bucket: !Ref AthenaQueryBucket
 
 Resources:
   AthenaQueryBucket:

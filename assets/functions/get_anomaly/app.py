@@ -5,8 +5,7 @@ from pyathena import connect
 
 
 def lambda_handler(event, context):
-    print(event)
-    ATHENA_OUTPUT_BUCKET = event['Athena_bucket']
+    ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
     METER_ID = event['Meter_id']
     DATA_START = event['Data_start']
     DATA_END = event['Data_end']
