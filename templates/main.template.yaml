@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Template to deploy AWS Quick Start for Utility meter data analytics.
+Description: Main Template to deploy AWS Quick Start for Utility meter data analytics in a new VPC. (qs-1r18anaju)
 Metadata:
   QuickStartDocumentation:
     EntrypointName: "Launch into a new VPC"

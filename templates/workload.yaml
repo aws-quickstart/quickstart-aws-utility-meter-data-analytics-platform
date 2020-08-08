@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: "Master template to deploy Meter data analytics platform"
+Description: "Workload template to deploy Meter data analytics platform in an existing VPC. (qs-1r18anahd)"
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Rules:
