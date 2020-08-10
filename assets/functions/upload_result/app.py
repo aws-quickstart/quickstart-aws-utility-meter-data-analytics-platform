@@ -28,7 +28,7 @@ def get_meters(connection, start, end, db_schema):
 
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
-    S3_BUCKET = event['S3_bucket']
+    S3_BUCKET = os.environ['Working_bucket']
     BATCH_START = event['Batch_start']
     BATCH_END = event['Batch_end']
     FORECAST_START = event['Data_end']

@@ -11,6 +11,7 @@ Globals:
       Variables:
         Db_schema: meter-data
         Athena_bucket: !Ref AthenaQueryBucket
+        Working_bucket: !Ref WorkingBucket
 
 Resources:
   AthenaQueryBucket:
@@ -28,7 +29,6 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-training.asl.json'
       DefinitionSubstitutions:
-        WorkingBucket: !Ref WorkingBucket
         LambdaPrepareTrainingName: !Ref PrepareTrainingFunction
         AccountId: !Sub ${AWS::AccountId}
         SageMakerRole: !GetAtt SageMakerRole.Arn
@@ -77,7 +77,6 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-prediction-pipeline.asl.json'
       DefinitionSubstitutions:
-        WorkingBucket: !Ref WorkingBucket
         AnomalyCrawler: !Ref AnomalyCrawler
         ForcastCrawler: !Ref ForcastCrawler
         LambdaSplitFunctionName: !Ref SplitBatchFunction
@@ -411,3 +410,9 @@ Parameters:
       Name of the glue data catalog database
     Default: meter-data
     Type: String
+
+Outputs:
+  AthenaQueryBucket:
+    Value: !Ref AthenaQueryBucket
+  WorkingBucket:
+    Value: !Ref WorkingBucket

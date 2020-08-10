@@ -4,17 +4,16 @@ sample lambda input
     "Meter_start": 1,
     "Meter_end": 100,
     "Batch_size": 20,
-    "S3_bucket": "meter-analytics"
 }
 
 '''
-import uuid
+import uuid, os
 
 def lambda_handler(event, context):
     start       = event['Meter_start']
     end         = event['Meter_end']
     batchsize   = event['Batch_size']
-    s3_bucket   = event['S3_bucket']
+    s3_bucket   = os.environ['Working_bucket']
 
     id = uuid.uuid4().hex
     batchdetail = []

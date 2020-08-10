@@ -2,7 +2,6 @@
 Input event payload expected to be in the following format:
 
 {
-"S3_bucket": "cf-meter-data",
 "Batch_start": "MAC000001",
 "Batch_end": "MAC000020",
 "Data_start": "2013-06-01",
@@ -48,7 +47,7 @@ def get_meters(connection, start, end, db_schema):
 
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
-    S3_BUCKET = event['S3_bucket']
+    S3_BUCKET = os.environ['Working_bucket']
     USE_WEATHER_DATA = event['With_weather_data']
     BATCH_START = event['Batch_start']
     BATCH_END = event['Batch_end']

@@ -64,7 +64,6 @@
       "Parameters": {
         "FunctionName": "${LambdaSplitFunctionName}",
         "Payload": {
-          "S3_bucket": "${WorkingBucket}",
           "ModelName.$": "$.ModelName",
           "Meter_start.$": "$.Meter_start",
           "Meter_end.$": "$.Meter_end",
@@ -89,7 +88,6 @@
         "LambdaPrepareFunctionName": "${LambdaPrepareFunctionName}",
         "LambdaResultFunctionName": "${LambdaResultFunctionName}",
         "ModelName.$": "$.ModelName",
-        "S3_bucket": "${WorkingBucket}",
         "Data_start.$": "$.Data_start",
         "Data_end.$": "$.Data_end",
         "Batch_info.$": "$$.Map.Item.Value",
@@ -103,7 +101,6 @@
             "Parameters": {
               "FunctionName": "${LambdaAnomalyFunctionName}",
               "Payload": {
-                "S3_bucket": "${WorkingBucket}",
                 "Batch_start.$": "$.Batch_info.Batch_start",
                 "Batch_end.$": "$.Batch_info.Batch_end",
                 "Data_start.$": "$.Data_start",
@@ -120,7 +117,6 @@
             "Parameters": {
               "FunctionName": "${LambdaPrepareFunctionName}",
               "Payload": {
-                "S3_bucket": "${WorkingBucket}",
                 "Batch_start.$": "$.Batch_info.Batch_start",
                 "Batch_end.$": "$.Batch_info.Batch_end",
                 "Data_start.$": "$.Data_start",
@@ -166,7 +162,6 @@
             "Parameters": {
               "FunctionName": "${LambdaResultFunctionName}",
               "Payload": {
-                "S3_bucket": "${WorkingBucket}",
                 "Batch_start.$": "$.Batch_info.Batch_start",
                 "Batch_end.$": "$.Batch_info.Batch_end",
                 "Data_start.$": "$.Data_start",

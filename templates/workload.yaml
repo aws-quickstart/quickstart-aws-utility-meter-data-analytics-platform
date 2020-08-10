@@ -138,6 +138,7 @@ Resources:
         Parameters:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
+          AthenaQueryBucket: !GetAtt PredictionStack.Outputs.AthenaQueryBucket
 
 Mappings: 
   MeterCountMap: 

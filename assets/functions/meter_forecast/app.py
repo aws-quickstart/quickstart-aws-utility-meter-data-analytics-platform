@@ -65,8 +65,6 @@ def lambda_handler(event, context):
     USE_WEATHER_DATA = event['With_weather_data']
     DATA_START = event['Data_start']
     DATA_END = event['Data_end']
-    FORECAST_PERIOD = event['Forecast_period']
-    prediction_length = FORECAST_PERIOD * 24
     DB_SCHEMA = os.environ['Db_schema']
 
     region = 'us-east-1'

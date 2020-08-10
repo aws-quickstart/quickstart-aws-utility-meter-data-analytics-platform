@@ -5,7 +5,6 @@
       "Parameters": {
         "FunctionName": "${LambdaPrepareTrainingName}",
         "Payload": {
-          "S3_bucket": "${WorkingBucket}",
           "Training_samples.$": "$.Training_samples",
           "Data_start.$": "$.Data_start",
           "Data_end.$": "$.Data_end",

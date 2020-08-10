@@ -2,7 +2,6 @@
 Input event payload expected to be in the following format:
 
 {
-  "S3_bucket": "meter-data-bucket",
   "Data_start": "2013-06-01",
   "Data_end": "2014-01-01",
   "Forecast_period": 7,
@@ -46,7 +45,7 @@ def write_upload_file(bucket, path, data):
 
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
-    S3_BUCKET = event['S3_bucket']
+    S3_BUCKET = os.environ['Working_bucket']
     TRAINING_SAMPLES = event['Training_samples']
     USE_WEATHER_DATA = event['With_weather_data']
     DATA_START = event['Data_start']
