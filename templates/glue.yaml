@@ -278,8 +278,8 @@ Resources:
     Properties:
       ManagedPolicyName: !Sub "MeterData-S3Bucket-Access-Policy-${AWS::Region}"
       Path: "/service-role/"
-      PolicyDocument:
-        - CreateLZS3 BucketCondition
+      PolicyDocument: !If
+        - CreateLZS3BucketCondition
         - !Sub |
           {
               "Version": "2012-10-17",
