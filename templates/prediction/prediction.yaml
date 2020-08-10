@@ -20,6 +20,33 @@ Resources:
   WorkingBucket:
     Type: AWS::S3::Bucket
 
+  MlPipelineTriggerStateMachine:
+    Type: 'AWS::Serverless::StateMachine'
+    Properties:
+      DefinitionUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/ml_pipeline_trigger_state_machine.asl.json'
+      DefinitionSubstitutions:
+        InitialTrainingStateMachine: !Ref InitialTrainingStateMachine
+        PredictionPipelineStateMachine: !Ref PredictionPipelineStateMachine
+        CheckInitialPipelineRun: !Ref CheckInitialPipelineRun
+      Policies:
+        - Version: 2012-10-17
+            Statement:
+        - Effect: Allow
+          Action:
+            - events:PutTargets
+            - events:PutRule
+            - events:DescribeRule
+          Resource: "*"
+            - Effect: Allow
+              Action:
+                - "iam:PassRole"
+              Resource: "*"
+        - LambdaInvokePolicy:
+            FunctionName: !Ref CheckInitialPipelineRun
+
   # init training statemachine
   InitialTrainingStateMachine:
     Type: 'AWS::Serverless::StateMachine'
@@ -129,7 +156,7 @@ Resources:
   #
   # Lambda functions
   #
-  PrepareTrainingFunction:
+  CheckInitialPipelineRun:
     Type: 'AWS::Serverless::Function'
     Properties:
       MemorySize: 512
@@ -138,6 +165,20 @@ Resources:
         Bucket: !Ref QSS3BucketName
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/prepare_training.zip'
+      Handler: app.lambda_handler
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Layers:
+        - !Ref DependencyLayer
+
+  PrepareTrainingFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      MemorySize: 128
+      Timeout: 30
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/check_inital_pipeline_run.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
@@ -410,9 +451,15 @@ Parameters:
       Name of the glue data catalog database
     Default: meter-data
     Type: String
+  StateQueue:
+    ConstraintDescription: >-
+      Name of the central communication queue
+    Type: String
 
 Outputs:
   AthenaQueryBucket:
     Value: !Ref AthenaQueryBucket
   WorkingBucket:
     Value: !Ref WorkingBucket
+  MlPipeline:
+    Value: !Ref MlPipelineTriggerStateMachine

@@ -1,4 +1,6 @@
 import sys
+import boto3
+
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
@@ -6,13 +8,18 @@ from awsglue.context import GlueContext
 from awsglue.job import Job
 
 ## @params: [TempDir, JOB_NAME]
-args = getResolvedOptions(sys.argv, ['TempDir','JOB_NAME', 'db_name', 'redshift_connection', 'temp_workflow_bucket'])
+args = getResolvedOptions(sys.argv, ['TempDir','JOB_NAME', 'db_name', 'redshift_connection', 'temp_workflow_bucket', 'state_queue'])
 
 sc = SparkContext()
 glueContext = GlueContext(sc)
 spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
+
+# sending state to queue for other services to pick up
+client = boto3.client('sqs')
+queue = client.get_queue_by_name(QueueName=args['state_queue'])
+queue.send_message(MessageBody='data prepared')
 
 allDaily = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = "daily", transformation_ctx = "allDaily")
 glueContext.write_dynamic_frame.from_jdbc_conf(frame = allDaily, catalog_connection = args['redshift_connection'], connection_options = {"dbtable": "daily", "database": args['db_name']}, redshift_tmp_dir = args["TempDir"], transformation_ctx = "allDaily")

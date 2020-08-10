@@ -77,7 +77,7 @@
       "ResultPath": null,
       "Parameters": {
         "ExecutionRoleArn": "${SageMakerRole}",
-        "ModelName.$": "$.ML_model_name",
+        "ModelName.$": "$.ModelName",
         "PrimaryContainer": {
           "Environment": {},
           "Image": "522234722520.dkr.ecr.us-east-1.amazonaws.com/forecasting-deepar:1",
@@ -92,12 +92,12 @@
       "ResultPath": null,
       "Resource": "arn:aws:states:::sagemaker:createEndpointConfig",
       "Parameters": {
-        "EndpointConfigName.$": "$.ML_model_name",
+        "EndpointConfigName.$": "$.ModelName",
         "ProductionVariants": [
           {
             "InitialInstanceCount": 1,
             "InstanceType": "ml.m4.xlarge",
-            "ModelName.$": "$.ML_model_name",
+            "ModelName.$": "$.ModelName",
             "VariantName": "AllTraffic"
           }
         ]
@@ -108,7 +108,7 @@
     "Update Model Endpoint": {
       "Resource": "arn:aws:states:::sagemaker:createEndpoint",
       "Parameters": {
-        "EndpointConfigName.$": "$.ML_model_name",
+        "EndpointConfigName.$": "$.ModelName",
         "EndpointName.$": "$.ML_endpoint_name"
       },
       "Type": "Task",

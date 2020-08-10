@@ -129,3 +129,4 @@ def lambda_handler(event, context):
 
     write_upload_file(S3_BUCKET, 'meteranalytics/train/training.json', training_data)
     write_upload_file(S3_BUCKET, 'meteranalytics/test/testing.json', testing_data)
+    write_upload_file(S3_BUCKET, 'meteranalytics/initial_pass', '')

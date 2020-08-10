@@ -1,0 +1,71 @@
+{
+  "Comment": "Starts the ML Pipeline and checks weather the initial training should be executed or not.",
+  "StartAt": "check initial pipeline run",
+  "States": {
+    "check initial pipeline run": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${CheckInitialPipelineRun}",
+        "Payload": {
+
+        }
+      },
+      "Next": "should initial pipeline triggered"
+    },
+    "should initial pipeline triggered": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.initial_pipeline_passed",
+          "BooleanEquals": false,
+          "Next": "run initial pipeline"
+        }
+      ],
+      "Default": "run batch pipeline"
+    },
+    "run initial pipeline": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution.sync:2",
+      "Parameters": {
+        "StateMachineArn": "${InitialTrainingStateMachine}",
+        "Input": {
+          "Data_start.$": "$.Data_start",
+          "Data_end.$": "$.Data_end",
+          "Forecast_period.$": "$.Forecast_period",
+          "Training_samples.$": "$.Training_samples",
+          "With_weather_data.$": "$.With_weather_data",
+          "Training_instance_type.$": "$.Training_instance_type",
+          "Training_job_name.$": "$.Training_job_name",
+          "ModelName.$": "$.ModelName",
+          "Endpoint_instance_type.$": "$.Endpoint_instance_type",
+          "ML_endpoint_name.$": "$.ML_endpoint_name",
+          "AWS_STEP_FUNCTIONS_STARTED_BY_EXECUTION_ID.$": "$$.Execution.Id"
+        }
+      },
+      "Next": "run batch pipeline"
+    },
+    "run batch pipeline": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution.sync:2",
+      "Parameters": {
+        "StateMachineArn": "${PredictionPipelineStateMachine}",
+        "Input": {
+          "Meter_start.$": "$.Meter_start",
+          "Meter_end.$": "$.Meter_end",
+          "Batch_size.$": "$.Batch_size",
+          "Data_start.$": "$.Data_start",
+          "Data_end.$": "$.Data_end",
+          "Forecast_period.$": "$.Forecast_period",
+          "ModelName.$": "$.ModelName",
+          "With_weather_data.$": "$.With_weather_data",
+          "AWS_STEP_FUNCTIONS_STARTED_BY_EXECUTION_ID.$": "$$.Execution.Id"
+        }
+      },
+      "Next": "Success"
+    },
+    "Success": {
+      "Type": "Succeed"
+    }
+  }
+}
