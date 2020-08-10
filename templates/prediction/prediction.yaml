@@ -33,13 +33,13 @@ Resources:
         CheckInitialPipelineRun: !Ref CheckInitialPipelineRun
       Policies:
         - Version: 2012-10-17
-            Statement:
-        - Effect: Allow
-          Action:
-            - events:PutTargets
-            - events:PutRule
-            - events:DescribeRule
-          Resource: "*"
+          Statement:
+            - Effect: Allow
+              Action:
+                - events:PutTargets
+                - events:PutRule
+                - events:DescribeRule
+              Resource: "*"
             - Effect: Allow
               Action:
                 - "iam:PassRole"
