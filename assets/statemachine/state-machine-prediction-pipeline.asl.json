@@ -65,7 +65,6 @@
         "FunctionName": "${LambdaSplitFunctionName}",
         "Payload": {
           "S3_bucket": "${WorkingBucket}",
-          "Athena_bucket": "${AthenaQueryBucket}",
           "ModelName.$": "$.ModelName",
           "Meter_start.$": "$.Meter_start",
           "Meter_end.$": "$.Meter_end",
@@ -90,7 +89,6 @@
         "LambdaPrepareFunctionName": "${LambdaPrepareFunctionName}",
         "LambdaResultFunctionName": "${LambdaResultFunctionName}",
         "ModelName.$": "$.ModelName",
-        "Athena_bucket": "${AthenaQueryBucket}",
         "S3_bucket": "${WorkingBucket}",
         "Data_start.$": "$.Data_start",
         "Data_end.$": "$.Data_end",
@@ -105,7 +103,6 @@
             "Parameters": {
               "FunctionName": "${LambdaAnomalyFunctionName}",
               "Payload": {
-                "Athena_bucket": "${AthenaQueryBucket}",
                 "S3_bucket": "${WorkingBucket}",
                 "Batch_start.$": "$.Batch_info.Batch_start",
                 "Batch_end.$": "$.Batch_info.Batch_end",
@@ -123,7 +120,6 @@
             "Parameters": {
               "FunctionName": "${LambdaPrepareFunctionName}",
               "Payload": {
-                "Athena_bucket": "${AthenaQueryBucket}",
                 "S3_bucket": "${WorkingBucket}",
                 "Batch_start.$": "$.Batch_info.Batch_start",
                 "Batch_end.$": "$.Batch_info.Batch_end",
@@ -170,7 +166,6 @@
             "Parameters": {
               "FunctionName": "${LambdaResultFunctionName}",
               "Payload": {
-                "Athena_bucket": "${AthenaQueryBucket}",
                 "S3_bucket": "${WorkingBucket}",
                 "Batch_start.$": "$.Batch_info.Batch_start",
                 "Batch_end.$": "$.Batch_info.Batch_end",

@@ -28,7 +28,6 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-training.asl.json'
       DefinitionSubstitutions:
-        AthenaQueryBucket: !Ref AthenaQueryBucket
         WorkingBucket: !Ref WorkingBucket
         LambdaPrepareTrainingName: !Ref PrepareTrainingFunction
         AccountId: !Sub ${AWS::AccountId}
@@ -78,7 +77,6 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-prediction-pipeline.asl.json'
       DefinitionSubstitutions:
-        AthenaQueryBucket: !Ref AthenaQueryBucket
         WorkingBucket: !Ref WorkingBucket
         AnomalyCrawler: !Ref AnomalyCrawler
         ForcastCrawler: !Ref ForcastCrawler
