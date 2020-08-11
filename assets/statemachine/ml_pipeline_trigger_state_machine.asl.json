@@ -7,10 +7,9 @@
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
         "FunctionName": "${CheckInitialPipelineRun}",
-        "Payload": {
-
-        }
+        "Payload": {}
       },
+      "OutputPath": "$.Payload",
       "Next": "should initial pipeline triggered"
     },
     "should initial pipeline triggered": {

@@ -11,7 +11,8 @@ functions=("upload_result"  \
            "batch_anomaly_detection" \
            "crawler/trigger_glue_crawler" \
            "crawler/get_glue_crawler_state" \
-           "check_inital_pipeline_run")
+           "state_topic_subscription" \
+           "check_initial_pipeline_run")
 
 for lambda_folder in ${functions[*]};
 do

@@ -84,7 +84,6 @@ Resources:
         --db_name: !Ref DBName
         --redshift_connection: !Ref GlueConnection
         --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
-        --state_queue: !Ref StateQueue
       Connections:
         Connections:
           - !Ref GlueConnection
@@ -92,7 +91,7 @@ Resources:
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
 
   GlueJob5:
     Type: "AWS::Glue::Job"
@@ -120,7 +119,7 @@ Resources:
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
 
   GlueJob6:
     Type: "AWS::Glue::Job"
@@ -151,7 +150,7 @@ Resources:
         --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
       MaxRetries: 0
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
 
@@ -181,7 +180,7 @@ Resources:
           - !Ref GlueConnection
       MaxRetries: 0
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
 
@@ -321,19 +320,32 @@ Resources:
               ]
           }
 
-  IAMManagedSQSPolicy:
-    Type: "AWS::IAM::ManagedPolicy"
+
+  GlueJobStateChangeRule:
+    Type: AWS::Events::Rule
     Properties:
-      ManagedPolicyName: !Sub "MeterData-SQS-Access-Policy-${AWS::Region}"
-      Path: "/service-role/"
+      Description: "EventRule"
+      EventPattern:
+        source:
+          - "aws.glue"
+        detail-type:
+          - "Glue Job State Change"
+      State: "ENABLED"
+      Targets:
+        - Arn: !Ref TopicArn
+          Id: "SNSTarget"
+  EventTopicPolicy:
+    Type: 'AWS::SNS::TopicPolicy'
+    Properties:
       PolicyDocument:
-        Version: "2012-10-17"
         Statement:
           - Effect: Allow
-            Action:
-              - sqs:SendMessage
-            Resource:
-              - !Ref StateQueue
+            Principal:
+              Service: events.amazonaws.com
+            Action: 'sns:Publish'
+            Resource: !Ref TopicArn
+      Topics:
+        - !Ref TopicArn
 
   IAMRole:
     Type: "AWS::IAM::Role"
@@ -343,7 +355,6 @@ Resources:
       MaxSessionDuration: 3600
       ManagedPolicyArns:
         - !Ref IAMManagedPolicy
-        - !Ref IAMManagedSQSPolicy
         - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
         - "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
         - "arn:aws:iam::aws:policy/AmazonRedshiftFullAccess"
@@ -438,6 +449,8 @@ Outputs:
     Value: !Ref BusinessZoneS3Bucket
   GlueWorkflow:
     Value: !Ref GlueWorkflow
+  RedshiftTransportJob:
+    Value: !Ref GlueJob4
 
 Parameters:
   MasterUsername:
@@ -505,6 +518,6 @@ Parameters:
     Description: No. of DPUs for Glue Job
     Default: 10
 
-  StateQueue:
+  TopicArn:
     Type: String
-    Description: ARN of ML Pipeline StateMachine
+    Description: ARN of ML Pipeline State SNS Topic
