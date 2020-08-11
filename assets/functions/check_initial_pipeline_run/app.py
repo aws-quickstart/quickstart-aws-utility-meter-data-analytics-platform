@@ -31,9 +31,9 @@ def lambda_handler(event, context):
         "With_weather_data": 0,
         "Training_instance_type": "ml.c4.2xlarge",
         "Endpoint_instance_type": "ml.m4.xlarge",
-        "Training_job_name": "training_job_{}".format(str(uuid.uuid4())),
-        "ModelName": "ml_model_{}".format(str(uuid.uuid4())),
-        "ML_endpoint_name": "ml_endpoint_{}".format(str(uuid.uuid4())),
+        "Training_job_name": "training-job-{}".format(str(uuid.uuid4())),
+        "ModelName": "ml-model-{}".format(str(uuid.uuid4())),
+        "ML_endpoint_name": "ml-endpoint-{}".format(str(uuid.uuid4())),
         "Meter_start": 1,
         "Meter_end": 100,
         "Batch_size": 75

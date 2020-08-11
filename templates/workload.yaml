@@ -11,8 +11,8 @@ Rules:
         AssertDescription: Must provide a value for 'Landing Zone S3Bucket Name' when value of 'Create Landing Zone S3Bucket' is NO.
 
 Resources:
-    StateQueue:
-      Type: AWS::SQS::Queue
+    WorkflowStateTopic:
+      Type: AWS::SNS::Topic
 
     RedshiftStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -86,7 +86,7 @@ Resources:
           CreateLandingZoneS3Bucket: !Ref CreateLandingZoneS3Bucket
           LandingZoneS3BucketName: !Ref LandingZoneS3BucketName
           DPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
-          StateQueue: !GetAtt StateQueue.Arn
+          TopicArn: !Ref WorkflowStateTopic
 
     GlueTablesStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -125,7 +125,8 @@ Resources:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
           DBName: !Ref DBName
-          StateQueue: !Ref StateQueue
+          TopicArn: !Ref WorkflowStateTopic
+          RedshiftTransportJob: !GetAtt GlueStack.Outputs.RedshiftTransportJob
 
     PredictionApiStack:
       Type: 'AWS::CloudFormation::Stack'

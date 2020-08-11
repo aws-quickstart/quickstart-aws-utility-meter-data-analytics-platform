@@ -44,6 +44,12 @@ Resources:
               Action:
                 - "iam:PassRole"
               Resource: "*"
+            - Effect: Allow
+              Action:
+                - "states:StartExecution"
+              Resource:
+                - !Ref InitialTrainingStateMachine
+                - !Ref PredictionPipelineStateMachine
         - LambdaInvokePolicy:
             FunctionName: !Ref CheckInitialPipelineRun
 
@@ -156,7 +162,7 @@ Resources:
   #
   # Lambda functions
   #
-  CheckInitialPipelineRun:
+  PrepareTrainingFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
       MemorySize: 512
@@ -170,7 +176,7 @@ Resources:
       Layers:
         - !Ref DependencyLayer
 
-  PrepareTrainingFunction:
+  CheckInitialPipelineRun:
     Type: 'AWS::Serverless::Function'
     Properties:
       MemorySize: 128
@@ -178,9 +184,32 @@ Resources:
       CodeUri:
         Bucket: !Ref QSS3BucketName
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/check_inital_pipeline_run.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/check_initial_pipeline_run.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Layers:
+        - !Ref DependencyLayer
+
+  StateTopicSubscription:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      MemorySize: 128
+      Timeout: 30
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/state_topic_subscription.zip'
+      Handler: app.lambda_handler
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Environment:
+        Variables:
+          ml_pipeline_trigger_state_machine: !Ref MlPipelineTriggerStateMachine
+          glue_job_name: !Ref RedshiftTransportJob
+      Events:
+        SnsTrigger:
+          Type: SNS
+          Properties:
+            Topic: !Ref TopicArn
       Layers:
         - !Ref DependencyLayer
 
@@ -391,6 +420,7 @@ Resources:
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
         - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
+        - 'arn:aws:iam::aws:policy/AWSStepFunctionsFullAccess'
 
   SageMakerRole:
     Type: 'AWS::IAM::Role'
@@ -451,9 +481,9 @@ Parameters:
       Name of the glue data catalog database
     Default: meter-data
     Type: String
-  StateQueue:
-    ConstraintDescription: >-
-      Name of the central communication queue
+  TopicArn:
+    Type: String
+  RedshiftTransportJob:
     Type: String
 
 Outputs:
