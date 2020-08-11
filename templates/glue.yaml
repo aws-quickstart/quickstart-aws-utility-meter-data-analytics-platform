@@ -92,7 +92,7 @@ Resources:
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
 
   GlueJob5:
     Type: "AWS::Glue::Job"
@@ -120,7 +120,7 @@ Resources:
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
 
   GlueJob6:
     Type: "AWS::Glue::Job"
@@ -151,7 +151,7 @@ Resources:
         --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
       MaxRetries: 0
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
 
@@ -181,7 +181,7 @@ Resources:
           - !Ref GlueConnection
       MaxRetries: 0
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
 
@@ -327,7 +327,7 @@ Resources:
       ManagedPolicyName: !Sub "MeterData-SQS-Access-Policy-${AWS::Region}"
       Path: "/service-role/"
       PolicyDocument:
-        Version: "2012-10-17"
+        Version: 2012-10-17
         Statement:
           - Effect: Allow
             Action:
