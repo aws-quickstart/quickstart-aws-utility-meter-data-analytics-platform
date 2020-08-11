@@ -1,11 +1,11 @@
-:quickstart-project-name: quickstart-documentation-base
-:partner-product-name: Example Product Name
-:partner-company-name: Example Company Name, Ltd.
-:doc-month: May
+:quickstart-project-name: quickstart-aws-utility-meter-data-analytics-platform
+:partner-product-name: Utility Meter Data Analytics
+:partner-company-name: Amazon Web Services
+:doc-month: August
 :doc-year: 2020
-:partner-contributors: John Doe and Jane Doe - {partner-company-name}
-:quickstart-contributors: Jim Smith - AWS Global Partner SA, AWS + Joe Jones - Technical Product Manager, AWS
-:deployment_time: 30 minutes / 1 hour
+:partner-contributors:
+:quickstart-contributors: Avneet Singh, Juan Yu, Sascha Rodekamp, Shivansh Singh - AWS
+:deployment_time: 30 minutes
 :default_deployment_region: us-east-1
 // Uncomment these two attributes if you are leveraging
 // - an AWS Marketplace listing.
