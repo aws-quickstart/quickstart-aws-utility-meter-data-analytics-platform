@@ -1,4 +1,4 @@
-# How to turn the model or use a custom model in the pipeline
+# How to re-train the model or use a custom model in the pipeline
 This cloudformation will deploy a model training pipeline and batch pipeline to generate forecast and anomaly result. The initial deployment will execute both pipelines after ETL jobs are done. 
 After new data added, you can re-run the whole cloudformation to reprocess the whole data and training a new model, or you might want to just re-run each part at different schedule. for example, run the Glue ETL flow daily to process and format new data; run the batch pipeline weekly to generate forecast and anomaly for new data; run the model training pipeline monthly to re-train model to learn new customer consumption patterns. You can even use a custom model for batch pipeline and forecast API. 
 
