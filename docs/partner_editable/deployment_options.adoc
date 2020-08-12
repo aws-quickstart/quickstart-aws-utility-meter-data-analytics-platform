@@ -1,8 +1,10 @@
 // There are generally two deployment options. If additional are required, add them here
 
-This Quick Start provides two deployment options:
+This Quick Start creates a serverless architecture in your AWS Account. As part of the Quick Start deployment, it creates a Redshift cluster, which is created in a private subnet within a VPC.
 
-* *Deploy {partner-product-name} into a new VPC (end-to-end deployment)*. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys {partner-product-name} into this new VPC.
-* *Deploy {partner-product-name} into an existing VPC*. This option provisions {partner-product-name} in your existing AWS infrastructure.
+For deployment of the Redshift cluster, this Quick Start provides two deployment options:
+
+* *Deploy {partner-product-name} into a new VPC (end-to-end deployment)*. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, and other infrastructure components. It then deploys Redshift cluster into this new VPC.
+* *Deploy {partner-product-name} into an existing VPC*. This option provisions Redshift cluster in your existing AWS infrastructure.
 
 The Quick Start provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and {partner-product-name} settings, as discussed later in this guide.
