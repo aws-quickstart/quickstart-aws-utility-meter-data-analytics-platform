@@ -43,6 +43,9 @@ def write_upload_file(bucket, path, data):
 
     boto3.Session().resource('s3').Bucket(bucket).Object(path).put(Body=jsonBuffer.getvalue())
 
+def write_json_to_file(bucket, path, data):
+    boto3.Session().resource('s3').Bucket(bucket).Object(path).put(Body=data)
+
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
     S3_BUCKET = os.environ['Working_bucket']
@@ -129,4 +132,5 @@ def lambda_handler(event, context):
 
     write_upload_file(S3_BUCKET, 'meteranalytics/train/training.json', training_data)
     write_upload_file(S3_BUCKET, 'meteranalytics/test/testing.json', testing_data)
-    write_upload_file(S3_BUCKET, 'meteranalytics/initial_pass', '')
+
+    write_json_to_file(S3_BUCKET, 'meteranalytics/initial_pass', event)
