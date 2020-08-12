@@ -1,0 +1,125 @@
+# Appendix
+
+## Data set format
+
+The input format is variable and can be adjusted as described in the section <<additional_info.adoc#Customize this Quick Start,'Customize this Quick Start'>>. However, the input data format of the 'London Meter Reads' looks like the following:
+
+[cols="1,1,1", options="header"]
+.Input Schema
+|===
+|Field
+|Type
+|Format
+
+|lclid|string|
+|stdortou|string|
+|datetime|string|yyyy-MM-dd HH:mm:ss.SSSSSSS
+|kwh/hh (per half hour)|double|0.000
+|acorn|string|
+|acorn_grouped|string|
+|===
+
+## Table schemas
+
+The {partner-product-name} Quick Start works with the following internal table schema. This schema will also be used in Amazon Redshift.
+
+[cols="1,1,1,1", options="header"]
+.Internal Schema
+|===
+|Field
+|Type
+|Mandatory
+|Format
+
+|meter_id| String| X|
+|reading_value| double| X|0.000
+|reading_type| String| X|AGG\|INT*
+|reading_date_time| Timestamp| X|yyyy-MM-dd HH:mm:ss.SSS
+|date_str| String|X| yyyyMMdd
+|obis_code| String| |
+|week_of_year| int| |
+|month| int| |
+|year| int| |
+|hour| int| |
+|minute| int| |
+|===
+
+AGG = Aggregated Reads
+
+INT = Interval Reads
+
+## API inputs and outputs
+
+The API endpoint can be found in the API Gateway Console. So the base URL will look similar to the following one:
+https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod
+
+### Forecast
+
+Forecast future energy consumption for a certain meter can be.
+
+https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast
+
+.input parameter
+[source,json]
+----
+{
+  "Meter_id": meter_id,
+  "Data_start": start,
+  "Data_end": end,
+  "Forecast_period": period,
+  "With_weather_data": withweather,
+  "ML_endpoint_name": ML_endpoint
+}
+----
+
+.example curl command
+[source,shell script]
+----
+curl -d '{"Meter_id": "MAC004734","Data_start": "2013-05-01","Data_end": "2013-10-01","Forecast_period": 7,"With_weather_data": 0,"ML_endpoint_name": "ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89"}' \
+     -H "Content-Type: application/json" \
+     -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast
+----
+
+### Anomaly
+
+Get anomalies for a certain meter in a given time range.
+
+.input parameter
+[source,json]
+----
+{
+  "Meter_id": meter_id,
+  "Data_start": start,
+  "Data_end": end,
+  "Outlier_only": outlier_only
+}
+----
+
+.example curl command
+[source,shell script]
+----
+curl -d '{"Meter_id": "MAC000005","Data_start": "2013-01-01","Data_end": "2013-12-31","Outlier_only":0}' \
+     -H "Content-Type: application/json" \
+     -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/anomaly
+----
+
+### Outage
+
+Returns a list of outages for the given timeframe. (past only)
+
+.input parameter
+[source,json]
+----
+{
+  "startDateTime": start,
+  "endDateTime": end
+}
+----
+
+.example curl command
+[source,shell script]
+----
+curl -d '{"startDateTime": "2013-01-03 09:00:01","endDateTime": "2013-01-03 10:59:59"}' \
+     -H "Content-Type: application/json" \
+     -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage
+----

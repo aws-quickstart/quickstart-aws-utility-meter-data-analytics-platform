@@ -62,6 +62,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-training.asl.json'
       DefinitionSubstitutions:
+        WorkingBucket: !Ref WorkingBucket
         LambdaPrepareTrainingName: !Ref PrepareTrainingFunction
         AccountId: !Sub ${AWS::AccountId}
         SageMakerRole: !GetAtt SageMakerRole.Arn
@@ -111,7 +112,7 @@ Resources:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-prediction-pipeline.asl.json'
       DefinitionSubstitutions:
         AnomalyCrawler: !Ref AnomalyCrawler
-        ForcastCrawler: !Ref ForcastCrawler
+        ForecastCrawler: !Ref ForecastCrawler
         LambdaSplitFunctionName: !Ref SplitBatchFunction
         LambdaPrepareFunctionName: !Ref PrepareBatchFunction
         LambdaResultFunctionName: !Ref UploadResultFunction
@@ -227,7 +228,8 @@ Resources:
   PrepareBatchFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Timeout: 300
+      MemorySize: 512
+      Timeout: 900
       CodeUri:
         Bucket: !Ref QSS3BucketName
         Key:
@@ -323,10 +325,10 @@ Resources:
   #
   # Crawler
   #
-  ForcastCrawler:
+  ForecastCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
-      Name: !Sub "meter-data-forcast-crawler-${AWS::Region}"
+      Name: !Sub "meter-data-forecast-crawler-${AWS::Region}"
       Role: !Sub "service-role/${CrawlerRole}"
       Targets:
         S3Targets:
