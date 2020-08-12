@@ -54,6 +54,7 @@ Globals:
     Environment:
       Variables:
         Athena_bucket: !Ref AthenaQueryBucket
+        Db_schema: meter-data
 
 Resources:
   ExecuteLambdaRole:

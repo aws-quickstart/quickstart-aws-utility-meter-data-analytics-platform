@@ -1,4 +1,4 @@
-import boto3, os
+import boto3, os, json
 import pandas as pd
 
 from pyathena import connect
@@ -6,11 +6,16 @@ from pyathena import connect
 
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
-    METER_ID = event['Meter_id']
-    DATA_START = event['Data_start']
-    DATA_END = event['Data_end']
-    OUTLIER_ONLY = event['Outlier_only']
     DB_SCHEMA = os.environ['Db_schema']
+
+    parameter = event
+    if "body" in event:
+        parameter = json.loads(event["body"])
+
+    METER_ID = parameter['Meter_id']
+    DATA_START = parameter['Data_start']
+    DATA_END = parameter['Data_end']
+    OUTLIER_ONLY = parameter['Outlier_only']
 
     region = 'us-east-1'
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)

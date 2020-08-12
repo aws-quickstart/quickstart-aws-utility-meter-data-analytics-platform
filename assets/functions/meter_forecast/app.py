@@ -60,12 +60,17 @@ def decode_response(response, freq, prediction_time):
 
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
-    METER_ID = event['Meter_id']
-    ML_ENDPOINT_NAME = event['ML_endpoint_name']
-    USE_WEATHER_DATA = event['With_weather_data']
-    DATA_START = event['Data_start']
-    DATA_END = event['Data_end']
     DB_SCHEMA = os.environ['Db_schema']
+
+    parameter = event
+    if "body" in event:
+        parameter = json.loads(event["body"])
+
+    METER_ID = parameter['Meter_id']
+    ML_ENDPOINT_NAME = parameter['ML_endpoint_name']
+    USE_WEATHER_DATA = parameter['With_weather_data']
+    DATA_START = parameter['Data_start']
+    DATA_END = parameter['Data_end']
 
     region = 'us-east-1'
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
