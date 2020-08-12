@@ -55,7 +55,7 @@ https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod
 
 ### Forecast
 
-Forecast future energy consumption for a certain meter can be.
+Forecast future energy consumption for a certain meter.
 
 https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast
 
@@ -84,6 +84,8 @@ curl -d '{"Meter_id": "MAC004734","Data_start": "2013-05-01","Data_end": "2013-1
 
 Get anomalies for a certain meter in a given time range.
 
+https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/anomaly
+
 .input parameter
 [source,json]
 ----
@@ -106,6 +108,8 @@ curl -d '{"Meter_id": "MAC000005","Data_start": "2013-01-01","Data_end": "2013-1
 ### Outage
 
 Returns a list of outages for the given timeframe. (past only)
+
+https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage
 
 .input parameter
 [source,json]
