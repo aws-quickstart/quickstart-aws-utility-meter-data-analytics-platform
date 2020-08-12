@@ -228,7 +228,8 @@ Resources:
   PrepareBatchFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Timeout: 300
+      MemorySize: 512
+      Timeout: 900
       CodeUri:
         Bucket: !Ref QSS3BucketName
         Key:
