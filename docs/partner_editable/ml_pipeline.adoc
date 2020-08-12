@@ -1,0 +1,44 @@
+# How to turn the model or use a custom model in the pipeline
+This cloudformation will deploy a model training pipeline and batch pipeline to generate forecast and anomaly result. The initial deployment will execute both pipelines after ETL jobs are done. 
+After new data added, you can re-run the whole cloudformation to reprocess the whole data and training a new model, or you might want to just re-run each part at different schedule. for example, run the Glue ETL flow daily to process and format new data; run the batch pipeline weekly to generate forecast and anomaly for new data; run the model training pipeline monthly to re-train model to learn new customer consumption patterns. You can even use a custom model for batch pipeline and forecast API. 
+
+## Run batch prediction pipeline
+1. Batch pipeline is implemented by Step Functions, Go to Step Functions console, find the State machine which name starts with "PredictionPipelineStateMachine-"
++
+image::../images/1_batchpipeline.png[AWS Step Functions console]
+
+2. Open this state machine and click start execution
++
+image::../images/2_batchpipeline_execution.png[AWS Step Functions console]
+
+The input parameter needs to contain below information in JSON format. You can specify the range of meters you want to process, what's the date range of your data. Note the Batch_size should not exceed 100. You can also specify a customer model you trained in SageMaker. If the model is trained with weather data as dynamic features, set "With_weather_data" to 1, otherwise set it to 0.
+```json
+{
+  "Meter_start": 1,
+  "Meter_end": 50,
+  "Batch_size": 25,
+  "Data_start": "2013-01-01",
+  "Data_end": "2013-10-01",
+  "Forecast_period": 7,
+  "ModelName": "ml-model-0731",
+  "With_weather_data": 0
+}
+```
+
+## Re-train model with different parameters
+1. Go to Step Functions console, find the State machine which name starts with "InitialTrainingStateMachine-", open it and go to Definition, find the "HyperParameters" part, then modify the parameters or add more parameters. More about DeepAR Hyperparameters, please see https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html
++
+image::../images/3_trainingpipeline_hyperparameters.png[AWS Step Functions console]
+
+2. Save change to the state machine and click start execution. The input parameter needs to contain below information in JSON format. Training_samples specifies how many meters' data will be used to train the model, the more meters are used, the more accurate the model will be, however the longer the training will take. If you have corresponding weather data, set "With_weather_data" to 1, otherwise set it to 0. Give a new name for "ModelName" and "ML_endpoint_name".
+```json
+{
+  "Training_samples": 20,
+  "Data_start": "2013-01-01",
+  "Data_end": "2013-10-01",
+  "Forecast_period": 7,
+  "ModelName": "ml-model-0731",
+  "ML_endpoint_name": "ml-model-0731",
+  "With_weather_data": 0
+}
+```
