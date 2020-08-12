@@ -91,3 +91,8 @@ image::../images/3_open_editor.png[Open editor,width=648,height=439]
 |hour| int| |
 |minute| int| |
 |===
+
+include::../{specificdir}/ml_pipeline.adoc[]
+
+== Data schema and API i/o format
+include::../{specificdir}/data_format.adoc[]

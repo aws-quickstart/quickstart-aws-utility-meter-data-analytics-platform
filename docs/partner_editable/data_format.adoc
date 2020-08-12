@@ -1,8 +1,6 @@
-# Appendix
+=== Meter data format
 
-## Data set format
-
-The input format is variable and can be adjusted as described in the section <<additional_info.adoc#Customize this Quick Start,'Customize this Quick Start'>>. However, the input data format of the 'London Meter Reads' looks like the following:
+The input meter data format is variable and can be adjusted as described in the section <<additional_info.adoc#Customize this Quick Start,'Customize this Quick Start'>>. However, the sample input data format of the 'London Meter Reads' looks like the following:
 
 [cols="1,1,1", options="header"]
 .Input Schema
@@ -19,7 +17,7 @@ The input format is variable and can be adjusted as described in the section <<a
 |acorn_grouped|string|
 |===
 
-## Table schemas
+=== Table schemas
 
 The {partner-product-name} Quick Start works with the following internal table schema. This schema will also be used in Amazon Redshift.
 
@@ -48,14 +46,14 @@ AGG = Aggregated Reads
 
 INT = Interval Reads
 
-## API inputs and outputs
+=== API inputs and outputs
 
-The API endpoint can be found in the API Gateway Console. So the base URL will look similar to the following one:
+The API endpoint can be found in the API Gateway Console. The base URL will look similar to the following:
 https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod
 
-### Forecast
+==== Enery usage forecast
 
-Forecast future energy consumption for a certain meter.
+Forecast future energy consumption for a specific meter.
 
 https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast
 
@@ -80,7 +78,7 @@ curl -d '{"Meter_id": "MAC004734","Data_start": "2013-05-01","Data_end": "2013-1
      -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast
 ----
 
-### Anomaly
+==== Anomaly detection
 
 Get anomalies for a certain meter in a given time range.
 
@@ -105,9 +103,9 @@ curl -d '{"Meter_id": "MAC000005","Data_start": "2013-01-01","Data_end": "2013-1
      -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/anomaly
 ----
 
-### Outage
+==== Meter outage details
 
-Returns a list of outages for the given timeframe. (past only)
+Returns a list of past outages for the given timeframe, including geo-location data.
 
 https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage
 

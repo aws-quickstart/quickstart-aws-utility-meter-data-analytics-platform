@@ -797,6 +797,19 @@ table p {
 </ul>
 </li>
 <li><a href="#_customize_this_quick_start">Customize this Quick Start</a></li>
+<li><a href="#_how_to_re_train_the_model_or_use_a_custom_model_in_the_pipeline">How to re-train the model or use a custom model in the pipeline</a>
+<ul class="sectlevel2">
+<li><a href="#_run_batch_prediction_pipeline">Run batch prediction pipeline</a></li>
+<li><a href="#_re_train_model_with_different_parameters">Re-train model with different parameters</a></li>
+</ul>
+</li>
+<li><a href="#_data_schema_and_api_io_format">Data schema and API i/o format</a>
+<ul class="sectlevel2">
+<li><a href="#_meter_data_format">Meter data format</a></li>
+<li><a href="#_table_schemas">Table schemas</a></li>
+<li><a href="#_api_inputs_and_outputs">API inputs and outputs</a></li>
+</ul>
+</li>
 <li><a href="#_faq">FAQ</a></li>
 <li><a href="#_troubleshooting">Troubleshooting</a></li>
 <li><a href="#_send_us_feedback">Send us feedback</a></li>
@@ -1696,6 +1709,337 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 </div>
 </div>
 <div class="sect1">
+<h2 id="_how_to_re_train_the_model_or_use_a_custom_model_in_the_pipeline">How to re-train the model or use a custom model in the pipeline</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Quick Start deploys a model training pipeline and batch pipeline to generate forecast and anomaly result. The initial deployment will execute both pipelines after ETL jobs are done.</p>
+</div>
+<div class="paragraph">
+<p>After new data is added, you can re-run the whole cloudformation to reprocess the entire data and training a new model, or you might want to just re-run each part at different schedule. For example, run the Glue ETL flow daily to process and format new data; run the batch pipeline weekly to generate forecast and anomaly for new data; run the model training pipeline monthly to re-train model to learn new customer consumption patterns. You can even use a custom model for batch pipeline and forecast API.</p>
+</div>
+<div class="sect2">
+<h3 id="_run_batch_prediction_pipeline">Run batch prediction pipeline</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Batch pipeline is implemented by Step Functions. Go to Step Functions console in your AWS Account, find the State machine with prefix "PredictionPipelineStateMachine-".</p>
+<div class="imageblock">
+<div class="content">
+<img src="images/1_batchpipeline.png" alt="AWS Step Functions console">
+</div>
+</div>
+</li>
+<li>
+<p>Open the state machine and click start execution.</p>
+<div class="imageblock">
+<div class="content">
+<img src="images/2_batchpipeline_execution.png" alt="AWS Step Functions console">
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The input parameter needs to contain below information in JSON format. You can specify the range of meters you want to process, and what&#8217;s the date range of your data. Note the Batch_size should not exceed 100. You can also specify a customer model you trained in SageMaker. If the model is trained with weather data as dynamic features, set "With_weather_data" to 1, otherwise set it to 0.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "Meter_start": 1,
+  "Meter_end": 50,
+  "Batch_size": 25,
+  "Data_start": "2013-01-01",
+  "Data_end": "2013-10-01",
+  "Forecast_period": 7,
+  "ModelName": "ml-model-0731",
+  "With_weather_data": 0
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_re_train_model_with_different_parameters">Re-train model with different parameters</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Go to Step Functions console, and find the State machine with prefix "InitialTrainingStateMachine-".</p>
+</li>
+<li>
+<p>Open state machine and go to Definition, find the "HyperParameters" part, then modify the parameters or add more parameters. More about DeepAR Hyperparameters, please see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html" class="bare">https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html</a></p>
+<div class="imageblock">
+<div class="content">
+<img src="images/3_trainingpipeline_hyperparameters.png" alt="AWS Step Functions console">
+</div>
+</div>
+</li>
+<li>
+<p>Save change to the state machine and click start execution. The input parameter needs to contain below information in JSON format. Training_samples specifies how many meters' data will be used to train the model, the more meters are used, the more accurate the model will be, however the longer the training will take. If you have corresponding weather data, set "With_weather_data" to 1, otherwise set it to 0. Give a new name for "ModelName" and "ML_endpoint_name".</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "Training_samples": 20,
+  "Data_start": "2013-01-01",
+  "Data_end": "2013-10-01",
+  "Forecast_period": 7,
+  "ModelName": "ml-model-0731",
+  "ML_endpoint_name": "ml-model-0731",
+  "With_weather_data": 0
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_data_schema_and_api_io_format">Data schema and API i/o format</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_meter_data_format">Meter data format</h3>
+<div class="paragraph">
+<p>The input meter data format is variable and can be adjusted as described in the section <a href="additional_info.html#Customize this Quick Start">'Customize this Quick Start'</a>. However, the sample input data format of the 'London Meter Reads' looks like the following:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 6. Input Schema</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">lclid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">stdortou</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">datetime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yyyy-MM-dd HH:mm:ss.SSSSSSS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">kwh/hh (per half hour)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.000</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acorn</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acorn_grouped</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_table_schemas">Table schemas</h3>
+<div class="paragraph">
+<p>The Utility Meter Data Analytics Quick Start works with the following internal table schema. This schema will also be used in Amazon Redshift.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. Internal Schema</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Mandatory</th>
+<th class="tableblock halign-left valign-top">Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">meter_id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reading_value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.000</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reading_type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AGG|INT*</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reading_date_time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yyyy-MM-dd HH:mm:ss.SSS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">date_str</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yyyyMMdd</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">obis_code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">week_of_year</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">month</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">year</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">hour</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">minute</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>AGG = Aggregated Reads</p>
+</div>
+<div class="paragraph">
+<p>INT = Interval Reads</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_api_inputs_and_outputs">API inputs and outputs</h3>
+<div class="paragraph">
+<p>The API endpoint can be found in the API Gateway Console. The base URL will look similar to the following:
+<a href="https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod" class="bare">https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod</a></p>
+</div>
+<div class="sect3">
+<h4 id="_enery_usage_forecast">Enery usage forecast</h4>
+<div class="paragraph">
+<p>Forecast future energy consumption for a specific meter.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast" class="bare">https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast</a></p>
+</div>
+<div class="listingblock">
+<div class="title">input parameter</div>
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "Meter_id": meter_id,
+  "Data_start": start,
+  "Data_end": end,
+  "Forecast_period": period,
+  "With_weather_data": withweather,
+  "ML_endpoint_name": ML_endpoint
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">example curl command</div>
+<div class="content">
+<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl -d '{"Meter_id": "MAC004734","Data_start": "2013-05-01","Data_end": "2013-10-01","Forecast_period": 7,"With_weather_data": 0,"ML_endpoint_name": "ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89"}' \
+     -H "Content-Type: application/json" \
+     -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_anomaly_detection">Anomaly detection</h4>
+<div class="paragraph">
+<p>Get anomalies for a certain meter in a given time range.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/anomaly" class="bare">https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/anomaly</a></p>
+</div>
+<div class="listingblock">
+<div class="title">input parameter</div>
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "Meter_id": meter_id,
+  "Data_start": start,
+  "Data_end": end,
+  "Outlier_only": outlier_only
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">example curl command</div>
+<div class="content">
+<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl -d '{"Meter_id": "MAC000005","Data_start": "2013-01-01","Data_end": "2013-12-31","Outlier_only":0}' \
+     -H "Content-Type: application/json" \
+     -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/anomaly</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_meter_outage_details">Meter outage details</h4>
+<div class="paragraph">
+<p>Returns a list of past outages for the given timeframe, including geo-location data.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage" class="bare">https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage</a></p>
+</div>
+<div class="listingblock">
+<div class="title">input parameter</div>
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+  "startDateTime": start,
+  "endDateTime": end
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">example curl command</div>
+<div class="content">
+<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl -d '{"startDateTime": "2013-01-03 09:00:01","endDateTime": "2013-01-03 10:59:59"}' \
+     -H "Content-Type: application/json" \
+     -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_faq">FAQ</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -1777,7 +2121,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-12 17:02:58 UTC
+Last updated 2020-08-12 18:01:54 UTC
 </div>
 </div>
 </body>
