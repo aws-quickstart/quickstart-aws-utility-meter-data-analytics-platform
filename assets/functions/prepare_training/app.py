@@ -44,7 +44,7 @@ def write_upload_file(bucket, path, data):
     boto3.Session().resource('s3').Bucket(bucket).Object(path).put(Body=jsonBuffer.getvalue())
 
 def write_json_to_file(bucket, path, data):
-    boto3.Session().resource('s3').Bucket(bucket).Object(path).put(Body=data)
+    boto3.Session().resource('s3').Bucket(bucket).Object(path).put(Body=json.dumps(data))
 
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
