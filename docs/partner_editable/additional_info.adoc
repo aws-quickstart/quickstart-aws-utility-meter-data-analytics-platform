@@ -80,9 +80,9 @@ image::../images/3_open_editor.png[Open editor,width=648,height=439]
 |Format
 
 |meter_id| String| X|
-|reading_value| double| X|
-|reading_type| String| X|
-|reading_date_time| Timestamp| X|
+|reading_value| double| X|0.000
+|reading_type| String| X|AGG\|INT
+|reading_date_time| Timestamp| X|yyyy-MM-dd HH:mm:ss.SSS
 |date_str| String|X| yyyyMMdd
 |obis_code| String| |
 |week_of_year| int| |
