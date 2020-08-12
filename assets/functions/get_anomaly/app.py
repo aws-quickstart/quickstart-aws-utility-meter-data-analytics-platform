@@ -20,8 +20,13 @@ def lambda_handler(event, context):
     region = 'us-east-1'
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
 
-    query = '''select ma.*, mw.temperature, mw.apparenttemperature 
-    from "{}".anomaly ma, "{}".weather_daily mw
+    query = '''with weather_daily as (
+        select date_trunc('day', date_parse(time,'%Y-%m-%d %H:%i:%s')) as datetime,
+        avg(temperature) as temperature, avg(apparenttemperature) as apparenttemperature, avg(humidity) as humidity
+        from default.weather group by 1
+    )
+    select ma.*, mw.temperature, mw.apparenttemperature
+    from "{}".anomaly ma, weather_daily mw
     where meter_id = '{}'
     and cast(ma.ds as timestamp) >= timestamp '{}' and cast(ma.ds as timestamp) < timestamp '{}'
     and cast(ma.ds as timestamp) = mw.datetime
