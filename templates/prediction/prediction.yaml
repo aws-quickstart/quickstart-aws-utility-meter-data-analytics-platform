@@ -112,7 +112,7 @@ Resources:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-prediction-pipeline.asl.json'
       DefinitionSubstitutions:
         AnomalyCrawler: !Ref AnomalyCrawler
-        ForcastCrawler: !Ref ForcastCrawler
+        ForecastCrawler: !Ref ForecastCrawler
         LambdaSplitFunctionName: !Ref SplitBatchFunction
         LambdaPrepareFunctionName: !Ref PrepareBatchFunction
         LambdaResultFunctionName: !Ref UploadResultFunction
@@ -324,10 +324,10 @@ Resources:
   #
   # Crawler
   #
-  ForcastCrawler:
+  ForecastCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
-      Name: !Sub "meter-data-forcast-crawler-${AWS::Region}"
+      Name: !Sub "meter-data-forecast-crawler-${AWS::Region}"
       Role: !Sub "service-role/${CrawlerRole}"
       Targets:
         S3Targets:

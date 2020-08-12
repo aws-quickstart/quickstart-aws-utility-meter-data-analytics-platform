@@ -93,7 +93,7 @@ Resources:
             Method: post
             Path: /anomaly
 
-  MeterForcastPredictionApi:
+  MeterForecastPredictionApi:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: app.lambda_handler
@@ -112,7 +112,7 @@ Resources:
           Type: Api
           Properties:
             Method: post
-            Path: /forcast
+            Path: /forecast
   
   DependencyLayer:
     Type: 'AWS::Serverless::LayerVersion'
@@ -132,13 +132,13 @@ Resources:
     Type: 'AWS::Lambda::Permission'
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref MeterForcastPredictionApi
+      FunctionName: !Ref MeterForecastPredictionApi
       Principal: apigateway.amazonaws.com
 
 Outputs:
-  MeterForcastPredictionApi:
+  MeterForecastPredictionApi:
     Description: Prediction function.
-    Value: !Ref MeterForcastPredictionApi
+    Value: !Ref MeterForecastPredictionApi
   AnomalyPredictionApi:
     Description: Anomaly API.
     Value: !Ref AnomalyPredictionApi

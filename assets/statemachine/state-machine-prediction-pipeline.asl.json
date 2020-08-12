@@ -81,7 +81,7 @@
     },
     "Process batches": {
       "Type": "Map",
-      "Next": "trigger forcast crawler",
+      "Next": "trigger forecast crawler",
       "InputPath": "$",
       "ItemsPath": "$.batchdetail.Payload",
       "Parameters": {
@@ -95,9 +95,9 @@
         "Forecast_period.$": "$.Forecast_period"
       },
       "Iterator": {
-        "StartAt": "Anomaly detecton",
+        "StartAt": "Anomaly detection",
         "States": {
-          "Anomaly detecton": {
+          "Anomaly detection": {
             "Parameters": {
               "FunctionName": "${LambdaAnomalyFunctionName}",
               "Payload": {
@@ -177,36 +177,36 @@
         }
       }
     },
-    "trigger forcast crawler": {
+    "trigger forecast crawler": {
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
         "FunctionName": "${LambdaTriggerCrawlerFunctionName}",
         "Payload": {
-          "crawler_name": "${ForcastCrawler}"
+          "crawler_name": "${ForecastCrawler}"
         }
       },
       "OutputPath": "$.Payload",
-      "Next": "wait for forcast crawler"
+      "Next": "wait for forecast crawler"
     },
-    "wait for forcast crawler": {
+    "wait for forecast crawler": {
       "Type": "Wait",
       "Seconds": 10,
-      "Next": "get forcast crawler state"
+      "Next": "get forecast crawler state"
     },
-    "get forcast crawler state": {
+    "get forecast crawler state": {
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
         "FunctionName": "${LambdaGetCrawlerStateFunctionName}",
         "Payload": {
-          "crawler_name": "${ForcastCrawler}"
+          "crawler_name": "${ForecastCrawler}"
         }
       },
       "OutputPath": "$.Payload",
-      "Next": "is forcast crawler ready"
+      "Next": "is forecast crawler ready"
     },
-    "is forcast crawler ready": {
+    "is forecast crawler ready": {
       "Type": "Choice",
       "Choices": [
         {
@@ -214,7 +214,7 @@
             "Variable": "$.crawler_state",
             "StringEquals": "READY"
           },
-          "Next": "wait for forcast crawler"
+          "Next": "wait for forecast crawler"
         }
       ],
       "Default": "Finish"
