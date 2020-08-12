@@ -17,17 +17,55 @@ To upload the sample dataset to the Raw S3 bucket, follow the below steps:
 
 . Select the landing zone bucket, buckets names are generated, find the one which contains the word landing zone. This will be the starting point for the ETL process.
 +
-image::../images/1_bucket_layout.png[Bucket Layout,width=648,height=439]
+image::../images/1_bucket_layout.png[Bucket Layout]
 
 . Upload the London Meter Data to the landing zone bucket.
 +
-image::../images/2_upload_demo_data_set.png[Upload demo data set,width=648,height=439]
+image::../images/2_upload_demo_data_set.png[Upload demo data set]
 
 . After the demo data is uploaded, the folder contains one file with all the meter reads.
 +
-image::../images/3_upload_demo_data_set.png[Uploaded demo data set,width=648,height=439]
+image::../images/3_upload_demo_data_set.png[Uploaded demo data set]
 
 //[TODO EC2 command line steps]
+
+=== Prepare weather data if you want to use it for training
+
+. Download the sample weather dataset from https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv
+. Upload the dataset to S3 bucket
+. Create "weather" table in target Glue database using below SQL statement. Make sure replace "weather-data-location" to where you upload the weather dataset.
+```sql
+CREATE EXTERNAL TABLE weather(
+  visibility double,
+  windbearing bigint,
+  temperature double,
+  time string,
+  dewpoint double,
+  pressure double,
+  apparenttemperature double,
+  windspeed double,
+  preciptype string,
+  icon string,
+  humidity double,
+  summary string )
+ROW FORMAT DELIMITED
+      FIELDS TERMINATED BY ','
+LOCATION
+  's3://<weather-data-location>'
+TBLPROPERTIES (
+  'has_encrypted_data'='false',
+  'skip.header.line.count'='1');
+```
++
+image::../images/4_create_weather_table.png
+
+If you have other weather dataset you want to use, make sure it contains at least below 4 columns.
+```sql
+time string  format: yyyy-MM-dd HH:mm:ss
+temperature double
+apparenttemperature double
+humidity double
+```
 
 === Start the AWS Glue ETL and ML training pipeline
 
@@ -37,15 +75,15 @@ Follow the below steps to start the ETL pipeline.
 
 . Go to the AWS Glue Console, and select 'Workflows'
 +
-image::../images/4_start_etl_workflow.png[AWS Glue Console,width=648,height=439]
+image::../images/4_start_etl_workflow.png[AWS Glue Console]
 
 . Select the workflow and choose 'Run' from the drop-down-menu
 +
-image::../images/5_start_etl_workflow.png[Start ETL workflow,width=648,height=439]
+image::../images/5_start_etl_workflow.png[Start ETL workflow]
 
 . After started, the Workflow should be indicated as 'Running' in the 'History' tab
 +
-image::../images/6_start_etl_workflow.png[Start ETL workflow,width=648,height=439]
+image::../images/6_start_etl_workflow.png[Start ETL workflow]
 
 TIP: If the workflow doesn't start and jumps directly to 'Completed' go back to step 2
 
@@ -59,15 +97,15 @@ To update the data mapping, the AWS Glue job can be edited directly in the web e
 
 . Navigate to the AWS Glue Job console
 +
-image::../images/1_edit_etl_job.png[AWS Glue Job console,width=648,height=439]
+image::../images/1_edit_etl_job.png[AWS Glue Job console]
 
 . Select the 'transform_raw_to_clean-*' job
 +
-image::../images/2_edit_etl_job.png[Edit ETL Job,width=648,height=439]
+image::../images/2_edit_etl_job.png[Edit ETL Job]
 
 . Open script editor and start editing the input mapping
 +
-image::../images/3_open_editor.png[Open editor,width=648,height=439]
+image::../images/3_open_editor.png[Open editor]
 
 . To adopt a different input format look for the 'ApplyMapping' call and adjust it to your needs  to reflect your custom input format. Currently, the internal model works with the following schema:
 +
