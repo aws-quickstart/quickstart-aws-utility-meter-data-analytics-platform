@@ -3,4 +3,91 @@
 
 == Post deployment steps
 
-_Add post deployment steps here. Provide details about what user needs to do, after the stack creation is completed successfully._
+To see the capabilities of the QuickStart, follow the below steps to use dataset of meter reads from the City of London, between 2011 to 2014.
+
+=== Download Sample Dataset
+Download the sample dataset from https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households[here^]. The file can be downloaded to your local machine unzipped and then uploaded to S3. However, given the size of the unzipped file (~11GB), it is faster to run a EC2 instance with sufficient privileges to write to S3, download the file to the EC2 instance, unzip it and upload the data from there.
+
+https://data.london.gov.uk/download/smartmeter-energy-use-data-in-london-households/3527bf39-d93e-4071-8451-df2ade1ea4f2/Power-Networks-LCL-June2015(withAcornGps).zip[Download^]
+
+=== Upload the dataset to the Raw (Landing zone) S3 bucket
+The sample dataset needs to be uploaded to the landing zone bucket. The landing zone is the starting point for AWS Glue workflow. Files that are placed in this S3 bucket will be processed by the ETL pipeline. Furthermore, the AWS Glue ETL workflow tracks which files haven been processed and which are not.
+
+To upload the sample dataset to the Raw S3 bucket, follow the below steps:
+
+. Select the landing zone bucket, buckets names are generated, find the one which contains the word landing zone. This will be the starting point for the ETL process.
++
+image::../images/1_bucket_layout.png[Bucket Layout,width=648,height=439]
+
+. Upload the London Meter Data to the landing zone bucket.
++
+image::../images/2_upload_demo_data_set.png[Upload demo data set,width=648,height=439]
+
+. After the demo data is uploaded, the folder contains one file with all the meter reads.
++
+image::../images/3_upload_demo_data_set.png[Uploaded demo data set,width=648,height=439]
+
+//[TODO EC2 command line steps]
+
+=== Start the AWS Glue ETL and ML training pipeline
+
+By default, the pipeline will be triggered each day at 09:00 AM and process the newly arrived data in the landing zone S3 bucket. However, it's also possible to trigger the pipeline manually. To trigger the ETL pipeline, go to the AWS Glue console and then select the 'Workflow' menu entry. The AWS Glue workflow orchestrates the different steps of the ETL process. After the workflow run has successfully completed, a state machine https://state.machine[link] is called to build the ML model and prepare the data for energy usage forecast and anomaly.
+
+Follow the below steps to start the ETL pipeline.
+
+. Go to the AWS Glue Console, and select 'Workflows'
++
+image::../images/4_start_etl_workflow.png[AWS Glue Console,width=648,height=439]
+
+. Select the workflow and choose 'Run' from the drop-down-menu
++
+image::../images/5_start_etl_workflow.png[Start ETL workflow,width=648,height=439]
+
+. After started, the Workflow should be indicated as 'Running' in the 'History' tab
++
+image::../images/6_start_etl_workflow.png[Start ETL workflow,width=648,height=439]
+
+TIP: If the workflow doesn't start and jumps directly to 'Completed' go back to step 2
+
+== Customize this Quick Start
+
+This Quick Start can be easily customized to use with your own data format. To do that, the first AWS Glue job has to be adjusted to map the incoming data to the internal meter data lake schema. The following steps describe how it can be achieved.
+
+The first AWS Glue Job in the AWS Glue ETL workflow transforms the raw data in the landing zone S3 bucket to cleaned data in the Clean Zone S3 bucket. This step is also responsible for mapping the inbound data to the internal data schema, which is used by the rest of the steps in the AWS ETL workflow and the ML step functions.
+
+To update the data mapping, the AWS Glue job can be edited directly in the web editor.
+
+. Navigate to the AWS Glue Job console
++
+image::../images/1_edit_etl_job.png[AWS Glue Job console,width=648,height=439]
+
+. Select the 'transform_raw_to_clean-*' job
++
+image::../images/2_edit_etl_job.png[Edit ETL Job,width=648,height=439]
+
+. Open script editor and start editing the input mapping
++
+image::../images/3_open_editor.png[Open editor,width=648,height=439]
+
+. To adopt a different input format look for the 'ApplyMapping' call and adjust it to your needs  to reflect your custom input format. Currently, the internal model works with the following schema:
++
+[cols="1,1,1,1", options="header"]
+.Schema
+|===
+|Field
+|Type
+|Mandatory
+|Format
+
+|meter_id| String| X|
+|reading_value| double| X|
+|reading_type| String| X|
+|reading_date_time| Timestamp| X|
+|date_str| String|X| yyyyMMdd
+|obis_code| String| |
+|week_of_year| int| |
+|month| int| |
+|year| int| |
+|hour| int| |
+|minute| int| |
+|===
