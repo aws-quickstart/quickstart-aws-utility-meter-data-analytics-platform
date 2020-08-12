@@ -838,7 +838,7 @@ report bugs, or submit feature ideas for this Quick Start.
 </table>
 </div>
 <div class="paragraph text-left">
-<p>This Quick Start was created by Amazon Web Services in collaboration with Amazon Web Services (AWS). <a href="http://aws.amazon.com/quickstart/" target="_blank" rel="noopener">Quick Starts</a> are automated reference deployments that use AWS CloudFormation templates to deploy key technologies on AWS, following AWS best practices.</p>
+<p>This Quick Start was created by  in collaboration with Amazon Web Services (AWS). <a href="http://aws.amazon.com/quickstart/" target="_blank" rel="noopener">Quick Starts</a> are automated reference deployments that use AWS CloudFormation templates to deploy key technologies on AWS, following AWS best practices.</p>
 </div>
 </div>
 </div>
@@ -849,7 +849,7 @@ report bugs, or submit feature ideas for this Quick Start.
 <p>This Quick Start reference deployment guide provides step-by-step instructions for deploying Utility Meter Data Analytics on the AWS Cloud.</p>
 </div>
 <div class="paragraph">
-<p>This Quick Start is for users who &lt;target audience and usage scenario&gt;</p>
+<p>This Quick Start is for teams and organizations who are looking to gain insights from their Utility meter data, available from the MDM systems.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -871,7 +871,10 @@ collaborated with AWS on the content of the Quick Start.
 <h2 id="_utility_meter_data_analytics_on_aws">Utility Meter Data Analytics on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>&lt;Describe how the software works on AWS.&gt;</p>
+<p>Utility Meter Data Analytics Quick Start deploys a serverless architecture to ingest, store, and analyze utility meter data, available from the MDM systems. It creates an AWS Glue Workflow which consists of AWS Glue crawlers, jobs and data catalog, to convert the raw meter data (from MDM systems) into clean and partitioned data. This partitioned data is then consumed by Machine learning pipeline built using AWS Step function and Amazon Sagemaker, to create an ML model. This model is then used by another ML pipeline to batch process the meter data for providing energy usage forecast and usage anomaly information.</p>
+</div>
+<div class="paragraph">
+<p>This Quick Start also creates API endpoints, using Amazon API Gateway, to provide endpoints which can be utilized to get information about the energy usage forecast, anomaly detection and meter outage information. A sample Jupyter notebook is also provided with this Quick Start, which can be used to do data science and data visualizations on the provided sample data set, or run adhoc queries on your own meter data set.</p>
 </div>
 </div>
 </div>
@@ -1067,10 +1070,13 @@ Cloud.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><em>us-east-1 (N. Virginia)</em> (EXAMPLE)</p>
+<p>us-east-1 (N. Virginia)</p>
 </li>
 <li>
-<p><em>us-east-2 (Ohio)</em> (EXAMPLE)</p>
+<p>us-east-2 (Ohio)</p>
+</li>
+<li>
+<p>us-west-2 (Oregon)</p>
 </li>
 </ul>
 </div>
@@ -1112,7 +1118,7 @@ Certain regions are available on an opt-in basis. Refer to the AWS Documentation
 </div>
 </div>
 <div class="sect3">
-<h4 id="_prepare_your_amazon_web_services_account">Prepare your Amazon Web Services account</h4>
+<h4 id="_prepare_your_account">Prepare your  account</h4>
 <div class="paragraph">
 <p><em>Describe any setup required in the partner portal/account prior to template launch</em></p>
 </div>
@@ -1126,15 +1132,18 @@ Certain regions are available on an opt-in basis. Refer to the AWS Documentation
 <div class="sect3">
 <h4 id="_deployment_options">Deployment options</h4>
 <div class="paragraph">
-<p>This Quick Start provides two deployment options:</p>
+<p>This Quick Start creates a serverless architecture in your AWS Account. As part of the Quick Start deployment, it creates a Redshift cluster, which is created in a private subnet within a VPC.</p>
+</div>
+<div class="paragraph">
+<p>For deployment of the Redshift cluster, this Quick Start provides two deployment options:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Deploy Utility Meter Data Analytics into a new VPC (end-to-end deployment)</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys Utility Meter Data Analytics into this new VPC.</p>
+<p><strong>Deploy Utility Meter Data Analytics into a new VPC (end-to-end deployment)</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, and other infrastructure components. It then deploys Redshift cluster into this new VPC.</p>
 </li>
 <li>
-<p><strong>Deploy Utility Meter Data Analytics into an existing VPC</strong>. This option provisions Utility Meter Data Analytics in your existing AWS infrastructure.</p>
+<p><strong>Deploy Utility Meter Data Analytics into an existing VPC</strong>. This option provisions Redshift cluster in your existing AWS infrastructure.</p>
 </li>
 </ul>
 </div>
@@ -1752,7 +1761,7 @@ and to share your customizations with others.</p>
 </div>
 <hr>
 <div class="paragraph">
-<p>© 2020, Amazon Web Services Inc., or its affiliates, and Amazon Web Services. All rights reserved.</p>
+<p>© 2020, Amazon Web Services Inc., or its affiliates, and . All rights reserved.</p>
 </div>
 <div class="sect3">
 <h4 id="_notices">Notices</h4>
@@ -1768,7 +1777,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-12 00:29:04 UTC
+Last updated 2020-08-12 00:55:07 UTC
 </div>
 </div>
 </body>
