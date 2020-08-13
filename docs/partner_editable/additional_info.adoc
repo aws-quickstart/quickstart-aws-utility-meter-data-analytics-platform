@@ -29,11 +29,14 @@ image::../images/3_upload_demo_data_set.png[Uploaded demo data set]
 
 //[TODO EC2 command line steps]
 
-=== Prepare weather data if you want to use it for training
+=== Prepare weather data if you want to use it for training and forecasting
 
 . Download the sample weather dataset from https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv
 . Upload the dataset to S3 bucket
 . Create "weather" table in target Glue database using below SQL statement. Make sure replace "weather-data-location" to where you upload the weather dataset.
++
+image::../images/4_create_weather_table.png[Create weather table via Athena]
+
 ```sql
 CREATE EXTERNAL TABLE weather(
   visibility double,
@@ -56,16 +59,21 @@ TBLPROPERTIES (
   'has_encrypted_data'='false',
   'skip.header.line.count'='1');
 ```
-+
-image::../images/4_create_weather_table.png[Create weather table via Athena]
 
-If you have other weather dataset you want to use, make sure it contains at least below 4 columns.
-```sql
-time string  format: yyyy-MM-dd HH:mm:ss
-temperature double
-apparenttemperature double
-humidity double
-```
+If you have other weather dataset you want to use, just make sure it contains at least below 4 columns.
+
+[cols="1,1,1,1", options="header"]
+.Schema
+|===
+|Field
+|Type
+|Mandatory
+|Format
+|time |string|X|  yyyy-MM-dd HH:mm:ss
+|temperature| double|X|
+|apparenttemperature |double|X|
+|humidity |double|X|
+|===
 
 === Start the AWS Glue ETL and ML training pipeline
 
