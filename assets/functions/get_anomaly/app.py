@@ -43,5 +43,9 @@ def lambda_handler(event, context):
     if OUTLIER_ONLY == 1:
         query = query + ' and anomaly <> 0'
 
-    df_consumption = pd.read_sql(query, connection) 
-    return df_consumption.to_json()
+    df_consumption = pd.read_sql(query, connection)
+
+    return {
+        "statusCode": 200,
+        "body": df_consumption.to_json()
+    }

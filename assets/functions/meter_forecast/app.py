@@ -97,5 +97,9 @@ def lambda_handler(event, context):
     df_prediction = decode_response(response['Body'].read(), freq, prediction_time)
 
     df_prediction.columns = ['consumption']
-    return df_prediction.to_json()
-    
+    prediction_result = df_prediction.to_json()
+
+    return {
+        "statusCode": 200,
+        "body": prediction_result
+    }

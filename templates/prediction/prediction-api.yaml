@@ -84,6 +84,14 @@ Resources:
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
         - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
+      Policies:
+        - PolicyName: sagemaker_invoke_endpoint
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 'sagemaker:InvokeEndpoint'
+                Resource: '*'
 
   AnomalyPredictionApi:
     Type: 'AWS::Serverless::Function'
