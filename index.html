@@ -793,7 +793,7 @@ table p {
 <ul class="sectlevel2">
 <li><a href="#_download_sample_dataset">Download Sample Dataset</a></li>
 <li><a href="#_upload_the_dataset_to_the_raw_landing_zone_s3_bucket">Upload the dataset to the Raw (Landing zone) S3 bucket</a></li>
-<li><a href="#_prepare_weather_data_if_you_want_to_use_it_for_training">Prepare weather data if you want to use it for training</a></li>
+<li><a href="#_prepare_weather_data_if_you_want_to_use_it_for_training_and_forecasting">Prepare weather data if you want to use it for training and forecasting</a></li>
 <li><a href="#_start_the_aws_glue_etl_and_ml_training_pipeline">Start the AWS Glue ETL and ML training pipeline</a></li>
 </ul>
 </li>
@@ -1529,7 +1529,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 </div>
 </div>
 <div class="sect2">
-<h3 id="_prepare_weather_data_if_you_want_to_use_it_for_training">Prepare weather data if you want to use it for training</h3>
+<h3 id="_prepare_weather_data_if_you_want_to_use_it_for_training_and_forecasting">Prepare weather data if you want to use it for training and forecasting</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1540,6 +1540,11 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 </li>
 <li>
 <p>Create "weather" table in target Glue database using below SQL statement. Make sure replace "weather-data-location" to where you upload the weather dataset.</p>
+<div class="imageblock">
+<div class="content">
+<img src="images/4_create_weather_table.png" alt="Create weather table via Athena">
+</div>
+</div>
 </li>
 </ol>
 </div>
@@ -1568,20 +1573,51 @@ TBLPROPERTIES (
 </div>
 </div>
 <div class="paragraph">
-<p>+
-image::../images/4_create_weather_table.png[Create weather table via Athena]</p>
+<p>If you have other weather dataset you want to use, just make sure it contains at least below 4 columns.</p>
 </div>
-<div class="paragraph">
-<p>If you have other weather dataset you want to use, make sure it contains at least below 4 columns.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-sql" data-lang="sql">time string  format: yyyy-MM-dd HH:mm:ss
-temperature double
-apparenttemperature double
-humidity double</code></pre>
-</div>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. Schema</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Mandatory</th>
+<th class="tableblock halign-left valign-top">Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yyyy-MM-dd HH:mm:ss</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">temperature</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">apparenttemperature</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">humidity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">double</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_start_the_aws_glue_etl_and_ml_training_pipeline">Start the AWS Glue ETL and ML training pipeline</h3>
@@ -1675,7 +1711,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <li>
 <p>To adopt a different input format look for the 'ApplyMapping' call and adjust it to your needs  to reflect your custom input format. Currently, the internal model works with the following schema:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Schema</caption>
+<caption class="title">Table 6. Schema</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1858,7 +1894,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <p>The input meter data format is variable and can be adjusted as described in the section <a href="additional_info.html#Customize this Quick Start">'Customize this Quick Start'</a>. However, the sample input data format of the 'London Meter Reads' looks like the following:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. Input Schema</caption>
+<caption class="title">Table 7. Input Schema</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1911,7 +1947,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <p>The Utility Meter Data Analytics Quick Start works with the following internal table schema. This schema will also be used in Amazon Redshift.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. Internal Schema</caption>
+<caption class="title">Table 8. Internal Schema</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -2177,7 +2213,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-13 00:17:41 UTC
+Last updated 2020-08-13 00:44:27 UTC
 </div>
 </div>
 </body>
