@@ -3,9 +3,7 @@ Testing event
 {
   "Data_start": "2013-06-01",
   "Data_end": "2014-01-01",
-  "Forecast_period": 7,
   "Meter_id": "MAC004534",
-  "With_weather_data": 1,
   "ML_endpoint_name": "ml-endpoint-0001"
 }
 '''
@@ -61,6 +59,7 @@ def decode_response(response, freq, prediction_time):
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
     DB_SCHEMA = os.environ['Db_schema']
+    USE_WEATHER_DATA = os.environ['With_weather_data']
 
     parameter = event
     if "body" in event:
@@ -68,7 +67,6 @@ def lambda_handler(event, context):
 
     METER_ID = parameter['Meter_id']
     ML_ENDPOINT_NAME = parameter['ML_endpoint_name']
-    USE_WEATHER_DATA = parameter['With_weather_data']
     DATA_START = parameter['Data_start']
     DATA_END = parameter['Data_end']
 

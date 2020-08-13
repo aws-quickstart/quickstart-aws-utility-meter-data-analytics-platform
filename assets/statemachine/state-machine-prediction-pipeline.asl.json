@@ -15,8 +15,8 @@
           "Data_start.$": "$.Data_start",
           "Data_end.$": "$.Data_end",
           "Batch_size.$": "$.Batch_size",
-          "With_weather_data.$": "$.With_weather_data",
-          "Forecast_period.$": "$.Forecast_period"
+          "Forecast_period.$": "$.Forecast_period",
+          "Endpoint_instance_type.$": "$.Endpoint_instance_type"
         }
       },
       "OutputPath": "$.Payload",
@@ -40,8 +40,8 @@
           "Data_start.$": "$.Data_start",
           "Data_end.$": "$.Data_end",
           "Batch_size.$": "$.Batch_size",
-          "With_weather_data.$": "$.With_weather_data",
-          "Forecast_period.$": "$.Forecast_period"
+          "Forecast_period.$": "$.Forecast_period",
+          "Endpoint_instance_type.$": "$.Endpoint_instance_type"
         }
       },
       "OutputPath": "$.Payload",
@@ -64,14 +64,13 @@
       "Parameters": {
         "FunctionName": "${LambdaSplitFunctionName}",
         "Payload": {
-          "ModelName.$": "$.ModelName",
           "Meter_start.$": "$.Meter_start",
           "Meter_end.$": "$.Meter_end",
           "Data_start.$": "$.Data_start",
           "Data_end.$": "$.Data_end",
           "Batch_size.$": "$.Batch_size",
-          "With_weather_data.$": "$.With_weather_data",
-          "Forecast_period.$": "$.Forecast_period"
+          "Forecast_period.$": "$.Forecast_period",
+          "Endpoint_instance_type.$": "$.Endpoint_instance_type"
         }
       },
       "Resource": "arn:aws:states:::lambda:invoke",
@@ -91,7 +90,7 @@
         "Data_start.$": "$.Data_start",
         "Data_end.$": "$.Data_end",
         "Batch_info.$": "$$.Map.Item.Value",
-        "With_weather_data.$": "$.With_weather_data",
+        "Endpoint_instance_type.$": "$.Endpoint_instance_type",
         "Forecast_period.$": "$.Forecast_period"
       },
       "Iterator": {
@@ -104,8 +103,7 @@
                 "Batch_start.$": "$.Batch_info.Batch_start",
                 "Batch_end.$": "$.Batch_info.Batch_end",
                 "Data_start.$": "$.Data_start",
-                "Data_end.$": "$.Data_end",
-                "Forecast_period.$": "$.Forecast_period"
+                "Data_end.$": "$.Data_end"
               }
             },
             "Resource": "arn:aws:states:::lambda:invoke",
@@ -121,7 +119,6 @@
                 "Batch_end.$": "$.Batch_info.Batch_end",
                 "Data_start.$": "$.Data_start",
                 "Data_end.$": "$.Data_end",
-                "With_weather_data.$": "$.With_weather_data",
                 "Forecast_period.$": "$.Forecast_period"
               }
             },
@@ -151,7 +148,7 @@
               },
               "TransformResources": {
                 "InstanceCount": 1,
-                "InstanceType": "ml.m4.xlarge"
+                "InstanceType.$": "$.Endpoint_instance_type"
               }
             },
             "Type": "Task",

@@ -1,7 +1,7 @@
 == How to re-train the model or use a custom model in the pipeline
-The Quick Start deploys a model training pipeline and batch pipeline to generate forecast and anomaly result. The initial deployment will execute both pipelines after ETL jobs are done. 
+The Quick Start deploys a model training pipeline and batch pipeline to generate forecast and anomaly result. The initial deployment will execute both pipelines after ETL jobs are done.
 
-After new data is added, you can re-run the whole cloudformation to reprocess the entire data and training a new model, or you might want to just re-run each part at different schedule. For example, run the Glue ETL flow daily to process and format new data; run the batch pipeline weekly to generate forecast and anomaly for new data; run the model training pipeline monthly to re-train model to learn new customer consumption patterns. You can even use a custom model for batch pipeline and forecast API. 
+After new data is added, you can re-run the whole cloudformation to reprocess the entire data and training a new model, or you might want to just re-run each part at different schedule. For example, run the Glue ETL flow daily to process and format new data; run the batch pipeline weekly to generate forecast and anomaly for new data; run the model training pipeline monthly to re-train model to learn new customer consumption patterns. You can even use a custom model for batch pipeline and forecast API.
 
 === Run batch prediction pipeline
 
@@ -13,7 +13,7 @@ image::../images/1_batchpipeline.png[AWS Step Functions console]
 +
 image::../images/2_batchpipeline_execution.png[AWS Step Functions console]
 
-The input parameter needs to contain below information in JSON format. You can specify the range of meters you want to process, and what's the date range of your data. Note the Batch_size should not exceed 100. You can also specify a customer model you trained in SageMaker. If the model is trained with weather data as dynamic features, set "With_weather_data" to 1, otherwise set it to 0.
+The input parameter needs to contain below information in JSON format. You can specify the range of meters you want to process, and what's the date range of your data. Note the Batch_size should not exceed 100. You can also specify a customer model you trained in SageMaker.
 ```json
 {
   "Meter_start": 1,
@@ -22,8 +22,7 @@ The input parameter needs to contain below information in JSON format. You can s
   "Data_start": "2013-01-01",
   "Data_end": "2013-10-01",
   "Forecast_period": 7,
-  "ModelName": "ml-model-0731",
-  "With_weather_data": 0
+  "ModelName": "ml-model-0731"
 }
 ```
 
@@ -34,7 +33,7 @@ The input parameter needs to contain below information in JSON format. You can s
 +
 image::../images/3_trainingpipeline_hyperparameters.png[AWS Step Functions console]
 
-. Save change to the state machine and click start execution. The input parameter needs to contain below information in JSON format. Training_samples specifies how many meters' data will be used to train the model, the more meters are used, the more accurate the model will be, however the longer the training will take. If you have corresponding weather data, set "With_weather_data" to 1, otherwise set it to 0. Give a new name for "ModelName" and "ML_endpoint_name".
+. Save change to the state machine and click start execution. The input parameter needs to contain below information in JSON format. Training_samples specifies how many meters' data will be used to train the model, the more meters are used, the more accurate the model will be, however the longer the training will take. Give a new name for "ModelName" and "ML_endpoint_name".
 ```json
 {
   "Training_samples": 20,
@@ -42,7 +41,6 @@ image::../images/3_trainingpipeline_hyperparameters.png[AWS Step Functions conso
   "Data_end": "2013-10-01",
   "Forecast_period": 7,
   "ModelName": "ml-model-0731",
-  "ML_endpoint_name": "ml-model-0731",
-  "With_weather_data": 0
+  "ML_endpoint_name": "ml-model-0731"
 }
 ```

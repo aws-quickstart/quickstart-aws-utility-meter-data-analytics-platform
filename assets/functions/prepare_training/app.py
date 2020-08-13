@@ -5,8 +5,7 @@ Input event payload expected to be in the following format:
   "Data_start": "2013-06-01",
   "Data_end": "2014-01-01",
   "Forecast_period": 7,
-  "Training_samples": 50,
-  "With_weather_data": 1
+  "Training_samples": 50
 }
 
 '''
@@ -49,13 +48,14 @@ def write_json_to_file(bucket, path, data):
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
     S3_BUCKET = os.environ['Working_bucket']
+    DB_SCHEMA = os.environ['Db_schema']
+    USE_WEATHER_DATA = os.environ['With_weather_data']
+
     TRAINING_SAMPLES = event['Training_samples']
-    USE_WEATHER_DATA = event['With_weather_data']
     DATA_START = event['Data_start']
     DATA_END = event['Data_end']
     FORECAST_PERIOD = event['Forecast_period']
     prediction_length = FORECAST_PERIOD * 24
-    DB_SCHEMA = os.environ['Db_schema']
 
     # region should be an environment variable
     region = 'us-east-1'

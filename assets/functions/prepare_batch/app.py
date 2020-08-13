@@ -6,8 +6,7 @@ Input event payload expected to be in the following format:
 "Batch_end": "MAC000020",
 "Data_start": "2013-06-01",
 "Data_end": "2014-01-01",
-"Forecast_period": 7,
-"With_weather_data": 1
+"Forecast_period": 7
 }
 
 '''
@@ -48,14 +47,15 @@ def get_meters(connection, start, end, db_schema):
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
     S3_BUCKET = os.environ['Working_bucket']
-    USE_WEATHER_DATA = event['With_weather_data']
+    DB_SCHEMA = os.environ['Db_schema']
+    USE_WEATHER_DATA = os.environ['With_weather_data']
+
     BATCH_START = event['Batch_start']
     BATCH_END = event['Batch_end']
     DATA_START = event['Data_start']
     DATA_END = event['Data_end']
     FORECAST_PERIOD = event['Forecast_period']
     prediction_length = FORECAST_PERIOD * 24
-    DB_SCHEMA = os.environ['Db_schema']
 
 
     region = 'us-east-1'

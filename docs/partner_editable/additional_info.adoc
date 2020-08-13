@@ -75,6 +75,8 @@ If you have other weather dataset you want to use, just make sure it contains at
 |humidity |double|X|
 |===
 
+In CloudFormation stack, set "WithWeather" to 1 to indicate weather data is available to use.
+
 === Start the AWS Glue ETL and ML training pipeline
 
 By default, the pipeline will be triggered each day at 09:00 AM and process the newly arrived data in the landing zone S3 bucket. However, it's also possible to trigger the pipeline manually. To trigger the ETL pipeline, go to the AWS Glue console and then select the 'Workflow' menu entry. The AWS Glue workflow orchestrates the different steps of the ETL process. After the workflow run has successfully completed, a state machine https://state.machine[link] is called to build the ML model and prepare the data for energy usage forecast and anomaly.

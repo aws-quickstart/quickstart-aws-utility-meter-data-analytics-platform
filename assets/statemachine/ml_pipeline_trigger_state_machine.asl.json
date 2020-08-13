@@ -33,7 +33,6 @@
           "Data_end.$": "$.Data_end",
           "Forecast_period.$": "$.Forecast_period",
           "Training_samples.$": "$.Training_samples",
-          "With_weather_data.$": "$.With_weather_data",
           "Training_instance_type.$": "$.Training_instance_type",
           "Training_job_name.$": "$.Training_job_name",
           "ModelName.$": "$.ModelName",
@@ -70,7 +69,7 @@
           "Data_end.$": "$.Data_end",
           "Forecast_period.$": "$.Forecast_period",
           "ModelName.$": "$.ModelName",
-          "With_weather_data.$": "$.With_weather_data",
+          "Endpoint_instance_type.$": "$.Endpoint_instance_type",
           "AWS_STEP_FUNCTIONS_STARTED_BY_EXECUTION_ID.$": "$$.Execution.Id"
         }
       },

@@ -87,10 +87,11 @@ def process_batch(meter_start, meter_end, data_end, db_schema, connection):
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
     S3_BUCKET = os.environ['Working_bucket']
+    DB_SCHEMA = os.environ['Db_schema']
+
     BATCH_START = event['Batch_start']
     BATCH_END = event['Batch_end']
     DATA_END = event['Data_end']
-    DB_SCHEMA = os.environ['Db_schema']
 
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
     result = process_batch(BATCH_START, BATCH_END, DATA_END, DB_SCHEMA, connection)
