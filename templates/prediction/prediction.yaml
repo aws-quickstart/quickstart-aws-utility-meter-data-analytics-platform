@@ -9,9 +9,10 @@ Globals:
     Runtime: python3.7
     Environment:
       Variables:
-        Db_schema: meter-data
+        Db_schema: !Ref DBName
         Athena_bucket: !Ref AthenaQueryBucket
         Working_bucket: !Ref WorkingBucket
+        With_weather_data: !Ref WithWeather
 
 Resources:
   AthenaQueryBucket:
@@ -28,6 +29,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/ml_pipeline_trigger_state_machine.asl.json'
       DefinitionSubstitutions:
+        LoadPipelineParameter: !Ref LoadPipelineParameter
         InitialTrainingStateMachine: !Ref InitialTrainingStateMachine
         PredictionPipelineStateMachine: !Ref PredictionPipelineStateMachine
         CheckInitialPipelineRun: !Ref CheckInitialPipelineRun
@@ -52,6 +54,8 @@ Resources:
                 - !Ref PredictionPipelineStateMachine
         - LambdaInvokePolicy:
             FunctionName: !Ref CheckInitialPipelineRun
+        - LambdaInvokePolicy:
+            FunctionName: !Ref LoadPipelineParameter
 
   # init training statemachine
   InitialTrainingStateMachine:
@@ -163,6 +167,20 @@ Resources:
   #
   # Lambda functions
   #
+  LoadPipelineParameter:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      MemorySize: 128
+      Timeout: 30
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/load_pipeline_parameter.zip'
+      Handler: app.lambda_handler
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Layers:
+        - !Ref DependencyLayer
+
   PrepareTrainingFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
@@ -263,9 +281,6 @@ Resources:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/batch_anomaly_detection.zip'
       MemorySize: 2048
       Timeout: 600
-      Environment:
-        Variables:
-          Db_schema: meter-data
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
         - !Ref BatchAnomalyDependencyLayer
@@ -487,6 +502,12 @@ Parameters:
     Type: String
   RedshiftTransportJob:
     Type: String
+  WithWeather:
+    Description: >-
+      Enables or disables the use of weather data.
+      0 = weather data won't be used
+      1 = enable weather data use
+    Type: Number
 
 Outputs:
   AthenaQueryBucket:

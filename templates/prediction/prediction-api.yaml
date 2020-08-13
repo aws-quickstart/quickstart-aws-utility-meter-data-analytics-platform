@@ -47,6 +47,17 @@ Parameters:
       This string can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
     Type: String
+  WithWeather:
+    Description: >-
+      Enables or disables the use of weather data.
+      0 = weather data won't be used
+      1 = enable weather data use
+    Type: Number
+  DBName:
+    ConstraintDescription: >-
+      Name of the glue data catalog database
+    Default: meter-data
+    Type: String
 
 Globals:
   Function:
@@ -54,7 +65,8 @@ Globals:
     Environment:
       Variables:
         Athena_bucket: !Ref AthenaQueryBucket
-        Db_schema: meter-data
+        Db_schema: !Ref DBName
+        With_weather_data: !Ref WithWeather
 
 Resources:
   ExecuteLambdaRole:
@@ -72,6 +84,14 @@ Resources:
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
         - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
+      Policies:
+        - PolicyName: sagemaker_invoke_endpoint
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 'sagemaker:InvokeEndpoint'
+                Resource: '*'
 
   AnomalyPredictionApi:
     Type: 'AWS::Serverless::Function'

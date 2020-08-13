@@ -70,6 +70,8 @@ Metadata:
         default: Landing zone S3 bucket
       NoOfMeters:
         default: No. of meters
+      WithWeather:
+        default: Weather data Availability
 
 Resources:
   VPC:
@@ -131,6 +133,7 @@ Resources:
         - '0'
         - !Ref 'AvailabilityZones'
         NoOfMeters: !Ref NoOfMeters
+        WithWeather: !Ref WithWeather
 
 Conditions:
   UsingDefaultBucket: !Equals
@@ -238,6 +241,13 @@ Parameters:
     Description: CIDR block for the VPC.
     Type: String
   
+  WithWeather:
+    Type: Number
+    Default: 0
+    Description: >-
+      Enables or disables the use of weather data.
+      0 = weather data won't be used
+      1 = enable weather data use
 
 Outputs:
   StackName:

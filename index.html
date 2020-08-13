@@ -1618,6 +1618,9 @@ TBLPROPERTIES (
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>In CloudFormation stack, set "WithWeather" to 1 to indicate weather data is available to use.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_start_the_aws_glue_etl_and_ml_training_pipeline">Start the AWS Glue ETL and ML training pipeline</h3>
@@ -1832,7 +1835,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 </ol>
 </div>
 <div class="paragraph">
-<p>The input parameter needs to contain below information in JSON format. You can specify the range of meters you want to process, and what&#8217;s the date range of your data. Note the Batch_size should not exceed 100. You can also specify a customer model you trained in SageMaker. If the model is trained with weather data as dynamic features, set "With_weather_data" to 1, otherwise set it to 0.</p>
+<p>The input parameter needs to contain below information in JSON format. You can specify the range of meters you want to process, and what&#8217;s the date range of your data. Note the Batch_size should not exceed 100. You can also specify a customer model you trained in SageMaker.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1843,8 +1846,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
   "Data_start": "2013-01-01",
   "Data_end": "2013-10-01",
   "Forecast_period": 7,
-  "ModelName": "ml-model-0731",
-  "With_weather_data": 0
+  "ModelName": "ml-model-0731"
 }</code></pre>
 </div>
 </div>
@@ -1865,7 +1867,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 </div>
 </li>
 <li>
-<p>Save change to the state machine and click start execution. The input parameter needs to contain below information in JSON format. Training_samples specifies how many meters' data will be used to train the model, the more meters are used, the more accurate the model will be, however the longer the training will take. If you have corresponding weather data, set "With_weather_data" to 1, otherwise set it to 0. Give a new name for "ModelName" and "ML_endpoint_name".</p>
+<p>Save change to the state machine and click start execution. The input parameter needs to contain below information in JSON format. Training_samples specifies how many meters' data will be used to train the model, the more meters are used, the more accurate the model will be, however the longer the training will take. Give a new name for "ModelName" and "ML_endpoint_name".</p>
 </li>
 </ol>
 </div>
@@ -1877,8 +1879,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
   "Data_end": "2013-10-01",
   "Forecast_period": 7,
   "ModelName": "ml-model-0731",
-  "ML_endpoint_name": "ml-model-0731",
-  "With_weather_data": 0
+  "ML_endpoint_name": "ml-model-0731"
 }</code></pre>
 </div>
 </div>
@@ -2213,7 +2214,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-13 00:44:27 UTC
+Last updated 2020-08-13 16:28:16 UTC
 </div>
 </div>
 </body>

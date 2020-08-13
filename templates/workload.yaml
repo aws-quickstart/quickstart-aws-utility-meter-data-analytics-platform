@@ -127,6 +127,7 @@ Resources:
           DBName: !Ref DBName
           TopicArn: !Ref WorkflowStateTopic
           RedshiftTransportJob: !GetAtt GlueStack.Outputs.RedshiftTransportJob
+          WithWeather: !Ref WithWeather
 
     PredictionApiStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -145,6 +146,8 @@ Resources:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
           AthenaQueryBucket: !GetAtt PredictionStack.Outputs.AthenaQueryBucket
+          WithWeather: !Ref WithWeather
+          DBName: !Ref DBName
 
 Mappings: 
   MeterCountMap: 
@@ -271,6 +274,14 @@ Parameters:
       - "1-50000"
       - "50001-and-more"
     Default: "1-50000"
+
+  WithWeather:
+    Type: String
+    Default: 0
+    Description: >-
+      Enables or disables the use of weather data.
+      0 = weather data won't be used
+      1 = enable weather data use
 
 Metadata:
   QuickStartDocumentation:
