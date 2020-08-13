@@ -793,6 +793,7 @@ table p {
 <ul class="sectlevel2">
 <li><a href="#_download_sample_dataset">Download Sample Dataset</a></li>
 <li><a href="#_upload_the_dataset_to_the_raw_landing_zone_s3_bucket">Upload the dataset to the Raw (Landing zone) S3 bucket</a></li>
+<li><a href="#_prepare_weather_data_if_you_want_to_use_it_for_training">Prepare weather data if you want to use it for training</a></li>
 <li><a href="#_start_the_aws_glue_etl_and_ml_training_pipeline">Start the AWS Glue ETL and ML training pipeline</a></li>
 </ul>
 </li>
@@ -1504,7 +1505,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <p>Select the landing zone bucket, buckets names are generated, find the one which contains the word landing zone. This will be the starting point for the ETL process.</p>
 <div class="imageblock">
 <div class="content">
-<img src="images/1_bucket_layout.png" alt="Bucket Layout" width="648" height="439">
+<img src="images/1_bucket_layout.png" alt="Bucket Layout">
 </div>
 </div>
 </li>
@@ -1512,7 +1513,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <p>Upload the London Meter Data to the landing zone bucket.</p>
 <div class="imageblock">
 <div class="content">
-<img src="images/2_upload_demo_data_set.png" alt="Upload demo data set" width="648" height="439">
+<img src="images/2_upload_demo_data_set.png" alt="Upload demo data set">
 </div>
 </div>
 </li>
@@ -1520,11 +1521,66 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <p>After the demo data is uploaded, the folder contains one file with all the meter reads.</p>
 <div class="imageblock">
 <div class="content">
-<img src="images/3_upload_demo_data_set.png" alt="Uploaded demo data set" width="648" height="439">
+<img src="images/3_upload_demo_data_set.png" alt="Uploaded demo data set">
 </div>
 </div>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_prepare_weather_data_if_you_want_to_use_it_for_training">Prepare weather data if you want to use it for training</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Download the sample weather dataset from <a href="https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv" class="bare">https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv</a></p>
+</li>
+<li>
+<p>Upload the dataset to S3 bucket</p>
+</li>
+<li>
+<p>Create "weather" table in target Glue database using below SQL statement. Make sure replace "weather-data-location" to where you upload the weather dataset.</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-sql" data-lang="sql">CREATE EXTERNAL TABLE weather(
+  visibility double,
+  windbearing bigint,
+  temperature double,
+  time string,
+  dewpoint double,
+  pressure double,
+  apparenttemperature double,
+  windspeed double,
+  preciptype string,
+  icon string,
+  humidity double,
+  summary string )
+ROW FORMAT DELIMITED
+      FIELDS TERMINATED BY ','
+LOCATION
+  's3://&lt;weather-data-location&gt;'
+TBLPROPERTIES (
+  'has_encrypted_data'='false',
+  'skip.header.line.count'='1');</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>+
+image::../images/4_create_weather_table.png[Create weather table via Athena]</p>
+</div>
+<div class="paragraph">
+<p>If you have other weather dataset you want to use, make sure it contains at least below 4 columns.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-sql" data-lang="sql">time string  format: yyyy-MM-dd HH:mm:ss
+temperature double
+apparenttemperature double
+humidity double</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1541,7 +1597,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <p>Go to the AWS Glue Console, and select 'Workflows'</p>
 <div class="imageblock">
 <div class="content">
-<img src="images/4_start_etl_workflow.png" alt="AWS Glue Console" width="648" height="439">
+<img src="images/4_start_etl_workflow.png" alt="AWS Glue Console">
 </div>
 </div>
 </li>
@@ -1549,7 +1605,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <p>Select the workflow and choose 'Run' from the drop-down-menu</p>
 <div class="imageblock">
 <div class="content">
-<img src="images/5_start_etl_workflow.png" alt="Start ETL workflow" width="648" height="439">
+<img src="images/5_start_etl_workflow.png" alt="Start ETL workflow">
 </div>
 </div>
 </li>
@@ -1557,7 +1613,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <p>After started, the Workflow should be indicated as 'Running' in the 'History' tab</p>
 <div class="imageblock">
 <div class="content">
-<img src="images/6_start_etl_workflow.png" alt="Start ETL workflow" width="648" height="439">
+<img src="images/6_start_etl_workflow.png" alt="Start ETL workflow">
 </div>
 </div>
 </li>
@@ -1596,7 +1652,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <p>Navigate to the AWS Glue Job console</p>
 <div class="imageblock">
 <div class="content">
-<img src="images/1_edit_etl_job.png" alt="AWS Glue Job console" width="648" height="439">
+<img src="images/1_edit_etl_job.png" alt="AWS Glue Job console">
 </div>
 </div>
 </li>
@@ -1604,7 +1660,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <p>Select the 'transform_raw_to_clean-*' job</p>
 <div class="imageblock">
 <div class="content">
-<img src="images/2_edit_etl_job.png" alt="Edit ETL Job" width="648" height="439">
+<img src="images/2_edit_etl_job.png" alt="Edit ETL Job">
 </div>
 </div>
 </li>
@@ -1612,7 +1668,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <p>Open script editor and start editing the input mapping</p>
 <div class="imageblock">
 <div class="content">
-<img src="images/3_open_editor.png" alt="Open editor" width="648" height="439">
+<img src="images/3_open_editor.png" alt="Open editor">
 </div>
 </div>
 </li>
@@ -2121,7 +2177,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-12 18:01:54 UTC
+Last updated 2020-08-13 00:17:41 UTC
 </div>
 </div>
 </body>
