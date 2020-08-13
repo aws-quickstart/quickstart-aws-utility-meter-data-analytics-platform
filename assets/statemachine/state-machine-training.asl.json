@@ -9,7 +9,11 @@
           "Data_start.$": "$.Data_start",
           "Data_end.$": "$.Data_end",
           "Forecast_period.$": "$.Forecast_period",
-          "With_weather_data.$": "$.With_weather_data"
+          "With_weather_data.$": "$.With_weather_data",
+          "ModelName.$": "$.ModelName",
+          "Meter_start.$": "$.Meter_start",
+          "Meter_end.$": "$.Meter_end",
+          "Batch_size.$": "$.Batch_size"
         }
       },
       "ResultPath": null,

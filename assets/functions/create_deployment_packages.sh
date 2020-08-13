@@ -12,6 +12,7 @@ functions=("upload_result"  \
            "crawler/trigger_glue_crawler" \
            "crawler/get_glue_crawler_state" \
            "state_topic_subscription" \
+           "load_pipeline_parameter" \
            "check_initial_pipeline_run")
 
 for lambda_folder in ${functions[*]};

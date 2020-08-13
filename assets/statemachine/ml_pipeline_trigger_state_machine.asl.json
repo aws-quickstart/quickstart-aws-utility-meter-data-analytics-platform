@@ -39,9 +39,22 @@
           "ModelName.$": "$.ModelName",
           "Endpoint_instance_type.$": "$.Endpoint_instance_type",
           "ML_endpoint_name.$": "$.ML_endpoint_name",
+          "Meter_start.$": "$.Meter_start",
+          "Meter_end.$": "$.Meter_end",
+          "Batch_size.$": "$.Batch_size",
           "AWS_STEP_FUNCTIONS_STARTED_BY_EXECUTION_ID.$": "$$.Execution.Id"
         }
       },
+      "Next": "load pipeline parameter"
+    },
+    "load pipeline parameter": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${LoadPipelineParameter}",
+        "Payload": {}
+      },
+      "OutputPath": "$.Payload",
       "Next": "run batch pipeline"
     },
     "run batch pipeline": {
