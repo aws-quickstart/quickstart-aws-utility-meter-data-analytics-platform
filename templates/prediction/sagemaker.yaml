@@ -5,6 +5,16 @@ Parameters:
     Type: String
     Description: Session name must satisfy regular expression pattern ^[a-zA-Z0-9](-*[a-zA-Z0-9])*
     Default: "meter-data-demo"
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    Default: aws-quickstart
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    Default: quickstart-aws-utility-meter-data-analytics-platform/
+    Type: String
+
+
 Resources:
   SageMakerRole:
     Type: AWS::IAM::Role
@@ -17,7 +27,7 @@ Resources:
                 - sagemaker.amazonaws.com
             Action:
               - sts:AssumeRole
-      ManagedPolicyArns: # TODO: HARDEN THESE POLICIES
+      ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonSageMakerReadOnly
         - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
         - arn:aws:iam::aws:policy/AmazonS3FullAccess
@@ -42,9 +52,9 @@ Resources:
             #!/bin/bash -xe
 
             name="Meter_demo"
-            # Todo: download demo notebook files once github is public.
-            #cd /home/ec2-user/SageMaker
-            #wget https://github.com/aws-quickstart/quickstart-aws-utility-meter-data-analytics-platform/raw/develop/assets/notebooks/mdm_demos.ipynb
+
+            cd /home/ec2-user/SageMaker
+            wget https://${QSS3BucketName}.s3.${AWS::URLSuffix}/${QSS3KeyPrefix}/assets/notebooks/mdm_demos.ipynb
 
             # Create a Jupyter kernel for your new environment
 
@@ -54,7 +64,6 @@ Resources:
             /home/ec2-user/anaconda3/bin/python -m ipykernel install --name "$name" --display-name "$name" --user
             source /home/ec2-user/anaconda3/bin/deactivate
             EOF
-
 
   NotebookInstance:
     Type: AWS::SageMaker::NotebookInstance
