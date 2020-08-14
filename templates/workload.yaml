@@ -128,6 +128,7 @@ Resources:
           TopicArn: !Ref WorkflowStateTopic
           RedshiftTransportJob: !GetAtt GlueStack.Outputs.RedshiftTransportJob
           WithWeather: !Ref WithWeather
+          BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
 
     PredictionApiStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -148,12 +149,12 @@ Resources:
           AthenaQueryBucket: !GetAtt PredictionStack.Outputs.AthenaQueryBucket
           WithWeather: !Ref WithWeather
           DBName: !Ref DBName
-    
-    OutageApiStack:
+
+    CopyDemoDataStack:
       Type: 'AWS::CloudFormation::Stack'
       Properties:
         TemplateURL: !Sub
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/prediction/getoutage-api.yaml'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/copy-demo-data.yaml'
           - S3Region:
               !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket:
@@ -165,8 +166,24 @@ Resources:
         Parameters:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
-          SourceS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
-          DBName: !Ref DBName
+          BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
+
+    SagemakerStack:
+      Type: 'AWS::CloudFormation::Stack'
+      Properties:
+        TemplateURL: !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/prediction/sagemaker.yaml'
+          - S3Region:
+              !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket:
+              !If [
+                UsingDefaultBucket,
+                !Sub '${QSS3BucketName}-${AWS::Region}',
+                !Ref QSS3BucketName,
+              ]
+        Parameters:
+          QSS3BucketName: !Ref QSS3BucketName
+          QSS3KeyPrefix: !Ref QSS3KeyPrefix
 
 Mappings: 
   MeterCountMap: 

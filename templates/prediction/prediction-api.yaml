@@ -114,6 +114,26 @@ Resources:
             Method: post
             Path: /anomaly
 
+  OutageApi:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/outage_info.zip'
+      Description: Lambda function to get outage for a certain timeframe
+      MemorySize: 128
+      Timeout: 180
+      Runtime: "nodejs12.x"
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Method: post
+            Path: /outage
+
   MeterForecastPredictionApi:
     Type: 'AWS::Serverless::Function'
     Properties:
