@@ -63,7 +63,7 @@ TBLPROPERTIES (
 If you have other weather dataset you want to use, just make sure it contains at least below 4 columns.
 
 [cols="1,1,1,1", options="header"]
-.Schema
+.Weather data schema
 |===
 |Field
 |Type
@@ -76,6 +76,23 @@ If you have other weather dataset you want to use, just make sure it contains at
 |===
 
 The CloudFormation parameter "WithWeather" should have been set to 1 to indicate that weather data is available to use, for generating ML model.
+
+=== Prepare geo-location data
+
+This Quick Start requires geo-location data to be uploaded to the _geodata_ folder in Landing Zone S3 bucket. The S3 path of this location should be _s3://<Landing-zone-s3-bucket-name>/geodata/_. Geo-location data should be in a .CSV file format with the following structure, where all 3 columns are mandatory with comma-separated values.
+
+[cols="1,1", options="header"]
+.Geo-location data schema
+|===
+|Field
+|Type
+|meter id |string
+|latitude |string
+|longitude |string
+|===
+
+If this data is missing, API request to get meter outage information will return error.
+
 
 === Start the AWS Glue ETL and ML training pipeline
 
