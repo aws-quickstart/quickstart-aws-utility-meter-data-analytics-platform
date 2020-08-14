@@ -1,33 +1,36 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Create lambda function and API to get meter outage info"
 Resources:
-    GeoDataCrawler:
-      Type: "AWS::Glue::Crawler"
+    GlueTableGeodata:
+      Type: "AWS::Glue::Table"
       Properties:
-          Role: !Sub "service-role/${CrawlerIAMRole}"
-          Targets:
-              S3Targets:
-                  - Path: !Sub "s3://${SourceS3Bucket}/geodata"
-          DatabaseName: !Ref DBName
-          SchemaChangePolicy:
-              UpdateBehavior: "LOG"
-              DeleteBehavior: "DEPRECATE_IN_DATABASE"
-    
-    CrawlerIAMRole:
-        Type: "AWS::IAM::Role"
-        Properties:
-          Path: "/service-role/"
-          AssumeRolePolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Principal:
-                  Service: 'glue.amazonaws.com'
-                Action: 'sts:AssumeRole'
-          ManagedPolicyArns:
-            - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-            - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
-            - "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+        DatabaseName: !Ref DBName
+        CatalogId: !Ref "AWS::AccountId"
+        TableInput:
+          Name: "geodata"
+          TableType: "EXTERNAL_TABLE"
+          StorageDescriptor:
+            Columns:
+              - Name: "col0"
+                Type: "string"
+              - Name: "col1"
+                Type: "double"
+              - Name: "col2"
+                Type: "double"
+            Location: !Sub "s3://${BusinessZoneS3Bucket}/geodata/"
+            InputFormat: "org.apache.hadoop.mapred.TextInputFormat"
+            OutputFormat: "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+            Compressed: false
+            NumberOfBuckets: -1
+            SerdeInfo:
+              SerializationLibrary: "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+              Parameters:
+                "field.delim": ","
+                "skip.header.line.count": 0
+            Parameters:
+              CrawlerSchemaDeserializerVersion: "1.0"
+              CrawlerSchemaSerializerVersion: "1.0"
+              areColumnsQuoted: "false"
 
     ExecuteLambdaRole:
       Type: 'AWS::IAM::Role'
@@ -156,3 +159,5 @@ Parameters:
     Type: String
     Default: meter-data
     Description: Glue catalog database name
+  BusinessZoneS3Bucket:
+    Type: String
