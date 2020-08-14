@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PWD=`pwd`
+HOME=$(pwd)
 
 functions=("upload_result"  \
            "split_batch"  \
@@ -13,11 +13,12 @@ functions=("upload_result"  \
            "crawler/get_glue_crawler_state" \
            "state_topic_subscription" \
            "load_pipeline_parameter" \
+           "outage_info" \
            "check_initial_pipeline_run")
 
 for lambda_folder in ${functions[*]};
 do
    function_name=${lambda_folder////_}
    echo $function_name
-   zip -9jqr "$PWD/packages/${function_name}.zip" "./${lambda_folder}"
+   (cd $lambda_folder; zip -9qr "$HOME/packages/${function_name}.zip" .;cd $HOME)
 done

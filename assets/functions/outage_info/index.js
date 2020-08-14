@@ -31,7 +31,7 @@ exports.handler = async (event, context, callback) => {
 		}
 	} 
 	
-	let dbname = process.env.DB_NAME
+	let dbname = process.env.Db_schema
 	const athenaExpressConfig = {
 		aws,
 		db: dbname,

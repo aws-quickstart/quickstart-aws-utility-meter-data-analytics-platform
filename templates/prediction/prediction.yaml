@@ -369,6 +369,37 @@ Resources:
   #
   # glue database
   #
+  GlueTableGeodata:
+    Type: "AWS::Glue::Table"
+    Properties:
+      DatabaseName: !Ref DBName
+      CatalogId: !Ref "AWS::AccountId"
+      TableInput:
+        Name: "geodata"
+        TableType: "EXTERNAL_TABLE"
+        StorageDescriptor:
+          Columns:
+            - Name: "col0"
+              Type: "string"
+            - Name: "col1"
+              Type: "double"
+            - Name: "col2"
+              Type: "double"
+          Location: !Sub "s3://${BusinessZoneS3Bucket}/geodata/"
+          InputFormat: "org.apache.hadoop.mapred.TextInputFormat"
+          OutputFormat: "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+          Compressed: false
+          NumberOfBuckets: -1
+          SerdeInfo:
+            SerializationLibrary: "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+            Parameters:
+              "field.delim": ","
+              "skip.header.line.count": 0
+          Parameters:
+            CrawlerSchemaDeserializerVersion: "1.0"
+            CrawlerSchemaSerializerVersion: "1.0"
+            areColumnsQuoted: "false"
+
   GlueTableAnomaly:
     Type: "AWS::Glue::Table"
     Properties:
@@ -502,6 +533,8 @@ Parameters:
   TopicArn:
     Type: String
   RedshiftTransportJob:
+    Type: String
+  BusinessZoneS3Bucket:
     Type: String
   WithWeather:
     Description: >-

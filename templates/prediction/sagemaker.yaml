@@ -54,7 +54,7 @@ Resources:
             name="Meter_demo"
 
             cd /home/ec2-user/SageMaker
-            wget https://${QSS3BucketName}.s3.${AWS::URLSuffix}/${QSS3KeyPrefix}/assets/notebooks/mdm_demos.ipynb
+            aws s3 cp s3://${QSS3BucketName}/temp/assets/notebooks/mdm_demos.ipynb .
 
             # Create a Jupyter kernel for your new environment
 
