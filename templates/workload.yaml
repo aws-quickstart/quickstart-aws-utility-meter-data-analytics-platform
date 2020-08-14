@@ -165,7 +165,7 @@ Resources:
         Parameters:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
-          SourceS3Bucket: !GetAtt GlueStack.Outputs.LandingZoneS3Bucket
+          SourceS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
           DBName: !Ref DBName
 
 Mappings: 

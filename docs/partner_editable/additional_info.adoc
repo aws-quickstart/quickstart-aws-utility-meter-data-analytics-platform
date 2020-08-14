@@ -27,6 +27,8 @@ image::../images/2_upload_demo_data_set.png[Upload demo data set]
 +
 image::../images/3_upload_demo_data_set.png[Uploaded demo data set]
 
+WARNING: Landing Zone S3 bucket should only have meter data files. It shouldn't contain any folders, otherwise, the ETL workflow will fail.
+
 //[TODO EC2 command line steps]
 
 === Prepare weather data if you want to use it for training and forecasting
@@ -79,7 +81,7 @@ The CloudFormation parameter "WithWeather" should have been set to 1 to indicate
 
 === Prepare geo-location data
 
-This Quick Start requires geo-location data to be uploaded to the _geodata_ folder in Landing Zone S3 bucket. The S3 path of this location should be _s3://<Landing-zone-s3-bucket-name>/geodata/_. Geo-location data should be in a .CSV file format with the following structure, where all 3 columns are mandatory with comma-separated values.
+This Quick Start requires geo-location data to be uploaded to the _geodata_ folder in Business Zone S3 bucket. You can get the name of the Business zone S3 bucket from the output section of the CloudFormation stack. The S3 path of geo-data location should be _s3://<business-zone-s3-bucket-name>/geodata/_. The data should be in a .CSV file format with the following structure, where all 3 columns are mandatory with comma-separated values.
 
 [cols="1,1", options="header"]
 .Geo-location data schema
