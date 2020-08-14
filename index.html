@@ -1530,6 +1530,18 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 </li>
 </ol>
 </div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Landing Zone S3 bucket should only have meter data files. It shouldn&#8217;t contain any folders, otherwise, the ETL workflow will fail.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_prepare_weather_data_if_you_want_to_use_it_for_training_and_forecasting">Prepare weather data if you want to use it for training and forecasting</h3>
@@ -1628,7 +1640,7 @@ TBLPROPERTIES (
 <div class="sect2">
 <h3 id="_prepare_geo_location_data">Prepare geo-location data</h3>
 <div class="paragraph">
-<p>This Quick Start requires geo-location data to be uploaded to the <em>geodata</em> folder in Landing Zone S3 bucket. The S3 path of this location should be <em>s3://&lt;Landing-zone-s3-bucket-name&gt;/geodata/</em>. Geo-location data should be in a .CSV file format with the following structure, where all 3 columns are mandatory with comma-separated values.</p>
+<p>This Quick Start requires geo-location data to be uploaded to the <em>geodata</em> folder in Business Zone S3 bucket. You can get the name of the Business zone S3 bucket from the output section of the CloudFormation stack. The S3 path of geo-data location should be <em>s3://&lt;business-zone-s3-bucket-name&gt;/geodata/</em>. The data should be in a .CSV file format with the following structure, where all 3 columns are mandatory with comma-separated values.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 6. Geo-location data schema</caption>
@@ -2245,7 +2257,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-14 05:03:33 UTC
+Last updated 2020-08-14 05:29:27 UTC
 </div>
 </div>
 </body>
