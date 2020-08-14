@@ -1,6 +1,6 @@
 === Meter data format
 
-The input meter data format is variable and can be adjusted as described in the section <<additional_info.adoc#Customize this Quick Start,'Customize this Quick Start'>>. However, the sample input data format of the 'London Meter Reads' looks like the following:
+The input meter data format is variable and can be adjusted as described in the section <<Customize this Quick Start,'Customize this Quick Start'>>. However, the sample input data format of the 'London Meter Reads' looks like the following:
 
 [cols="1,1,1", options="header"]
 .Input Schema
@@ -19,7 +19,7 @@ The input meter data format is variable and can be adjusted as described in the 
 
 === Table schemas
 
-The {partner-product-name} Quick Start works with the following internal table schema. This schema will also be used in Amazon Redshift.
+This Quick Start uses the following table schema for ETL job, ML model training and API queries. This schema is also used in Amazon Redshift.
 
 [cols="1,1,1,1", options="header"]
 .Internal Schema
@@ -53,7 +53,7 @@ https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod
 
 ==== Enery usage forecast
 
-Forecast future energy consumption for a specific meter.
+API endpoint and input JSON for energy consumption forecast for a specific meter is described below.
 
 https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast
 
@@ -80,7 +80,7 @@ curl -d '{"Meter_id": "MAC004734","Data_start": "2013-05-01","Data_end": "2013-1
 
 ==== Anomaly detection
 
-Get anomalies for a certain meter in a given time range.
+API endpoint and input JSON format to get energy usage anomaly for a specific meter in a given time range is described below.
 
 https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/anomaly
 
@@ -105,7 +105,7 @@ curl -d '{"Meter_id": "MAC000005","Data_start": "2013-01-01","Data_end": "2013-1
 
 ==== Meter outage details
 
-Returns a list of past outages for the given timeframe, including geo-location data.
+API endpoint and input JSON to get a list of past meter outages for the given timeframe, including geo-location data, is described below.
 
 https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage
 

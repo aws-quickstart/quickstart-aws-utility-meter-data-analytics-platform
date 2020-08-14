@@ -1,13 +1,15 @@
 // If no preperation is required, remove all content from here
 
-==== Prepare your AWS account
+//==== Prepare your AWS account
 
-_Describe any setup required in the AWS account prior to template launch_
+//_Describe any setup required in the AWS account prior to template launch_
 
-==== Prepare your {partner-company-name} account
+//==== Prepare your {partner-company-name} account
 
-_Describe any setup required in the partner portal/account prior to template launch_
+//_Describe any setup required in the partner portal/account prior to template launch_
 
 ==== Prepare for the deployment
 
-_Describe any preparation required to complete the product build, such as obtaining licenses or placing files in S3_
+To see the full capabilities of this Quick Start, make sure you have a sample dataset for utility meters, from an MDM system. Optionally, you can also have weather data, geo location data and CIS data for the corresponding utility meters, to gain better insights.
+
+Details about how you can download a sample dataset and use with this Quick Start is provided in the Post-deployment section, later in this deployment guide.
