@@ -3,12 +3,15 @@
 |Resource |This deployment uses
 
 // Space needed to maintain table headers
-|VPCs |<n>
-|Elastic IP addresses |<n>
-|AWS Identity and Access Management (IAM) security groups |<n>
-|IAM roles |<n>
-|Auto Scaling groups |<n>
-|Application Load Balancers |<n>
-|Network Load Balancers |<n>
-|<type> instances |<n>
+|VPCs |1
+|IAM roles |7
+|Amazon S3 buckets |5
+|AWS Glue crawlers |4
+|AWS Glue jobs |3
+|Amazon Sagemaker instances |1
+|Amazon Sagemaker endpoints |1
+|AWS Lambda functions |9
+|Amazon API gateway endpoints |2
+|Amazon Redshift instances |1
+|AWS Step functions |3
 |===
