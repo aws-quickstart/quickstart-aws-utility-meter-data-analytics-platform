@@ -52,8 +52,15 @@ exports.handler = async (event, context, callback) => {
 	//const sqlQuery = "SELECT * FROM daily WHERE reading_type = '11' AND reading_date_time BETWEEN TIMESTAMP '2010-01-03 09:00:01' AND TIMESTAMP '2010-01-03 10:59:59'";
 
 	try {
-		let results = await athenaExpress.query(sqlQuery);
-		callback(null, results);
+		let queryResults = await athenaExpress.query(sqlQuery);
+
+		let response = {
+			"statusCode": 200,
+			"body": JSON.stringify(queryResults),
+			"isBase64Encoded": false
+		}
+
+		callback(null, response);
 	} catch (error) {
 		callback(error, null);
 	}
