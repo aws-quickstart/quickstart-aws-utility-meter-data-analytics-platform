@@ -27,7 +27,7 @@ image::../images/2_upload_demo_data_set.png[Upload demo data set]
 +
 image::../images/3_upload_demo_data_set.png[Uploaded demo data set]
 
-WARNING: Landing Zone S3 bucket should only have meter data files. It shouldn't contain any folders, otherwise, the ETL workflow will fail.
+WARNING: Landing Zone S3 bucket should only have meter data files. It shouldn't contain any subfolder, otherwise, the ETL workflow will fail.
 
 //[TODO EC2 command line steps]
 

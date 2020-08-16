@@ -888,7 +888,7 @@ collaborated with AWS on the content of the Quick Start.
 <p>Utility Meter Data Analytics Quick Start deploys a serverless architecture to ingest, store, and analyze utility meter data, available from the MDM systems. It creates an AWS Glue Workflow which consists of AWS Glue crawlers, jobs and data catalog, to convert the raw meter data (from MDM systems) into clean and partitioned data. This partitioned data is then consumed by Machine learning pipeline built using AWS Step function and Amazon Sagemaker, to create an ML model. This model is then used by another ML pipeline to batch process the meter data for providing energy usage forecast and usage anomaly information.</p>
 </div>
 <div class="paragraph">
-<p>This Quick Start also creates API endpoints, using Amazon API Gateway, to provide endpoints which can be utilized to get information about the energy usage forecast, anomaly detection and meter outage information. A sample Jupyter notebook is also provided with this Quick Start, which can be used to do data science and data visualizations on the provided sample data set, or run adhoc queries on your own meter data set.</p>
+<p>This Quick Start also creates API endpoints, using Amazon API Gateway, to provide REST APIs which can be utilized to get information about the energy usage forecast, anomaly detection and meter outage information. A sample Jupyter notebook is also provided with this Quick Start, which can be used to do data science and data visualizations on the provided sample data set, or run adhoc queries on your own meter data set.</p>
 </div>
 </div>
 </div>
@@ -969,13 +969,13 @@ AWS Cloud.</p>
 <p>AWS Step function to batch process the meter data for energy usage forecast and anomaly detection.</p>
 </li>
 <li>
-<p>Amazon Sagemaker endpoint for inferencing energy usage forecasting.</p>
+<p>Amazon Sagemaker endpoint for real-time inferencing energy usage forecasting.</p>
 </li>
 <li>
 <p>Jupyter notebook with sample code to perform data science and data visulaization on meter data, directly from AWS S3 buckets.</p>
 </li>
 <li>
-<p>AWS Lambda functions to query Amazon Athena or Amazon Sagemaker endpoint, to provide API query results</p>
+<p>AWS Lambda functions to query S3 via Amazon Athena or invoke Amazon Sagemaker endpoint, to provide API query results</p>
 </li>
 <li>
 <p>Amazon API Gateway endpoint to get information about energy usage forecast, anomaly detection and meter outage information.</p>
@@ -1062,7 +1062,7 @@ Cloud.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Sagemaker instances</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Sagemaker notebook instances</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
@@ -1075,7 +1075,7 @@ Cloud.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Amazon API gateway endpoints</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift instances</p></td>
@@ -1537,7 +1537,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Landing Zone S3 bucket should only have meter data files. It shouldn&#8217;t contain any folders, otherwise, the ETL workflow will fail.
+Landing Zone S3 bucket should only have meter data files. It shouldn&#8217;t contain any subfolder, otherwise, the ETL workflow will fail.
 </td>
 </tr>
 </table>
@@ -2111,8 +2111,6 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
   "Meter_id": meter_id,
   "Data_start": start,
   "Data_end": end,
-  "Forecast_period": period,
-  "With_weather_data": withweather,
   "ML_endpoint_name": ML_endpoint
 }</code></pre>
 </div>
@@ -2120,7 +2118,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <div class="listingblock">
 <div class="title">example curl command</div>
 <div class="content">
-<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl -d '{"Meter_id": "MAC004734","Data_start": "2013-05-01","Data_end": "2013-10-01","Forecast_period": 7,"With_weather_data": 0,"ML_endpoint_name": "ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89"}' \
+<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl -d '{"Meter_id": "MAC004734","Data_start": "2013-05-01","Data_end": "2013-10-01","ML_endpoint_name": "ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89"}' \
      -H "Content-Type: application/json" \
      -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast</code></pre>
 </div>
@@ -2257,7 +2255,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-15 12:13:03 UTC
+Last updated 2020-08-16 21:54:20 UTC
 </div>
 </div>
 </body>

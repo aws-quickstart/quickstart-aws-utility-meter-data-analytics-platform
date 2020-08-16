@@ -64,8 +64,6 @@ https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast
   "Meter_id": meter_id,
   "Data_start": start,
   "Data_end": end,
-  "Forecast_period": period,
-  "With_weather_data": withweather,
   "ML_endpoint_name": ML_endpoint
 }
 ----
@@ -73,7 +71,7 @@ https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast
 .example curl command
 [source,shell script]
 ----
-curl -d '{"Meter_id": "MAC004734","Data_start": "2013-05-01","Data_end": "2013-10-01","Forecast_period": 7,"With_weather_data": 0,"ML_endpoint_name": "ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89"}' \
+curl -d '{"Meter_id": "MAC004734","Data_start": "2013-05-01","Data_end": "2013-10-01","ML_endpoint_name": "ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89"}' \
      -H "Content-Type: application/json" \
      -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast
 ----
