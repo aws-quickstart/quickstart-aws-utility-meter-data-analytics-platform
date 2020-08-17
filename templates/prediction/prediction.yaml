@@ -235,13 +235,15 @@ Resources:
   SplitBatchFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Timeout: 180
+      Timeout: 300
       CodeUri:
         Bucket: !Ref QSS3BucketName
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/split_batch.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Layers:
+        - !Ref DependencyLayer
 
   PrepareBatchFunction:
     Type: 'AWS::Serverless::Function'
