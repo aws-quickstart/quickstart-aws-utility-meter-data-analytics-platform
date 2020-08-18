@@ -12,6 +12,9 @@ import pandas as pd
 
 from pyathena import connect
 
+REGION = os.environ['AWS_REGION']
+
+
 def lambda_handler(event, context):
     #list index starts from 0
     start       = event['Meter_start'] - 1
@@ -21,8 +24,7 @@ def lambda_handler(event, context):
     s3_bucket   = os.environ['Working_bucket']
     schema = os.environ['Db_schema']
 
-    region = 'us-east-1'
-    connection = connect(s3_staging_dir='s3://{}/'.format(athena_bucket), region_name=region)
+    connection = connect(s3_staging_dir='s3://{}/'.format(athena_bucket), region_name=REGION)
 
     # Todo, more efficient way is to create a meter list table instead of getting it from raw data
     df_meters = pd.read_sql('''select distinct meter_id from "{}".daily order by meter_id'''.format(schema), connection)

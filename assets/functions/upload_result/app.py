@@ -18,6 +18,9 @@ import numpy as np
 
 from pyathena import connect
 
+REGION = os.environ['AWS_REGION']
+
+
 def get_meters(connection, start, end, db_schema):
     selected_households = '''select distinct meter_id
                   from "{}".daily where meter_id between '{}' and '{}' order by meter_id;
@@ -37,8 +40,7 @@ def lambda_handler(event, context):
     FORECAST_PERIOD = event['Forecast_period']
     prediction_length = FORECAST_PERIOD * 24
 
-    region = 'us-east-1'
-    connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
+    connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=REGION)
 
     output = 'meteranalytics/inference/batch_%s_%s/batch.json.out' % (BATCH_START, BATCH_END)
     boto3.Session().resource('s3').Bucket(S3_BUCKET).Object(output).download_file('/tmp/batch.out.json')

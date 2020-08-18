@@ -12,7 +12,10 @@ import boto3, os
 import pandas as pd 
 import numpy as np
 import json
-from pyathena import connect 
+from pyathena import connect
+
+REGION = os.environ['AWS_REGION']
+
     
 def get_weather(connection, start, db_schema):
     weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, temperature,
@@ -70,8 +73,7 @@ def lambda_handler(event, context):
     DATA_START = parameter['Data_start']
     DATA_END = parameter['Data_end']
 
-    region = 'us-east-1'
-    connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
+    connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=REGION)
     query = '''select date_trunc('HOUR', reading_date_time) as datetime, sum(reading_value) as consumption
                 from "{}".daily
                 where meter_id = '{}' and reading_date_time >= timestamp '{}'

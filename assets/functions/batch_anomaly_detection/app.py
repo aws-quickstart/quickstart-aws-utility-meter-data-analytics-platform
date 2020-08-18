@@ -4,7 +4,7 @@ import pandas as pd
 from pyathena import connect
 from fbprophet import Prophet
 
-region = 'us-east-1'
+REGION = os.environ['AWS_REGION']
 
 def weekend(ds):
     ds = pd.to_datetime(ds)
@@ -93,7 +93,7 @@ def lambda_handler(event, context):
     BATCH_END = event['Batch_end']
     DATA_END = event['Data_end']
 
-    connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
+    connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=REGION)
     result = process_batch(BATCH_START, BATCH_END, DATA_END, DB_SCHEMA, connection)
 
     result.to_csv('/tmp/anomaly.csv', index=False)

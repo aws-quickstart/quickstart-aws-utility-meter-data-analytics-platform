@@ -17,6 +17,9 @@ import pandas as pd
 
 from pyathena import connect
 
+REGION = os.environ['AWS_REGION']
+
+
 def write_upload_file(bucket, path, data):
     jsonBuffer = io.StringIO()
     for d in data:
@@ -58,8 +61,7 @@ def lambda_handler(event, context):
     prediction_length = FORECAST_PERIOD * 24
 
 
-    region = 'us-east-1'
-    connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
+    connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=REGION)
 
     meter_samples = get_meters(connection, BATCH_START, BATCH_END, DB_SCHEMA)
 

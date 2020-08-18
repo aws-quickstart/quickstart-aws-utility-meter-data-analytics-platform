@@ -52,7 +52,7 @@ logging.basicConfig(filename=log_filename,level=logging.INFO,format='%(levelname
 # -------------------------------------------
 # S3 UPLOAD
 # -------------------------------------------
-s3 = boto3.resource('s3', region_name='us-east-1')
+s3 = boto3.resource('s3')
 
 # upload all objects in a given directory locally, to a given S3 bucket
 def upload_to_s3(dir, s3bucket, s3path):

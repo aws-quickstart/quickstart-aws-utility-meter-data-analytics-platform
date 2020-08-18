@@ -16,6 +16,8 @@ import pandas as pd
 
 from pyathena import connect
 
+REGION = os.environ['AWS_REGION']
+
 def get_weather(connection, start, schema):
     weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, 
     temperature, apparenttemperature,  humidity
@@ -57,9 +59,7 @@ def lambda_handler(event, context):
     FORECAST_PERIOD = event['Forecast_period']
     prediction_length = FORECAST_PERIOD * 24
 
-    # region should be an environment variable
-    region = 'us-east-1'
-    connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=region)
+    connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=REGION)
 
     meter_samples = get_meters(connection, TRAINING_SAMPLES, DB_SCHEMA)
 
