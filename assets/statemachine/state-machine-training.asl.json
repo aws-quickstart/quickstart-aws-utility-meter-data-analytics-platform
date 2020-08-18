@@ -27,7 +27,7 @@
       "Resource": "arn:aws:states:::sagemaker:createTrainingJob.sync",
       "Parameters": {
         "AlgorithmSpecification": {
-          "TrainingImage": "522234722520.dkr.ecr.us-east-1.amazonaws.com/forecasting-deepar:1",
+          "TrainingImage": "${TrainingImage}/forecasting-deepar:1",
           "TrainingInputMode": "File"
         },
         "OutputDataConfig": {
@@ -85,7 +85,7 @@
         "ModelName.$": "$.ModelName",
         "PrimaryContainer": {
           "Environment": {},
-          "Image": "522234722520.dkr.ecr.us-east-1.amazonaws.com/forecasting-deepar:1",
+          "Image": "${TrainingImage}/forecasting-deepar:1",
           "ModelDataUrl.$": "$['TrainingOutput']['ModelArtifacts']['S3ModelArtifacts']"
         }
       },
