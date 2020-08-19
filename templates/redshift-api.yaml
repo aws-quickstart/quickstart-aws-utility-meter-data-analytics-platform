@@ -38,6 +38,8 @@ Parameters:
     Type: AWS::EC2::Subnet::Id
   Subnet2ID:
     Type: AWS::EC2::Subnet::Id
+  RedshiftSecret:
+    Type: String
 
 Globals:
   Function:
@@ -135,23 +137,6 @@ Resources:
       ServiceName: !Sub com.amazonaws.${AWS::Region}.secretsmanager
       VpcEndpointType: "Interface"
       VpcId: !Ref VPCID
-
-  #
-  # SecretsManager
-  #
-  RedshiftSecret:
-    Type: 'AWS::SecretsManager::Secret'
-    Properties:
-      Name: MySecretForAppB
-      Description: Redshift secret
-      SecretString: '{"username":"meteradmin","password":"MeterAdmin2020!"}'
-
-  SecretRedshiftAttachment:
-    Type: "AWS::SecretsManager::SecretTargetAttachment"
-    Properties:
-      SecretId: !Ref RedshiftSecret
-      TargetId: 'redshift-meter-cluster'
-      TargetType: AWS::Redshift::Cluster
 
   #
   # IAM

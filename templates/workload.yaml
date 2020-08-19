@@ -185,6 +185,29 @@ Resources:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
 
+    ReadshiftApiStack:
+      Type: 'AWS::CloudFormation::Stack'
+      Properties:
+        TemplateURL: !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/redshift-api.yaml'
+          - S3Region:
+              !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket:
+              !If [
+                UsingDefaultBucket,
+                !Sub '${QSS3BucketName}-${AWS::Region}',
+                !Ref QSS3BucketName,
+              ]
+        Parameters:
+          QSS3BucketName: !Ref QSS3BucketName
+          QSS3KeyPrefix: !Ref QSS3KeyPrefix
+          DBName: !Ref DBName
+          RedshiftSecret: !GetAtt RedshiftStack.Outputs.RedshiftSecret
+          Subnet1ID: !Ref Subnet1ID
+          Subnet2ID: !Ref Subnet2ID
+          VPCID: !Ref VPCID
+          RemoteAccessCIDR: !Ref RemoteAccessCIDR
+
 Mappings: 
   MeterCountMap: 
     "1-50000": 
