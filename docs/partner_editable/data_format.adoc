@@ -123,3 +123,17 @@ curl -d '{"startDateTime": "2013-01-03 09:00:01","endDateTime": "2013-01-03 10:5
      -H "Content-Type: application/json" \
      -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage
 ----
+
+==== Aggregation API
+Aggregations get loaded in real time from Amazon Redshift over an API endpoint
+
+consumption aggregations can be done on a daily, weekly or monthly basis for a certain year and meter:
+----
+https://xxxxxx.execute-api.us-east-1.amazonaws.com/consumption/<daily|weekly|monthly>/<year>/<meter_id>
+----
+
+.example curl command for monthly aggregated data:
+[source,shell script]
+----
+curl https://xxxxxx.execute-api.us-east-1.amazonaws.com/consumption/monthly/2013/MAC001595
+----
