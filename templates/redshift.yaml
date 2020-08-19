@@ -114,6 +114,24 @@ Resources:
                   Resource:
                     - '*'
 
+
+    #
+    # SecretsManager
+    #
+    RedshiftSecret:
+      Type: 'AWS::SecretsManager::Secret'
+      Properties:
+        Name: redshift_credentials
+        Description: Redshift secret
+        SecretString: !Sub '{"username":"${MasterUsername}","password":"${MasterUserPassword}"}'
+
+    SecretRedshiftAttachment:
+      Type: "AWS::SecretsManager::SecretTargetAttachment"
+      Properties:
+        SecretId: !Ref RedshiftSecret
+        TargetId: !Ref RedshiftCluster
+        TargetType: AWS::Redshift::Cluster
+
 Outputs:
   StackName:
     Description: 'Stack name'
@@ -141,6 +159,9 @@ Outputs:
   RedshiftSecurityGroupId:
     Description: Redshifit SecurityGroupId
     Value: !GetAtt RedshiftSecurityGroup.GroupId
+  RedshiftSecret:
+    Description: SecretManager secret reference
+    Value: !Ref RedshiftSecret
 
 Parameters:
   MasterUsername:

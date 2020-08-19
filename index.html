@@ -2178,6 +2178,26 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_aggregation_api">Aggregation API</h4>
+<div class="paragraph">
+<p>Aggregations get loaded in real time from Amazon Redshift over an API endpoint</p>
+</div>
+<div class="paragraph">
+<p>consumption aggregations can be done on a daily, weekly or monthly basis for a certain year and meter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>https://xxxxxx.execute-api.us-east-1.amazonaws.com/consumption/&lt;daily|weekly|monthly&gt;/&lt;year&gt;/&lt;meter_id&gt;</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">example curl command for monthly aggregated data:</div>
+<div class="content">
+<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl https://xxxxxx.execute-api.us-east-1.amazonaws.com/consumption/monthly/2013/MAC001595</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2255,7 +2275,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-19 15:32:14 UTC
+Last updated 2020-08-19 17:02:05 UTC
 </div>
 </div>
 </body>
