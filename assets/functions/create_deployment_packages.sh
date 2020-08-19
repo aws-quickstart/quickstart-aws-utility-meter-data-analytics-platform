@@ -2,15 +2,17 @@
 
 HOME=$(pwd)
 
-functions=("upload_result"  \
+functions=(
+           "crawler/trigger_glue_crawler" \
+           "crawler/get_glue_crawler_state" \
+           "redshift/consumption" \
+           "upload_result"  \
            "split_batch"  \
            "prepare_training"  \
            "prepare_batch"  \
            "meter_forecast" \
            "get_anomaly"  \
            "batch_anomaly_detection" \
-           "crawler/trigger_glue_crawler" \
-           "crawler/get_glue_crawler_state" \
            "state_topic_subscription" \
            "load_pipeline_parameter" \
            "outage_info" \
