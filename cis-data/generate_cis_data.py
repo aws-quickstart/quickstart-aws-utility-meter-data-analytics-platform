@@ -10,9 +10,11 @@ import uuid, barnum, json, csv
 # load meter DB
 def load_db():
     # Open db file and load db in memory
-    fh = open("./meter-data/db.json", 'r')
-    db = json.load(fh)
-    
+    meterdata_filename = "../geo-data/london_meters.csv"
+    with open(meterdata_filename, newline='') as meterids_file:
+        reader = csv.reader(meterids_file)
+        db = list(map(lambda row: row[0], reader))
+
     return db
 
 # write csv file
@@ -52,7 +54,7 @@ def generate():
             phone = barnum.create_phone()
 
             # create and print cis data record
-            cis_data_row = [str(uuid.uuid4()), fullname, zipcode, city, state, street, phone, meter['meter_id']]
+            cis_data_row = [str(uuid.uuid4()), fullname, zipcode, city, state, street, phone, meter]
             print(cis_data_row)
             record_list.append(cis_data_row)
     
