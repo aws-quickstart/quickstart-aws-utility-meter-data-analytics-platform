@@ -154,16 +154,16 @@ Resources:
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
 
-  GlueJobCisDataToRedshift:
+  GlueJobImportDemoDataToRedshift:
     Type: "AWS::Glue::Job"
     Properties:
-      Name: !Sub "cis_to_redshift-${AWS::Region}"
+      Name: !Sub "import_demo_data_to_redshift-${AWS::Region}"
       Role: !GetAtt IAMRole.Arn
       ExecutionProperty:
         MaxConcurrentRuns: 1
       Command:
         Name: "glueetl"
-        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/cis_to_redshift.py"
+        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/import_demo_data_to_redshift.py"
         PythonVersion: "3"
       DefaultArguments:
         --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
@@ -174,13 +174,14 @@ Resources:
         --job-language: "python"
         --db_name: !Ref DBName
         --redshift_connection: !Ref GlueConnection
-        --cis-bucket: !Ref CisS3Bucket
+        --cis_bucket: !Sub "${BusinessZoneS3Bucket}/cisdata"
+        --geo_bucket: !Sub "${BusinessZoneS3Bucket}/geodata"
       Connections:
         Connections:
           - !Ref GlueConnection
       MaxRetries: 0
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
 

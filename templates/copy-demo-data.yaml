@@ -13,6 +13,17 @@ Resources:
         Objects:
           - meter-geo-data.csv
 
+    CopyCisData:
+      Type: Custom::CopyArtifacts
+      Properties:
+        ServiceToken: !GetAtt 'CopyDemoDataFunction.Arn'
+        DestBucket: !Ref BusinessZoneS3Bucket
+        DestPrefix: 'cisdata/'
+        SourceBucket: !Ref 'QSS3BucketName'
+        Prefix: !Sub '${QSS3KeyPrefix}assets/data/'
+        Objects:
+          - cis-data.csv
+
     CopyDemoDataRole:
       Type: AWS::IAM::Role
       Properties:
