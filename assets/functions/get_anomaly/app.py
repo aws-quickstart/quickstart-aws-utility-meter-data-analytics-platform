@@ -5,19 +5,28 @@ from pyathena import connect
 
 REGION = os.environ['AWS_REGION']
 
+# expected request: anomaly/{meter_id}?data_start={}&data_end={}&outlier_only={}
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
     DB_SCHEMA = os.environ['Db_schema']
     USE_WEATHER_DATA = os.environ['With_weather_data']
 
-    parameter = event
-    if "body" in event:
-        parameter = json.loads(event["body"])
+    pathParameter = event["pathParameters"]
+    queryParameter = event["queryStringParameters"]
 
-    METER_ID = parameter['Meter_id']
-    DATA_START = parameter['Data_start']
-    DATA_END = parameter['Data_end']
-    OUTLIER_ONLY = parameter['Outlier_only']
+    if ("meter_id" not in pathParameter) \
+            or ("data_start" not in queryParameter) \
+            or ("data_end" not in queryParameter) \
+            or ("outlier_only" not in queryParameter):
+        return {
+            'statusCode': 500,
+            'body': "error: meter_id, data_start, data_end and outlier_only needs to be provided."
+        }
+
+    METER_ID = pathParameter['meter_id']
+    DATA_START = queryParameter['data_start']
+    DATA_END = queryParameter['data_end']
+    OUTLIER_ONLY = queryParameter['outlier_only']
 
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=REGION)
 

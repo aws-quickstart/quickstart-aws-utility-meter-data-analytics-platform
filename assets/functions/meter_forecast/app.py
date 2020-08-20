@@ -58,20 +58,28 @@ def decode_response(response, freq, prediction_time):
     dict_of_samples = {}
     return pd.DataFrame(data={**predictions['quantiles'], **dict_of_samples}, index=prediction_index)
 
-
+# expect request: forecast/{meter_id}?ml_endpoint_name={}&data_start={}&data_end={}
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
     DB_SCHEMA = os.environ['Db_schema']
     USE_WEATHER_DATA = os.environ['With_weather_data']
 
-    parameter = event
-    if "body" in event:
-        parameter = json.loads(event["body"])
+    pathParameter = event["pathParameters"]
+    queryParameter = event["queryStringParameters"]
 
-    METER_ID = parameter['Meter_id']
-    ML_ENDPOINT_NAME = parameter['ML_endpoint_name']
-    DATA_START = parameter['Data_start']
-    DATA_END = parameter['Data_end']
+    if ("meter_id" not in pathParameter) \
+            or ("ml_endpoint_name" not in queryParameter) \
+            or ("data_start" not in queryParameter) \
+            or ("data_end" not in queryParameter):
+        return {
+            'statusCode': 500,
+            'body': "error: meter_id, data_start, data_end and outlier_only needs to be provided."
+        }
+
+    METER_ID = pathParameter['meter_id']
+    ML_ENDPOINT_NAME = queryParameter['ml_endpoint_name']
+    DATA_START = queryParameter['data_start']
+    DATA_END = queryParameter['data_end']
 
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=REGION)
     query = '''select date_trunc('HOUR', reading_date_time) as datetime, sum(reading_value) as consumption

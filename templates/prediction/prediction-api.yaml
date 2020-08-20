@@ -58,6 +58,16 @@ Parameters:
       Name of the glue data catalog database
     Default: meter-data
     Type: String
+  VPCID:
+    Type: AWS::EC2::VPC::Id
+  RemoteAccessCIDR:
+    Type: String
+  Subnet1ID:
+    Type: AWS::EC2::Subnet::Id
+  Subnet2ID:
+    Type: AWS::EC2::Subnet::Id
+  RedshiftSecret:
+    Type: String
 
 Globals:
   Function:
@@ -69,6 +79,15 @@ Globals:
         With_weather_data: !Ref WithWeather
 
 Resources:
+  #
+  # Http API
+  #
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+
+  #
+  # IAM
+  #
   ExecuteLambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -93,6 +112,66 @@ Resources:
                 Action: 'sagemaker:InvokeEndpoint'
                 Resource: '*'
 
+  ExecuteRedshiftLambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 'lambda.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'
+      Policies:
+        - PolicyName: secre_manager_read_access
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "secretsmanager:GetSecretValue"
+                  - "secretsmanager:DescribeSecret"
+                  - "secretsmanager:ListSecrets"
+                  - "kms:Decrypt"
+                Resource: '*'
+
+  #
+  # Lambda
+  #
+  ConsumptionApi:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.lambda_handler
+      CodeUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/redshift_consumption.zip'
+      Description: Lambda function to get consumption for certain meter in different aggregation levels (daily, weekly, monthly)
+      MemorySize: 256
+      Timeout: 180
+      Role: !GetAtt 'ExecuteRedshiftLambdaRole.Arn'
+      Environment:
+        Variables:
+          SECRET_NAME: !Ref RedshiftSecret
+      Layers:
+        - !Ref PostgresLayer
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref LambdaVpcSecurityGroup
+        SubnetIds:
+          - !Ref Subnet1ID
+          - !Ref Subnet2ID
+      Events:
+        ApiEvent:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref HttpApi
+            Method: GET
+            Path: /consumption/{requested_aggregation}/{year}/{meter_id}
+
   AnomalyPredictionApi:
     Type: 'AWS::Serverless::Function'
     Properties:
@@ -109,10 +188,11 @@ Resources:
         - !Ref DependencyLayer
       Events:
         ApiEvent:
-          Type: Api
+          Type: HttpApi
           Properties:
-            Method: post
-            Path: /anomaly
+            ApiId: !Ref HttpApi
+            Method: GET
+            Path: /anomaly/{meter_id}
 
   OutageApi:
     Type: 'AWS::Serverless::Function'
@@ -129,9 +209,10 @@ Resources:
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Events:
         ApiEvent:
-          Type: Api
+          Type: HttpApi
           Properties:
-            Method: post
+            ApiId: !Ref HttpApi
+            Method: GET
             Path: /outage
 
   MeterForecastPredictionApi:
@@ -150,11 +231,29 @@ Resources:
         - !Ref DependencyLayer
       Events:
         ApiEvent:
-          Type: Api
+          Type: HttpApi
           Properties:
-            Method: post
-            Path: /forecast
-  
+            ApiId: !Ref HttpApi
+            Method: GET
+            Path: /forecast/{meter_id}
+
+  #
+  # Dependency Layer
+  #
+  PostgresLayer:
+    Type: 'AWS::Serverless::LayerVersion'
+    Properties:
+      LayerName: !Sub "api-dependencies-${AWS::Region}"
+      Description: Dependencies for sam app
+      ContentUri:
+        Bucket: !Ref QSS3BucketName
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/dependencies/postgres/layer.zip'
+      CompatibleRuntimes:
+        - python3.7
+      LicenseInfo: 'Available under the MIT-0 license.'
+      RetentionPolicy: Retain
+
   DependencyLayer:
     Type: 'AWS::Serverless::LayerVersion'
     Properties:
@@ -168,13 +267,44 @@ Resources:
         - python3.7
       LicenseInfo: 'Available under the MIT-0 license.'
       RetentionPolicy: Retain
-  
-  ConfigLambdaPermission:
-    Type: 'AWS::Lambda::Permission'
+
+  #
+  # Network
+  #
+  LambdaVpcSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
     Properties:
-      Action: lambda:InvokeFunction
-      FunctionName: !Ref MeterForecastPredictionApi
-      Principal: apigateway.amazonaws.com
+      GroupDescription: Security group for Lambda Function
+      VpcId: !Ref VPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: !Ref RemoteAccessCIDR
+          Description: 'Lambda to VPC CIDR'
+
+  SecretManagerVpcEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      PrivateDnsEnabled: true
+      PolicyDocument: '{
+         "Version":"2012-10-17",
+         "Statement":[{
+           "Effect":"Allow",
+           "Principal": "*",
+           "Action": "*",
+           "Resource":"*"
+         }]
+      }'
+      SecurityGroupIds:
+        - !Ref LambdaVpcSecurityGroup
+      SubnetIds:
+        - !Ref Subnet1ID
+        - !Ref Subnet2ID
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.secretsmanager
+      VpcEndpointType: "Interface"
+      VpcId: !Ref VPCID
+
 
 Outputs:
   MeterForecastPredictionApi:

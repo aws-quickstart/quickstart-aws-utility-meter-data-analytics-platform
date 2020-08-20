@@ -8,26 +8,27 @@ const AthenaExpress = require("athena-express"),
     /* has the necessary permission to execute Athena queries 
     /* and store the result in Amazon S3 bucket */
 
+// outage?start_date_time={}&end_date_time={}
 exports.handler = async (event, context, callback) => {
 	
-	let requestBody = {};
+	let queryParameter = {};
 	try {
-		requestBody = JSON.parse(event.body);
+		queryParameter = JSON.parse(event.queryStringParameters);
 	} catch (e) {
 		if (e instanceof TypeError) {
 			console.log("---event doesn't have body attribute---");
 			console.log(event);
 			console.log("--------");
-			requestBody = event;
+			queryParameter = event;
 		}
 		else if (e instanceof Error) {
 			console.log("---event has body attribute in JSON format--")
 			console.log(event);
 			console.log("--------");
 			if (event.body)
-				requestBody = event.body;
+				queryParameter = event.body;
 			else
-				requestBody = event;
+				queryParameter = event;
 		}
 	} 
 	
@@ -44,8 +45,8 @@ exports.handler = async (event, context, callback) => {
 
 
 	console.log(requestBody);
-	let startDateTime = requestBody.startDateTime;
-    let endDateTime = requestBody.endDateTime;
+	let startDateTime = requestBody.start_date_time;
+    let endDateTime = requestBody.end_date_time;
 	
     const sqlQuery = "SELECT d.*, g.col1 as lat, g.col2 as long FROM daily d, geodata g WHERE d.meter_id = g.col0 AND d.reading_type = '" +errorCode+ "' AND d.reading_date_time BETWEEN TIMESTAMP '" +startDateTime+ "' AND TIMESTAMP '" +endDateTime+ "'";
     console.log(sqlQuery);
