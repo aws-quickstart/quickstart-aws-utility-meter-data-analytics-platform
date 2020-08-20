@@ -121,7 +121,7 @@ Resources:
     RedshiftSecret:
       Type: 'AWS::SecretsManager::Secret'
       Properties:
-        Name: redshift_credentials
+        Name: redshift_db_credentials
         Description: Redshift secret
         SecretString: !Sub '{"username":"${MasterUsername}","password":"${MasterUserPassword}"}'
 

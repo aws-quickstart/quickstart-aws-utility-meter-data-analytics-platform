@@ -49,79 +49,45 @@ INT = Interval Reads
 === API inputs and outputs
 
 The API endpoint can be found in the API Gateway Console. The base URL will look similar to the following:
-https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod
+https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/
 
 ==== Enery usage forecast
 
 API endpoint and input JSON for energy consumption forecast for a specific meter is described below.
-
-https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast
-
-.input parameter
-[source,json]
 ----
-{
-  "Meter_id": meter_id,
-  "Data_start": start,
-  "Data_end": end,
-  "ML_endpoint_name": ML_endpoint
-}
+https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/<meter_id>?data_start=<>&data_end=<>&ml_endpoint_name=<>
 ----
 
 .example curl command
 [source,shell script]
 ----
-curl -d '{"Meter_id": "MAC004734","Data_start": "2013-05-01","Data_end": "2013-10-01","ML_endpoint_name": "ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89"}' \
-     -H "Content-Type: application/json" \
-     -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast
+curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/MAC004734?data_start=2013-05-01&data_end=2013-10-01&ml_endpoint_name=ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89
 ----
 
 ==== Anomaly detection
 
 API endpoint and input JSON format to get energy usage anomaly for a specific meter in a given time range is described below.
-
-https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/anomaly
-
-.input parameter
-[source,json]
 ----
-{
-  "Meter_id": meter_id,
-  "Data_start": start,
-  "Data_end": end,
-  "Outlier_only": outlier_only
-}
+https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/anomaly/<meter_id>?data_start=<>&data_end=<>&outlier_only=<>
 ----
 
 .example curl command
 [source,shell script]
 ----
-curl -d '{"Meter_id": "MAC000005","Data_start": "2013-01-01","Data_end": "2013-12-31","Outlier_only":0}' \
-     -H "Content-Type: application/json" \
-     -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/anomaly
+curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/anomaly/MAC000005?data_start=2013-01-01&data_end=2013-12-31&outlier_only=0
 ----
 
 ==== Meter outage details
 
 API endpoint and input JSON to get a list of past meter outages for the given timeframe, including geo-location data, is described below.
-
-https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage
-
-.input parameter
-[source,json]
 ----
-{
-  "startDateTime": start,
-  "endDateTime": end
-}
+https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?startDateTime=<>&endDateTime=<>
 ----
 
 .example curl command
 [source,shell script]
 ----
-curl -d '{"startDateTime": "2013-01-03 09:00:01","endDateTime": "2013-01-03 10:59:59"}' \
-     -H "Content-Type: application/json" \
-     -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage
+curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?start_date_time=2013-01-03 09:00:01&end_date_time=2013-01-03 10:59:59
 ----
 
 ==== Aggregation API

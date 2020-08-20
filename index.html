@@ -1466,7 +1466,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <p>Monitor the status of the stack. When the status is <strong>CREATE_COMPLETE</strong>, the Utility Meter Data Analytics deployment is ready.</p>
 </li>
 <li>
-<p>Use the values displayed in the <strong>Outputs</strong> tab for the stack, as shown in figure 2, to view the created resources.</p>
+<p>Use the values displayed in the <strong>Outputs</strong> tab for the stack, as shown in <a href="#cfn_outputs">Utility Meter Data Analytics outputs after successful deployment</a>, to view the created resources.</p>
 </li>
 </ol>
 </div>
@@ -2094,33 +2094,22 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <h3 id="_api_inputs_and_outputs">API inputs and outputs</h3>
 <div class="paragraph">
 <p>The API endpoint can be found in the API Gateway Console. The base URL will look similar to the following:
-<a href="https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod" class="bare">https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod</a></p>
+<a href="https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/" class="bare">https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/</a></p>
 </div>
 <div class="sect3">
 <h4 id="_enery_usage_forecast">Enery usage forecast</h4>
 <div class="paragraph">
 <p>API endpoint and input JSON for energy consumption forecast for a specific meter is described below.</p>
 </div>
-<div class="paragraph">
-<p><a href="https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast" class="bare">https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast</a></p>
-</div>
 <div class="listingblock">
-<div class="title">input parameter</div>
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
-  "Meter_id": meter_id,
-  "Data_start": start,
-  "Data_end": end,
-  "ML_endpoint_name": ML_endpoint
-}</code></pre>
+<pre>https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/&lt;meter_id&gt;?data_start=&lt;&gt;&amp;data_end=&lt;&gt;&amp;ml_endpoint_name=&lt;&gt;</pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">example curl command</div>
 <div class="content">
-<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl -d '{"Meter_id": "MAC004734","Data_start": "2013-05-01","Data_end": "2013-10-01","ML_endpoint_name": "ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89"}' \
-     -H "Content-Type: application/json" \
-     -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/forecast</code></pre>
+<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/MAC004734?data_start=2013-05-01&amp;data_end=2013-10-01&amp;ml_endpoint_name=ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89</code></pre>
 </div>
 </div>
 </div>
@@ -2129,26 +2118,15 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <div class="paragraph">
 <p>API endpoint and input JSON format to get energy usage anomaly for a specific meter in a given time range is described below.</p>
 </div>
-<div class="paragraph">
-<p><a href="https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/anomaly" class="bare">https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/anomaly</a></p>
-</div>
 <div class="listingblock">
-<div class="title">input parameter</div>
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
-  "Meter_id": meter_id,
-  "Data_start": start,
-  "Data_end": end,
-  "Outlier_only": outlier_only
-}</code></pre>
+<pre>https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/anomaly/&lt;meter_id&gt;?data_start=&lt;&gt;&amp;data_end=&lt;&gt;&amp;outlier_only=&lt;&gt;</pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">example curl command</div>
 <div class="content">
-<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl -d '{"Meter_id": "MAC000005","Data_start": "2013-01-01","Data_end": "2013-12-31","Outlier_only":0}' \
-     -H "Content-Type: application/json" \
-     -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/anomaly</code></pre>
+<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/anomaly/MAC000005?data_start=2013-01-01&amp;data_end=2013-12-31&amp;outlier_only=0</code></pre>
 </div>
 </div>
 </div>
@@ -2157,24 +2135,15 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <div class="paragraph">
 <p>API endpoint and input JSON to get a list of past meter outages for the given timeframe, including geo-location data, is described below.</p>
 </div>
-<div class="paragraph">
-<p><a href="https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage" class="bare">https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage</a></p>
-</div>
 <div class="listingblock">
-<div class="title">input parameter</div>
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
-  "startDateTime": start,
-  "endDateTime": end
-}</code></pre>
+<pre>https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?startDateTime=&lt;&gt;&amp;endDateTime=&lt;&gt;</pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">example curl command</div>
 <div class="content">
-<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl -d '{"startDateTime": "2013-01-03 09:00:01","endDateTime": "2013-01-03 10:59:59"}' \
-     -H "Content-Type: application/json" \
-     -X POST https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/Prod/outage</code></pre>
+<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?start_date_time=2013-01-03 09:00:01&amp;end_date_time=2013-01-03 10:59:59</code></pre>
 </div>
 </div>
 </div>
@@ -2275,7 +2244,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-19 17:02:05 UTC
+Last updated 2020-08-20 18:52:07 UTC
 </div>
 </div>
 </body>
