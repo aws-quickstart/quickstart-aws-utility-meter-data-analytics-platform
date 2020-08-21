@@ -762,6 +762,11 @@ table.tableblock .title,
 table p {
   margin: 0rem;
 }
+
+/* Add border around hyperlink images */
+a img {
+    border: 1px solid #A4A4A4;
+}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -1089,7 +1094,7 @@ Cloud.</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_supported_regions">Supported regions</h4>
+<h4 id="_supported_regions">Supported Regions</h4>
 <div class="paragraph">
 <p>The following regions are currently supported by this Quick Start.</p>
 </div>
@@ -1472,7 +1477,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 </div>
 <div id="cfn_outputs" class="imageblock">
 <div class="content">
-<img src="images/cfn_outputs.png" alt="cfn_outputs" width="648" height="439">
+<a class="image" href="images/cfn_outputs.png"><img src="images/cfn_outputs.png" alt="cfn_outputs" width="648" height="439"></a>
 </div>
 <div class="title">Figure 2. Utility Meter Data Analytics outputs after successful deployment</div>
 </div>
@@ -2143,7 +2148,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <div class="listingblock">
 <div class="title">example curl command</div>
 <div class="content">
-<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?start_date_time=2013-01-03 09:00:01&amp;end_date_time=2013-01-03 10:59:59</code></pre>
+<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?start_date_time=2013-01-03+09:00:01&amp;end_date_time=2013-01-03+10:59:59</code></pre>
 </div>
 </div>
 </div>
@@ -2244,7 +2249,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-20 18:52:07 UTC
+Last updated 2020-08-21 10:39:44 UTC
 </div>
 </div>
 </body>
