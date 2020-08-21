@@ -87,7 +87,7 @@ https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?startDateTime=<>&end
 .example curl command
 [source,shell script]
 ----
-curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?start_date_time=2013-01-03 09:00:01&end_date_time=2013-01-03 10:59:59
+curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?start_date_time=2013-01-03+09:00:01&end_date_time=2013-01-03+10:59:59
 ----
 
 ==== Aggregation API
