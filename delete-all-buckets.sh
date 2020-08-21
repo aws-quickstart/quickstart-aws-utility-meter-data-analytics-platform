@@ -12,7 +12,11 @@ do
   if  [[ $bucket == meter-data-* ]] || [[ $bucket == aws-glue-* ]] ;
   then
       echo "Deleting bucket: $bucket"
-      sh delete-buckets.sh $bucket
+      {
+        sh delete-buckets.sh $bucket
+      } || {
+        echo "Error deleting bucket: $bucket"
+      }
   fi
 
 done
