@@ -21,7 +21,7 @@ create_table_sql = "create table if not exists daily("\
                         "reading_date_time	timestamp       , "\
                         "reading_type	    VARCHAR(32)     , "\
                         "date_str	        VARCHAR(16)      )"\
-                        "DISTKEY(meter_id) SORTKEY(meter_id, year);"
+                        "DISTKEY(meter_id) SORTKEY(year, meter_id);"
 
 ## @params: [TempDir, JOB_NAME]
 args = getResolvedOptions(sys.argv, ['TempDir','JOB_NAME', 'db_name', 'redshift_connection', 'temp_workflow_bucket'])
