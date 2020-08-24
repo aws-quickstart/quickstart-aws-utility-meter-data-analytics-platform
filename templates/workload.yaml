@@ -126,7 +126,7 @@ Resources:
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
           DBName: !Ref DBName
           TopicArn: !Ref WorkflowStateTopic
-          RedshiftTransportJob: !GetAtt GlueStack.Outputs.RedshiftTransportJob
+          GlueJobNameTrigger: !GetAtt GlueStack.Outputs.JobNameTransformCleanToBusiness
           WithWeather: !Ref WithWeather
           BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
 

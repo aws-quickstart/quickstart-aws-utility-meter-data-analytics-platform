@@ -17,7 +17,7 @@ job.init(args['JOB_NAME'], args)
 tableName = args['table_name'].replace("-", "_")
 cleanedMeterDataSource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = tableName, transformation_ctx = "cleanedMeterDataSource")
 
-business_zone_bucket_path_daily = "s3://" + args['business_zone_bucket'] + "/daily"
+business_zone_bucket_path_daily = "s3a://" + args['business_zone_bucket'] + "/daily"
 
 businessZone = glueContext.write_dynamic_frame.from_options(frame = cleanedMeterDataSource, \
     connection_type = "s3", \
