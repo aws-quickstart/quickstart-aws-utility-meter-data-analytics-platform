@@ -269,7 +269,7 @@ Resources:
       Environment:
         Variables:
           ml_pipeline_trigger_state_machine: !Ref MlPipelineTriggerStateMachine
-          glue_job_name: !Ref RedshiftTransportJob
+          glue_job_name: !Ref GlueJobNameTrigger
       Events:
         SnsTrigger:
           Type: SNS
@@ -580,7 +580,7 @@ Parameters:
     Type: String
   TopicArn:
     Type: String
-  RedshiftTransportJob:
+  GlueJobNameTrigger:
     Type: String
   BusinessZoneS3Bucket:
     Type: String

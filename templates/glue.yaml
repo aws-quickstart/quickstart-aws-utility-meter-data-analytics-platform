@@ -64,7 +64,7 @@ Resources:
         DeleteBehavior: "DEPRECATE_IN_DATABASE"
       TablePrefix: "aggregated_"
 
-  GlueCrawler4:
+  GlueCrawler4BusinessDailyCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
       Name: !Sub 'meter-data-business-daily-crawler-${AWS::Region}'
@@ -77,7 +77,7 @@ Resources:
         UpdateBehavior: "LOG"
         DeleteBehavior: "DEPRECATE_IN_DATABASE"
 
-  GlueCrawler5:
+  GlueCrawler5CleanCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
       Name: !Sub "meter-data-clean-crawler-${AWS::Region}"
@@ -90,7 +90,7 @@ Resources:
         UpdateBehavior: "LOG"
         DeleteBehavior: "DEPRECATE_IN_DATABASE"
 
-  GlueCrawler6:
+  GlueCrawler6RawCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
       Name: !Sub "meter-data-raw-crawler-${AWS::Region}"
@@ -127,6 +127,7 @@ Resources:
         --enable-continuous-cloudwatch-log: "true"
         --enable-continuous-log-filter: "true"
         --job-language: "python"
+        --enable-s3-parquet-optimized-committer : true
         --db_name: !Ref DBName
         --business_zone_bucket: !Ref BusinessZoneS3Bucket
         --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
@@ -153,6 +154,7 @@ Resources:
         --enable-continuous-cloudwatch-log: "true"
         --enable-continuous-log-filter: "true"
         --job-language: "python"
+        --enable-s3-parquet-optimized-committer : true
         --db_name: !Ref DBName
         --business_zone_bucket: !Ref BusinessZoneS3Bucket
         --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
@@ -180,6 +182,7 @@ Resources:
         --enable-continuous-log-filter: "true"
         --job-language: "python"
         --db_name: !Ref DBName
+        --enable-s3-parquet-optimized-committer : true
         --business_zone_bucket: !Ref BusinessZoneS3Bucket
         --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
       MaxRetries: 0
@@ -188,7 +191,7 @@ Resources:
       GlueVersion: "1.0"
       MaxCapacity: !Ref DPU
 
-  GlueJob4:
+  GlueJob4BusinessDailyToRedshift:
     Type: "AWS::Glue::Job"
     Properties:
       Name: !Sub "business_daily_to_redshift-${AWS::Region}"
@@ -206,6 +209,7 @@ Resources:
         --enable-continuous-log-filter: "true"
         --job-bookmark-option: "job-bookmark-enable"
         --job-language: "python"
+        --enable-s3-parquet-optimized-committer : true
         --db_name: !Ref DBName
         --redshift_connection: !Ref GlueConnection
         --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
@@ -218,7 +222,7 @@ Resources:
       Timeout: 2880
       GlueVersion: "1.0"
 
-  GlueJob5:
+  GlueJob5CleanToBusiness:
     Type: "AWS::Glue::Job"
     Properties:
       Name: !Sub "transform_clean_to_business_partition-${AWS::Region}"
@@ -236,6 +240,7 @@ Resources:
         --enable-continuous-log-filter: "true"
         --job-bookmark-option: "job-bookmark-enable"
         --job-language: "python"
+        --enable-s3-parquet-optimized-committer : true
         --db_name: !Ref DBName
         --table_name: !Ref CleanZoneS3Bucket
         --business_zone_bucket: !Ref BusinessZoneS3Bucket
@@ -246,7 +251,7 @@ Resources:
       Timeout: 2880
       GlueVersion: "1.0"
 
-  GlueJob6:
+  GlueJob6RawToClean:
     Type: "AWS::Glue::Job"
     Properties:
       Name: !Sub "transform_raw_to_clean-${AWS::Region}"
@@ -266,6 +271,7 @@ Resources:
         --enable-continuous-log-filter: "true"
         --job-bookmark-option: "job-bookmark-enable"
         --job-language: "python"
+        --enable-s3-parquet-optimized-committer : true
         --db_name: !Ref DBName
         --table_name: !If
           - CreateLZS3BucketCondition
@@ -315,7 +321,7 @@ Resources:
     Type: "AWS::Glue::Trigger"
     Properties:
       Actions:
-        - CrawlerName: !Ref GlueCrawler6
+        - CrawlerName: !Ref GlueCrawler6RawCrawler
       Name: !Sub "ScheduledStart-${AWS::Region}"
       Type: SCHEDULED
       Description: "Scheduled trigger, 9am each day"
@@ -326,7 +332,7 @@ Resources:
     Type: "AWS::Glue::Trigger"
     Properties:
       Actions:
-        - CrawlerName: !Ref GlueCrawler5
+        - CrawlerName: !Ref GlueCrawler5CleanCrawler
       Name: !Sub "clean-data-crawler-${AWS::Region}"
       Type: "CONDITIONAL"
       StartOnCreation: true
@@ -334,7 +340,7 @@ Resources:
       Predicate:
         Conditions:
           - LogicalOperator: "EQUALS"
-            JobName: !Ref GlueJob6
+            JobName: !Ref GlueJob6RawToClean
             State: "SUCCEEDED"
 
   GlueTrigger3:
@@ -345,21 +351,11 @@ Resources:
       StartOnCreation: true
       WorkflowName: !Ref GlueWorkflow
       Actions:
-        - JobName: !Ref GlueJob4
+        - JobName: !Ref GlueJob4BusinessDailyToRedshift
       Predicate:
-        Logical: "AND"
         Conditions:
           - LogicalOperator: "EQUALS"
-            CrawlerName: !Ref GlueCrawler4
-            CrawlState: "SUCCEEDED"
-          - LogicalOperator: "EQUALS"
-            CrawlerName: !Ref GlueCrawler
-            CrawlState: "SUCCEEDED"
-          - LogicalOperator: "EQUALS"
-            CrawlerName: !Ref GlueCrawler3
-            CrawlState: "SUCCEEDED"
-          - LogicalOperator: "EQUALS"
-            CrawlerName: !Ref GlueCrawler2
+            CrawlerName: !Ref GlueCrawler4BusinessDailyCrawler
             CrawlState: "SUCCEEDED"
 
   GlueTrigger4:
@@ -370,11 +366,11 @@ Resources:
       StartOnCreation: true
       WorkflowName: !Ref GlueWorkflow
       Actions:
-        - CrawlerName: !Ref GlueCrawler4
+        - CrawlerName: !Ref GlueCrawler4BusinessDailyCrawler
       Predicate:
         Conditions:
           - LogicalOperator: "EQUALS"
-            JobName: !Ref GlueJob5
+            JobName: !Ref GlueJob5CleanToBusiness
             State: "SUCCEEDED"
 
   GlueTrigger5:
@@ -385,11 +381,11 @@ Resources:
       StartOnCreation: true
       WorkflowName: !Ref GlueWorkflow
       Actions:
-        - JobName: !Ref GlueJob5
+        - JobName: !Ref GlueJob5CleanToBusiness
       Predicate:
         Conditions:
           - LogicalOperator: "EQUALS"
-            CrawlerName: !Ref GlueCrawler5
+            CrawlerName: !Ref GlueCrawler5CleanCrawler
             CrawlState: "SUCCEEDED"
 
   GlueTrigger6:
@@ -421,7 +417,7 @@ Resources:
         Conditions:
           -
             LogicalOperator: "EQUALS"
-            CrawlerName: !Ref GlueCrawler4
+            CrawlerName: !Ref GlueCrawler4BusinessDailyCrawler
             CrawlState: "SUCCEEDED"
 
   GlueTrigger8:
@@ -453,7 +449,7 @@ Resources:
         Conditions:
           -
             LogicalOperator: "EQUALS"
-            CrawlerName: !Ref GlueCrawler4
+            CrawlerName: !Ref GlueCrawler4BusinessDailyCrawler
             CrawlState: "SUCCEEDED"
 
   GlueTrigger10:
@@ -464,11 +460,11 @@ Resources:
       StartOnCreation: true
       WorkflowName: !Ref GlueWorkflow
       Actions:
-        - JobName: !Ref GlueJob6
+        - JobName: !Ref GlueJob6RawToClean
       Predicate:
         Conditions:
           - LogicalOperator: "EQUALS"
-            CrawlerName: !Ref GlueCrawler6
+            CrawlerName: !Ref GlueCrawler6RawCrawler
             CrawlState: "SUCCEEDED"
 
   GlueTrigger11:
@@ -500,7 +496,7 @@ Resources:
         Conditions:
           -
             LogicalOperator: "EQUALS"
-            CrawlerName: !Ref GlueCrawler4
+            CrawlerName: !Ref GlueCrawler4BusinessDailyCrawler
             CrawlState: "SUCCEEDED"
 
   IAMManagedPolicy:
@@ -680,8 +676,8 @@ Outputs:
     Value: !Ref BusinessZoneS3Bucket
   GlueWorkflow:
     Value: !Ref GlueWorkflow
-  RedshiftTransportJob:
-    Value: !Ref GlueJob4
+  JobNameTransformCleanToBusiness:
+    Value: !Ref GlueJob4BusinessDailyToRedshift
 
 Parameters:
   MasterUsername:
