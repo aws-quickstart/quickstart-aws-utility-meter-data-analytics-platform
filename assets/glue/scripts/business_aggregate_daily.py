@@ -36,11 +36,12 @@ def aggregate_and_write_data_to_s3(bucket_path, push_down_predicate=""):
         .agg(sum("reading_value").alias("aggregated_consumption"))
 
     daily_aggregated_interval_reads \
+        .repartition("date_str") \
         .write \
         .mode("overwrite") \
-        .format("parquet") \
+        .option("compression", "snappy") \
         .partitionBy("date_str") \
-        .save(bucket_path)
+        .parquet(bucket_path)
 
 
 ## @params: [JOB_NAME, db_name, business_zone_bucket, temp_workflow_bucket]
