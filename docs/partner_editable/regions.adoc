@@ -1,3 +1,6 @@
 - us-east-1 (N. Virginia)
 - us-east-2 (Ohio)
 - us-west-2 (Oregon)
+- eu-central-1 (Frankfurt)
+- ca-central-1 (Canda)
+- ap-south-1 (Mumbai)
