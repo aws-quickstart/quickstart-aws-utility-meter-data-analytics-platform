@@ -2,6 +2,6 @@
 // Identify your target audience and explain how/why they would use this Quick Start.
 //Avoid borrowing text from third-party websites (copying text from AWS service documentation is fine). Also, avoid marketing-speak, focusing instead on the technical aspect.
 
-This Quick Start reference deployment guide provides step-by-step instructions for deploying {partner-product-name} on the AWS Cloud.
+This Quick Start reference deployment guide provides step-by-step instructions for deploying a {partner-product-name} solution on the AWS Cloud.
 
-This Quick Start is for teams and organizations who are looking to gain insights from their Utility meter data, available from the MDM systems.
+This Quick Start is for teams and organizations who are looking to gain insights from their Utility meter data, available from their Meter Data Management (MDM) or similar systems. While the impetus for this Quick Start was the increasing number of customers asking for best practice advice to store and analyze Smart Meter data, older types of meter data can be accommodated as well.

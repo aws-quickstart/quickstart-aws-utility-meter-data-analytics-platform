@@ -1,6 +1,6 @@
 :quickstart-project-name: quickstart-aws-utility-meter-data-analytics-platform
 :partner-product-name: Utility Meter Data Analytics
-:partner-company-name:
+//:partner-company-name:
 :doc-month: August
 :doc-year: 2020
 :partner-contributors:

@@ -867,7 +867,7 @@ report bugs, or submit feature ideas for this Quick Start.
 </table>
 </div>
 <div class="paragraph text-left">
-<p>This Quick Start was created by  in collaboration with Amazon Web Services (AWS). <a href="http://aws.amazon.com/quickstart/" target="_blank" rel="noopener">Quick Starts</a> are automated reference deployments that use AWS CloudFormation templates to deploy key technologies on AWS, following AWS best practices.</p>
+<p>This Quick Start was created by Amazon Web Services (AWS). <a href="http://aws.amazon.com/quickstart/" target="_blank" rel="noopener">Quick Starts</a> are automated reference deployments that use AWS CloudFormation templates to deploy key technologies on AWS, following AWS best practices.</p>
 </div>
 </div>
 </div>
@@ -875,10 +875,10 @@ report bugs, or submit feature ideas for this Quick Start.
 <h2 id="_overview">Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This Quick Start reference deployment guide provides step-by-step instructions for deploying Utility Meter Data Analytics on the AWS Cloud.</p>
+<p>This Quick Start reference deployment guide provides step-by-step instructions for deploying a Utility Meter Data Analytics solution on the AWS Cloud.</p>
 </div>
 <div class="paragraph">
-<p>This Quick Start is for teams and organizations who are looking to gain insights from their Utility meter data, available from the MDM systems.</p>
+<p>This Quick Start is for teams and organizations who are looking to gain insights from their Utility meter data, available from their Meter Data Management (MDM) or similar systems. While the impetus for this Quick Start was the increasing number of customers asking for best practice advice to store and analyze Smart Meter data, older types of meter data can be accommodated as well.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -900,7 +900,7 @@ collaborated with AWS on the content of the Quick Start.
 <h2 id="_utility_meter_data_analytics_on_aws">Utility Meter Data Analytics on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Utility Meter Data Analytics Quick Start deploys a serverless architecture to ingest, store, and analyze utility meter data, available from the MDM systems. It creates an AWS Glue Workflow which consists of AWS Glue crawlers, jobs and data catalog, to convert the raw meter data (from MDM systems) into clean and partitioned data. This partitioned data is then consumed by Machine learning pipeline built using AWS Step function and Amazon Sagemaker, to create an ML model. This model is then used by another ML pipeline to batch process the meter data for providing energy usage forecast and usage anomaly information.</p>
+<p>Utility Meter Data Analytics Quick Start deploys a serverless architecture to ingest, store, and analyze utility meter data, available from the MDM systems. It creates an AWS Glue Workflow which consists of AWS Glue crawlers, jobs and data catalog, to convert the raw meter data (from MDM systems) into clean and partitioned data. This partitioned data is then consumed by Machine learning pipeline built using AWS Step function and Amazon Sagemaker, to create an ML model. This model is then used by another ML pipeline to batch process the meter data for providing energy usage forecast and usage anomaly detection.</p>
 </div>
 <div class="paragraph">
 <p>This Quick Start also creates API endpoints, using Amazon API Gateway, to provide REST APIs which can be utilized to get information about the energy usage forecast, anomaly detection and meter outage information. A sample Jupyter notebook is also provided with this Quick Start, which can be used to do data science and data visualizations on the provided sample data set, or run adhoc queries on your own meter data set.</p>
@@ -963,10 +963,10 @@ AWS Cloud.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>AWS S3 buckets to store raw, clean and partitioned (business) meter data.</p>
+<p>AWS S3 buckets to store raw, clean and business meter data.</p>
 </li>
 <li>
-<p>AWS Glue crawlers, and Glue Jobs to transform crawl, transform and convert incoming raw meter data into cleaned data, in desired format and partitioned appropriately.</p>
+<p>AWS Glue crawlers, and Glue Jobs to transform crawl, transform and convert incoming raw meter data into cleaned data, in desired format and partitioned appropriately into "curated" business data.</p>
 </li>
 <li>
 <p>AWS Glue workflow to orchestrate various triggers, crawlers and jobs.</p>
@@ -987,7 +987,7 @@ AWS Cloud.</p>
 <p>Amazon Sagemaker endpoint for real-time inferencing energy usage forecasting.</p>
 </li>
 <li>
-<p>Jupyter notebook with sample code to perform data science and data visulaization on meter data, directly from AWS S3 buckets.</p>
+<p>Jupyter notebook with sample code to perform data science and data visualization on meter data, directly from AWS S3 buckets.</p>
 </li>
 <li>
 <p>AWS Lambda functions to query S3 via Amazon Athena or invoke Amazon Sagemaker endpoint, to provide API query results</p>
@@ -1115,6 +1115,15 @@ Cloud.</p>
 </li>
 <li>
 <p>us-west-2 (Oregon)</p>
+</li>
+<li>
+<p>eu-central-1 (Frankfurt)</p>
+</li>
+<li>
+<p>ca-central-1 (Canda)</p>
+</li>
+<li>
+<p>ap-south-1 (Mumbai)</p>
 </li>
 </ul>
 </div>
@@ -1495,7 +1504,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <h2 id="_post_deployment_steps">Post deployment steps</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To see the capabilities of the QuickStart, follow the below steps to use dataset of meter reads from the City of London, between 2011 to 2014.</p>
+<p>To see the capabilities of the QuickStart, follow the below steps to use dataset of meter reads from the City of London, between 2011 to 2014. The <a href="#_customize_this_quick_start"><em>Customize this Quick Start</em></a> section explains how to edit the raw data ETL script to work with your own meter data.</p>
 </div>
 <div class="sect2">
 <h3 id="_download_sample_dataset">Download Sample Dataset</h3>
@@ -2454,7 +2463,7 @@ and to share your customizations with others.</p>
 </div>
 <hr>
 <div class="paragraph">
-<p>© 2020, Amazon Web Services Inc., or its affiliates, and . All rights reserved.</p>
+<p>© 2020, Amazon Web Services Inc., or its affiliates, and {partner-company-name}. All rights reserved.</p>
 </div>
 <div class="sect3">
 <h4 id="_notices">Notices</h4>
@@ -2470,7 +2479,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-27 15:15:44 UTC
+Last updated 2020-08-27 19:32:08 UTC
 </div>
 </div>
 </body>
