@@ -46,14 +46,29 @@ AGG = Aggregated Reads
 
 INT = Interval Reads
 
-=== API inputs and outputs
+==== Energy usage forecast
 
-The API endpoint can be found in the API Gateway Console. The base URL will look similar to the following:
-https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/
+The Energy forecast endpoint that returns a list of future consumptions based on the trained ml model.
 
-==== Enery usage forecast
+[%header,cols=2*]
+|===
+|Parameter
+|Description
 
-API endpoint and input JSON for energy consumption forecast for a specific meter is described below.
+|meter_id
+|The ID of the meter for which the forecast should be made.
+
+|data_start
+|Start date of meter reads that should be used a basis for the prediction
+
+|data_end
+|End date of meter reads that should be used a basis for the prediction
+
+|ml_endpoint_name
+|The ML endpoint created by sage maker.
+|===
+
+.url structure
 ----
 https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/<meter_id>?data_start=<>&data_end=<>&ml_endpoint_name=<>
 ----
@@ -64,9 +79,49 @@ https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/<meter_id>?data_st
 curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/MAC004734?data_start=2013-05-01&data_end=2013-10-01&ml_endpoint_name=ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89
 ----
 
+.response
+[source, json]
+----
+{
+   "consumption":{
+      "1380585600000":0.7684248686,
+      "1380589200000":0.4294368029,
+      "1380592800000":0.3510326743,
+      "1380596400000":0.2964941561,
+      "1380600000000":0.3064994216,
+      "1380603600000":0.4563854337,
+      "1380607200000":0.6386958361,
+      "1380610800000":0.5963768363,
+      "1380614400000":0.5587928891,
+      "1380618000000":0.4409750104,
+      "1380621600000":0.4719932675
+   }
+}
+----
+
 ==== Anomaly detection
 
-API endpoint and input JSON format to get energy usage anomaly for a specific meter in a given time range is described below.
+The endpoint returns a list of energy usage anomalies for a specific meter in a given time range.
+
+[%header,cols=2*]
+|===
+|Parameter
+|Description
+
+|meter_id
+|The ID of the meter for which anomalies should be determined.
+
+|data_start
+|Start date of the anomaly detection.
+
+|data_end
+|End date of the anomaly detection.
+
+|outlier_only
+|Defines if only outliers should be returned or all data for this certain meter.
+|===
+
+.url structure
 ----
 https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/anomaly/<meter_id>?data_start=<>&data_end=<>&outlier_only=<>
 ----
@@ -77,11 +132,67 @@ https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/anomaly/<meter_id>?data_sta
 curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/anomaly/MAC000005?data_start=2013-01-01&data_end=2013-12-31&outlier_only=0
 ----
 
+The output returns a list of reading dates in which anomalies are marked on a daily basis.
+
+.response
+[source, json]
+----
+{
+   "meter_id":{
+      "1":"MAC000005",
+      "2":"MAC000005"
+   },
+   "ds":{
+      "1":"2013-01-02",
+      "2":"2013-01-07"
+   },
+   "consumption":{
+      "1":5.7,
+      "2":11.436
+   },
+   "yhat_lower":{
+      "1":3.3661955822,
+      "2":3.5661772085
+   },
+   "yhat_upper":{
+      "1":9.1361769262,
+      "2":8.9443160402
+   },
+   "anomaly":{
+      "1":0,
+      "2":1
+   },
+   "importance":{
+      "1":0.0,
+      "2":0.217880724
+   }
+}
+----
+
 ==== Meter outage details
 
-API endpoint and input JSON to get a list of past meter outages for the given timeframe, including geo-location data, is described below.
+Endpoint that returns a list of meter that delivered an error code instead of a valid reading. Data includes geograpihc information (latitude, longitude) which can be used to great a heat map of current meter outages to i.e. visualize outage cluster.
+
+startDateTime:Describes the start time of the time windows.
+
+end_date_time: describes: Describes the end time of the time window.
+
+[%header,cols=2*]
+|===
+|Parameter
+|Description
+
+|start_date_time
+|Start of outage time frame.
+
+|end_date_time
+|End of outage time frame.
+
+|===
+
+.url structure
 ----
-https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?startDateTime=<>&endDateTime=<>
+https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?start_date_time=<>&end_date_time=<>
 ----
 
 .example curl command
@@ -90,10 +201,52 @@ https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?startDateTime=<>&end
 curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?start_date_time=2013-01-03+09:00:01&end_date_time=2013-01-03+10:59:59
 ----
 
-==== Aggregation API
-Aggregations get loaded in real time from Amazon Redshift over an API endpoint
+Returns a list of meters that had an outage in the requested time range.
 
-consumption aggregations can be done on a daily, weekly or monthly basis for a certain year and meter:
+.response
+[source, json]
+----
+{
+   "Items":[
+      {
+         "meter_id":"MAC000138",
+         "reading_date_time":"2013-01-03 09:30:00.000",
+         "date_str":"20130103",
+         "lat":40.7177325,
+         "long":-74.043845
+      },
+      {
+         "meter_id":"MAC000139",
+         "reading_date_time":"2013-01-03 10:00:00.000",
+         "date_str":"20130103",
+         "lat":40.7177325,
+         "long":-74.043845
+      }
+  ]
+   }
+----
+
+
+==== Aggregation API
+The aggregation endpoint returns aggregated readings for a certain meter on a daily, weekly or monthly basis.
+
+[%header,cols=2*]
+|===
+|Parameter
+|Description
+
+|aggregation level
+|daily, weekly or monthly aggregation level
+
+|year
+|The year the aggregation should cover.
+
+|meter_id
+|The ID of the meter for which the aggregation should be done.
+
+|===
+
+.url structure
 ----
 https://xxxxxx.execute-api.us-east-1.amazonaws.com/consumption/<daily|weekly|monthly>/<year>/<meter_id>
 ----
@@ -101,5 +254,27 @@ https://xxxxxx.execute-api.us-east-1.amazonaws.com/consumption/<daily|weekly|mon
 .example curl command for monthly aggregated data:
 [source,shell script]
 ----
-curl https://xxxxxx.execute-api.us-east-1.amazonaws.com/consumption/monthly/2013/MAC001595
+curl https://xxxxxx.execute-api.us-east-1.amazonaws.com/consumption/daily/2013/MAC001595
+----
+
+.response:
+[source, json]
+----
+[
+   [
+      "MAC001595",
+      "20130223",
+      3.34
+   ],
+   [
+      "MAC001595",
+      "20130221",
+      5.316
+   ],
+   [
+      "MAC001595",
+      "20130226",
+      4.623
+   ]
+]
 ----
