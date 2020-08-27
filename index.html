@@ -767,6 +767,17 @@ table p {
 a img {
     border: 1px solid #A4A4A4;
 }
+
+#preview_mode {
+	border-color:#e0e0dc;
+	-webkit-box-shadow:0 1px 4px #e0e0dc;
+	box-shadow:0 1px 4px #e0e0dc;
+  background:#ffffb3;
+  padding-bottom: 2rem;
+}
+#preview_mode .tableblock {
+  background:#ffffb3;
+}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -814,7 +825,6 @@ a img {
 <ul class="sectlevel2">
 <li><a href="#_meter_data_format">Meter data format</a></li>
 <li><a href="#_table_schemas">Table schemas</a></li>
-<li><a href="#_api_inputs_and_outputs">API inputs and outputs</a></li>
 </ul>
 </li>
 <li><a href="#_faq">FAQ</a></li>
@@ -2091,19 +2101,43 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <div class="paragraph">
 <p>INT = Interval Reads</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_api_inputs_and_outputs">API inputs and outputs</h3>
-<div class="paragraph">
-<p>The API endpoint can be found in the API Gateway Console. The base URL will look similar to the following:
-<a href="https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/" class="bare">https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/</a></p>
-</div>
 <div class="sect3">
-<h4 id="_enery_usage_forecast">Enery usage forecast</h4>
+<h4 id="_energy_usage_forecast">Energy usage forecast</h4>
 <div class="paragraph">
-<p>API endpoint and input JSON for energy consumption forecast for a specific meter is described below.</p>
+<p>The Energy forecast endpoint that returns a list of future consumptions based on the trained ml model.</p>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">meter_id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The ID of the meter for which the forecast should be made.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">data_start</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Start date of meter reads that should be used a basis for the prediction</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">data_end</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">End date of meter reads that should be used a basis for the prediction</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ml_endpoint_name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The ML endpoint created by sage maker.</p></td>
+</tr>
+</tbody>
+</table>
 <div class="listingblock">
+<div class="title">url structure</div>
 <div class="content">
 <pre>https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/&lt;meter_id&gt;?data_start=&lt;&gt;&amp;data_end=&lt;&gt;&amp;ml_endpoint_name=&lt;&gt;</pre>
 </div>
@@ -2114,13 +2148,64 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <pre class="highlight"><code class="language-shell script" data-lang="shell script">curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/MAC004734?data_start=2013-05-01&amp;data_end=2013-10-01&amp;ml_endpoint_name=ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89</code></pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="title">response</div>
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "consumption":{
+      "1380585600000":0.7684248686,
+      "1380589200000":0.4294368029,
+      "1380592800000":0.3510326743,
+      "1380596400000":0.2964941561,
+      "1380600000000":0.3064994216,
+      "1380603600000":0.4563854337,
+      "1380607200000":0.6386958361,
+      "1380610800000":0.5963768363,
+      "1380614400000":0.5587928891,
+      "1380618000000":0.4409750104,
+      "1380621600000":0.4719932675
+   }
+}</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_anomaly_detection">Anomaly detection</h4>
 <div class="paragraph">
-<p>API endpoint and input JSON format to get energy usage anomaly for a specific meter in a given time range is described below.</p>
+<p>The endpoint returns a list of energy usage anomalies for a specific meter in a given time range.</p>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">meter_id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The ID of the meter for which anomalies should be determined.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">data_start</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Start date of the anomaly detection.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">data_end</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">End date of the anomaly detection.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">outlier_only</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines if only outliers should be returned or all data for this certain meter.</p></td>
+</tr>
+</tbody>
+</table>
 <div class="listingblock">
+<div class="title">url structure</div>
 <div class="content">
 <pre>https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/anomaly/&lt;meter_id&gt;?data_start=&lt;&gt;&amp;data_end=&lt;&gt;&amp;outlier_only=&lt;&gt;</pre>
 </div>
@@ -2131,15 +2216,82 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <pre class="highlight"><code class="language-shell script" data-lang="shell script">curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/anomaly/MAC000005?data_start=2013-01-01&amp;data_end=2013-12-31&amp;outlier_only=0</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>The output returns a list of reading dates in which anomalies are marked on a daily basis.</p>
+</div>
+<div class="listingblock">
+<div class="title">response</div>
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "meter_id":{
+      "1":"MAC000005",
+      "2":"MAC000005"
+   },
+   "ds":{
+      "1":"2013-01-02",
+      "2":"2013-01-07"
+   },
+   "consumption":{
+      "1":5.7,
+      "2":11.436
+   },
+   "yhat_lower":{
+      "1":3.3661955822,
+      "2":3.5661772085
+   },
+   "yhat_upper":{
+      "1":9.1361769262,
+      "2":8.9443160402
+   },
+   "anomaly":{
+      "1":0,
+      "2":1
+   },
+   "importance":{
+      "1":0.0,
+      "2":0.217880724
+   }
+}</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_meter_outage_details">Meter outage details</h4>
 <div class="paragraph">
-<p>API endpoint and input JSON to get a list of past meter outages for the given timeframe, including geo-location data, is described below.</p>
+<p>Endpoint that returns a list of meter that delivered an error code instead of a valid reading. Data includes geograpihc information (latitude, longitude) which can be used to great a heat map of current meter outages to i.e. visualize outage cluster.</p>
 </div>
+<div class="paragraph">
+<p>startDateTime:Describes the start time of the time windows.</p>
+</div>
+<div class="paragraph">
+<p>end_date_time: describes: Describes the end time of the time window.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">start_date_time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Start of outage time frame.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">end_date_time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">End of outage time frame.</p></td>
+</tr>
+</tbody>
+</table>
 <div class="listingblock">
+<div class="title">url structure</div>
 <div class="content">
-<pre>https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?startDateTime=&lt;&gt;&amp;endDateTime=&lt;&gt;</pre>
+<pre>https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?start_date_time=&lt;&gt;&amp;end_date_time=&lt;&gt;</pre>
 </div>
 </div>
 <div class="listingblock">
@@ -2148,16 +2300,66 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <pre class="highlight"><code class="language-shell script" data-lang="shell script">curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?start_date_time=2013-01-03+09:00:01&amp;end_date_time=2013-01-03+10:59:59</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Returns a list of meters that had an outage in the requested time range.</p>
+</div>
+<div class="listingblock">
+<div class="title">response</div>
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">{
+   "Items":[
+      {
+         "meter_id":"MAC000138",
+         "reading_date_time":"2013-01-03 09:30:00.000",
+         "date_str":"20130103",
+         "lat":40.7177325,
+         "long":-74.043845
+      },
+      {
+         "meter_id":"MAC000139",
+         "reading_date_time":"2013-01-03 10:00:00.000",
+         "date_str":"20130103",
+         "lat":40.7177325,
+         "long":-74.043845
+      }
+  ]
+   }</code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_aggregation_api">Aggregation API</h4>
 <div class="paragraph">
-<p>Aggregations get loaded in real time from Amazon Redshift over an API endpoint</p>
+<p>The aggregation endpoint returns aggregated readings for a certain meter on a daily, weekly or monthly basis.</p>
 </div>
-<div class="paragraph">
-<p>consumption aggregations can be done on a daily, weekly or monthly basis for a certain year and meter:</p>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">aggregation level</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">daily, weekly or monthly aggregation level</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">year</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The year the aggregation should cover.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">meter_id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The ID of the meter for which the aggregation should be done.</p></td>
+</tr>
+</tbody>
+</table>
 <div class="listingblock">
+<div class="title">url structure</div>
 <div class="content">
 <pre>https://xxxxxx.execute-api.us-east-1.amazonaws.com/consumption/&lt;daily|weekly|monthly&gt;/&lt;year&gt;/&lt;meter_id&gt;</pre>
 </div>
@@ -2165,7 +2367,29 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <div class="listingblock">
 <div class="title">example curl command for monthly aggregated data:</div>
 <div class="content">
-<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl https://xxxxxx.execute-api.us-east-1.amazonaws.com/consumption/monthly/2013/MAC001595</code></pre>
+<pre class="highlight"><code class="language-shell script" data-lang="shell script">curl https://xxxxxx.execute-api.us-east-1.amazonaws.com/consumption/daily/2013/MAC001595</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">response:</div>
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">[
+   [
+      "MAC001595",
+      "20130223",
+      3.34
+   ],
+   [
+      "MAC001595",
+      "20130221",
+      5.316
+   ],
+   [
+      "MAC001595",
+      "20130226",
+      4.623
+   ]
+]</code></pre>
 </div>
 </div>
 </div>
@@ -2246,7 +2470,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-24 14:38:03 UTC
+Last updated 2020-08-27 15:15:44 UTC
 </div>
 </div>
 </body>
