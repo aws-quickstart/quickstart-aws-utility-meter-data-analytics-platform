@@ -163,3 +163,6 @@ include::./ml_pipeline.adoc[]
 
 == Data schema and API i/o format
 include::./data_format.adoc[]
+
+== Best practices
+* Use Amazon S3 Glacier to archive the meter data from raw, clean and business S3 buckets, for long term storage and cost savings.
