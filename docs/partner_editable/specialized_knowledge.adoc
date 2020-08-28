@@ -1,6 +1,11 @@
 // Replace the content in <>
 // Describe or link to specific knowledge requirements; for example: “familiarity with basic concepts in the areas of networking, database operations, and data encryption” or “familiarity with <software>.”
 
-This Quick Start assumes familiarity with <knowledge expectations>.
+=== Assumptions
 
+This Quick Start assumes the following:
 
+* Meter data has already been validated and processed by the MDM system.
+* Meter data doesn't include late arriving data. Currently, Quick Start doesn't support late arriving meter data.
+* Weather data is not required, however recommended to get useful insights for unusual energy consumption, when correlated with weather information.
+* Customer information (CIS) data is not required, however recomended to get insights on customer energy usage consumption.

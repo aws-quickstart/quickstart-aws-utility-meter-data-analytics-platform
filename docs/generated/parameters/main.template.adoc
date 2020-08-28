@@ -26,7 +26,7 @@
 (`LandingzoneTransformer`)|`default`|Defines the Transformer for the input data in the Landing Zone|Create landing zone bucket
 (`CreateLandingZoneS3Bucket`)|`Yes`|Select 'No' if you have an existing S3 bucket with raw meter data which you would like to use. Otherwise leave default value as 'Yes'. You must provide a value for 'Landing zone S3 bucket' parameter if you select 'No'.|Landing zone S3 bucket
 (`LandingZoneS3BucketName`)|`**__Requires input__**`|(Conditional) You must provide a value if you select 'No' for 'Create Landing Zone bucket' parameter above.|No. of meters
-(`NoOfMeters`)|`1-50000`|Approximate No. of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure appropriate no. of DPUs for the Glue Job.|Transformer that reads the landing zone data
+(`NoOfMeters`)|`1-50000`|Approximate range. of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure appropriate no. of DPUs for the Glue Job. Default value is good for sample data set or evaluation purpose. For production deployment with millions of meters, select '50001-and-more' from the list.|Transformer that reads the landing zone data
 (`LandingzoneTransformer`)|`default`|Defines the Transformer for the input data in the Landing Zone
 |===
 .Quick Start Configuration

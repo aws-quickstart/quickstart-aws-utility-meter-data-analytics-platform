@@ -2,6 +2,7 @@ Deploying this Quick Start for a new virtual private cloud (VPC) with
 *default parameters* builds the following _{partner-product-name}_ environment in the
 AWS Cloud.
 
+:xrefstyle: short
 [#architecture1]
 .Quick Start architecture for _{partner-product-name}_ on AWS
 [link=images/architecture_diagram.png]

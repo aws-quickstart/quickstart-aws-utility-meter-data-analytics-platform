@@ -207,7 +207,7 @@ Parameters:
   
   NoOfMeters:
     Type: String
-    Description: Approximate No. of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure appropriate no. of DPUs for the Glue Job.
+    Description: Approximate range. of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure appropriate no. of DPUs for the Glue Job. Default value is good for sample data set or evaluation purpose. For production deployment with millions of meters, select '50001-and-more' from the list.
     AllowedValues:
       - "1-50000"
       - "50001-and-more"
