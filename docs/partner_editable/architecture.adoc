@@ -10,7 +10,8 @@ image::../images/architecture_diagram.png[Architecture,width=648,height=439]
 
 As shown in Figure 1, the Quick Start sets up the following:
 
-* AWS S3 buckets to store raw, clean and business meter data.
+* AWS S3 buckets to store raw, clean and (partitioned) business meter data. 
+** Data in business bucket is partitioned as follows - s3://BusinessBucket/<reading_type_value>/<date>/<meter-data-file-in-parquet-format>
 * AWS Glue crawlers, and Glue Jobs to transform crawl, transform and convert incoming raw meter data into cleaned data, in desired format and partitioned appropriately into "curated" business data.
 * AWS Glue workflow to orchestrate various triggers, crawlers and jobs.
 * AWS Glue data catalog to store metadata and source information about the meter data.
