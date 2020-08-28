@@ -965,7 +965,14 @@ AWS Cloud.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>AWS S3 buckets to store raw, clean and business meter data.</p>
+<p>AWS S3 buckets to store raw, clean and (partitioned) business meter data.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Data in business bucket is partitioned as follows - s3://BusinessBucket/&lt;reading_type_value&gt;/&lt;date&gt;/&lt;meter-data-file-in-parquet-format&gt;</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p>AWS Glue crawlers, and Glue Jobs to transform crawl, transform and convert incoming raw meter data into cleaned data, in desired format and partitioned appropriately into "curated" business data.</p>
@@ -2493,7 +2500,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-28 01:31:10 UTC
+Last updated 2020-08-28 23:23:28 UTC
 </div>
 </div>
 </body>
