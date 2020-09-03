@@ -73,7 +73,7 @@ def lambda_handler(event, context):
             or ("data_end" not in queryParameter):
         return {
             'statusCode': 500,
-            'body': "error: meter_id, data_start, data_end and outlier_only needs to be provided."
+            'body': "error: meter_id, data_start, data_end and ml endpoint needs to be provided."
         }
 
     METER_ID = pathParameter['meter_id']
