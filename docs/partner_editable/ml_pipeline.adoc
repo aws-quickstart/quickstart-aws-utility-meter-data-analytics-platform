@@ -7,11 +7,17 @@ After new data is added, you can re-run the whole cloudformation to reprocess th
 
 . Batch pipeline is implemented by Step Functions. Go to Step Functions console in your AWS Account, find the State machine with prefix "PredictionPipelineStateMachine-".
 +
+:xrefstyle: short
+[#step_function_console]
+.AWS Step Functions console
 image::../images/1_batchpipeline.png[AWS Step Functions console]
 
 . Open the state machine and click start execution.
 +
-image::../images/2_batchpipeline_execution.png[AWS Step Functions console]
+:xrefstyle: short
+[#batch_pipeline_execution]
+.Batch pipeline execution
+image::../images/2_batchpipeline_execution.png[Batch pipeline execution]
 
 The input parameter needs to contain below information in JSON format. You can specify the range of meters you want to process, and what's the date range of your data. Note the Batch_size should not exceed 100. You can also specify a customer model you trained in SageMaker.
 ```json
@@ -29,11 +35,15 @@ The input parameter needs to contain below information in JSON format. You can s
 === Re-train model with different parameters
 
 . Go to Step Functions console, and find the State machine with prefix "InitialTrainingStateMachine-". 
-. Open state machine and go to Definition, find the "HyperParameters" part, then modify the parameters or add more parameters. To lear more about DeepAR Hyperparameters, please see https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html
+. Open state machine and go to Definition, find the "HyperParameters" part, then modify the parameters or add more parameters. To learn more about DeepAR Hyperparameters, please see https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html[Amazon Sagemaker documentation^].  
 +
-image::../images/3_trainingpipeline_hyperparameters.png[AWS Step Functions console]
+:xrefstyle: short
+[#hyperparameters]
+.HyperParameters
+image::../images/3_trainingpipeline_hyperparameters.png[HyperParameters]
 
 . Save change to the state machine and click start execution. The input parameter needs to contain below information in JSON format. Training_samples specifies how many meters' data will be used to train the model, the more meters are used, the more accurate the model will be, however the longer the training will take. Give a new name for "ModelName" and "ML_endpoint_name".
++
 ```json
 {
   "Training_samples": 20,

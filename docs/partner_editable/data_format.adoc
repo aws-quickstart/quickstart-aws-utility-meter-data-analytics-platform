@@ -51,6 +51,7 @@ INT = Interval Reads
 The Energy forecast endpoint that returns a list of future consumptions based on the trained ml model.
 
 [%header,cols=2*]
+.Parameter description
 |===
 |Parameter
 |Description
@@ -104,6 +105,7 @@ curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/MAC004734?dat
 The endpoint returns a list of energy usage anomalies for a specific meter in a given time range.
 
 [%header,cols=2*]
+.Parameter description
 |===
 |Parameter
 |Description
@@ -178,6 +180,7 @@ startDateTime:Describes the start time of the time windows.
 end_date_time: describes: Describes the end time of the time window.
 
 [%header,cols=2*]
+. Parameter description
 |===
 |Parameter
 |Description
@@ -231,6 +234,7 @@ Returns a list of meters that had an outage in the requested time range.
 The aggregation endpoint returns aggregated readings for a certain meter on a daily, weekly or monthly basis.
 
 [%header,cols=2*]
+.Parameter description
 |===
 |Parameter
 |Description
