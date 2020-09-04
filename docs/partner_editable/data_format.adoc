@@ -1,3 +1,11 @@
+=== Data partitioning
+The curated data in the 'business zone' is partitioned by *reading type* and *reading date*.
+On the lowest level of the partition tree, all meter reads for a day can be found.
+To optimize query performance, the data is stored in a column based file format (Parquet).
+
+=== Late arriving data
+The data lake handles late arriving data. If a meter sends data on a later point in time, the ETL pipeline takes care of storing the late meter read in the correct partition.
+
 === Meter data format
 
 The input meter data format is variable and can be adjusted as described in the section <<Customize this Quick Start,'Customize this Quick Start'>>. However, the sample input data format of the 'London Meter Reads' looks like the following:
