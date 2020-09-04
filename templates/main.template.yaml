@@ -194,6 +194,7 @@ Parameters:
   QSS3BucketRegion:
     Type: String
     Description: AWS Region for AWS Quick Start S3 bucket
+    Default: us-east-1
   
   DBName:
     Type: String

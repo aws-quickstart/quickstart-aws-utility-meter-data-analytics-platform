@@ -35,5 +35,5 @@
 |Parameter label (name) |Default value|Description|Quick Start S3 Bucket name
 (`QSS3BucketName`)|`aws-quickstart`|AWS Quick Start S3 bucket name where the Quick Start assets are hosted|Quick Start S3 Bucket Key Prefix
 (`QSS3KeyPrefix`)|`quickstart-aws-utility-meter-data-analytics-platform/`|S3 bucket key prefix for the AWS Quick Start assets|Quick Start S3 Bucket AWS Region
-(`QSS3BucketRegion`)|`**__Requires input__**`|AWS Region for AWS Quick Start S3 bucket
+(`QSS3BucketRegion`)|`us-east-1`|AWS Region for AWS Quick Start S3 bucket
 |===
