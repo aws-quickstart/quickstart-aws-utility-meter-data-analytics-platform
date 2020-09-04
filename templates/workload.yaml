@@ -328,7 +328,7 @@ Parameters:
 
 Metadata:
   QuickStartDocumentation:
-    EntrypointName: "Launch into an existing VPC"
+    EntrypointName: "Parameters for launching into an existing VPC"
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:

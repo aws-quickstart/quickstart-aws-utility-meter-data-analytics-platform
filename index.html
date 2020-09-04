@@ -803,7 +803,7 @@ a img {
 <ul class="sectlevel2">
 <li><a href="#_sign_in_to_your_aws_account">Sign in to your AWS account</a></li>
 <li><a href="#_launch_the_quick_start">Launch the Quick Start</a></li>
-<li><a href="#_launch_into_a_new_vpc">Launch into a new VPC</a></li>
+<li><a href="#_parameters_for_launching_into_a_new_vpc">Parameters for launching into a new VPC</a></li>
 </ul>
 </li>
 <li><a href="#_post_deployment_steps">Post deployment steps</a>
@@ -1303,7 +1303,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 </div>
 </div>
 <div class="sect2">
-<h3 id="_launch_into_a_new_vpc">Launch into a new VPC</h3>
+<h3 id="_parameters_for_launching_into_a_new_vpc">Parameters for launching into a new VPC</h3>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. Redshift Cluster Configuration</caption>
 <colgroup>
@@ -1535,26 +1535,29 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <ol class="arabic">
 <li>
 <p>Select the landing zone bucket, buckets names are generated, find the one which contains the word landing zone. This will be the starting point for the ETL process.</p>
-<div class="imageblock">
+<div id="bucket_layout" class="imageblock">
 <div class="content">
 <img src="images/1_bucket_layout.png" alt="Bucket Layout">
 </div>
+<div class="title">Figure 3. S3 Bucket layout</div>
 </div>
 </li>
 <li>
 <p>Upload the London Meter Data to the landing zone bucket.</p>
-<div class="imageblock">
+<div id="upload_demo_dataset" class="imageblock">
 <div class="content">
 <img src="images/2_upload_demo_data_set.png" alt="Upload demo data set">
 </div>
+<div class="title">Figure 4. Upload demo data set</div>
 </div>
 </li>
 <li>
 <p>After the demo data is uploaded, the folder contains one file with all the meter reads.</p>
-<div class="imageblock">
+<div id="uploaded_demo_dataset" class="imageblock">
 <div class="content">
 <img src="images/3_upload_demo_data_set.png" alt="Uploaded demo data set">
 </div>
+<div class="title">Figure 5. Uploaded demo data set</div>
 </div>
 </li>
 </ol>
@@ -1577,20 +1580,18 @@ Landing Zone S3 bucket should only have meter data files. It shouldn&#8217;t con
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download the sample weather dataset from <a href="https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv" class="bare">https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv</a></p>
+<p><a href="https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv" target="_blank" rel="noopener">Download</a> the sample weather dataset.</p>
 </li>
 <li>
 <p>Upload the dataset to S3 bucket</p>
 </li>
 <li>
 <p>Create "weather" table in target Glue database using below SQL statement. Make sure to replace "weather-data-location" to where you upload the weather dataset.</p>
-<div class="imageblock">
+<div id="create_weather_table" class="imageblock">
 <div class="content">
 <img src="images/4_create_weather_table.png" alt="Create weather table via Athena">
 </div>
-</div>
-</li>
-</ol>
+<div class="title">Figure 6. Create weather table</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1615,6 +1616,9 @@ TBLPROPERTIES (
   'has_encrypted_data'='false',
   'skip.header.line.count'='1');</code></pre>
 </div>
+</div>
+</li>
+</ol>
 </div>
 <div class="paragraph">
 <p>If you have other weather dataset you want to use, just make sure it contains at least below 4 columns.</p>
@@ -1714,26 +1718,29 @@ TBLPROPERTIES (
 <ol class="arabic">
 <li>
 <p>Go to the AWS Glue Console, and select 'Workflows'.</p>
-<div class="imageblock">
+<div id="glue_console" class="imageblock">
 <div class="content">
 <img src="images/4_start_etl_workflow.png" alt="AWS Glue Console">
 </div>
+<div class="title">Figure 7. AWS Glue Console</div>
 </div>
 </li>
 <li>
 <p>Select the workflow and choose 'Run' from the drop-down-menu.</p>
-<div class="imageblock">
+<div id="start_etl_workflow" class="imageblock">
 <div class="content">
 <img src="images/5_start_etl_workflow.png" alt="Start ETL workflow">
 </div>
+<div class="title">Figure 8. Start ETL workflow</div>
 </div>
 </li>
 <li>
 <p>The Workflow should be indicated as 'Running' in the 'History' tab.</p>
-<div class="imageblock">
+<div id="running_workflow" class="imageblock">
 <div class="content">
-<img src="images/6_start_etl_workflow.png" alt="Start ETL workflow">
+<img src="images/6_start_etl_workflow.png" alt="Running workflow">
 </div>
+<div class="title">Figure 9. Running workflow</div>
 </div>
 </li>
 </ol>
@@ -1769,26 +1776,29 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <ol class="arabic">
 <li>
 <p>Navigate to the AWS Glue Job console.</p>
-<div class="imageblock">
+<div id="glue_job_console" class="imageblock">
 <div class="content">
 <img src="images/1_edit_etl_job.png" alt="AWS Glue Job console">
 </div>
+<div class="title">Figure 10. AWS Glue Job console</div>
 </div>
 </li>
 <li>
 <p>Select the 'transform_raw_to_clean-*' job.</p>
-<div class="imageblock">
+<div id="edit_etl_job" class="imageblock">
 <div class="content">
 <img src="images/2_edit_etl_job.png" alt="Edit ETL Job">
 </div>
+<div class="title">Figure 11. Edit ETL Job</div>
 </div>
 </li>
 <li>
 <p>Open script editor and start editing the input mapping.</p>
-<div class="imageblock">
+<div id="open_editor" class="imageblock">
 <div class="content">
 <img src="images/3_open_editor.png" alt="Open editor">
 </div>
+<div class="title">Figure 12. Open editor</div>
 </div>
 </li>
 <li>
@@ -1898,18 +1908,20 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <ol class="arabic">
 <li>
 <p>Batch pipeline is implemented by Step Functions. Go to Step Functions console in your AWS Account, find the State machine with prefix "PredictionPipelineStateMachine-".</p>
-<div class="imageblock">
+<div id="step_function_console" class="imageblock">
 <div class="content">
 <img src="images/1_batchpipeline.png" alt="AWS Step Functions console">
 </div>
+<div class="title">Figure 13. AWS Step Functions console</div>
 </div>
 </li>
 <li>
 <p>Open the state machine and click start execution.</p>
-<div class="imageblock">
+<div id="batch_pipeline_execution" class="imageblock">
 <div class="content">
-<img src="images/2_batchpipeline_execution.png" alt="AWS Step Functions console">
+<img src="images/2_batchpipeline_execution.png" alt="Batch pipeline execution">
 </div>
+<div class="title">Figure 14. Batch pipeline execution</div>
 </div>
 </li>
 </ol>
@@ -1939,18 +1951,16 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <p>Go to Step Functions console, and find the State machine with prefix "InitialTrainingStateMachine-".</p>
 </li>
 <li>
-<p>Open state machine and go to Definition, find the "HyperParameters" part, then modify the parameters or add more parameters. To lear more about DeepAR Hyperparameters, please see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html" class="bare">https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html</a></p>
-<div class="imageblock">
+<p>Open state machine and go to Definition, find the "HyperParameters" part, then modify the parameters or add more parameters. To learn more about DeepAR Hyperparameters, please see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html" target="_blank" rel="noopener">Amazon Sagemaker documentation</a>.</p>
+<div id="hyperparameters" class="imageblock">
 <div class="content">
-<img src="images/3_trainingpipeline_hyperparameters.png" alt="AWS Step Functions console">
+<img src="images/3_trainingpipeline_hyperparameters.png" alt="HyperParameters">
 </div>
+<div class="title">Figure 15. HyperParameters</div>
 </div>
 </li>
 <li>
 <p>Save change to the state machine and click start execution. The input parameter needs to contain below information in JSON format. Training_samples specifies how many meters' data will be used to train the model, the more meters are used, the more accurate the model will be, however the longer the training will take. Give a new name for "ModelName" and "ML_endpoint_name".</p>
-</li>
-</ol>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-json" data-lang="json">{
@@ -1962,6 +1972,9 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
   "ML_endpoint_name": "ml-model-0731"
 }</code></pre>
 </div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -2138,6 +2151,7 @@ To optimize query performance, the data is stored in a column based file format 
 <p>The Energy forecast endpoint that returns a list of future consumptions based on the trained ml model.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 10. Parameter description</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2206,6 +2220,7 @@ To optimize query performance, the data is stored in a column based file format 
 <p>The endpoint returns a list of energy usage anomalies for a specific meter in a given time range.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 11. Parameter description</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2297,24 +2312,34 @@ To optimize query performance, the data is stored in a column based file format 
 <div class="paragraph">
 <p>end_date_time: describes: Describes the end time of the time window.</p>
 </div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Parameter description</p>
+</li>
+</ol>
+</div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
+<col style="width: 100%;">
 </colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">start_date_time</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Start of outage time frame.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">end_date_time</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">End of outage time frame.</p></td>
 </tr>
 </tbody>
@@ -2364,6 +2389,7 @@ To optimize query performance, the data is stored in a column based file format 
 <p>The aggregation endpoint returns aggregated readings for a certain meter on a daily, weekly or monthly basis.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 12. Parameter description</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2513,7 +2539,7 @@ and to share your customizations with others.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-09-03 10:28:23 UTC
+Last updated 2020-09-04 18:54:12 UTC
 </div>
 </div>
 </body>
