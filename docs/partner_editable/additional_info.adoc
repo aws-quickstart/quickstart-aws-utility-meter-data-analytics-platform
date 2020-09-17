@@ -6,6 +6,9 @@
 To see the capabilities of the QuickStart, follow the below steps to use dataset of meter reads from the City of London, between 2011 to 2014. The <<Customize this Quick Start>> section explains how to edit the raw data ETL script to work with your own meter data.
 
 === Download Sample Dataset
+
+NOTE: For using the demo dataset, the **LandingzoneTransformer** need to be set to 'london' during the Quick Start deployment.
+
 Download the sample dataset from https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households[here^]. The file can be downloaded to your local machine, unzipped, and then uploaded to S3. However, given the size of the unzipped file (~11GB), it is faster to run a EC2 instance with sufficient privileges to write to S3, download the file to the EC2 instance, unzip it and upload the data from there.
 
 https://data.london.gov.uk/download/smartmeter-energy-use-data-in-london-households/3527bf39-d93e-4071-8451-df2ade1ea4f2/Power-Networks-LCL-June2015(withAcornGps).zip[Download sample meter data^]

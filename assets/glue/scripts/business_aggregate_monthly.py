@@ -38,7 +38,7 @@ def calculate_dates_of_month(date_str):
     last_date_of_month = datetime.date(year, month, days_of_month)
     delta = last_date_of_month - first_date_of_month
 
-    return [(first_date_of_month + datetime.timedelta(days=i)).strftime('%Y%m%d') for i in range(delta.days + 1)]
+    return "({})".format(",".join((first_date_of_month + datetime.timedelta(days=i)).strftime('%Y%m%d') for i in range(delta.days + 1)))
 
 
 def aggregate_and_write_data_to_s3(bucket_path, push_down_predicate=""):
