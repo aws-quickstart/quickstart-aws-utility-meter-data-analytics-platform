@@ -1,7 +1,7 @@
 :quickstart-project-name: quickstart-aws-utility-meter-data-analytics-platform
 :partner-product-name: Utility Meter Data Analytics
 //:partner-company-name:
-:doc-month: August
+:doc-month: October
 :doc-year: 2020
 :partner-contributors:
 :quickstart-contributors: Avneet Singh, Juan Yu, Sascha Rodekamp, Shivansh Singh - AWS
