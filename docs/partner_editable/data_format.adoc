@@ -181,17 +181,7 @@ The output returns a list of reading dates in which anomalies are marked on a da
 
 ==== Meter-outage details
 
-The endpoint returns a list of meters that delivered an error code instead of a valid reading. Data includes geographic information (latitude, longitude) which can be used to create a heat map of current meter outages, for example, to visualize an outage cluster.
-
-//TODO Shivansh, Is "heat map" correct above, or do we just mean "map"?
-
-startDateTime: Describes the start time of the time windows.
-
-//TODO Shivansh, should startDateTime, above, be start_date_time to match the table below?
-
-end_date_time: Describes the end time of the time window.
-
-//TODO Shivansh, Why are we  listing and describing these two items above when the table below does the same? I recommend deleting the above two lines and adding any relevant details from their descriptions to the table below.
+The endpoint returns a list of meters that delivered an error code instead of a valid reading. Data includes geographic information (latitude, longitude) which can be used to create a map of current meter outages, for example, to visualize an outage cluster.
 
 [%header,cols=2*]
 .Parameter description

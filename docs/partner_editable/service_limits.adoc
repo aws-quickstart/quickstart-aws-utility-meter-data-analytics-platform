@@ -5,7 +5,7 @@
 // Space needed to maintain table headers
 |VPCs |1
 |AWS Identity and Access Management (IAM) roles |7
-|Amazon S3 buckets |5
+|Amazon S3 buckets |6
 |AWS Glue crawlers |4
 |AWS Glue jobs |3
 |Amazon Sagemaker notebook instances |1
@@ -15,6 +15,10 @@
 |Amazon Redshift instances |1
 |AWS Step Functions |3
 //TODO Shivansh, Should "Amazon Sagemaker notebook instances" be "Jupyter notebook instances" as in the archit. diagram?
+// I would stick to 'Amazon Sagemaker notebook instances'
 //TODO Shivansh, Should the archit. diagram show all five S3 buckets?
+// there a 6 S3 Buckets, the additional are is a temp bucket where we store meta data.
+// the temp bucket and athena query bucket are missing in the diagram.
 //TODO SHivansh, For "AWS Step Functions" (the service name), what are the resources that we have three of?
+// The proper term would be : three different State Machines
 |===

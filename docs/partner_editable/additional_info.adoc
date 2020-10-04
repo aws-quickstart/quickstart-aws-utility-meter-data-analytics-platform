@@ -95,15 +95,15 @@ The CloudFormation parameter `WithWeather` should have been set to 1 to indicate
 
 === Prepare geolocation data
 
-This Quick Start requires geolocation data to be uploaded to the `geodata` folder in the business-zone S3 bucket. You can get the name of the this bucket from the output section of the CloudFormation stack. The S3 path of geodata location should be `s3://<business-zone-s3-bucket-name>/geodata/`. The data should be in a .CSV file format with the following structure, where all three columns are mandatory with comma-separated values.
+This Quick Start requires geolocation data to be uploaded to the `geodata` folder in the business-zone S3 bucket. You can get the name of this bucket from the output section in the CloudFormation stack. The S3 path of geodata location should be `s3://<business-zone-s3-bucket-name>/geodata/`. The data should be in a .CSV file format with the following structure, where all three columns (meter id, latitude, longitude) are mandatory with comma-separated values.
 
-//TODO Shivansh, we say "all three columns," but there are only two.
+//TODO Marcia, maybe the table is misleading. The table describes the schmea fields meter_id, lat, long which are the three mentioned columns
 
 [cols="1,1", options="header"]
 .Geolocation data schema
 |===
-|Field
-|Type
+|Field Name
+|Field Type
 |meter id |string
 |latitude |string
 |longitude |string
@@ -139,10 +139,6 @@ image::../images/5_start_etl_workflow.png[Start ETL workflow]
 [#running_workflow]
 .Running workflow
 image::../images/6_start_etl_workflow.png[Running workflow]
-
-TIP: If the workflow doesn't start and jumps directly to a run status of *Completed*, go back to step 2.
-
-//TODO Shivansh, In the preceding tip, how do we set the step number to automatically track with editing changes in the steps, as we do with figure references? (Please let me know so that I can make these edits myself in the future.)
 
 == Customize this Quick Start
 
