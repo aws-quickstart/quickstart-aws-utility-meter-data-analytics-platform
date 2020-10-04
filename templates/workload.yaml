@@ -204,10 +204,10 @@ Outputs:
     Description: 'Stack name'
     Value: !Sub '${AWS::StackName}'
   RedshiftClusterEndpoint:
-    Description: Redshift cluster endpoint address with port
+    Description: Amazon Redshift cluster endpoint address with port
     Value: !GetAtt RedshiftStack.Outputs.RedshiftClusterEndpoint
   RedshiftEndpoint:
-    Description: Redshift endpoint address
+    Description: Amazon Redshift endpoint address
     Value: !GetAtt RedshiftStack.Outputs.RedshiftEndpoint
   GlueWorkflowName:
     Description: Glue workflow name
@@ -228,34 +228,34 @@ Outputs:
 Parameters:
   MasterUsername:
     Type: String
-    Description: Redshift cluster master user name
+    Description: Amazon Redshift cluster master user name
 
   MasterUserPassword:
     Type: String
-    Description: Redshift cluster master user password
+    Description: Amazon Redshift cluster master user password
     NoEcho: True
   
   ClusterName:
     Type: String
     Default: redshift-cluster-1
-    Description: Redshift cluster name
+    Description: Amazon Redshift cluster name
 
   Subnet1ID:
     Type: AWS::EC2::Subnet::Id
-    Description: Subnet 1 ID to create Redshift cluster
+    Description: Subnet 1 ID to create Amazon Redshift cluster
   
   Subnet2ID:
     Type: AWS::EC2::Subnet::Id
-    Description: Subnet 2 ID to create Redshift cluster
+    Description: Subnet 2 ID to create Amazon Redshift cluster
   
   VPCID:
     Type: AWS::EC2::VPC::Id
-    Description: VPC ID to create Redshift cluster
+    Description: VPC ID to create Amazon Redshift cluster
   
   RemoteAccessCIDR:
     Type: String
     Default: 0.0.0.0/0
-    Description: CIDR block from where access to the Redshift cluster is allowed
+    Description: CIDR block from where access to the Amazon Redshift cluster is allowed
 
   LandingzoneTransformer:
     Type: String
@@ -296,12 +296,12 @@ Parameters:
   DBName:
     Type: String
     Default: meter-data
-    Description: Redshift database name
+    Description: Amazon Redshift database name
   
   RedshiftPort:
     Type: String
     Default: 5439
-    Description: Redshift cluster port no.
+    Description: Amazon Redshift cluster port number
   
   VPCRouteTableId:
     Type: String
@@ -333,7 +333,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: Redshift Cluster Configuration
+          default: Amazon Redshift Cluster Configuration
         Parameters:
           - MasterUsername
           - MasterUserPassword
@@ -369,11 +369,11 @@ Metadata:
       MasterUserPassword:
         default: Master user password
       ClusterName:
-        default: Redshift cluster name
+        default: Amazon Redshift cluster name
       RedshiftPort:
-        default: Redshift port
+        default: Amazon Redshift port
       DBName:
-        default: Redshift database name
+        default: Amazon Redshift database name
       Subnet1ID:
         default: Subnet 1 ID
       Subnet2ID:
