@@ -78,7 +78,7 @@ TBLPROPERTIES (
 
 If you have another weather dataset you want to use, make sure it contains at least the four columns shown in [___].
 
-//TODO Shivnash, how do we fill in the blank in the previous sentence so that it automatically says "Table 1"? Do we need something like what we use for figures — ':xrefstyle: short' — to make sure we generate the number, not the caption text? (Please let me know so that I can fill in table references on my own in the future. Thanks.)
+//TODO Shivansh, how do we fill in the blank in the previous sentence so that it automatically says "Table 1"? Do we need something like what we use for figures — ':xrefstyle: short' — to make sure we generate the number, not the caption text? (Please let me know so that I can fill in table references on my own in the future. Thanks.)
 
 [cols="1,1,1,1", options="header"]
 .Weather data schema
