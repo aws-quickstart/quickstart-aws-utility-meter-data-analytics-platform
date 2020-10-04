@@ -10,6 +10,7 @@
 
 ==== Prepare for the deployment
 
-To see the full capabilities of this Quick Start, make sure you have a sample dataset for utility meters, from an MDM system. Optionally, you can also have weather data, geo location data and CIS data for the corresponding utility meters, to gain better insights.
+To see the full capabilities of this Quick Start, make sure you have a sample dataset for utility meters from an MDM system. Optionally, to gain better insights, we recommend that you also have weather data, geolocation data, and CIS data corresponding to the utility meters.
 
-Details about how you can download a sample dataset and use with this Quick Start is provided in the Post-deployment section, later in this deployment guide.
+For details on how to download and use a sample dataset with this Quick Start, see the Post-deployment steps section of this deployment guide.
+//TODO Shivansh, how do we create a link on "Post-deployment steps" here? Please let me know so that I can do it myself in the future. Thank you! (FYI, that heading "Post-deployment steps" isn't hyphenated in the boilerplate as of Oct. 2; it will be hyphenated as soon as my latest PR is approved.)

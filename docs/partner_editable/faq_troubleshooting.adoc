@@ -19,3 +19,12 @@ For additional information, see https://docs.aws.amazon.com/AWSCloudFormation/la
 //== Troubleshooting
 
 //<Steps for troubleshooting the deployment go here.>
+
+
+//TODO Shivansh, Follow this FAQ, do you know why the guide includes only the parameters for launching into a new VPC?
+
+//TODO Shivansh, In Table 10, the five descriptions simply repeat the info in the labels. We'll want to define those five items instead, or say something helpful about each. (Please leave this comment in the doc until we've addressed this.)
+
+//TODO Shivansh, Table 11 mentions Availability Zones. Are they part of this Quick Start? If so, we need to review those descriptions. (Please leave this comment in the doc until we've addressed this.)
+
+//TODO Shivansh, I haven’t edited the parameter descriptions in workload.yaml yet. I want to confirm my edits in the main template with you before I copy them in. (Please leave this comment in the doc until we've addressed this.)
