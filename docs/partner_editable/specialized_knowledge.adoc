@@ -6,5 +6,5 @@
 This Quick Start assumes the following:
 
 * Meter data has already been validated and processed by the MDM system.
-* Weather data is not required, however recommended to get useful insights for unusual energy consumption, when correlated with weather information.
-* Customer information (CIS) data is not required, however recomended to get insights on customer energy usage consumption.
+* Weather data, while not required, is recommended because it produces insights when correlated with unusual energy usage.
+* Data from a customer information system (CIS), while not required, is recommended because it produces insights related to customer energy usage.
