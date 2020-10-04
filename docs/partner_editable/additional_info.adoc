@@ -36,9 +36,7 @@ image::../images/2_upload_demo_data_set.png[Upload demo dataset]
 .Uploaded demo dataset
 image::../images/3_upload_demo_data_set.png[Uploaded demo dataset]
 
-WARNING: The landing-zone S3 bucket should only have meter-data files. If it contains any subfolders, the ETL workflow will fail.
-
-//TODO Shivansh, What should people do if they see subfolders? Warnings should include guidance.
+WARNING: Make sure that your landing-zone S3 bucket contains only meter-data files. If it contains any subfolders, the ETL workflow will fail.
 
 //[TODO EC2 command line steps]
 
