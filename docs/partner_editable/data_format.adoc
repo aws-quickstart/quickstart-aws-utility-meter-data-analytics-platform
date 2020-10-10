@@ -59,7 +59,7 @@ INT = Interval reads
 The energy forecast endpoint returns a list of predicted consumptions based on the trained ML model.
 
 [%header,cols=2*]
-.Parameter description
+.Parameter descriptions
 |===
 |Parameter
 |Description
@@ -113,7 +113,7 @@ curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/MAC004734?dat
 The endpoint returns a list of energy-usage anomalies for a specific meter in a given time range.
 
 [%header,cols=2*]
-.Parameter description
+.Parameter descriptions
 |===
 |Parameter
 |Description
@@ -184,7 +184,7 @@ The output returns a list of reading dates in which anomalies are marked on a da
 The endpoint returns a list of meters that delivered an error code instead of a valid reading. Data includes geographic information (latitude, longitude) which can be used to create a map of current meter outages, for example, to visualize an outage cluster.
 
 [%header,cols=2*]
-.Parameter description
+.Parameter descriptions
 |===
 |Parameter
 |Description
@@ -238,7 +238,7 @@ Returns a list of meters that had an outage in the requested time range.
 The aggregation endpoint returns aggregated readings for a certain meter on a daily, weekly ,or monthly basis.
 
 [%header,cols=2*]
-.Parameter description
+.Parameter descriptions
 |===
 |Parameter
 |Description

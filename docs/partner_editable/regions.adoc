@@ -5,5 +5,5 @@
 // - ca-central-1 (Canda)
 // - ap-south-1 (Mumbai)
 
-This Quick Start can be deployed in all AWS Regions where the services described in <<architecture1>> are available.
-//TODO Shivansh, Aren't deployment guides supposed to list the specific Regions now? As in "The following Regions are currently supported by this Quick Start..." 
+The following Regions are currently supported by this Quick Start...
+//TODO Shivansh, Please list the specific Regions. 

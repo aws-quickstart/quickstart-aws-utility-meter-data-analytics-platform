@@ -10,6 +10,7 @@ After new data is added, you can rerun the whole AWS CloudFormation to reprocess
 :xrefstyle: short
 [#step_function_console]
 .AWS Step Functions console
+[link=images/1_batchpipeline.png]
 image::../images/1_batchpipeline.png[AWS Step Functions console]
 
 . Open the state machine, and choose *Start execution*.
@@ -17,6 +18,7 @@ image::../images/1_batchpipeline.png[AWS Step Functions console]
 :xrefstyle: short
 [#batch_pipeline_execution]
 .Batch pipeline execution
+[link=images/2_batchpipeline_execution.png]
 image::../images/2_batchpipeline_execution.png[Batch pipeline execution]
 
 The input parameter needs to contain the following information in JSON format. You can specify the range of meters you want to process and the date range of your data. Note that `Batch_size` should not exceed 100. You can also specify a customer model that you trained in SageMaker.
@@ -41,6 +43,7 @@ The input parameter needs to contain the following information in JSON format. Y
 :xrefstyle: short
 [#hyperparameters]
 .Hyperparameters
+[link=images/3_trainingpipeline_hyperparameters.png]
 image::../images/3_trainingpipeline_hyperparameters.png[HyperParameters]
 
 . Save change to the state machine, and choose *Start execution*. The input parameter needs to contain the following information in JSON format. `Training_samples` specifies how many meters' data will be used to train the model. The more meters are used, the more accurate the model will be and the longer the training will take. 

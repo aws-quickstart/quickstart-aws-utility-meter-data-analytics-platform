@@ -37,7 +37,7 @@ Metadata:
           - QSS3BucketRegion
     ParameterLabels:
       MasterUsername:
-        default: Master username
+        default: Master user name
       MasterUserPassword:
         default: Master user password
       ClusterName:
