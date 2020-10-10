@@ -1,9 +1,10 @@
 // Add steps as necessary for accessing the software, post-configuration, and testing. Don’t include full usage instructions for your software, but add links to your product documentation for that information.
 //Should any sections not be applicable, remove them
+:xrefstyle: short
 
 == Post-deployment steps
 
-To see the capabilities of the QuickStart, follow the steps in this section to use the dataset of meter reads from the City of London between 2011 and 2014. The <<Customize this Quick Start>> section explains how to edit the raw-data ETL script to work with your own meter data.
+To see the capabilities of the QuickStart, follow the steps in this section to use the dataset of meter reads from the City of London between 2011 and 2014. The link:#_customize_this_quick_start[Customize this Quick Start] section explains how to edit the raw-data ETL script to work with your own meter data.
 
 === Download sample dataset
 Download the sample dataset https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households[here^]. You could download the file to your local machine, unzip it, and then upload it to Amazon S3. However, given the size of the unzipped file (~11GB), it's faster to run an EC2 instance with sufficient privileges to write to Amazon S3, download the file to the EC2 instance, unzip it, and upload the data from there.
@@ -16,24 +17,24 @@ You must upload the sample dataset to the landing-zone (raw-data) S3 bucket. The
 To upload the sample dataset to the landing-zone S3 bucket, follow these steps:
 
 . Select the landing-zone bucket. Bucket names are generated. Find the name that contains "landingzones." This will be the starting point for the ETL process.
-+
-:xrefstyle: short
++ 
 [#bucket_layout]
 .S3 bucket layout
+[link=images/1_bucket_layout.png]
 image::../images/1_bucket_layout.png[Bucket Layout]
 
 . Upload the London meter data to the landing-zone bucket.
 +
-:xrefstyle: short
 [#upload_demo_dataset]
-.Upload demo dataset
+.Uploading the demo dataset
+[link=images/2_upload_demo_data_set.png]
 image::../images/2_upload_demo_data_set.png[Upload demo dataset]
 
 . After the demo data is uploaded, verify that the folder contains one file with all the meter reads.
 +
-:xrefstyle: short
 [#uploaded_demo_dataset]
-.Uploaded demo dataset
+.The uploaded demo dataset
+[link=images/3_upload_demo_data_set.png]
 image::../images/3_upload_demo_data_set.png[Uploaded demo dataset]
 
 WARNING: Make sure that your landing-zone S3 bucket contains only meter-data files. If it contains any subfolders, the ETL workflow will fail.
@@ -46,9 +47,9 @@ WARNING: Make sure that your landing-zone S3 bucket contains only meter-data fil
 . Upload the dataset to the S3 bucket.
 . Create a weather table in the target AWS Glue database using the following SQL statement. Replace <weather-data-location> with the location where you upload the weather dataset.
 +
-:xrefstyle: short
 [#create_weather_table]
 .Create weather table
+[link=images/4_create_weather_table.png]
 image::../images/4_create_weather_table.png[Create weather table via Athena]
 +
 ```sql
@@ -74,11 +75,10 @@ TBLPROPERTIES (
   'skip.header.line.count'='1');
 ```
 
-If you have another weather dataset you want to use, make sure it contains at least the four columns shown in [___].
-
-//TODO Shivansh, how do we fill in the blank in the previous sentence so that it automatically says "Table 1"? Do we need something like what we use for figures — ':xrefstyle: short' — to make sure we generate the number, not the caption text? (Please let me know so that I can fill in table references on my own in the future. Thanks.)
+If you have another weather dataset you want to use, make sure it contains at least the four columns shown in <<weather_data_schema>>.
 
 [cols="1,1,1,1", options="header"]
+[#weather_data_schema]
 .Weather data schema
 |===
 |Field
@@ -95,9 +95,7 @@ The CloudFormation parameter `WithWeather` should have been set to 1 to indicate
 
 === Prepare geolocation data
 
-This Quick Start requires geolocation data to be uploaded to the `geodata` folder in the business-zone S3 bucket. You can get the name of this bucket from the output section in the CloudFormation stack. The S3 path of geodata location should be `s3://<business-zone-s3-bucket-name>/geodata/`. The data should be in a .CSV file format with the following structure, where all three columns (meter id, latitude, longitude) are mandatory with comma-separated values.
-
-//TODO Marcia, maybe the table is misleading. The table describes the schmea fields meter_id, lat, long which are the three mentioned columns
+This Quick Start requires geolocation data to be uploaded to the `geodata` folder in the business-zone S3 bucket. You can get the name of this bucket from the output section in the CloudFormation stack. The S3 path of geodata location should be `s3://<business-zone-s3-bucket-name>/geodata/`. The data should be in a .CSV file format with the following structure, where all three fields (meter id, latitude, and longitude) are mandatory with comma-separated values.
 
 [cols="1,1", options="header"]
 .Geolocation data schema
@@ -120,24 +118,24 @@ To trigger the ETL pipeline manually, follow these steps.
 
 . Go to the AWS Glue console, and choose *Workflows*.
 +
-:xrefstyle: short
 [#glue_console]
+[link=images/4_start_etl_workflow.png]
 .AWS Glue console
 image::../images/4_start_etl_workflow.png[AWS Glue Console]
 
 . Select the workflow. 
 . On the *Actions* menu, choose *Run*.
 +
-:xrefstyle: short
 [#start_etl_workflow]
-.Start ETL workflow
+.Start the ETL workflow
+[link=images/5_start_etl_workflow.png]
 image::../images/5_start_etl_workflow.png[Start ETL workflow]
 
 . In the *History* tab, make sure that the workflow's run status is *Running*.
 +
-:xrefstyle: short
 [#running_workflow]
-.Running workflow
+.Running the workflow
+[link=images/6_start_etl_workflow.png]
 image::../images/6_start_etl_workflow.png[Running workflow]
 
 == Customize this Quick Start
@@ -150,23 +148,23 @@ To update the data mapping, you can edit the AWS Glue job directly in the web ed
 
 . Navigate to the AWS Glue Job console.
 +
-:xrefstyle: short
 [#glue_job_console]
 .AWS Glue Job console
+[link=images/1_edit_etl_job.png]
 image::../images/1_edit_etl_job.png[AWS Glue Job console]
 
 . Select the `transform_raw_to_clean-*` job.
 +
-:xrefstyle: short
 [#edit_etl_job]
-.Edit ETL job
-image::../images/2_edit_etl_job.png[Edit ETL Job]
+.Selecting the ETL job
+[link=images/2_edit_etl_job.png]
+image::../images/2_edit_etl_job.png[Select the ETL job]
 
 . Open the script editor and start editing the input mapping.
 +
-:xrefstyle: short
 [#open_editor]
-.Open the script editor
+.Opening the script editor
+[link=images/3_open_editor.png]
 image::../images/3_open_editor.png[Open the script editor]
 
 . To adopt a different input format, look for the `ApplyMapping` call and adjust it to your needs to reflect your custom input format. The internal model works with the following schema:
