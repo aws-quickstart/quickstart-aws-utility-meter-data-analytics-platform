@@ -1,3 +1,5 @@
+The following regions are currently supported by this Quick Start.
+
 - us-east-1 (N. Virginia)
 - us-east-2 (Ohio)
 - us-west-2 (Oregon)
