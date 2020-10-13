@@ -38,7 +38,7 @@ def calculate_dates_for_week_of_year(date_str):
     # current date with time delta of the day of the week
     start_date = date_time_obj - datetime.timedelta(days=week_day)
 
-    return [str((start_date + datetime.timedelta(days=i)).date().strftime("%Y%m%d")) for i in range(7)]
+    return "({})".format(",".join(str((start_date + datetime.timedelta(days=i)).date().strftime("%Y%m%d")) for i in range(7)))
 
 
 def aggregate_and_write_data_to_s3(bucket_path, push_down_predicate=""):
@@ -89,6 +89,6 @@ else:
         for date in dates_to_process:
             dates_in_week = calculate_dates_for_week_of_year(date)
             aggregate_and_write_data_to_s3(business_zone_bucket_path,
-                                           "(reading_type == 'INT' and date_str IN '{}')".format(dates_in_week))
+                                           "(reading_type == 'INT' and date_str IN {})".format(dates_in_week))
 
 job.commit()
