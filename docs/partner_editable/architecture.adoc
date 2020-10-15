@@ -15,7 +15,7 @@ As shown in <<architecture1>>, the Quick Start sets up the following:
 ** S3 buckets to store data from an MDM or similar system. Raw meter data, clean data, and partitioned business data are stored in separate S3 buckets.
 ** An AWS Glue workflow:
 *** Crawlers, jobs, and triggers to crawl, transform, and convert incoming raw meter data into clean data in the desired format and partitioned business data.
-*** AWS Glue Data Catalog to store metadata and source information about the meter data.
+*** Data Catalog to store metadata and source information about the meter data.
 * An ML pipeline:
 ** Two AWS Step Functions workflows:
 *** Model training, which uses the partitioned business data to build an ML model.

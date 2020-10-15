@@ -1,8 +1,8 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: Main Template to deploy AWS Quick Start for Utility meter data analytics in a new VPC. (qs-1r18anaju)
+Description: Main template to deploy the AWS Quick Start for the Utility Meter Data Analytics platform in a new VPC. (qs-1r18anaju)
 Metadata:
   QuickStartDocumentation:
-    EntrypointName: "Parameters for launching into a new VPC"
+    EntrypointName: "Parameters for deploying into a new VPC"
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
@@ -22,7 +22,7 @@ Metadata:
           - PrivateSubnet2ACIDR
           - RemoteAccessCIDR
       - Label:
-          default: 'AWS Glue configurations'
+          default: 'AWS Glue configuration'
         Parameters:
           - LandingzoneTransformer
           - CreateLandingZoneS3Bucket
@@ -143,17 +143,17 @@ Conditions:
 Parameters:
   MasterUsername:
     Type: String
-    Description: Amazon Redshift cluster master user name.
+    Description: Master user name for the Amazon Redshift cluster.
 
   MasterUserPassword:
     Type: String
-    Description: Amazon Redshift cluster master user password.
+    Description: Master user password for the Amazon Redshift cluster.
     NoEcho: True
   
   ClusterName:
     Type: String
     Default: redshift-cluster-1
-    Description: Amazon Redshift cluster name.
+    Description: Name of the Amazon Redshift cluster.
 
   RemoteAccessCIDR:
     Type: String
@@ -171,7 +171,7 @@ Parameters:
   CreateLandingZoneS3Bucket:
     Type: String
     Default: 'Yes'
-    Description: Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you select "No," you must provide a value for the landing-zone S3 bucket name (LandingZoneS3BucketName).
+    Description: Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (LandingZoneS3BucketName).
     AllowedValues:
       - 'Yes'
       - 'No'
@@ -179,7 +179,7 @@ Parameters:
   LandingZoneS3BucketName:
     Type: String
     Default: ""
-    Description: You must provide a value if you selected "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.
+    Description: You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.
 
   QSS3BucketName:
     Type: String
@@ -189,7 +189,7 @@ Parameters:
   QSS3KeyPrefix:
     Type: String
     Default: quickstart-aws-utility-meter-data-analytics-platform/
-    Description: S3 key prefix that is used to simulate a folder for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html.
+    Description: S3 key prefix that is used to simulate a directory for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html.
   
   QSS3BucketRegion:
     Type: String
@@ -199,16 +199,16 @@ Parameters:
   DBName:
     Type: String
     Default: meter-data
-    Description: Amazon Redshift database name.
+    Description: Name of the Amazon Redshift database.
   
   RedshiftPort:
     Type: String
     Default: 5439
-    Description: Amazon Redshift cluster port number.
+    Description: Port number that you use to connect to the Amazon Redshift cluster.
   
   NoOfMeters:
     Type: String
-    Description: Approximate range of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value is good for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."
+    Description: Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."
     AllowedValues:
       - "1-50000"
       - "50001-and-more"
@@ -216,8 +216,7 @@ Parameters:
 
   AvailabilityZones:
     Description: >-
-      List of Availability Zones to use for the subnets in the VPC. The logical
-      order is preserved and 2 zones must be provided unless the third Availability Zone parameter is specified, in which case 3 zones must be provided.
+      List of Availability Zones to use for the subnets in the VPC. The logical order is preserved. You must provide two zones, according to AWS best practices. If a third Availability Zone parameter is specified, you must also provide that zone.
     Type: List<AWS::EC2::AvailabilityZone::Name>
   
   PrivateSubnet1ACIDR:
@@ -247,7 +246,7 @@ Parameters:
     Description: >-
       Enables or disables the use of weather data.
       0 = Weather data won't be used.
-      1 = Enable weather data use.
+      1 = Enable use of weather data.
 
 Outputs:
   StackName:

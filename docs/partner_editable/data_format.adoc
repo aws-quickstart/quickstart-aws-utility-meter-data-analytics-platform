@@ -235,7 +235,7 @@ Returns a list of meters that had an outage in the requested time range.
 
 
 ==== Aggregation API
-The aggregation endpoint returns aggregated readings for a certain meter on a daily, weekly ,or monthly basis.
+The aggregation endpoint returns aggregated readings for a certain meter on a daily, weekly, or monthly basis.
 
 [%header,cols=2*]
 .Parameter descriptions
@@ -244,7 +244,7 @@ The aggregation endpoint returns aggregated readings for a certain meter on a da
 |Description
 
 |aggregation level
-|Daily, weekly or monthly aggregation level.
+|Daily, weekly, or monthly aggregation level.
 
 |year
 |The year the aggregation should cover.
