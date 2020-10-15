@@ -4,6 +4,6 @@
 
 This guide provides instructions for deploying the {partner-product-short-name} Quick Start reference architecture on the AWS Cloud.
 
-This Quick Start deploys a platform that uses machine learning (ML) to help you analyze data from smart utility meters. Built by Amazon Web Services (AWS), this Quick Start is for utility companies or other organizations that are looking to gain insights from smart-meter data. This data comes from meter data management (MDM) or similar systems. Insights include unusual energy usage, energy-usage forecasts, and meter-outage details.
+This Quick Start deploys a platform that uses machine learning (ML) to help you analyze data from smart utility meters. It's for utility companies or other organizations that are looking to gain insights from smart-meter data. This data comes from meter data management (MDM) or similar systems. Insights include unusual energy usage, energy-usage forecasts, and meter-outage details.
 
 Except for Amazon Redshift, this is a serverless architecture.
