@@ -23,7 +23,7 @@ As shown in <<architecture1>>, the Quick Start sets up the following:
 ** Amazon S3 for storing the processed data.
 ** Amazon SageMaker for real-time forecasting of energy usage.
 ** A Jupyter notebook with sample code to perform data science and data visualization.
-* AWS Lambda to query the partitioned business data through Amazon Athena or invoke Amazon SageMaker to provide API query results.
+* AWS Lambda to query the partitioned business data through Amazon Athena or invoke SageMaker to provide API query results.
 * Amazon API Gateway to deliver API query results for energy usage, anomalies, and meter outages.
 
 [.small]#*The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.#
