@@ -2,8 +2,8 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-The {partner-product-name} Quick Start deploys a serverless architecture to ingest, store, and analyze utility-meter data. It creates an AWS Glue workflow, which consists of AWS Glue triggers, crawlers, and jobs as well as a data catalog. This workflow converts raw meter data into clean data and partitioned business data.
+The {partner-product-name} Quick Start deploys a serverless architecture to ingest, store, and analyze utility-meter data. It creates an AWS Glue workflow, which consists of AWS Glue triggers, crawlers, and jobs as well as the AWS Glue Data Catalog. This workflow converts raw meter data into clean data and partitioned business data.
 
-Next, this partitioned data enters an ML pipeline, which uses AWS Step Functions and Amazon SageMaker. First, an AWS Step Functions model-training workflow creates an ML model. Then another AWS Step Functions workflow uses the ML model to batch process the meter data. The processed data becomes the basis for forecasting energy usage, detecting usage anomalies, and reporting on meter outages. The Quick Start provides a Jupyter notebook that you can use to do data science and data visualizations on a provided sample dataset or run ad hoc queries on your own meter data.
+Next, this partitioned data enters an ML pipeline, which uses AWS Step Functions and Amazon SageMaker. First, an AWS Step Functions model-training workflow creates an ML model. Then another AWS Step Functions workflow uses the ML model to batch process the meter data. The processed data becomes the basis for forecasting energy usage, detecting usage anomalies, and reporting on meter outages. The Quick Start provides a Jupyter notebook that you can use to do data science and data visualizations on a provided sample dataset or run queries on your own meter data.
 
 This Quick Start also creates application programming interface (API) endpoints using Amazon API Gateway. API Gateway provides REST APIs that deliver the query results. 

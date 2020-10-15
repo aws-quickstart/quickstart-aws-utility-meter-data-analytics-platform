@@ -1,15 +1,22 @@
 == How to retrain the model or use a custom model in the pipeline
-This Quick Start deploys an ML pipeline, including a model-training workflow and a batch-processing workflow. This pipeline generates data that becomes the basis for forecasts and anomaly results. The initial deployment executes both workflows after ETL jobs are done.
+This Quick Start deploys an ML pipeline, including a model-training workflow and a batch-processing workflow. This pipeline generates data that becomes the basis for forecasts and anomaly results. The initial deployment runs both workflows after ETL jobs are done.
 
-After new data is added, you can rerun the whole AWS CloudFormation to reprocess the entire data and train a new model, or you might want to just rerun each part at a different schedule. For example, run the AWS Glue ETL workflow daily to process and format new data; run the batch workflow weekly to generate forecast and anomaly for new data; and run the model-training workflow monthly to retrain the model to learn new customer-consumption patterns. You can also use a custom model for batch pipeline and forecast API.
+After new data is added, you can rerun the whole AWS CloudFormation to reprocess the entire data and train a new model. Alternatively, you might rerun each part at a different schedule, as in these examples: 
+
+* Run the AWS Glue ETL workflow daily to process and format new data.
+* Run the batch workflow weekly to generate forecast and anomaly for new data.
+* Run the model-training workflow monthly to retrain the model to learn new customer-consumption patterns. 
+
+You can also use a custom model for batch pipeline and forecast API.
 
 === Run the batch prediction pipeline
+The batch pipeline is implemented by AWS Step Functions. 
 
-. The batch pipeline is implemented by Step Functions. Go to the Step Functions console in your AWS account, and find the state machine with the prefix `PredictionPipelineStateMachine-`.
+. Open the Step Functions console. Find the state machine with the prefix "PredictionPipelineStateMachine-".
 +
 :xrefstyle: short
 [#step_function_console]
-.AWS Step Functions console
+.Viewing state machines on the AWS Step Functions console
 [link=images/1_batchpipeline.png]
 image::../images/1_batchpipeline.png[AWS Step Functions console]
 
@@ -36,7 +43,7 @@ The input parameter needs to contain the following information in JSON format. Y
 
 === Retrain the model with different parameters
 
-. Go to the Step Functions console, and find the state machine with prefix `InitialTrainingStateMachine-`. 
+. Open the Step Functions console. Find the state machine with prefix "InitialTrainingStateMachine-". 
 . Open the state machine, and choose *Definition*. 
 . Find the `HyperParameters` part, and modify the parameters or add more parameters. See https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html[DeepAR Hyperparameters^].  
 +
@@ -46,7 +53,7 @@ The input parameter needs to contain the following information in JSON format. Y
 [link=images/3_trainingpipeline_hyperparameters.png]
 image::../images/3_trainingpipeline_hyperparameters.png[HyperParameters]
 
-. Save change to the state machine, and choose *Start execution*. The input parameter needs to contain the following information in JSON format. `Training_samples` specifies how many meters' data will be used to train the model. The more meters are used, the more accurate the model will be and the longer the training will take. 
+. Save the change to the state machine, and choose *Start execution*. The input parameter needs to contain the following information in JSON format. `Training_samples` specifies how many meters' data will be used to train the model. The more meters are used, the more accurate the model will be and the longer the training will take. 
 
 . Give a new name for `ModelName` and `ML_endpoint_name`.
 +
