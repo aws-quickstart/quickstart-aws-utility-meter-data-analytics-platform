@@ -1,17 +1,17 @@
 === Data partitioning
-The curated data in the 'business zone' is partitioned by *reading type* and *reading date*.
-On the lowest level of the partition tree, all meter reads for a day can be found.
-To optimize query performance, the data is stored in a column based file format (Parquet).
+The curated data in the business-zone S3 bucket is partitioned by *reading type* and *reading date*, as follows: s3://BusinessBucket/<reading_type_value>/<date>/<meter-data-file-in-parquet-format>.
 
-=== Late arriving data
-The data lake handles late arriving data. If a meter sends data on a later point in time, the ETL pipeline takes care of storing the late meter read in the correct partition.
+You can find all meter reads for a day on the lowest level of the partition tree. To optimize query performance, the data is stored in a column-based file format (Parquet).
 
-=== Meter data format
+=== Late-arriving data
+The data lake handles late-arriving data. If a meter sends data later, the ETL pipeline takes care of storing the late meter read in the correct partition.
 
-The input meter data format is variable and can be adjusted as described in the section <<Customize this Quick Start,'Customize this Quick Start'>>. However, the sample input data format of the 'London Meter Reads' looks like the following:
+=== Meter-data format
+
+The input meter-data format is variable and can be adjusted as described in the section <<Customize this Quick Start,'Customize this Quick Start'>>. The sample input data format of the London meter reads looks like the following:
 
 [cols="1,1,1", options="header"]
-.Input Schema
+.Input schema
 |===
 |Field
 |Type
@@ -27,10 +27,10 @@ The input meter data format is variable and can be adjusted as described in the 
 
 === Table schemas
 
-This Quick Start uses the following table schema for ETL job, ML model training and API queries. This schema is also used in Amazon Redshift.
+This Quick Start uses the following table schema for ETL jobs, ML model training, and API queries. This schema is also used in Amazon Redshift.
 
 [cols="1,1,1,1", options="header"]
-.Internal Schema
+.Internal schema
 |===
 |Field
 |Type
@@ -50,16 +50,16 @@ This Quick Start uses the following table schema for ETL job, ML model training 
 |minute| int| |
 |===
 
-AGG = Aggregated Reads
+AGG = Aggregated reads
 
-INT = Interval Reads
+INT = Interval reads
 
-==== Energy usage forecast
+==== Energy-usage forecast
 
-The Energy forecast endpoint that returns a list of future consumptions based on the trained ml model.
+The energy forecast endpoint returns a list of predicted consumptions based on the trained ML model.
 
 [%header,cols=2*]
-.Parameter description
+.Parameter descriptions
 |===
 |Parameter
 |Description
@@ -68,13 +68,13 @@ The Energy forecast endpoint that returns a list of future consumptions based on
 |The ID of the meter for which the forecast should be made.
 
 |data_start
-|Start date of meter reads that should be used a basis for the prediction
+|Start date of meter reads that should be used a basis for the prediction.
 
 |data_end
-|End date of meter reads that should be used a basis for the prediction
+|End date of meter reads that should be used a basis for the prediction.
 
 |ml_endpoint_name
-|The ML endpoint created by sage maker.
+|The ML endpoint created by SageMaker.
 |===
 
 .url structure
@@ -110,10 +110,10 @@ curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/MAC004734?dat
 
 ==== Anomaly detection
 
-The endpoint returns a list of energy usage anomalies for a specific meter in a given time range.
+The endpoint returns a list of energy-usage anomalies for a specific meter in a given time range.
 
 [%header,cols=2*]
-.Parameter description
+.Parameter descriptions
 |===
 |Parameter
 |Description
@@ -128,7 +128,7 @@ The endpoint returns a list of energy usage anomalies for a specific meter in a 
 |End date of the anomaly detection.
 
 |outlier_only
-|Defines if only outliers should be returned or all data for this certain meter.
+|Determines whether all data or only outliers should be returned for a certain meter.
 |===
 
 .url structure
@@ -179,16 +179,12 @@ The output returns a list of reading dates in which anomalies are marked on a da
 }
 ----
 
-==== Meter outage details
+==== Meter-outage details
 
-Endpoint that returns a list of meter that delivered an error code instead of a valid reading. Data includes geograpihc information (latitude, longitude) which can be used to great a heat map of current meter outages to i.e. visualize outage cluster.
-
-startDateTime:Describes the start time of the time windows.
-
-end_date_time: describes: Describes the end time of the time window.
+The endpoint returns a list of meters that delivered an error code instead of a valid reading. Data includes geographic information (latitude, longitude) which can be used to create a map of current meter outages, for example, to visualize an outage cluster.
 
 [%header,cols=2*]
-. Parameter description
+.Parameter descriptions
 |===
 |Parameter
 |Description
@@ -239,16 +235,16 @@ Returns a list of meters that had an outage in the requested time range.
 
 
 ==== Aggregation API
-The aggregation endpoint returns aggregated readings for a certain meter on a daily, weekly or monthly basis.
+The aggregation endpoint returns aggregated readings for a certain meter on a daily, weekly, or monthly basis.
 
 [%header,cols=2*]
-.Parameter description
+.Parameter descriptions
 |===
 |Parameter
 |Description
 
 |aggregation level
-|daily, weekly or monthly aggregation level
+|Daily, weekly, or monthly aggregation level.
 
 |year
 |The year the aggregation should cover.

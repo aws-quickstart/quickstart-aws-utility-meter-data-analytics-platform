@@ -768,16 +768,19 @@ a img {
     border: 1px solid #A4A4A4;
 }
 
-#preview_mode {
+.preview_mode {
 	border-color:#e0e0dc;
 	-webkit-box-shadow:0 1px 4px #e0e0dc;
 	box-shadow:0 1px 4px #e0e0dc;
   background:#ffffb3;
   padding-bottom: 2rem;
 }
-#preview_mode .tableblock {
+.preview_mode .tableblock {
   background:#ffffb3;
 }
+
+.footer-text{color:rgba(255,255,255,.8);line-height:1.44;background:#1c222a;padding:1.25em;max-width:100%;margin-bottom:unset}
+p.footer-text a{color:#d7d8d8}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -803,42 +806,44 @@ a img {
 <ul class="sectlevel2">
 <li><a href="#_sign_in_to_your_aws_account">Sign in to your AWS account</a></li>
 <li><a href="#_launch_the_quick_start">Launch the Quick Start</a></li>
-<li><a href="#_parameters_for_launching_into_a_new_vpc">Parameters for launching into a new VPC</a></li>
 </ul>
 </li>
-<li><a href="#_post_deployment_steps">Post deployment steps</a>
+<li><a href="#_post_deployment_steps">Post-deployment steps</a>
 <ul class="sectlevel2">
-<li><a href="#_download_sample_dataset">Download Sample Dataset</a></li>
-<li><a href="#_upload_the_dataset_to_the_raw_landing_zone_s3_bucket">Upload the dataset to the Raw (Landing zone) S3 bucket</a></li>
-<li><a href="#_prepare_weather_data_if_you_want_to_use_it_for_training_and_forecasting">Prepare weather data if you want to use it for training and forecasting</a></li>
-<li><a href="#_prepare_geo_location_data">Prepare geo-location data</a></li>
+<li><a href="#_download_sample_demo_dataset">Download sample (demo) dataset</a></li>
+<li><a href="#_upload_the_dataset_to_the_landing_zone_raw_data_s3_bucket">Upload the dataset to the landing-zone (raw-data) S3 bucket</a></li>
+<li><a href="#_optional_prepare_weather_data_for_use_in_training_and_forecasting">(Optional) Prepare weather data for use in training and forecasting</a></li>
+<li><a href="#_optional_prepare_geolocation_data">(Optional) Prepare geolocation data</a></li>
 <li><a href="#_start_the_aws_glue_etl_and_ml_training_pipeline">Start the AWS Glue ETL and ML training pipeline</a></li>
 </ul>
 </li>
 <li><a href="#_customize_this_quick_start">Customize this Quick Start</a></li>
-<li><a href="#_how_to_re_train_the_model_or_use_a_custom_model_in_the_pipeline">How to re-train the model or use a custom model in the pipeline</a>
+<li><a href="#_how_to_retrain_the_model_or_use_a_custom_model_in_the_pipeline">How to retrain the model or use a custom model in the pipeline</a>
 <ul class="sectlevel2">
-<li><a href="#_run_batch_prediction_pipeline">Run batch prediction pipeline</a></li>
-<li><a href="#_re_train_model_with_different_parameters">Re-train model with different parameters</a></li>
+<li><a href="#_run_the_batch_prediction_pipeline">Run the batch prediction pipeline</a></li>
+<li><a href="#_retrain_the_model_with_different_parameters">Retrain the model with different parameters</a></li>
 </ul>
 </li>
-<li><a href="#_data_schema_and_api_io_format">Data schema and API i/o format</a>
+<li><a href="#_data_schema_and_api_io_format">Data schema and API I/O format</a>
 <ul class="sectlevel2">
 <li><a href="#_data_partitioning">Data partitioning</a></li>
-<li><a href="#_late_arriving_data">Late arriving data</a></li>
-<li><a href="#_meter_data_format">Meter data format</a></li>
+<li><a href="#_late_arriving_data">Late-arriving data</a></li>
+<li><a href="#_meter_data_format">Meter-data format</a></li>
 <li><a href="#_table_schemas">Table schemas</a></li>
 </ul>
 </li>
 <li><a href="#_best_practices">Best practices</a></li>
 <li><a href="#_faq">FAQ</a></li>
-<li><a href="#_send_us_feedback">Send us feedback</a></li>
-<li><a href="#_quick_start_reference_deployments">Quick Start reference deployments</a></li>
-<li><a href="#_github_repository">GitHub repository</a>
-<ul class="sectlevel3">
-<li><a href="#_notices">Notices</a></li>
+<li><a href="#_parameter_reference">Parameter reference</a>
+<ul class="sectlevel2">
+<li><a href="#_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</a></li>
+<li><a href="#_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</a></li>
 </ul>
 </li>
+<li><a href="#_send_us_feedback">Send us feedback</a></li>
+<li><a href="#_quick_start_reference_deployments">Quick Start reference deployments</a></li>
+<li><a href="#_github_repository">GitHub repository</a></li>
+<li><a href="#_notices">Notices</a></li>
 </ul>
 </div>
 </div>
@@ -853,9 +858,8 @@ a img {
 </div>
 </div>
 <div class="paragraph text-center">
-<p><strong>August, 2020</strong><br>
-<em></em><br>
-<em>Avneet Singh, Juan Yu, Sascha Rodekamp, Shivansh Singh - AWS</em></p>
+<p><strong>October 2020</strong><br>
+<em>Avneet Singh, Juan Yu, Sascha Rodekamp, and Shivansh Singh, AWS</em></p>
 </div>
 <div class="admonitionblock tip text-left">
 <table>
@@ -879,24 +883,13 @@ report bugs, or submit feature ideas for this Quick Start.
 <h2 id="_overview">Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This Quick Start reference deployment guide provides step-by-step instructions for deploying a Utility Meter Data Analytics solution on the AWS Cloud.</p>
+<p>This guide provides instructions for deploying the Utility Meter Data Analytics Quick Start reference architecture on the AWS Cloud.</p>
 </div>
 <div class="paragraph">
-<p>This Quick Start is for teams and organizations who are looking to gain insights from their Utility meter data, available from their Meter Data Management (MDM) or similar systems. While the impetus for this Quick Start was the increasing number of customers asking for best practice advice to store and analyze Smart Meter data, older types of meter data can be accommodated as well.</p>
+<p>This Quick Start deploys a platform that uses machine learning (ML) to help you analyze data from smart utility meters. It&#8217;s for utility companies or other organizations that are looking to gain insights from smart-meter data. This data comes from meter data management (MDM) or similar systems. Insights include unusual energy usage, energy-usage forecasts, and meter-outage details.</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Amazon may share who uses AWS
-Quick Starts with the AWS Partner Network (APN) Partner that
-collaborated with AWS on the content of the Quick Start.
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>Except for Amazon Redshift, this is a serverless architecture.</p>
 </div>
 </div>
 </div>
@@ -904,10 +897,13 @@ collaborated with AWS on the content of the Quick Start.
 <h2 id="_utility_meter_data_analytics_on_aws">Utility Meter Data Analytics on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Utility Meter Data Analytics Quick Start deploys a serverless architecture to ingest, store, and analyze utility meter data, available from the MDM systems. It creates an AWS Glue Workflow which consists of AWS Glue crawlers, jobs and data catalog, to convert the raw meter data (from MDM systems) into clean and partitioned data. This partitioned data is then consumed by Machine learning pipeline built using AWS Step function and Amazon Sagemaker, to create an ML model. This model is then used by another ML pipeline to batch process the meter data for providing energy usage forecast and usage anomaly detection.</p>
+<p>The Utility Meter Data Analytics Quick Start deploys a serverless architecture to ingest, store, and analyze utility-meter data. It creates an AWS Glue workflow, which consists of AWS Glue triggers, crawlers, and jobs as well as the AWS Glue Data Catalog. This workflow converts raw meter data into clean data and partitioned business data.</p>
 </div>
 <div class="paragraph">
-<p>This Quick Start also creates API endpoints, using Amazon API Gateway, to provide REST APIs which can be utilized to get information about the energy usage forecast, anomaly detection and meter outage information. A sample Jupyter notebook is also provided with this Quick Start, which can be used to do data science and data visualizations on the provided sample data set, or run adhoc queries on your own meter data set.</p>
+<p>Next, this partitioned data enters an ML pipeline, which uses AWS Step Functions and Amazon SageMaker. First, an AWS Step Functions model-training workflow creates an ML model. Then another AWS Step Functions workflow uses the ML model to batch process the meter data. The processed data becomes the basis for forecasting energy usage, detecting usage anomalies, and reporting on meter outages. The Quick Start provides a Jupyter notebook that you can use to do data science and data visualizations on a provided sample dataset or run queries on your own meter data.</p>
+</div>
+<div class="paragraph">
+<p>This Quick Start also creates application programming interface (API) endpoints using Amazon API Gateway. API Gateway provides REST APIs that deliver the query results.</p>
 </div>
 </div>
 </div>
@@ -920,7 +916,7 @@ this Quick Start. There is no additional cost for
 using the Quick Start.</p>
 </div>
 <div class="paragraph">
-<p>The AWS CloudFormation template for this Quick Start includes
+<p>The AWS CloudFormation templates for Quick Starts include
 configuration parameters that you can customize. Some of the settings,
 such as the instance type, affect the cost of deployment. For cost estimates,
 see the pricing pages for each AWS service you use. Prices are subject to change.</p>
@@ -932,7 +928,7 @@ see the pricing pages for each AWS service you use. Prices are subject to change
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-After you deploy the Quick Start, enable the <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-gettingstarted-turnonreports.html" target="_blank" rel="noopener">AWS Cost and Usage Report</a> to deliver billing metrics to an Amazon Simple Storage Service (Amazon S3) bucket in your account. It provides cost estimates based on usage throughout each month and aggregates the data at the end of the month. For more information about the report, see the <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-costusage.html" target="_blank" rel="noopener">AWS documentation</a>.
+After you deploy the Quick Start, <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-gettingstarted-turnonreports.html" target="_blank" rel="noopener">create AWS Cost and Usage Reports</a> to deliver billing metrics to an Amazon Simple Storage Service (Amazon S3) bucket in your account. These reports provide cost estimates based on usage throughout each month and aggregate the data at the end of the month. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-costusage.html" target="_blank" rel="noopener">What are AWS Cost and Usage Reports?</a>
 </td>
 </tr>
 </table>
@@ -952,69 +948,88 @@ After you deploy the Quick Start, enable the <a href="https://docs.aws.amazon.co
 <div class="sectionbody">
 <div class="paragraph">
 <p>Deploying this Quick Start for a new virtual private cloud (VPC) with
-<strong>default parameters</strong> builds the following <em>Utility Meter Data Analytics</em> environment in the
+default parameters builds the following Utility Meter Data Analytics environment in the
 AWS Cloud.</p>
 </div>
 <div id="architecture1" class="imageblock">
 <div class="content">
-<a class="image" href="images/architecture_diagram.png"><img src="images/architecture_diagram.png" alt="Architecture" width="648" height="439"></a>
+<img src="images/architecture_diagram.png" alt="Architecture" width="100%" height="100%">
 </div>
-<div class="title">Figure 1. Quick Start architecture for <em>Utility Meter Data Analytics</em> on AWS</div>
+<div class="title">Figure 1. Quick Start architecture for Utility Meter Data Analytics on AWS</div>
 </div>
 <div class="paragraph">
-<p>As shown in Figure 1, the Quick Start sets up the following:</p>
+<p>As shown in <a href="#architecture1">Figure 1</a>, the Quick Start sets up the following:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>AWS S3 buckets to store raw, clean and (partitioned) business meter data.</p>
+<p>A VPC configured with a private subnet, according to AWS best practices, to provide you with your own virtual network on AWS.*</p>
+</li>
+<li>
+<p>In the private subnet, an Amazon Redshift cluster that stores business data for analysis, visualization, and dashboards.</p>
+</li>
+<li>
+<p>An extract, transform, load (ETL) pipeline:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Data in business bucket is partitioned as follows - s3://BusinessBucket/&lt;reading_type_value&gt;/&lt;date&gt;/&lt;meter-data-file-in-parquet-format&gt;</p>
+<p>S3 buckets to store data from an MDM or similar system. Raw meter data, clean data, and partitioned business data are stored in separate S3 buckets.</p>
+</li>
+<li>
+<p>An AWS Glue workflow:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Crawlers, jobs, and triggers to crawl, transform, and convert incoming raw meter data into clean data in the desired format and partitioned business data.</p>
+</li>
+<li>
+<p>Data Catalog to store metadata and source information about the meter data.</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>AWS Glue crawlers, and Glue Jobs to transform crawl, transform and convert incoming raw meter data into cleaned data, in desired format and partitioned appropriately into "curated" business data.</p>
+<p>An ML pipeline:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Two AWS Step Functions workflows:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Model training, which uses the partitioned business data to build an ML model.</p>
 </li>
 <li>
-<p>AWS Glue workflow to orchestrate various triggers, crawlers and jobs.</p>
+<p>Batch processing, which uses the partitioned business data and the data from the model as a basis for forecasting.</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>AWS Glue data catalog to store metadata and source information about the meter data.</p>
+<p>Amazon S3 for storing the processed data.</p>
 </li>
 <li>
-<p>Amazon Redshift cluster in a private subnet inside a VPC.</p>
+<p>Amazon SageMaker for real-time forecasting of energy usage.</p>
 </li>
 <li>
-<p>AWS Step function to train model using the partitioned meter data available in business S3 bucket.</p>
+<p>A Jupyter notebook with sample code to perform data science and data visualization.</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>AWS Step function to batch process the meter data for energy usage forecast and anomaly detection.</p>
+<p>AWS Lambda to query the partitioned business data through Amazon Athena or invoke SageMaker to provide API query results.</p>
 </li>
 <li>
-<p>Amazon Sagemaker endpoint for real-time inferencing energy usage forecasting.</p>
-</li>
-<li>
-<p>Jupyter notebook with sample code to perform data science and data visualization on meter data, directly from AWS S3 buckets.</p>
-</li>
-<li>
-<p>AWS Lambda functions to query S3 via Amazon Athena or invoke Amazon Sagemaker endpoint, to provide API query results</p>
-</li>
-<li>
-<p>Amazon API Gateway endpoint to get information about energy usage forecast, anomaly detection and meter outage information.</p>
-</li>
-<li>
-<p>A VPC configured with public and private subnets, according to AWS best practices, to provide you with your own virtual network on AWS.*</p>
+<p>Amazon API Gateway to deliver API query results for energy usage, anomalies, and meter outages.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>*The template that deploys the Quick Start into an existing VPC skips
-the components marked by asterisks and prompts you for your existing VPC
-configuration.</p>
+<p><span class="small">*The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.</span></p>
 </div>
 </div>
 </div>
@@ -1044,10 +1059,10 @@ Cloud.</p>
 <p>Meter data has already been validated and processed by the MDM system.</p>
 </li>
 <li>
-<p>Weather data is not required, however recommended to get useful insights for unusual energy consumption, when correlated with weather information.</p>
+<p>Weather data, while not required, is recommended because it produces insights when correlated with unusual energy usage.</p>
 </li>
 <li>
-<p>Customer information (CIS) data is not required, however recomended to get insights on customer energy usage consumption.</p>
+<p>Data from a customer information system (CIS), while not required, is recommended because it produces insights related to customer energy usage.</p>
 </li>
 </ul>
 </div>
@@ -1088,12 +1103,12 @@ Cloud.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">IAM roles</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Identity and Access Management (IAM) roles</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Amazon S3 buckets</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">AWS Glue crawlers</p></td>
@@ -1104,11 +1119,11 @@ Cloud.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Sagemaker notebook instances</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon SageMaker notebook instances</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Sagemaker endpoints</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon SageMaker endpoints</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
@@ -1116,7 +1131,7 @@ Cloud.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon API gateway endpoints</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon API Gateway endpoints</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
@@ -1124,7 +1139,7 @@ Cloud.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Step functions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Step Functions state machines</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
 </tr>
 </tbody>
@@ -1133,7 +1148,29 @@ Cloud.</p>
 <div class="sect3">
 <h4 id="_supported_regions">Supported Regions</h4>
 <div class="paragraph">
-<p>This Quick Start can be deployed in all AWS Regions where the services described in <a href="#architecture1">Figure 1</a> are available.</p>
+<p>This Quick Start supports the following Regions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>us-east-1, US East (N. Virginia)</p>
+</li>
+<li>
+<p>us-east-2, US East (Ohio)</p>
+</li>
+<li>
+<p>us-west-2, US West (Oregon)</p>
+</li>
+<li>
+<p>eu-central-1, Europe (Frankfurt)</p>
+</li>
+<li>
+<p>ca-central-1, Canada (Central)</p>
+</li>
+<li>
+<p>ap-south-1, Asia Pacific (Mumbai)</p>
+</li>
+</ul>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1142,7 +1179,7 @@ Cloud.</p>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Certain Regions are available on an opt-in basis. Refer to the AWS Documentation on <a href="https://docs.aws.amazon.com/general/latest/gr/rande-manage.html" target="_blank" rel="noopener">Managing Regions</a> for more information.
+Certain Regions are available on an opt-in basis. See <a href="https://docs.aws.amazon.com/general/latest/gr/rande-manage.html" target="_blank" rel="noopener">Managing AWS Regions</a>.
 </td>
 </tr>
 </table>
@@ -1160,7 +1197,7 @@ Certain Regions are available on an opt-in basis. Refer to the AWS Documentation
 <div class="sect3">
 <h4 id="_iam_permissions">IAM permissions</h4>
 <div class="paragraph">
-<p>Before launching the Quick Start, you must log in to the AWS Management Console with <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html" target="_blank" rel="noopener">IAM permissions</a> for the resources and actions the templates deploy.</p>
+<p>Before launching the Quick Start, you must sign in to the AWS Management Console with <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html" target="_blank" rel="noopener">IAM permissions</a> for the resources that the templates deploy.</p>
 </div>
 <div class="paragraph">
 <p>The <em>AdministratorAccess</em> managed policy within IAM provides sufficient permissions, although your organization may choose to use a custom policy with more restrictions.</p>
@@ -1169,32 +1206,32 @@ Certain Regions are available on an opt-in basis. Refer to the AWS Documentation
 <div class="sect3">
 <h4 id="_prepare_for_the_deployment">Prepare for the deployment</h4>
 <div class="paragraph">
-<p>To see the full capabilities of this Quick Start, make sure you have a sample dataset for utility meters, from an MDM system. Optionally, you can also have weather data, geo location data and CIS data for the corresponding utility meters, to gain better insights.</p>
+<p>To see the full capabilities of this Quick Start, make sure you have a sample dataset for utility meters from an MDM system. Optionally, to gain better insights, we recommend that you also have weather data, geolocation data, and CIS data corresponding to the utility meters.</p>
 </div>
 <div class="paragraph">
-<p>Details about how you can download a sample dataset and use with this Quick Start is provided in the Post-deployment section, later in this deployment guide.</p>
+<p>For details on how to download and use a sample dataset with this Quick Start, see the <a href="#_post_deployment_steps">Post-deployment steps</a> section of this deployment guide.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_deployment_options">Deployment options</h4>
 <div class="paragraph">
-<p>This Quick Start creates a serverless architecture in your AWS Account. As part of the deployment, it creates a Redshift cluster, which is created in a private subnet within a VPC.</p>
+<p>This Quick Start creates a serverless architecture in your AWS account. As part of the deployment, it creates an Amazon Redshift cluster, which is created in a private subnet within a VPC.</p>
 </div>
 <div class="paragraph">
-<p>For deployment of the Redshift cluster, this Quick Start provides two deployment options:</p>
+<p>For deployment of the Amazon Redshift cluster, this Quick Start provides two deployment options:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Deploy Utility Meter Data Analytics into a new VPC (end-to-end deployment)</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, and other infrastructure components. It then deploys Redshift cluster into the new VPC.</p>
+<p><strong>Deploy Utility Meter Data Analytics into a new VPC</strong>. This option builds a new AWS environment consisting of the VPC, the subnet, and other infrastructure components. It then deploys an Amazon Redshift cluster into the new VPC.</p>
 </li>
 <li>
-<p><strong>Deploy Utility Meter Data Analytics into an existing VPC</strong>. This option provisions Redshift cluster in your existing AWS infrastructure.</p>
+<p><strong>Deploy Utility Meter Data Analytics into an existing VPC</strong>. This option provisions an Amazon Redshift cluster in your existing AWS infrastructure.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>The Quick Start provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, no. of DPUs for Glue jobs, and source S3 bucket, as discussed later in this guide.</p>
+<p>The Quick Start provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, the number of digital processing units (DPUs) for AWS Glue jobs, and the source S3 bucket, as discussed later in this guide.</p>
 </div>
 </div>
 </div>
@@ -1233,7 +1270,7 @@ You are responsible for the cost of the AWS services used while running this Qui
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Sign in to your AWS account, and choose one of the following options to launch the AWS CloudFormation template. For help with choosing an option, see <a href="#_deployment_options">deployment options</a> earlier in this guide.</p>
+<p>Sign in to your AWS account, and choose one of the following options to launch the AWS CloudFormation template. For help with choosing an option, see <a href="#_deployment_options">Deployment options</a> earlier in this guide.</p>
 </li>
 </ol>
 </div>
@@ -1257,13 +1294,10 @@ You are responsible for the cost of the AWS services used while running this Qui
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-If you’re deploying Utility Meter Data Analytics into an existing VPC, make sure that your VPC has two private subnets in different Availability Zones for the workload instances, and that the subnets aren’t shared. This Quick Start doesn’t support <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html" target="_blank" rel="noopener">shared subnets</a>. These subnets require <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html" target="_blank" rel="noopener">NAT gateways</a> in their route tables, to allow the instances to download packages and software without exposing them to the internet.
+If you’re deploying Utility Meter Data Analytics into an existing VPC, make sure that your VPC has two private subnets in different Availability Zones for the workload instances and that the subnets aren’t shared. This Quick Start doesn’t support <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html" target="_blank" rel="noopener">shared subnets</a>. These subnets require <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html" target="_blank" rel="noopener">network address translation (NAT) gateways</a> in their route tables so that the instances can download packages and software without exposing them to the internet. Also make sure that the domain name option in the DHCP options is configured as explained in <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html" target="_blank" rel="noopener">DHCP options sets</a>. You provide your VPC settings when you launch the Quick Start.
 </td>
 </tr>
 </table>
-</div>
-<div class="paragraph">
-<p>Also, make sure that the domain name option in the DHCP options is configured as explained in the <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html" target="_blank" rel="noopener">Amazon VPC documentation</a>. You provide your VPC settings when you launch the Quick Start.</p>
 </div>
 <div class="paragraph">
 <p>Each deployment takes about 30 minutes to complete.</p>
@@ -1271,7 +1305,7 @@ If you’re deploying Utility Meter Data Analytics into an existing VPC, make su
 <div class="olist arabic">
 <ol class="arabic" start="2">
 <li>
-<p>Check the AWS Region that’s displayed in the upper-right corner of the navigation bar, and change it if necessary. This is where the network infrastructure for Utility Meter Data Analytics will be built. The template is launched in the us-east-1 Region by default.</p>
+<p>Check the AWS Region that’s displayed in the upper-right corner of the navigation bar, and change it if necessary. This is where the network infrastructure for Utility Meter Data Analytics is built. The template is launched in the us-east-1 Region by default.</p>
 </li>
 </ol>
 </div>
@@ -1281,12 +1315,9 @@ If you’re deploying Utility Meter Data Analytics into an existing VPC, make su
 <p>On the <strong>Create stack</strong> page, keep the default setting for the template URL, and then choose <strong>Next</strong>.</p>
 </li>
 <li>
-<p>On the <strong>Specify stack details</strong> page, change the stack name if needed. Review the parameters for the template. Provide values for the parameters that require input. For all other parameters, review the default settings and customize them as necessary.</p>
+<p>On the <strong>Specify stack details</strong> page, change the stack name if needed. Review the parameters for the template. Provide values for the parameters that require input. For all other parameters, review the default settings and customize them as necessary. For details on each parameter, see the <a href="#_parameter_reference">Parameter reference</a> section of this guide.</p>
 </li>
 </ol>
-</div>
-<div class="paragraph">
-<p>In the following tables, parameters are listed by category and described separately for the deployment options. When you finish reviewing and customizing the parameters, choose <strong>Next</strong>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1301,185 +1332,6 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 </tr>
 </table>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_parameters_for_launching_into_a_new_vpc">Parameters for launching into a new VPC</h3>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. Redshift Cluster Configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Master username
-(<code>MasterUsername</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Redshift cluster master user name</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Master user password
-(<code>MasterUserPassword</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Redshift cluster master user password</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Redshift cluster name
-(<code>ClusterName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>redshift-cluster-1</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Redshift cluster name</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Redshift database name
-(<code>DBName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meter-data</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Redshift database name</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Redshift port
-(<code>RedshiftPort</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>5439</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Redshift cluster port no.</p></td>
-</tr>
-</tbody>
-</table>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. Network Configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Availability Zones
-(<code>AvailabilityZones</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved and 2 zones must be provided unless the Third Availability Zone parameter is specified, in which case 3 zones must be provided.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPC CIDR
-(<code>VPCCIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/16</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for the VPC.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Private subnet 1A CIDR
-(<code>PrivateSubnet1ACIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/19</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 1A located in Availability Zone 1</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Private subnet 2A CIDR
-(<code>PrivateSubnet2ACIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.32.0/19</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 2A located in Availability Zone 2</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Remote access CIDR block
-(<code>RemoteAccessCIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0.0.0/0</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block from where access to the Redshift cluster is allowed</p></td>
-</tr>
-</tbody>
-</table>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. Glue Configurations</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Transformer that reads the landing zone data
-(<code>LandingzoneTransformer</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>default</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the Transformer for the input data in the Landing Zone</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Create landing zone bucket
-(<code>CreateLandingZoneS3Bucket</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Yes</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Select 'No' if you have an existing S3 bucket with raw meter data which you would like to use. Otherwise leave default value as 'Yes'. You must provide a value for 'Landing zone S3 bucket' parameter if you select 'No'.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Landing zone S3 bucket
-(<code>LandingZoneS3BucketName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">(Conditional) You must provide a value if you select 'No' for 'Create Landing Zone bucket' parameter above.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">No. of meters
-(<code>NoOfMeters</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1-50000</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Approximate range. of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure appropriate no. of DPUs for the Glue Job. Default value is good for sample data set or evaluation purpose. For production deployment with millions of meters, select '50001-and-more' from the list.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Transformer that reads the landing zone data
-(<code>LandingzoneTransformer</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>default</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the Transformer for the input data in the Landing Zone</p></td>
-</tr>
-</tbody>
-</table>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. Quick Start Configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 Bucket name
-(<code>QSS3BucketName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>aws-quickstart</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Quick Start S3 bucket name where the Quick Start assets are hosted</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 Bucket Key Prefix
-(<code>QSS3KeyPrefix</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quickstart-aws-utility-meter-data-analytics-platform/</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket key prefix for the AWS Quick Start assets</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 Bucket AWS Region
-(<code>QSS3BucketRegion</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>us-east-1</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Region for AWS Quick Start S3 bucket</p></td>
-</tr>
-</tbody>
-</table>
 <div class="olist arabic">
 <ol class="arabic" start="5">
 <li>
@@ -1509,55 +1361,67 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 </div>
 </div>
 <div class="sect1">
-<h2 id="_post_deployment_steps">Post deployment steps</h2>
+<h2 id="_post_deployment_steps">Post-deployment steps</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To see the capabilities of the QuickStart, follow the below steps to use dataset of meter reads from the City of London, between 2011 to 2014. The <a href="#_customize_this_quick_start"><em>Customize this Quick Start</em></a> section explains how to edit the raw data ETL script to work with your own meter data.</p>
+<p>To see the capabilities of the QuickStart, follow the steps in this section to use the dataset of meter reads from the City of London between 2011 and 2014. The <a href="#_customize_this_quick_start">Customize this Quick Start</a> section explains how to edit the raw-data ETL script to work with your own meter data.</p>
 </div>
 <div class="sect2">
-<h3 id="_download_sample_dataset">Download Sample Dataset</h3>
+<h3 id="_download_sample_demo_dataset">Download sample (demo) dataset</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For using the demo dataset, you must set the <strong>LandingzoneTransformer</strong> to London during the Quick Start deployment.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>Download the sample dataset from <a href="https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households" target="_blank" rel="noopener">here</a>. The file can be downloaded to your local machine, unzipped, and then uploaded to S3. However, given the size of the unzipped file (~11GB), it is faster to run a EC2 instance with sufficient privileges to write to S3, download the file to the EC2 instance, unzip it and upload the data from there.</p>
+<p>Download the sample dataset from <a href="https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households" target="_blank" rel="noopener">SmartMeter Energy Consumption Data in London Households</a>. The file can be downloaded to your local machine, unzipped, and then uploaded to Amazon S3. However, given the size of the unzipped file (~11 GB), it&#8217;s faster to run an EC2 instance with sufficient permissions to write to Amazon S3, download the file to the EC2 instance, unzip it, and upload the data from there.</p>
 </div>
 <div class="paragraph">
 <p><a href="https://data.london.gov.uk/download/smartmeter-energy-use-data-in-london-households/3527bf39-d93e-4071-8451-df2ade1ea4f2/Power-Networks-LCL-June2015(withAcornGps).zip" target="_blank" rel="noopener">Download sample meter data</a></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_upload_the_dataset_to_the_raw_landing_zone_s3_bucket">Upload the dataset to the Raw (Landing zone) S3 bucket</h3>
+<h3 id="_upload_the_dataset_to_the_landing_zone_raw_data_s3_bucket">Upload the dataset to the landing-zone (raw-data) S3 bucket</h3>
 <div class="paragraph">
-<p>The sample dataset needs to be uploaded to the landing zone bucket. The landing zone is the starting point for AWS Glue workflow. Files that are placed in this S3 bucket will be processed by the ETL pipeline. Furthermore, the AWS Glue ETL workflow tracks which files haven been processed and which are not.</p>
+<p>You must upload the sample dataset to the landing-zone (raw-data) S3 bucket. The landing zone is the starting point for the AWS Glue workflow. Files that are placed in this S3 bucket are processed by the ETL pipeline. Furthermore, the AWS Glue ETL workflow tracks which files have been processed and which have not.</p>
 </div>
 <div class="paragraph">
-<p>To upload the sample dataset to the Raw S3 bucket, follow the below steps:</p>
+<p>To upload the sample dataset to the landing-zone S3 bucket, follow these steps:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Select the landing zone bucket, buckets names are generated, find the one which contains the word landing zone. This will be the starting point for the ETL process.</p>
+<p>Choose the landing-zone bucket. Bucket names are generated. Find the name that contains "landingzones." This is the starting point for the ETL process.</p>
 <div id="bucket_layout" class="imageblock">
 <div class="content">
-<img src="images/1_bucket_layout.png" alt="Bucket Layout">
+<a class="image" href="images/1_bucket_layout.png"><img src="images/1_bucket_layout.png" alt="Bucket Layout"></a>
 </div>
-<div class="title">Figure 3. S3 Bucket layout</div>
+<div class="title">Figure 3. S3 bucket layout</div>
 </div>
 </li>
 <li>
-<p>Upload the London Meter Data to the landing zone bucket.</p>
+<p>Upload the London meter data to the landing-zone bucket.</p>
 <div id="upload_demo_dataset" class="imageblock">
 <div class="content">
-<img src="images/2_upload_demo_data_set.png" alt="Upload demo data set">
+<a class="image" href="images/2_upload_demo_data_set.png"><img src="images/2_upload_demo_data_set.png" alt="Upload demo dataset"></a>
 </div>
-<div class="title">Figure 4. Upload demo data set</div>
+<div class="title">Figure 4. Uploading the demo dataset</div>
 </div>
 </li>
 <li>
-<p>After the demo data is uploaded, the folder contains one file with all the meter reads.</p>
+<p>After the demo data is uploaded, verify that the directory contains one file with all the meter reads.</p>
 <div id="uploaded_demo_dataset" class="imageblock">
 <div class="content">
-<img src="images/3_upload_demo_data_set.png" alt="Uploaded demo data set">
+<a class="image" href="images/3_upload_demo_data_set.png"><img src="images/3_upload_demo_data_set.png" alt="Uploaded demo dataset"></a>
 </div>
-<div class="title">Figure 5. Uploaded demo data set</div>
+<div class="title">Figure 5. The uploaded demo dataset</div>
 </div>
 </li>
 </ol>
@@ -1569,29 +1433,29 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Landing Zone S3 bucket should only have meter data files. It shouldn&#8217;t contain any subfolder, otherwise, the ETL workflow will fail.
+Make sure that your landing-zone S3 bucket contains only meter-data files. If it contains any subdirectories, the ETL workflow fails.
 </td>
 </tr>
 </table>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_prepare_weather_data_if_you_want_to_use_it_for_training_and_forecasting">Prepare weather data if you want to use it for training and forecasting</h3>
+<h3 id="_optional_prepare_weather_data_for_use_in_training_and_forecasting">(Optional) Prepare weather data for use in training and forecasting</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
 <p><a href="https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv" target="_blank" rel="noopener">Download</a> the sample weather dataset.</p>
 </li>
 <li>
-<p>Upload the dataset to S3 bucket</p>
+<p>Upload the dataset to the S3 bucket.</p>
 </li>
 <li>
-<p>Create "weather" table in target Glue database using below SQL statement. Make sure to replace "weather-data-location" to where you upload the weather dataset.</p>
+<p>Create a weather table in the target AWS Glue database using the following SQL statement. Replace &lt;weather-data-location&gt; with the location where you upload the weather dataset.</p>
 <div id="create_weather_table" class="imageblock">
 <div class="content">
-<img src="images/4_create_weather_table.png" alt="Create weather table via Athena">
+<a class="image" href="images/4_create_weather_table.png"><img src="images/4_create_weather_table.png" alt="Create weather table via Athena"></a>
 </div>
-<div class="title">Figure 6. Create weather table</div>
+<div class="title">Figure 6. Creating the weather table</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1621,10 +1485,10 @@ TBLPROPERTIES (
 </ol>
 </div>
 <div class="paragraph">
-<p>If you have other weather dataset you want to use, just make sure it contains at least below 4 columns.</p>
+<p>If you have another weather dataset you want to use, make sure that it contains at least the four columns shown in <a href="#weather_data_schema">Table 1</a>.</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Weather data schema</caption>
+<table id="weather_data_schema" class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Weather data schema</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1667,24 +1531,24 @@ TBLPROPERTIES (
 </tbody>
 </table>
 <div class="paragraph">
-<p>The CloudFormation parameter "WithWeather" should have been set to 1 to indicate that weather data is available to use, for generating ML model.</p>
+<p>The AWS CloudFormation parameter <code>WithWeather</code> should have been set to 1 to indicate that weather data is available to use for generating the ML model.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_prepare_geo_location_data">Prepare geo-location data</h3>
+<h3 id="_optional_prepare_geolocation_data">(Optional) Prepare geolocation data</h3>
 <div class="paragraph">
-<p>This Quick Start requires geo-location data to be uploaded to the <em>geodata</em> folder in Business Zone S3 bucket. You can get the name of the Business zone S3 bucket from the output section of the CloudFormation stack. The S3 path of geo-data location should be <em>s3://&lt;business-zone-s3-bucket-name&gt;/geodata/</em>. The data should be in a .CSV file format with the following structure, where all 3 columns are mandatory with comma-separated values.</p>
+<p>This Quick Start requires geolocation data to be uploaded to the <code>geodata</code> directory in the business-zone S3 bucket. You can get the name of this bucket from the output section in the AWS CloudFormation stack. The S3 path of geodata location should be <code>s3://&lt;business-zone-s3-bucket-name&gt;/geodata/</code>. The data should be in a CSV file format with the following structure, where all three fields (meter id, latitude, and longitude) are mandatory as comma-separated values.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. Geo-location data schema</caption>
+<caption class="title">Table 2. Geolocation data schema</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Field</th>
-<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Field Name</th>
+<th class="tableblock halign-left valign-top">Field Type</th>
 </tr>
 </thead>
 <tbody>
@@ -1703,59 +1567,50 @@ TBLPROPERTIES (
 </tbody>
 </table>
 <div class="paragraph">
-<p>If this data is missing, API request to get meter outage information will return error.</p>
+<p>If this data is missing, any API request to get meter-outage information returns an error.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_start_the_aws_glue_etl_and_ml_training_pipeline">Start the AWS Glue ETL and ML training pipeline</h3>
 <div class="paragraph">
-<p>By default, the pipeline is configured to be triggered each day at 09:00 AM and process the newly arrived data in the landing zone S3 bucket. However, to process the uploaded data without wait, trigger the pipeline manually. To trigger the ETL pipeline, go to the AWS Glue console and select the 'Workflow' menu entry. The AWS Glue workflow orchestrates the different steps of the ETL process. After the workflow run has successfully completed, Model training state machine is triggered to build the ML model and prepare the data for energy usage forecast and anomaly.</p>
+<p>By default, the pipeline is triggered each day at 09:00 and to process the newly arrived data in the landing-zone S3 bucket. To process the uploaded data without waiting, you trigger the ETL pipeline manually. When you do, the AWS Glue workflow orchestrates the steps of the ETL process. Then, the model training state machine is triggered to build the ML model and prepare the data for forecasting energy usage and reporting on anomalies.</p>
 </div>
 <div class="paragraph">
-<p>Follow the below steps to start the ETL pipeline.</p>
+<p>To trigger the ETL pipeline manually, follow these steps.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Go to the AWS Glue Console, and select 'Workflows'.</p>
+<p>Open the AWS Glue console. Choose <strong>Workflows</strong>.</p>
 <div id="glue_console" class="imageblock">
 <div class="content">
-<img src="images/4_start_etl_workflow.png" alt="AWS Glue Console">
+<a class="image" href="images/4_start_etl_workflow.png"><img src="images/4_start_etl_workflow.png" alt="AWS Glue console"></a>
 </div>
-<div class="title">Figure 7. AWS Glue Console</div>
+<div class="title">Figure 7. Viewing AWS Glue workflows</div>
 </div>
 </li>
 <li>
-<p>Select the workflow and choose 'Run' from the drop-down-menu.</p>
+<p>Select the workflow.</p>
+</li>
+<li>
+<p>On the <strong>Actions</strong> menu, choose <strong>Run</strong>.</p>
 <div id="start_etl_workflow" class="imageblock">
 <div class="content">
-<img src="images/5_start_etl_workflow.png" alt="Start ETL workflow">
+<a class="image" href="images/5_start_etl_workflow.png"><img src="images/5_start_etl_workflow.png" alt="Start ETL workflow"></a>
 </div>
-<div class="title">Figure 8. Start ETL workflow</div>
+<div class="title">Figure 8. Start the ETL workflow</div>
 </div>
 </li>
 <li>
-<p>The Workflow should be indicated as 'Running' in the 'History' tab.</p>
+<p>In the <strong>History</strong> tab, make sure that the workflow&#8217;s run status is <strong>Running</strong>.</p>
 <div id="running_workflow" class="imageblock">
 <div class="content">
-<img src="images/6_start_etl_workflow.png" alt="Running workflow">
+<a class="image" href="images/6_start_etl_workflow.png"><img src="images/6_start_etl_workflow.png" alt="Running workflow"></a>
 </div>
-<div class="title">Figure 9. Running workflow</div>
+<div class="title">Figure 9. Running the workflow</div>
 </div>
 </li>
 </ol>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to step 2.
-</td>
-</tr>
-</table>
 </div>
 </div>
 </div>
@@ -1764,47 +1619,47 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 <h2 id="_customize_this_quick_start">Customize this Quick Start</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This Quick Start can be easily customized to use with your own data format. To do that, the first AWS Glue job has to be adjusted to map the incoming data to the internal meter data lake schema. The following steps describe how it can be achieved.</p>
+<p>You can customize this Quick Start for use with your own data format. To do that, you adjust the first AWS Glue job to map the incoming data to the internal meter-data-lake schema. The following steps describe how.</p>
 </div>
 <div class="paragraph">
-<p>The first AWS Glue Job in the AWS Glue ETL workflow transforms the raw data in the landing zone S3 bucket to cleaned data in the Clean Zone S3 bucket. This step is also responsible for mapping the inbound data to the internal data schema, which is used by the rest of the steps in the AWS ETL workflow and the ML step functions.</p>
+<p>The first AWS Glue job in the ETL workflow transforms the raw data in the landing-zone S3 bucket to clean data in the clean-zone S3 bucket. This step also maps the inbound data to the internal data schema, which is used by the rest of the steps in the AWS ETL workflow and the ML state machines.</p>
 </div>
 <div class="paragraph">
-<p>To update the data mapping, the AWS Glue job can be edited directly in the web editor.</p>
+<p>To update the data mapping, you can edit the AWS Glue job directly in the web editor.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Navigate to the AWS Glue Job console.</p>
+<p>Open the AWS Glue console. Choose <strong>Jobs</strong>.</p>
 <div id="glue_job_console" class="imageblock">
 <div class="content">
-<img src="images/1_edit_etl_job.png" alt="AWS Glue Job console">
+<a class="image" href="images/1_edit_etl_job.png"><img src="images/1_edit_etl_job.png" alt="AWS Glue Job console"></a>
 </div>
-<div class="title">Figure 10. AWS Glue Job console</div>
+<div class="title">Figure 10. Viewing AWS Glue jobs</div>
 </div>
 </li>
 <li>
-<p>Select the 'transform_raw_to_clean-*' job.</p>
+<p>Select the ETL job ("transform_raw_to_clean-*").</p>
 <div id="edit_etl_job" class="imageblock">
 <div class="content">
-<img src="images/2_edit_etl_job.png" alt="Edit ETL Job">
+<a class="image" href="images/2_edit_etl_job.png"><img src="images/2_edit_etl_job.png" alt="Select the ETL job"></a>
 </div>
-<div class="title">Figure 11. Edit ETL Job</div>
+<div class="title">Figure 11. Selecting the ETL job</div>
 </div>
 </li>
 <li>
-<p>Open script editor and start editing the input mapping.</p>
+<p>Open the script editor, and edit the input mapping.</p>
 <div id="open_editor" class="imageblock">
 <div class="content">
-<img src="images/3_open_editor.png" alt="Open editor">
+<a class="image" href="images/3_open_editor.png"><img src="images/3_open_editor.png" alt="Open the script editor"></a>
 </div>
-<div class="title">Figure 12. Open editor</div>
+<div class="title">Figure 12. Opening the script editor</div>
 </div>
 </li>
 <li>
-<p>To adopt a different input format look for the 'ApplyMapping' call and adjust it to your needs  to reflect your custom input format. Currently, the internal model works with the following schema:</p>
+<p>To adopt a different input format, look for the <code>ApplyMapping</code> call and adjust it to your needs to reflect your custom input format. The internal model works with the following schema:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. Schema</caption>
+<caption class="title">Table 3. Schema</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1894,32 +1749,51 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 </div>
 </div>
 <div class="sect1">
-<h2 id="_how_to_re_train_the_model_or_use_a_custom_model_in_the_pipeline">How to re-train the model or use a custom model in the pipeline</h2>
+<h2 id="_how_to_retrain_the_model_or_use_a_custom_model_in_the_pipeline">How to retrain the model or use a custom model in the pipeline</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This Quick Start deploys a model training pipeline and batch pipeline to generate forecast and anomaly result. The initial deployment will execute both pipelines after ETL jobs are done.</p>
+<p>This Quick Start deploys an ML pipeline, including a model-training workflow and a batch-processing workflow. This pipeline generates data that becomes the basis for forecasts and anomaly results. The initial deployment runs both workflows after ETL jobs are done.</p>
 </div>
 <div class="paragraph">
-<p>After new data is added, you can re-run the whole cloudformation to reprocess the entire data and train a new model, or you might want to just re-run each part at different schedule. For example, run the Glue ETL flow daily to process and format new data; run the batch pipeline weekly to generate forecast and anomaly for new data; run the model training pipeline monthly to re-train model to learn new customer consumption patterns. You can even use a custom model for batch pipeline and forecast API.</p>
+<p>After new data is added, you can rerun the whole AWS CloudFormation to reprocess the entire data and train a new model. Alternatively, you might rerun each part at a different schedule, as in these examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Run the AWS Glue ETL workflow daily to process and format new data.</p>
+</li>
+<li>
+<p>Run the batch workflow weekly to generate forecast and anomaly for new data.</p>
+</li>
+<li>
+<p>Run the model-training workflow monthly to retrain the model to learn new customer-consumption patterns.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can also use a custom model for batch pipeline and forecast API.</p>
 </div>
 <div class="sect2">
-<h3 id="_run_batch_prediction_pipeline">Run batch prediction pipeline</h3>
+<h3 id="_run_the_batch_prediction_pipeline">Run the batch prediction pipeline</h3>
+<div class="paragraph">
+<p>The batch pipeline is implemented by AWS Step Functions.</p>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Batch pipeline is implemented by Step Functions. Go to Step Functions console in your AWS Account, find the State machine with prefix "PredictionPipelineStateMachine-".</p>
+<p>Open the Step Functions console. Find the state machine with the prefix "PredictionPipelineStateMachine-".</p>
 <div id="step_function_console" class="imageblock">
 <div class="content">
-<img src="images/1_batchpipeline.png" alt="AWS Step Functions console">
+<a class="image" href="images/1_batchpipeline.png"><img src="images/1_batchpipeline.png" alt="AWS Step Functions console"></a>
 </div>
-<div class="title">Figure 13. AWS Step Functions console</div>
+<div class="title">Figure 13. Viewing state machines on the AWS Step Functions console</div>
 </div>
 </li>
 <li>
-<p>Open the state machine and click start execution.</p>
+<p>Open the state machine, and choose <strong>Start execution</strong>.</p>
 <div id="batch_pipeline_execution" class="imageblock">
 <div class="content">
-<img src="images/2_batchpipeline_execution.png" alt="Batch pipeline execution">
+<a class="image" href="images/2_batchpipeline_execution.png"><img src="images/2_batchpipeline_execution.png" alt="Batch pipeline execution"></a>
 </div>
 <div class="title">Figure 14. Batch pipeline execution</div>
 </div>
@@ -1927,7 +1801,7 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 </ol>
 </div>
 <div class="paragraph">
-<p>The input parameter needs to contain below information in JSON format. You can specify the range of meters you want to process, and what&#8217;s the date range of your data. Note the Batch_size should not exceed 100. You can also specify a customer model you trained in SageMaker.</p>
+<p>The input parameter needs to contain the following information in JSON format. You can specify the range of meters you want to process and the date range of your data. Note that <code>Batch_size</code> should not exceed 100. You can also specify a customer model that you trained in SageMaker.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1944,23 +1818,29 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 </div>
 </div>
 <div class="sect2">
-<h3 id="_re_train_model_with_different_parameters">Re-train model with different parameters</h3>
+<h3 id="_retrain_the_model_with_different_parameters">Retrain the model with different parameters</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Go to Step Functions console, and find the State machine with prefix "InitialTrainingStateMachine-".</p>
+<p>Open the Step Functions console. Find the state machine with prefix "InitialTrainingStateMachine-".</p>
 </li>
 <li>
-<p>Open state machine and go to Definition, find the "HyperParameters" part, then modify the parameters or add more parameters. To learn more about DeepAR Hyperparameters, please see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html" target="_blank" rel="noopener">Amazon Sagemaker documentation</a>.</p>
+<p>Open the state machine, and choose <strong>Definition</strong>.</p>
+</li>
+<li>
+<p>Find the <code>HyperParameters</code> part, and modify the parameters or add more parameters. See <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html" target="_blank" rel="noopener">DeepAR Hyperparameters</a>.</p>
 <div id="hyperparameters" class="imageblock">
 <div class="content">
-<img src="images/3_trainingpipeline_hyperparameters.png" alt="HyperParameters">
+<a class="image" href="images/3_trainingpipeline_hyperparameters.png"><img src="images/3_trainingpipeline_hyperparameters.png" alt="HyperParameters"></a>
 </div>
-<div class="title">Figure 15. HyperParameters</div>
+<div class="title">Figure 15. Hyperparameters</div>
 </div>
 </li>
 <li>
-<p>Save change to the state machine and click start execution. The input parameter needs to contain below information in JSON format. Training_samples specifies how many meters' data will be used to train the model, the more meters are used, the more accurate the model will be, however the longer the training will take. Give a new name for "ModelName" and "ML_endpoint_name".</p>
+<p>Save the change to the state machine, and choose <strong>Start execution</strong>. The input parameter needs to contain the following information in JSON format. <code>Training_samples</code> specifies how many meters' data will be used to train the model. The more meters are used, the more accurate the model will be and the longer the training will take.</p>
+</li>
+<li>
+<p>Give a new name for <code>ModelName</code> and <code>ML_endpoint_name</code>.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-json" data-lang="json">{
@@ -1980,29 +1860,30 @@ If the workflow doesn&#8217;t start and jumps directly to 'Completed' go back to
 </div>
 </div>
 <div class="sect1">
-<h2 id="_data_schema_and_api_io_format">Data schema and API i/o format</h2>
+<h2 id="_data_schema_and_api_io_format">Data schema and API I/O format</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_data_partitioning">Data partitioning</h3>
 <div class="paragraph">
-<p>The curated data in the 'business zone' is partitioned by <strong>reading type</strong> and <strong>reading date</strong>.
-On the lowest level of the partition tree, all meter reads for a day can be found.
-To optimize query performance, the data is stored in a column based file format (Parquet).</p>
+<p>The curated data in the business-zone S3 bucket is partitioned by <strong>reading type</strong> and <strong>reading date</strong>, as follows: s3://BusinessBucket/&lt;reading_type_value&gt;/&lt;date&gt;/&lt;meter-data-file-in-parquet-format&gt;.</p>
+</div>
+<div class="paragraph">
+<p>You can find all meter reads for a day on the lowest level of the partition tree. To optimize query performance, the data is stored in a column-based file format (Parquet).</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_late_arriving_data">Late arriving data</h3>
+<h3 id="_late_arriving_data">Late-arriving data</h3>
 <div class="paragraph">
-<p>The data lake handles late arriving data. If a meter sends data on a later point in time, the ETL pipeline takes care of storing the late meter read in the correct partition.</p>
+<p>The data lake handles late-arriving data. If a meter sends data later, the ETL pipeline takes care of storing the late meter read in the correct partition.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_meter_data_format">Meter data format</h3>
+<h3 id="_meter_data_format">Meter-data format</h3>
 <div class="paragraph">
-<p>The input meter data format is variable and can be adjusted as described in the section <a href="#_customize_this_quick_start">'Customize this Quick Start'</a>. However, the sample input data format of the 'London Meter Reads' looks like the following:</p>
+<p>The input meter-data format is variable and can be adjusted as described in the section <a href="#_customize_this_quick_start">'Customize this Quick Start'</a>. The sample input data format of the London meter reads looks like the following:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. Input Schema</caption>
+<caption class="title">Table 4. Input schema</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2052,10 +1933,10 @@ To optimize query performance, the data is stored in a column based file format 
 <div class="sect2">
 <h3 id="_table_schemas">Table schemas</h3>
 <div class="paragraph">
-<p>This Quick Start uses the following table schema for ETL job, ML model training and API queries. This schema is also used in Amazon Redshift.</p>
+<p>This Quick Start uses the following table schema for ETL jobs, ML model training, and API queries. This schema is also used in Amazon Redshift.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 9. Internal Schema</caption>
+<caption class="title">Table 5. Internal schema</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -2140,18 +2021,18 @@ To optimize query performance, the data is stored in a column based file format 
 </tbody>
 </table>
 <div class="paragraph">
-<p>AGG = Aggregated Reads</p>
+<p>AGG = Aggregated reads</p>
 </div>
 <div class="paragraph">
-<p>INT = Interval Reads</p>
+<p>INT = Interval reads</p>
 </div>
 <div class="sect3">
-<h4 id="_energy_usage_forecast">Energy usage forecast</h4>
+<h4 id="_energy_usage_forecast">Energy-usage forecast</h4>
 <div class="paragraph">
-<p>The Energy forecast endpoint that returns a list of future consumptions based on the trained ml model.</p>
+<p>The energy forecast endpoint returns a list of predicted consumptions based on the trained ML model.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. Parameter description</caption>
+<caption class="title">Table 6. Parameter descriptions</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2169,15 +2050,15 @@ To optimize query performance, the data is stored in a column based file format 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">data_start</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Start date of meter reads that should be used a basis for the prediction</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Start date of meter reads that should be used a basis for the prediction.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">data_end</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">End date of meter reads that should be used a basis for the prediction</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">End date of meter reads that should be used a basis for the prediction.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ml_endpoint_name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The ML endpoint created by sage maker.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The ML endpoint created by SageMaker.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2217,10 +2098,10 @@ To optimize query performance, the data is stored in a column based file format 
 <div class="sect3">
 <h4 id="_anomaly_detection">Anomaly detection</h4>
 <div class="paragraph">
-<p>The endpoint returns a list of energy usage anomalies for a specific meter in a given time range.</p>
+<p>The endpoint returns a list of energy-usage anomalies for a specific meter in a given time range.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. Parameter description</caption>
+<caption class="title">Table 7. Parameter descriptions</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2246,7 +2127,7 @@ To optimize query performance, the data is stored in a column based file format 
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">outlier_only</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Defines if only outliers should be returned or all data for this certain meter.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determines whether all data or only outliers should be returned for a certain meter.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2302,44 +2183,29 @@ To optimize query performance, the data is stored in a column based file format 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_meter_outage_details">Meter outage details</h4>
+<h4 id="_meter_outage_details">Meter-outage details</h4>
 <div class="paragraph">
-<p>Endpoint that returns a list of meter that delivered an error code instead of a valid reading. Data includes geograpihc information (latitude, longitude) which can be used to great a heat map of current meter outages to i.e. visualize outage cluster.</p>
-</div>
-<div class="paragraph">
-<p>startDateTime:Describes the start time of the time windows.</p>
-</div>
-<div class="paragraph">
-<p>end_date_time: describes: Describes the end time of the time window.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Parameter description</p>
-</li>
-</ol>
+<p>The endpoint returns a list of meters that delivered an error code instead of a valid reading. Data includes geographic information (latitude, longitude) which can be used to create a map of current meter outages, for example, to visualize an outage cluster.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 8. Parameter descriptions</caption>
 <colgroup>
-<col style="width: 100%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Parameter</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">start_date_time</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Start of outage time frame.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">end_date_time</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">End of outage time frame.</p></td>
 </tr>
 </tbody>
@@ -2386,10 +2252,10 @@ To optimize query performance, the data is stored in a column based file format 
 <div class="sect3">
 <h4 id="_aggregation_api">Aggregation API</h4>
 <div class="paragraph">
-<p>The aggregation endpoint returns aggregated readings for a certain meter on a daily, weekly or monthly basis.</p>
+<p>The aggregation endpoint returns aggregated readings for a certain meter on a daily, weekly, or monthly basis.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. Parameter description</caption>
+<caption class="title">Table 9. Parameter descriptions</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2403,7 +2269,7 @@ To optimize query performance, the data is stored in a column based file format 
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">aggregation level</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">daily, weekly or monthly aggregation level</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Daily, weekly, or monthly aggregation level.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">year</p></td>
@@ -2456,12 +2322,8 @@ To optimize query performance, the data is stored in a column based file format 
 <div class="sect1">
 <h2 id="_best_practices">Best practices</h2>
 <div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Use Amazon S3 Glacier to archive the meter data from raw, clean and business S3 buckets, for long term storage and cost savings.</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>Use Amazon S3 Glacier to archive the meter data from raw, clean, and business S3 buckets for long-term storage and cost savings.</p>
 </div>
 </div>
 </div>
@@ -2498,10 +2360,379 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 </div>
 </div>
 <div class="sect1">
+<h2 id="_parameter_reference">Parameter reference</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</h3>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 10. Amazon Redshift cluster configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Master user name
+(<code>MasterUsername</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Master user name for the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Master user password
+(<code>MasterUserPassword</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Master user password for the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift cluster name
+(<code>ClusterName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>redshift-cluster-1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift database name
+(<code>DBName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meter-data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the Amazon Redshift database.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift port
+(<code>RedshiftPort</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>5439</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Port number that you use to connect to the Amazon Redshift cluster.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 11. Network configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Availability Zones
+(<code>AvailabilityZone</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Availability Zone for subnet 1.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPC ID
+(<code>VPCID</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPC ID to create the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 1 ID
+(<code>Subnet1ID</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 1 ID to create the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 2 ID
+(<code>Subnet2ID</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 2 ID to create the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Remote access CIDR block
+(<code>RemoteAccessCIDR</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0.0.0/0</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block from which access to the Amazon Redshift cluster is allowed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Route table ID
+(<code>VPCRouteTableId</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Main route table ID associated with your VPC and subnets.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 12. Glue configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transformer that reads the landing-zone data
+(<code>LandingzoneTransformer</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>default</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the transformer for the input data in the landing zone.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create landing-zone bucket
+(<code>CreateLandingZoneS3Bucket</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Yes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (LandingZoneS3BucketName).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Landing-zone S3 bucket
+(<code>LandingZoneS3BucketName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Blank string</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of meters
+(<code>NoOfMeters</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1-50000</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transformer that reads the landing-zone data
+(<code>LandingzoneTransformer</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>default</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the transformer for the input data in the landing zone.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 13. AWS Quick Start configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket name
+(<code>QSS3BucketName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>aws-quickstart</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket that you created for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This bucket name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 key prefix
+(<code>QSS3KeyPrefix</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quickstart-aws-utility-meter-data-analytics-platform/</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 key prefix that is used to simulate a directory for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html" class="bare">https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket Region
+(<code>QSS3BucketRegion</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>us-east-1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</h3>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 14. Amazon Redshift cluster configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Master user name
+(<code>MasterUsername</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Master user name for the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Master user password
+(<code>MasterUserPassword</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Master user password for the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift cluster name
+(<code>ClusterName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>redshift-cluster-1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift database name
+(<code>DBName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meter-data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the Amazon Redshift database.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift port
+(<code>RedshiftPort</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>5439</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Port number that you use to connect to the Amazon Redshift cluster.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 15. Network configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Availability Zones
+(<code>AvailabilityZones</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of Availability Zones to use for the subnets in the VPC. The logical order is preserved. You must provide two zones, according to AWS best practices. If a third Availability Zone parameter is specified, you must also provide that zone.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPC CIDR
+(<code>VPCCIDR</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/16</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for the VPC.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Private subnet 1A CIDR
+(<code>PrivateSubnet1ACIDR</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/19</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 1A located in Availability Zone 1.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Private subnet 2A CIDR
+(<code>PrivateSubnet2ACIDR</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.32.0/19</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 2A located in Availability Zone 2.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Remote access CIDR block
+(<code>RemoteAccessCIDR</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0.0.0/0</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block from which access to the Amazon Redshift cluster is allowed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 16. AWS Glue configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transformer that reads the landing-zone data
+(<code>LandingzoneTransformer</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>default</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the transformer for the input data in the landing zone.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create landing-zone bucket
+(<code>CreateLandingZoneS3Bucket</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Yes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (LandingZoneS3BucketName).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Landing-zone S3 bucket
+(<code>LandingZoneS3BucketName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Blank string</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of meters
+(<code>NoOfMeters</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1-50000</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transformer that reads the landing-zone data
+(<code>LandingzoneTransformer</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>default</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the transformer for the input data in the landing zone.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 17. AWS Quick Start configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket name
+(<code>QSS3BucketName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>aws-quickstart</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket that you created for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This bucket name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 key prefix
+(<code>QSS3KeyPrefix</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quickstart-aws-utility-meter-data-analytics-platform/</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 key prefix that is used to simulate a directory for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html" class="bare">https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket Region
+(<code>QSS3BucketRegion</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>us-east-1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_send_us_feedback">Send us feedback</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To post feedback, submit feature ideas, or report bugs, use the <strong>Issues</strong> section of the <a href="https://github.com/aws-quickstart/quickstart-aws-utility-meter-data-analytics-platform" target="_blank" rel="noopener">GitHub repository</a> for this Quick Start. If you’d like to submit code, please review the <a href="https://aws-quickstart.github.io/" target="_blank" rel="noopener">Quick Start Contributor’s Guide</a>.</p>
+<p>To post feedback, submit feature ideas, or report bugs, use the <strong>Issues</strong> section of the <a href="https://github.com/aws-quickstart/quickstart-aws-utility-meter-data-analytics-platform" target="_blank" rel="noopener">GitHub repository</a> for this Quick Start. To submit code, see the <a href="https://aws-quickstart.github.io/" target="_blank" rel="noopener">Quick Start Contributor’s Guide</a>.</p>
 </div>
 </div>
 </div>
@@ -2517,16 +2748,16 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 <h2 id="_github_repository">GitHub repository</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can visit our <a href="https://github.com/aws-quickstart/quickstart-aws-utility-meter-data-analytics-platform" target="_blank" rel="noopener">GitHub repository</a> to download
+<p>Visit our <a href="https://github.com/aws-quickstart/quickstart-aws-utility-meter-data-analytics-platform" target="_blank" rel="noopener">GitHub repository</a> to download
 the templates and scripts for this Quick Start, to post your comments,
 and to share your customizations with others.</p>
 </div>
 <hr>
-<div class="paragraph">
-<p>© 2020, Amazon Web Services Inc., or its affiliates, and {partner-company-name}. All rights reserved.</p>
 </div>
-<div class="sect3">
-<h4 id="_notices">Notices</h4>
+</div>
+<div class="sect1">
+<h2 id="_notices">Notices</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>This document is provided for informational purposes only. It represents AWS’s current product offerings and practices as of the date of issue of this document, which are subject to change without notice. Customers are responsible for making their own independent assessment of the information in this document and any use of AWS’s products or services, each of which is provided “as is” without warranty of any kind, whether expressed or implied. This document does not create any warranties, representations, contractual commitments, conditions, or assurances from AWS, its affiliates, suppliers, or licensors. The responsibilities and liabilities of AWS to its customers are controlled by AWS agreements, and this document is not part of, nor does it modify, any agreement between AWS and its customers.</p>
 </div>
@@ -2536,11 +2767,10 @@ and to share your customizations with others.</p>
 </div>
 </div>
 </div>
-</div>
-<div id="footer">
-<div id="footer-text">
-Last updated 2020-09-04 21:43:35 UTC
-</div>
-</div>
+<p class="footer-text">
+<!-- We can use document attributes: -->
+<!-- Generated with Asciidoctor v2.0.10. -->
+<a href="https://aws.amazon.com/privacy/">Privacy</a> | <a href="https://aws.amazon.com/terms/">Site terms</a> | &copy; 2020, Amazon Web Services, Inc. or its affiliates. All rights reserved.
+</p>
 </body>
 </html>

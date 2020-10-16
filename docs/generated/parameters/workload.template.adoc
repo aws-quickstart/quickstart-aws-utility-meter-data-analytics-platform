@@ -13,13 +13,14 @@
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Availability Zones
-(`AvailabilityZones`)|`**__Requires input__**`|List of Availability Zones to use for the subnets in the VPC. The logical order is preserved. You must provide two zones, according to AWS best practices. If a third Availability Zone parameter is specified, you must also provide that zone.|VPC CIDR
-(`VPCCIDR`)|`10.0.0.0/16`|CIDR block for the VPC.|Private subnet 1A CIDR
-(`PrivateSubnet1ACIDR`)|`10.0.0.0/19`|CIDR block for private subnet 1A located in Availability Zone 1.|Private subnet 2A CIDR
-(`PrivateSubnet2ACIDR`)|`10.0.32.0/19`|CIDR block for private subnet 2A located in Availability Zone 2.|Remote access CIDR block
-(`RemoteAccessCIDR`)|`0.0.0.0/0`|CIDR block from which access to the Amazon Redshift cluster is allowed.
+(`AvailabilityZone`)|`**__Requires input__**`|AWS Availability Zone for subnet 1.|VPC ID
+(`VPCID`)|`**__Requires input__**`|VPC ID to create the Amazon Redshift cluster.|Subnet 1 ID
+(`Subnet1ID`)|`**__Requires input__**`|Subnet 1 ID to create the Amazon Redshift cluster.|Subnet 2 ID
+(`Subnet2ID`)|`**__Requires input__**`|Subnet 2 ID to create the Amazon Redshift cluster.|Remote access CIDR block
+(`RemoteAccessCIDR`)|`0.0.0.0/0`|CIDR block from which access to the Amazon Redshift cluster is allowed.|Route table ID
+(`VPCRouteTableId`)|`**__Requires input__**`|Main route table ID associated with your VPC and subnets.
 |===
-.AWS Glue configuration
+.Glue configuration
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Transformer that reads the landing-zone data

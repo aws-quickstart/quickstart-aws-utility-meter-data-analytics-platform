@@ -4,14 +4,14 @@
 
 // Space needed to maintain table headers
 |VPCs |1
-|IAM roles |7
-|Amazon S3 buckets |5
+|AWS Identity and Access Management (IAM) roles |7
+|Amazon S3 buckets |6
 |AWS Glue crawlers |4
 |AWS Glue jobs |3
-|Amazon Sagemaker notebook instances |1
-|Amazon Sagemaker endpoints |1
+|Amazon SageMaker notebook instances |1
+|Amazon SageMaker endpoints |1
 |AWS Lambda functions |9
-|Amazon API gateway endpoints |1
+|Amazon API Gateway endpoints |1
 |Amazon Redshift instances |1
-|AWS Step functions |3
+|AWS Step Functions state machines |3
 |===

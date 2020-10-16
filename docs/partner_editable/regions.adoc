@@ -1,8 +1,8 @@
-// - us-east-1 (N. Virginia)
-// - us-east-2 (Ohio)
-// - us-west-2 (Oregon)
-// - eu-central-1 (Frankfurt)
-// - ca-central-1 (Canda)
-// - ap-south-1 (Mumbai)
+This Quick Start supports the following Regions:
 
-This Quick Start can be deployed in all AWS Regions where the services described in <<architecture1>> are available.
+* us-east-1, US East (N. Virginia)
+* us-east-2, US East (Ohio)
+* us-west-2, US West (Oregon)
+* eu-central-1, Europe (Frankfurt)
+* ca-central-1, Canada (Central)
+* ap-south-1, Asia Pacific (Mumbai)
