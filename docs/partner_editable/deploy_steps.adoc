@@ -43,10 +43,3 @@ Each deployment takes about {deployment_time} to complete.
 [start=3]
 . On the *Create stack* page, keep the default setting for the template URL, and then choose *Next*.
 . On the *Specify stack details* page, change the stack name if needed. Review the parameters for the template. Provide values for the parameters that require input. For all other parameters, review the default settings and customize them as necessary. For details on each parameter, see the link:#_parameter_reference[Parameter reference] section of this guide.
-
-//TO DO Shivansh, How do we add a link to "Parameter reference" in the previous sentence? (After we add the link, we'll remove the quotation marks.)
-
-// In the following tables, parameters are listed by category and described separately for the two deployment options:
-
-// * Parameters for deploying {partner-product-name} into a new VPC
-// * Parameters for deploying {partner-product-name} into an existing VPC
