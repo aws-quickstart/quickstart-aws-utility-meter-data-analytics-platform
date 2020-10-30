@@ -47,6 +47,10 @@ Parameters:
       This string can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
     Type: String
+  WorkingBucket:
+    Description: >-
+      S3 bucket name to save intermediate configuration.
+    Type: String
   WithWeather:
     Description: >-
       Enables or disables the use of weather data.
@@ -236,6 +240,9 @@ Resources:
             ApiId: !Ref HttpApi
             Method: GET
             Path: /forecast/{meter_id}
+      Environment:
+        Variables:
+          WORKING_BUCKET: !Ref WorkingBucket
 
   #
   # Dependency Layer

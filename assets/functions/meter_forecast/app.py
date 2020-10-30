@@ -15,7 +15,9 @@ import json
 from pyathena import connect
 
 REGION = os.environ['AWS_REGION']
+WORKING_BUCKET = os.environ['WORKING_BUCKET']
 
+s3 = boto3.client('s3')
     
 def get_weather(connection, start, db_schema):
     weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, temperature,
@@ -58,6 +60,11 @@ def decode_response(response, freq, prediction_time):
     dict_of_samples = {}
     return pd.DataFrame(data={**predictions['quantiles'], **dict_of_samples}, index=prediction_index)
 
+def load_json_from_file(bucket, path):
+    data = s3.get_object(Bucket=bucket, Key=path)
+
+    return json.load(data['Body'])
+
 # expect request: forecast/{meter_id}?ml_endpoint_name={}&data_start={}&data_end={}
 def lambda_handler(event, context):
     ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
@@ -68,16 +75,15 @@ def lambda_handler(event, context):
     queryParameter = event["queryStringParameters"]
 
     if ("meter_id" not in pathParameter) \
-            or ("ml_endpoint_name" not in queryParameter) \
             or ("data_start" not in queryParameter) \
             or ("data_end" not in queryParameter):
         return {
             'statusCode': 500,
-            'body': "error: meter_id, data_start, data_end and ml endpoint needs to be provided."
+            'body': "error: meter_id, data_start, and data_end needs to be provided."
         }
 
     METER_ID = pathParameter['meter_id']
-    ML_ENDPOINT_NAME = queryParameter['ml_endpoint_name']
+    ML_ENDPOINT_NAME = load_json_from_file(WORKING_BUCKET, "meteranalytics/initial_pass")["ML_endpoint_name"]
     DATA_START = queryParameter['data_start']
     DATA_END = queryParameter['data_end']
 
