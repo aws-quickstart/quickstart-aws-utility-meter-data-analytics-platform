@@ -23,3 +23,5 @@ done
 
 echo "Deleting stack meter-data-lake"
 aws cloudformation delete-stack --stack-name meter-data-lake
+
+aws cloudformation wait stack-delete-complete --stack-name meter-data-lake
