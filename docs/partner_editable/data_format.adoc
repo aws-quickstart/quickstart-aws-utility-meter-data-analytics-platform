@@ -79,13 +79,13 @@ The energy forecast endpoint returns a list of predicted consumptions based on t
 
 .url structure
 ----
-https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/<meter_id>?data_start=<>&data_end=<>&ml_endpoint_name=<>
+https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/<meter_id>?data_start=<>&data_end=<>
 ----
 
 .example curl command
 [source,shell script]
 ----
-curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/MAC004734?data_start=2013-05-01&data_end=2013-10-01&ml_endpoint_name=ml-endpoint-3d249a54-da4c-4fc6-a7f5-eabddf368f89
+curl https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/forecast/MAC004734?data_start=2013-05-01&data_end=2013-10-01
 ----
 
 .response
