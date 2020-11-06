@@ -3,8 +3,8 @@
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Master user name
-(`MasterUsername`)|`**__Requires input__**`|Master user name for the Amazon Redshift cluster.|Master user password
-(`MasterUserPassword`)|`**__Requires input__**`|Master user password for the Amazon Redshift cluster.|Amazon Redshift cluster name
+(`MasterUsername`)|`**__Requires input__**`|Master user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.|Master user password
+(`MasterUserPassword`)|`**__Requires input__**`|Master user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.|Amazon Redshift cluster name
 (`ClusterName`)|`redshift-cluster-1`|Name of the Amazon Redshift cluster.|Amazon Redshift database name
 (`DBName`)|`meter-data`|Name of the Amazon Redshift database.|Amazon Redshift port
 (`RedshiftPort`)|`5439`|Port number that you use to connect to the Amazon Redshift cluster.
