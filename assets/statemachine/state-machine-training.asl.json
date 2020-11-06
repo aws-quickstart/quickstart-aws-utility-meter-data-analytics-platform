@@ -14,7 +14,8 @@
           "Meter_end.$": "$.Meter_end",
           "Batch_size.$": "$.Batch_size",
           "Endpoint_instance_type.$": "$.Endpoint_instance_type",
-          "Training_instance_type.$": "$.Training_instance_type"
+          "Training_instance_type.$": "$.Training_instance_type",
+          "ML_endpoint_name.$": "$.ML_endpoint_name"
         }
       },
       "ResultPath": null,
