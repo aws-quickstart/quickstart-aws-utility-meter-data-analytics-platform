@@ -3,10 +3,11 @@
 
 import json, boto3, os
 
+S3 = boto3.client('s3')
+
 
 def load_json_from_file(bucket, path):
-    s3 = boto3.client('s3')
-    data = s3.get_object(Bucket=bucket, Key=path)
+    data = S3.get_object(Bucket=bucket, Key=path)
 
     return json.load(data['Body'])
 

@@ -17,6 +17,14 @@ import pandas as pd
 from pyathena import connect
 
 REGION = os.environ['AWS_REGION']
+ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
+S3_BUCKET = os.environ['Working_bucket']
+DB_SCHEMA = os.environ['Db_schema']
+USE_WEATHER_DATA = os.environ['With_weather_data']
+
+S3 = boto3.resource('s3')
+ATHENA_CONNECTION = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=REGION)
+
 
 def get_weather(connection, start, schema):
     weather_data = '''select date_parse(time,'%Y-%m-%d %H:%i:%s') as datetime, 
@@ -29,6 +37,7 @@ def get_weather(connection, start, schema):
     df_weather = df_weather.set_index('datetime')
     return df_weather
 
+
 def get_meters(connection, samples, schema):
     selected_households = '''select distinct meter_id
         from "{}".daily limit {};'''.format(schema, samples)
@@ -36,32 +45,28 @@ def get_meters(connection, samples, schema):
     df_meters = pd.read_sql(selected_households, connection)
     return df_meters['meter_id'].tolist()
 
-def write_upload_file(bucket, path, data):
-    jsonBuffer = io.StringIO()
-    for d in data:
-        jsonBuffer.write(json.dumps(d))
-        jsonBuffer.write('\n')
 
-    boto3.Session().resource('s3').Bucket(bucket).Object(path).put(Body=jsonBuffer.getvalue())
+def write_upload_file(bucket, path, data):
+    json_buffer = io.StringIO()
+    for d in data:
+        json_buffer.write(json.dumps(d))
+        json_buffer.write('\n')
+
+    S3.Bucket(bucket).Object(path).put(Body=json_buffer.getvalue())
+
 
 def write_json_to_file(bucket, path, data):
-    boto3.Session().resource('s3').Bucket(bucket).Object(path).put(Body=json.dumps(data))
+    S3.Bucket(bucket).Object(path).put(Body=json.dumps(data))
+
 
 def lambda_handler(event, context):
-    ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
-    S3_BUCKET = os.environ['Working_bucket']
-    DB_SCHEMA = os.environ['Db_schema']
-    USE_WEATHER_DATA = os.environ['With_weather_data']
+    training_samples = event['Training_samples']
+    data_start = event['Data_start']
+    data_end = event['Data_end']
+    forecast_period = event['Forecast_period']
+    prediction_length = forecast_period * 24
 
-    TRAINING_SAMPLES = event['Training_samples']
-    DATA_START = event['Data_start']
-    DATA_END = event['Data_end']
-    FORECAST_PERIOD = event['Forecast_period']
-    prediction_length = FORECAST_PERIOD * 24
-
-    connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=REGION)
-
-    meter_samples = get_meters(connection, TRAINING_SAMPLES, DB_SCHEMA)
+    meter_samples = get_meters(ATHENA_CONNECTION, training_samples, DB_SCHEMA)
 
     q = '''
             select date_trunc('HOUR', reading_date_time) as datetime, meter_id, sum(reading_value) as consumption
@@ -70,32 +75,39 @@ def lambda_handler(event, context):
                 and reading_date_time >= timestamp '{}'
                 and reading_date_time < timestamp '{}'
                 group by 2, 1
-        '''.format(DB_SCHEMA, "','".join(meter_samples), DATA_START, DATA_END)
+        '''.format(DB_SCHEMA, "','".join(meter_samples), data_start, data_end)
 
-    result = pd.read_sql(q, connection)
+    result = pd.read_sql(q, ATHENA_CONNECTION)
     result = result.set_index('datetime')
 
     timeseries = {}
     for meter_id in meter_samples:
         data_kw = result[result['meter_id'] == meter_id].resample('1H').sum()
-        timeseries[meter_id] = data_kw.iloc[:,0]  #np.trim_zeros(data_kw.iloc[:,0], trim='f')
+        timeseries[meter_id] = data_kw.iloc[:, 0]  # np.trim_zeros(data_kw.iloc[:,0], trim='f')
 
     freq = 'H'
     num_test_windows = 2
-    start_dataset = pd.Timestamp(DATA_START, freq=freq)
-    end_dataset = pd.Timestamp(DATA_END, freq=freq) - pd.Timedelta(1, unit='H')
+    start_dataset = pd.Timestamp(data_start, freq=freq)
+    end_dataset = pd.Timestamp(data_end, freq=freq) - pd.Timedelta(1, unit='H')
     end_training = end_dataset - pd.Timedelta(prediction_length * num_test_windows, unit='H')
 
     if USE_WEATHER_DATA == 1:
-        df_weather = get_weather(connection, DATA_START, DB_SCHEMA)
+        df_weather = get_weather(ATHENA_CONNECTION, data_start, DB_SCHEMA)
 
         training_data = [
             {
                 "start": str(start_dataset),
-                "target": ts[start_dataset:end_training].tolist(),  # We use -1, because pandas indexing includes the upper bound
-                "dynamic_feat": [df_weather['temperature'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist(),
-                                 df_weather['humidity'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist(),
-                                 df_weather['apparenttemperature'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size-1, unit='H')].tolist()]
+                "target": ts[start_dataset:end_training].tolist(),
+                # We use -1, because pandas indexing includes the upper bound
+                "dynamic_feat": [df_weather['temperature'][
+                                 start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size - 1,
+                                                                            unit='H')].tolist(),
+                                 df_weather['humidity'][
+                                 start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size - 1,
+                                                                            unit='H')].tolist(),
+                                 df_weather['apparenttemperature'][
+                                 start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_training].size - 1,
+                                                                            unit='H')].tolist()]
             }
             for meterid, ts in timeseries.items()
         ]
@@ -105,9 +117,15 @@ def lambda_handler(event, context):
             {
                 "start": str(start_dataset),
                 "target": ts[start_dataset:end_dataset].tolist(),
-                "dynamic_feat": [df_weather['temperature'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_dataset].size-1, unit='H')].tolist(),
-                                 df_weather['humidity'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_dataset].size-1, unit='H')].tolist(),
-                                 df_weather['apparenttemperature'][start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_dataset].size-1, unit='H')].tolist()]
+                "dynamic_feat": [df_weather['temperature'][
+                                 start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_dataset].size - 1,
+                                                                            unit='H')].tolist(),
+                                 df_weather['humidity'][
+                                 start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_dataset].size - 1,
+                                                                            unit='H')].tolist(),
+                                 df_weather['apparenttemperature'][
+                                 start_dataset:start_dataset + pd.Timedelta(ts[start_dataset:end_dataset].size - 1,
+                                                                            unit='H')].tolist()]
             }
             for k in range(1, num_test_windows + 1)
             for meterid, ts in timeseries.items()
@@ -116,7 +134,8 @@ def lambda_handler(event, context):
         training_data = [
             {
                 "start": str(start_dataset),
-                "target": ts[start_dataset:end_training].tolist()  # We use -1, because pandas indexing includes the upper bound
+                "target": ts[start_dataset:end_training].tolist()
+                # We use -1, because pandas indexing includes the upper bound
             }
             for meterid, ts in timeseries.items()
         ]
