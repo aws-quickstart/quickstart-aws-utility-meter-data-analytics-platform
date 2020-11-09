@@ -3,12 +3,13 @@ import uuid
 
 from botocore.errorfactory import ClientError
 
+S3 = boto3.client('s3')
+
 
 def check_if_file_exist(bucket, key):
-    s3_client = boto3.client('s3')
     file_exists = True
     try:
-        s3_client.head_object(Bucket=bucket, Key=key)
+        S3.head_object(Bucket=bucket, Key=key)
     except ClientError:
         file_exists = False
         pass
@@ -17,16 +18,13 @@ def check_if_file_exist(bucket, key):
 
 
 def load_json_from_file(bucket, path):
-    s3 = boto3.client('s3')
-    data = s3.get_object(Bucket=bucket, Key=path)
-
+    data = S3.get_object(Bucket=bucket, Key=path)
     return json.load(data['Body'])
 
 
 def lambda_handler(event, context):
     working_bucket = os.environ['Working_bucket']
     file_key = "meteranalytics/initial_pass"
-
 
     initial_pipeline_passed = check_if_file_exist(working_bucket, file_key)
 
@@ -50,6 +48,6 @@ def lambda_handler(event, context):
 
     return {
         **parameter,
-        **event, # will override parameter with same key, can be used to override default parameter from the outside
+        **event,  # will override parameter with same key, can be used to override default parameter from the outside
         "initial_pipeline_passed": initial_pipeline_passed
     }

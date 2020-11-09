@@ -1,32 +1,33 @@
-import boto3, os, json
+import os
 import pandas as pd
 
 from pyathena import connect
 
 REGION = os.environ['AWS_REGION']
+ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
+DB_SCHEMA = os.environ['Db_schema']
+USE_WEATHER_DATA = os.environ['With_weather_data']
+
 
 # expected request: anomaly/{meter_id}?data_start={}&data_end={}&outlier_only={}
 def lambda_handler(event, context):
-    ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
-    DB_SCHEMA = os.environ['Db_schema']
-    USE_WEATHER_DATA = os.environ['With_weather_data']
 
-    pathParameter = event["pathParameters"]
-    queryParameter = event["queryStringParameters"]
+    path_parameter = event["pathParameters"]
+    query_parameter = event["queryStringParameters"]
 
-    if ("meter_id" not in pathParameter) \
-            or ("data_start" not in queryParameter) \
-            or ("data_end" not in queryParameter) \
-            or ("outlier_only" not in queryParameter):
+    if ("meter_id" not in path_parameter) \
+            or ("data_start" not in query_parameter) \
+            or ("data_end" not in query_parameter) \
+            or ("outlier_only" not in query_parameter):
         return {
             'statusCode': 500,
             'body': "error: meter_id, data_start, data_end and outlier_only needs to be provided."
         }
 
-    METER_ID = pathParameter['meter_id']
-    DATA_START = queryParameter['data_start']
-    DATA_END = queryParameter['data_end']
-    OUTLIER_ONLY = queryParameter['outlier_only']
+    meter_id = path_parameter['meter_id']
+    data_start = query_parameter['data_start']
+    data_end = query_parameter['data_end']
+    outlier_only = query_parameter['outlier_only']
 
     connection = connect(s3_staging_dir='s3://{}/'.format(ATHENA_OUTPUT_BUCKET), region_name=REGION)
 
@@ -41,15 +42,15 @@ def lambda_handler(event, context):
         where meter_id = '{}'
         and cast(ma.ds as timestamp) >= timestamp '{}' and cast(ma.ds as timestamp) < timestamp '{}'
         and cast(ma.ds as timestamp) = mw.datetime
-        '''.format(DB_SCHEMA, DB_SCHEMA, METER_ID, DATA_START, DATA_END)
+        '''.format(DB_SCHEMA, DB_SCHEMA, meter_id, data_start, data_end)
     else:
         query = '''
         select * from "{}".anomaly
         where meter_id = '{}'
         and cast(ds as timestamp) >= timestamp '{}' and cast(ds as timestamp) < timestamp '{}'
-        '''.format(DB_SCHEMA, METER_ID, DATA_START, DATA_END)
+        '''.format(DB_SCHEMA, meter_id, data_start, data_end)
 
-    if OUTLIER_ONLY == 1:
+    if outlier_only == 1:
         query = query + ' and anomaly <> 0'
 
     df_consumption = pd.read_sql(query, connection)

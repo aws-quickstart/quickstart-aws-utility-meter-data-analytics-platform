@@ -3,7 +3,7 @@ import psycopg2
 import boto3
 
 REGION = os.environ['AWS_REGION']
-
+SECRET_NAME = os.environ["SECRET_NAME"]
 
 class JSONDateTimeEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -11,6 +11,7 @@ class JSONDateTimeEncoder(json.JSONEncoder):
             return obj.isoformat()
         else:
             return json.JSONEncoder.default(self, obj)
+
 
 def get_sql_statement(requested_aggregation):
     if requested_aggregation == "weekly":
@@ -34,8 +35,6 @@ def get_sql_statement(requested_aggregation):
 
 
 def load_redshift_cred():
-    secret_name = os.environ["SECRET_NAME"]
-
     # Create a Secrets Manager client
     session = boto3.session.Session()
     client = session.client(
@@ -45,7 +44,7 @@ def load_redshift_cred():
 
     try:
         get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
+            SecretId=SECRET_NAME
         )
 
     except ClientError as e:
@@ -77,11 +76,11 @@ def lambda_handler(event, context):
 
     redshift_cred = load_redshift_cred()
 
-    connection = psycopg2.connect(user = redshift_cred["username"],
-                                  password = redshift_cred["password"],
-                                  host = redshift_cred["host"],
-                                  port = redshift_cred["port"],
-                                  database = dbname)
+    connection = psycopg2.connect(user=redshift_cred["username"],
+                                  password=redshift_cred["password"],
+                                  host=redshift_cred["host"],
+                                  port=redshift_cred["port"],
+                                  database=dbname)
 
     cursor = connection.cursor()
 

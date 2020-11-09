@@ -24,7 +24,7 @@ def trigger_state_machine():
 
 
 def lambda_handler(event, context):
-    glue_job_name= os.environ['glue_job_name']
+    glue_job_name = os.environ['glue_job_name']
 
     message = event['Records'][0]['Sns']['Message']
     detail = json.loads(message)['detail']

@@ -149,7 +149,9 @@ Parameters:
     Type: String
     Description: Master user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
     NoEcho: True
-  
+    MinLength: '8'
+    MaxLength: '64'
+    AllowedPattern: "^(?=.*[A-Z])(?=.*[\W])(?=.*[0-9])(?=.*[a-z])(?!.*[@'\"/\\]).{8,64}$"
   ClusterName:
     Type: String
     Default: redshift-cluster-1
