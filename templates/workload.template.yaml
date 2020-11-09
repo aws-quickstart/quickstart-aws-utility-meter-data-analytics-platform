@@ -237,7 +237,7 @@ Parameters:
     NoEcho: True
     MinLength: '8'
     MaxLength: '64'
-    AllowedPattern: '^(?=.*[A-Z])(?=.*[\W])(?=.*[0-9])(?=.*[a-z])(?!.*[@'"/\\]).{8,64}$'
+    AllowedPattern: "^(?=.*[A-Z])(?=.*[\W])(?=.*[0-9])(?=.*[a-z])(?!.*[@'\"/\\]).{8,64}$"
   ClusterName:
     Type: String
     Default: redshift-cluster-1
