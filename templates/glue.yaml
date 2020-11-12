@@ -561,6 +561,12 @@ Resources:
       Targets:
         - Arn: !Ref TopicArn
           Id: "SNSTarget"
+          InputTransformer: 
+            InputPathsMap: 
+              state : $.detail.state
+              job_name: $.detail.jobName
+            InputTemplate: |
+              "The glue job <job_name> has changed state to <state>."
   EventTopicPolicy:
     Type: 'AWS::SNS::TopicPolicy'
     Properties:

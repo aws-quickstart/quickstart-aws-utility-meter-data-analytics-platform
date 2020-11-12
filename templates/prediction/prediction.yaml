@@ -274,6 +274,11 @@ Resources:
         SnsTrigger:
           Type: SNS
           Properties:
+            FilterPolicy:
+              job_name:
+                - !Ref GlueJobNameTrigger
+              state:
+                - "SUCCEEDED"
             Topic: !Ref TopicArn
       Layers:
         - !Ref DependencyLayer
