@@ -24,21 +24,6 @@ def trigger_state_machine():
 
 
 def lambda_handler(event, context):
-<<<<<<< HEAD
-    glue_job_name = os.environ['glue_job_name']
-
-    message = event['Records'][0]['Sns']['Message']
-    detail = json.loads(message)['detail']
-
-    # TODO move to SNS topic filter
-    job_name = (detail['jobName'])
-    job_sate = ((detail['state']))
-    if job_name == glue_job_name and job_sate == 'SUCCEEDED':
-        trigger_state_machine()
-    else:
-        print('receive job state change event: [{}][{}]'.format(job_name, job_sate))
-=======
     #glue_job_name= os.environ['glue_job_name']
     
     trigger_state_machine()
->>>>>>> sns filter for lambda trigger
