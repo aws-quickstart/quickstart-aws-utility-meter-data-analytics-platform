@@ -548,38 +548,6 @@ Resources:
           }
 
 
-  GlueJobStateChangeRule:
-    Type: AWS::Events::Rule
-    Properties:
-      Description: "EventRule"
-      EventPattern:
-        source:
-          - "aws.glue"
-        detail-type:
-          - "Glue Job State Change"
-      State: "ENABLED"
-      Targets:
-        - Arn: !Ref TopicArn
-          Id: "SNSTarget"
-          InputTransformer: 
-            InputPathsMap: 
-              state : $.detail.state
-              job_name: $.detail.jobName
-            InputTemplate: |
-              "The glue job <job_name> has changed state to <state>."
-  EventTopicPolicy:
-    Type: 'AWS::SNS::TopicPolicy'
-    Properties:
-      PolicyDocument:
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: events.amazonaws.com
-            Action: 'sns:Publish'
-            Resource: !Ref TopicArn
-      Topics:
-        - !Ref TopicArn
-
   IAMRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -707,7 +675,7 @@ Parameters:
 
   DBName:
     Type: String
-    Default: meter-data
+    Default: meter_data
 
   Subnet1ID:
     Type: AWS::EC2::Subnet::Id
@@ -750,7 +718,3 @@ Parameters:
     Type: String
     Description: No. of DPUs for Glue Job
     Default: 10
-
-  TopicArn:
-    Type: String
-    Description: ARN of ML Pipeline State SNS Topic

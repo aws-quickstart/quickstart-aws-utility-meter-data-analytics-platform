@@ -85,4 +85,4 @@ Parameters:
 
   DBName:
     Type: String
-    Default: meter-data
+    Default: meter_data
