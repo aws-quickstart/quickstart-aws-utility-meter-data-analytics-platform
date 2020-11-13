@@ -271,15 +271,19 @@ Resources:
           ml_pipeline_trigger_state_machine: !Ref MlPipelineTriggerStateMachine
           glue_job_name: !Ref GlueJobNameTrigger
       Events:
-        SnsTrigger:
-          Type: SNS
+        EventBridgeRule:
+          Type: EventBridgeRule
           Properties:
-            FilterPolicy:
-              job_name:
-                - !Ref GlueJobNameTrigger
-              state:
-                - "SUCCEEDED"
-            Topic: !Ref TopicArn
+            Pattern: 
+              source:
+                - "aws.glue"
+              detail-type:
+                - "Glue Job State Change"
+              detail:
+                state:
+                  - "SUCCEEDED"
+                jobName: 
+                  - !Ref GlueJobNameTrigger
       Layers:
         - !Ref DependencyLayer
 
@@ -581,9 +585,7 @@ Parameters:
   DBName:
     ConstraintDescription: >-
       Name of the glue data catalog database
-    Default: meter-data
-    Type: String
-  TopicArn:
+    Default: meter_data
     Type: String
   GlueJobNameTrigger:
     Type: String

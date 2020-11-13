@@ -11,8 +11,6 @@ Rules:
         AssertDescription: You must provide a value for 'Landing Zone S3Bucket Name' when value of 'Create Landing Zone S3Bucket' is No. 
 
 Resources:
-    WorkflowStateTopic:
-      Type: AWS::SNS::Topic
 
     RedshiftStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -86,7 +84,6 @@ Resources:
           CreateLandingZoneS3Bucket: !Ref CreateLandingZoneS3Bucket
           LandingZoneS3BucketName: !Ref LandingZoneS3BucketName
           DPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
-          TopicArn: !Ref WorkflowStateTopic
 
     GlueTablesStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -125,7 +122,6 @@ Resources:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
           DBName: !Ref DBName
-          TopicArn: !Ref WorkflowStateTopic
           GlueJobNameTrigger: !GetAtt GlueStack.Outputs.JobNameTransformCleanToBusiness
           WithWeather: !Ref WithWeather
           BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
@@ -298,7 +294,7 @@ Parameters:
   
   DBName:
     Type: String
-    Default: meter-data
+    Default: meter_data
     Description: Name of the Amazon Redshift database.
   
   RedshiftPort:
