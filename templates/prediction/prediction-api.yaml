@@ -60,7 +60,7 @@ Parameters:
   DBName:
     ConstraintDescription: >-
       Name of the glue data catalog database
-    Default: meter-data
+    Default: meter_data
     Type: String
   VPCID:
     Type: AWS::EC2::VPC::Id

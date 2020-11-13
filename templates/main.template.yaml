@@ -200,7 +200,7 @@ Parameters:
   
   DBName:
     Type: String
-    Default: meter-data
+    Default: meter_data
     Description: Name of the Amazon Redshift database.
   
   RedshiftPort:
