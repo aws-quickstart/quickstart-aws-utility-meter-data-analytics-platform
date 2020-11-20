@@ -8,7 +8,7 @@ const AthenaExpress = require("athena-express"),
 /* has the necessary permission to execute Athena queries 
 /* and store the result in Amazon S3 bucket */
 
-// outage?start_date_time={}&end_date_time={}
+// outage?error_code={}&start_date_time={}&end_date_time={}
 exports.handler = async (event, context, callback) => {
 
     let dbname = process.env.Db_schema
@@ -20,7 +20,7 @@ exports.handler = async (event, context, callback) => {
     ) {
         let response = {
             "statusCode": 500,
-            "body": "Query parameter couldn't be found in event.",
+            "body": "Query parameter couldn't be found in event. One of [error_code, start_date_time, end_date_time] is missing",
             "isBase64Encoded": false
         }
 
@@ -36,19 +36,22 @@ exports.handler = async (event, context, callback) => {
     }
     const athenaExpress = new AthenaExpress(athenaExpressConfig)
 
-    // TODO: Change following to correct error code
-    const errorCode = 'INT'
-
     console.log(queryParameter)
+    let errorCode = queryParameter.error_code
     let startDateTime = queryParameter.start_date_time
     let endDateTime = queryParameter.end_date_time
 
-    const sqlQuery = `SELECT d.*, g.col1 as lat, g.col2 as long FROM daily d, geodata g WHERE d.meter_id = g.col0 AND d.reading_type = '${errorCode}' AND d.reading_date_time BETWEEN TIMESTAMP '${startDateTime}' AND TIMESTAMP '${endDateTime}'`
-    console.log(sqlQuery)
-    //const sqlQuery = "SELECT * FROM daily WHERE reading_type = '11' AND reading_date_time BETWEEN TIMESTAMP '2010-01-03 09:00:01' AND TIMESTAMP '2010-01-03 10:59:59'"
+    let sqlQuery = []
+    sqlQuery.push(`SELECT d.*, g.col1 as lat, g.col2 as long FROM daily d, geodata g `)
+    sqlQuery.push(`WHERE d.meter_id = g.col0 AND d.reading_type = 'ERR' AND d.reading_date_time BETWEEN TIMESTAMP '${startDateTime}' AND TIMESTAMP '${endDateTime}' `)
+
+    if (errorCode) {
+        sqlQuery.push(`AND d.reading_value = '${errorCode}'`)
+    }
+
 
     try {
-        let queryResults = await athenaExpress.query(sqlQuery)
+        let queryResults = await athenaExpress.query(sqlQuery.join("").trim())
 
         let response = {
             "statusCode": 200,
