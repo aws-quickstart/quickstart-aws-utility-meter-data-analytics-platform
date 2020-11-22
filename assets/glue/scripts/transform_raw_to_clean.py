@@ -7,7 +7,6 @@ from awsglue.context import GlueContext
 from awsglue.dynamicframe import DynamicFrame
 from awsglue.job import Job
 from awsglue.transforms import *
-from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from botocore.errorfactory import ClientError
 from pyspark.context import SparkContext
@@ -98,11 +97,14 @@ tableName = args['table_name'].replace("-", "_")
 datasource = glueContext.create_dynamic_frame.from_catalog(database=args['db_name'], table_name=tableName,
                                                            transformation_ctx="datasource")
 
+datasource = datasource.resolveChoice(specs = [('col3','make_cols')])
+
 mapped_readings = ApplyMapping.apply(frame=datasource, mappings=[ \
     ("col0", "long", "meter_id", "string"), \
     ("col1", "string", "obis_code", "string"), \
     ("col2", "long", "reading_time", "string"), \
-    ("col3", "long", "reading_value", "double"), \
+    ("col3_double", "double", "reading_value", "double"), \
+    ("col3_string", "string", "error_value", "string"), \
     ("col4", "string", "reading_type", "string") \
     ], transformation_ctx="mapped_readings")
 
