@@ -124,9 +124,9 @@ def getall_meterids_shuffled(low, high):
     return meterids
 
 
-# get random integer between min and max inclusive
+# get random double between min and max inclusive, rounded
 def get_random(min, max):
-    return random.randint(min, max + 1)
+    return round(random.uniform(min, max + 1), 3)
 
 
 # -------------------------------------------
