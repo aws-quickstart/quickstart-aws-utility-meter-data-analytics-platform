@@ -98,6 +98,7 @@ def lambda_handler(event, context):
                 from "{}".daily
                 where meter_id = '{}' and reading_date_time >= timestamp '{}'
                 and  reading_date_time < timestamp '{}'
+                and reading_type = 'INT'
                 group by 1;
                 '''.format(DB_SCHEMA, meter_id, data_start, data_end)
     result = pd.read_sql(query, connection)
