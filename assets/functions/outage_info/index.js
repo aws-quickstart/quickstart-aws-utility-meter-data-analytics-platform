@@ -46,7 +46,7 @@ exports.handler = async (event, context, callback) => {
     sqlQuery.push(`WHERE d.meter_id = g.col0 AND d.reading_type = 'ERR' AND d.reading_date_time BETWEEN TIMESTAMP '${startDateTime}' AND TIMESTAMP '${endDateTime}' `)
 
     if (errorCode) {
-        sqlQuery.push(`AND d.reading_value = '${errorCode}'`)
+        sqlQuery.push(`AND d.error_value = '${errorCode}'`)
     }
 
 

@@ -31,6 +31,9 @@ Resources:
                         Name: "reading_value"
                         Type: "double"
                       -
+                        Name: "error_value"
+                        Type: "string"
+                      -
                         Name: "week_of_year"
                         Type: "int"
                       - 
