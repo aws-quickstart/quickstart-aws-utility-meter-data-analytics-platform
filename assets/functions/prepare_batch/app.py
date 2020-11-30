@@ -71,6 +71,7 @@ def lambda_handler(event, context):
     q = '''select date_trunc('HOUR', reading_date_time) as datetime, meter_id, sum(reading_value) as consumption
               from "{}".daily
               where meter_id in ('{}')
+              and reading_type = 'INT'
               and reading_date_time >= timestamp '{}'
               and reading_date_time < timestamp '{}'
               group by 2, 1

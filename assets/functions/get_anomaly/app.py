@@ -50,7 +50,7 @@ def lambda_handler(event, context):
         and cast(ds as timestamp) >= timestamp '{}' and cast(ds as timestamp) < timestamp '{}'
         '''.format(DB_SCHEMA, meter_id, data_start, data_end)
 
-    if outlier_only == 1:
+    if outlier_only == '1':
         query = query + ' and anomaly <> 0'
 
     df_consumption = pd.read_sql(query, connection)

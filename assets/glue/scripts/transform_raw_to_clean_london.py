@@ -70,8 +70,7 @@ def write_job_state_information(readings):
         "first_run": is_first_run()
     }
 
-    s3 = boto3.resource('s3')
-    s3.Object(args['temp_workflow_bucket'], 'glue_workflow_distinct_dates').put(Body=json.dumps(state))
+    s3_resource.Object(args['temp_workflow_bucket'], 'glue_workflow_distinct_dates').put(Body=json.dumps(state))
 
 
 args = getResolvedOptions(sys.argv, ['JOB_NAME', 'db_name', 'table_name', 'clean_data_bucket', 'temp_workflow_bucket', 'region'])
@@ -109,9 +108,6 @@ mapped_readings_df = mapped_readings_df \
     .withColumn("reading_date_time", reading_time) \
     .drop("reading_time")
 
-filteredMeterReads = DynamicFrame.fromDF(mapped_readings_df, glueContext, "filteredMeterReads")
-
-# write data to S3
 filteredMeterReads = DynamicFrame.fromDF(mapped_readings_df, glueContext, "filteredMeterReads")
 
 s3_clean_path = "s3://" + args['clean_data_bucket']

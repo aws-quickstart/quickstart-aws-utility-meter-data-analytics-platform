@@ -181,13 +181,16 @@ The output returns a list of reading dates in which anomalies are marked on a da
 
 ==== Meter-outage details
 
-The endpoint returns a list of meters that delivered an error code instead of a valid reading. Data includes geographic information (latitude, longitude) which can be used to create a map of current meter outages, for example, to visualize an outage cluster.
+The endpoint returns a list of meters that delivered an error code instead of a valid reading. Data includes geographic information (latitude, longitude) which can be used to create a map of current meter outages; for example, to visualize an outage cluster.
 
 [%header,cols=2*]
 .Parameter descriptions
 |===
 |Parameter
 |Description
+
+|error_code
+|Error code which should be retrieved from the API. The parameter is **optional**. If not set, all errors in the timeframe will be returned.
 
 |start_date_time
 |Start of outage time frame.
@@ -199,7 +202,7 @@ The endpoint returns a list of meters that delivered an error code instead of a 
 
 .url structure
 ----
-https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?start_date_time=<>&end_date_time=<>
+https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/outage?error_code=<>&start_date_time=<>&end_date_time=<>
 ----
 
 .example curl command

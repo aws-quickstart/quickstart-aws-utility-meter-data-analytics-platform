@@ -26,6 +26,7 @@ def get_batch_data(meter_start, meter_end, data_end, db_schema, connection):
     query = '''select meter_id, date_trunc('day', reading_date_time) as ds, sum(reading_value) as y 
   from "{}".daily
     where meter_id between '{}' and '{}'
+    and reading_type = 'INT'
   and reading_date_time > date_add('year', -1, timestamp '{}')
   and reading_date_time <= timestamp '{}'
     group by 2,1
