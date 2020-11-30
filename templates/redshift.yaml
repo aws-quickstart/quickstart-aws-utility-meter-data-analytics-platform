@@ -14,8 +14,8 @@ Resources:
           - !GetAtt MyRedshiftIAMRole.Arn
         MasterUsername: !Ref MasterUsername
         MasterUserPassword: !Ref MasterUserPassword
-        NodeType: dc2.large
-        NumberOfNodes: 2
+        NodeType: !Ref ClusterNodeType
+        NumberOfNodes: !Ref ClusterNodeCount
         PubliclyAccessible: false
         VpcSecurityGroupIds: 
           - !Ref RedshiftSecurityGroup
@@ -190,3 +190,11 @@ Parameters:
   DBName:
     Type: String
     Default: meter_data
+
+  ClusterNodeType:
+    Type: String
+    Default: ra3.4xlarge
+
+  ClusterNodeCount:
+    Type: Number
+    Default: 2
