@@ -226,6 +226,9 @@ Parameters:
   MasterUsername:
     Type: String
     Description: Master user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
+    MinLength: '1'
+    MaxLength: '128'
+    AllowedPattern : '([a-z])([a-z]|[0-9]|[_+.@-])*'
 
   MasterUserPassword:
     Type: String
@@ -234,6 +237,7 @@ Parameters:
     MinLength: '8'
     MaxLength: '64'
     AllowedPattern: '^(?=.*[A-Z])(?=.*[\W])(?=.*[0-9])(?=.*[a-z])(?!.*[@"/\\]).{8,64}$'
+
   ClusterName:
     Type: String
     Default: redshift-cluster-1
@@ -242,14 +246,17 @@ Parameters:
   Subnet1ID:
     Type: AWS::EC2::Subnet::Id
     Description: Subnet 1 ID to create the Amazon Redshift cluster.
+    MinLength: '1'
   
   Subnet2ID:
     Type: AWS::EC2::Subnet::Id
     Description: Subnet 2 ID to create the Amazon Redshift cluster.
-  
+    MinLength: '1'
+
   VPCID:
     Type: AWS::EC2::VPC::Id
     Description: VPC ID to create the Amazon Redshift cluster.
+    MinLength: '1'
   
   RemoteAccessCIDR:
     Type: String
@@ -258,8 +265,8 @@ Parameters:
 
   LandingzoneTransformer:
     Type: String
-    Default: default
-    Description: Defines the transformer for the input data in the landing zone.
+    Default: london
+    Description: 'Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.'
     AllowedValues:
       - default
       - london
@@ -305,10 +312,12 @@ Parameters:
   VPCRouteTableId:
     Type: String
     Description: Main route table ID associated with your VPC and subnets.
-  
+    MinLength: '1'
+
   AvailabilityZone:
     Type: AWS::EC2::AvailabilityZone::Name
     Description: AWS Availability Zone for subnet 1.
+    MinLength: '1'
   
   NoOfMeters:
     Type: String
