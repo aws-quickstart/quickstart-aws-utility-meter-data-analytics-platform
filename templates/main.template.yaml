@@ -144,6 +144,9 @@ Parameters:
   MasterUsername:
     Type: String
     Description: Master user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
+    MinLength: '1'
+    MaxLength: '128'
+    AllowedPattern : '([a-z])([a-z]|[0-9]|[_+.@-])*'
 
   MasterUserPassword:
     Type: String
@@ -152,6 +155,7 @@ Parameters:
     MinLength: '8'
     MaxLength: '64'
     AllowedPattern: '^(?=.*[A-Z])(?=.*[\W_])(?=.*[0-9])(?=.*[a-z])(?!.*[@"/\\]).{8,64}$'
+
   ClusterName:
     Type: String
     Default: redshift-cluster-1
@@ -164,8 +168,8 @@ Parameters:
 
   LandingzoneTransformer:
     Type: String
-    Default: default
-    Description: Defines the transformer for the input data in the landing zone.
+    Default: london
+    Description: 'Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.'
     AllowedValues:
       - default
       - london
