@@ -151,7 +151,7 @@ Parameters:
     NoEcho: True
     MinLength: '8'
     MaxLength: '64'
-    AllowedPattern: '^(?=.*[A-Z])(?=.*[\W])(?=.*[0-9])(?=.*[a-z])(?!.*[@"/\\]).{8,64}$'
+    AllowedPattern: '^(?=.*[A-Z])(?=.*[\W_])(?=.*[0-9])(?=.*[a-z])(?!.*[@"/\\]).{8,64}$'
   ClusterName:
     Type: String
     Default: redshift-cluster-1
@@ -212,9 +212,11 @@ Parameters:
     Type: String
     Description: Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."
     AllowedValues:
-      - "1-50000"
-      - "50001-and-more"
-    Default: "1-50000"
+      - "1-50K"
+      - "50K-1Mil"
+      - "1Mil-5Mil"
+      - "5Mil-and-more"
+    Default: "1-50K"
 
   AvailabilityZones:
     Description: >-
