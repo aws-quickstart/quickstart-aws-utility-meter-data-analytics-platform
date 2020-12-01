@@ -1,3 +1,6 @@
+general:
+  s3_regional_buckets: true
+
 project:
   name: quickstart-aws-utility-meter-data-analytics-platform
   owner: quickstart@amazon.com
@@ -9,7 +12,7 @@ tests:
   full-test-west2:
     parameters:
       MasterUsername: awsuser
-      MasterUserPassword: override
+      MasterUserPassword: Override_1
       ClusterName: redshift-cluster-3
       RedshiftPort: 5439
       DBName: sample-data
@@ -21,5 +24,3 @@ tests:
       QSS3KeyPrefix: quickstart-aws-utility-meter-data-analytics-platform/
       QSS3BucketRegion: $[taskcat_current_region]
     template: ./templates/main.template.yaml
-    regions: 
-    - us-west-2

@@ -259,17 +259,14 @@ Parameters:
   Subnet1ID:
     Type: AWS::EC2::Subnet::Id
     Description: Subnet 1 ID to create the Amazon Redshift cluster.
-    MinLength: '1'
   
   Subnet2ID:
     Type: AWS::EC2::Subnet::Id
     Description: Subnet 2 ID to create the Amazon Redshift cluster.
-    MinLength: '1'
 
   VPCID:
     Type: AWS::EC2::VPC::Id
     Description: VPC ID to create the Amazon Redshift cluster.
-    MinLength: '1'
   
   RemoteAccessCIDR:
     Type: String
@@ -330,7 +327,6 @@ Parameters:
   AvailabilityZone:
     Type: AWS::EC2::AvailabilityZone::Name
     Description: AWS Availability Zone for subnet 1.
-    MinLength: '1'
   
   NoOfMeters:
     Type: String

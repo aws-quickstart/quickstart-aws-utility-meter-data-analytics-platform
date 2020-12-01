@@ -374,9 +374,12 @@ Conditions:
   GovCloudCondition: !Equals
     - !Ref 'AWS::Region'
     - us-gov-west-1
-  NATGatewaysCondition: !Equals
+  NATGatewaysParamCondition: !Equals
     - !Ref 'CreateNATGateways'
     - 'true'
+  NATGatewaysCondition: !And
+    - !Condition 'NATGatewaysParamCondition'
+    - !Condition 'PublicSubnetsCondition'
   NATGateways&3AZCondition: !And
     - !Condition 'NATGatewaysCondition'
     - !Condition '3AZCondition'
