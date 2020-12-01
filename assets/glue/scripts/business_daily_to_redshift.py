@@ -8,7 +8,8 @@ from awsglue.job import Job
 
 create_table_sql = "create table if not exists daily("\
                         "meter_id	        VARCHAR(MAX)    ,   "\
-                        "reading_value	    FLOAT8          ,   "\
+                        "reading_value	    FLOAT8          ,   " \
+                        "error_value	    VARCHAR(16)          ,   " \
                         "obis_code	        VARCHAR(32)     , "\
                         "week_of_year	    INT4            , "\
                         "day_of_month	    INT4            , "\
