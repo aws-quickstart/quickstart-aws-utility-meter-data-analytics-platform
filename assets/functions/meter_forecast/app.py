@@ -84,7 +84,7 @@ def lambda_handler(event, context):
             or ("data_start" not in queryParameter) \
             or ("data_end" not in queryParameter):
         return {
-            'statusCode': 500,
+            'statusCode': 400,
             'body': "error: meter_id, data_start, and data_end needs to be provided."
         }
 
