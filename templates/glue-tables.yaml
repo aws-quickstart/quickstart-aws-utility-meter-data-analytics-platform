@@ -80,12 +80,6 @@ Parameters:
   BusinessZoneS3Bucket:
     Type: String
 
-  LandingZoneS3Bucket:
-    Type: String
-  
-  CleanZoneS3Bucket:
-    Type: String
-
   DBName:
     Type: String
     Default: meter_data

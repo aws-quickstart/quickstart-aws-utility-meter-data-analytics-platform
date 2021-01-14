@@ -102,12 +102,9 @@ Resources:
               ]
         Parameters:
           BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
-          LandingZoneS3Bucket: !GetAtt GlueStack.Outputs.LandingZoneS3Bucket
-          CleanZoneS3Bucket: !GetAtt GlueStack.Outputs.CleanZoneS3Bucket
           DBName: !Ref DBName
 
     PredictionStack:
-      DependsOn: GlueStack
       Type: 'AWS::CloudFormation::Stack'
       Properties:
         TemplateURL: !Sub
