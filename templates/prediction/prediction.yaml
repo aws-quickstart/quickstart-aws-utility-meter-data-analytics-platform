@@ -64,17 +64,17 @@ Resources:
   WorkingBucket:
     Type: AWS::S3::Bucket
 
-  MlPipelineTriggerStateMachine:
+  MlPipelineOrchestratorStateMachine:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
       DefinitionUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/ml_pipeline_trigger_state_machine.asl.json'
+          Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/ml-pipeline-orchestrator.asl.json'
       DefinitionSubstitutions:
         LoadPipelineParameter: !Ref LoadPipelineParameter
-        InitialTrainingStateMachine: !Ref InitialTrainingStateMachine
-        PredictionPipelineStateMachine: !Ref PredictionPipelineStateMachine
+        InitialTrainingStateMachine: "MlPipelineModelTraining"
+        PredictionPipelineStateMachine: "MlPipelinePreCalculationStateMachine"
         CheckInitialPipelineRun: !Ref CheckInitialPipelineRun
       Policies:
         - Version: 2012-10-17
@@ -93,21 +93,21 @@ Resources:
               Action:
                 - "states:StartExecution"
               Resource:
-                - !Ref InitialTrainingStateMachine
-                - !Ref PredictionPipelineStateMachine
+                - !Ref MlPipelineModelTrainingStateMachine
+                - !Ref MlPipelinePreCalculationStateMachine
         - LambdaInvokePolicy:
             FunctionName: !Ref CheckInitialPipelineRun
         - LambdaInvokePolicy:
             FunctionName: !Ref LoadPipelineParameter
 
   # init training statemachine
-  InitialTrainingStateMachine:
+  MlPipelineModelTrainingStateMachine:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
       DefinitionUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-training.asl.json'
+          Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/ml-pipeline-model-training.asl.json'
       DefinitionSubstitutions:
         WorkingBucket: !Ref WorkingBucket
         LambdaPrepareTrainingName: !Ref PrepareTrainingFunction
@@ -151,13 +151,13 @@ Resources:
 
 
   # Step functions state machine
-  PredictionPipelineStateMachine:
+  MlPipelinePreCalculationStateMachine:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
       DefinitionUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-prediction-pipeline.asl.json'
+          Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/ml-pipeline-pre-calculation.asl.json'
       DefinitionSubstitutions:
         AnomalyCrawler: !Ref AnomalyCrawler
         ForecastCrawler: !Ref ForecastCrawler
@@ -266,7 +266,7 @@ Resources:
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Environment:
         Variables:
-          ml_pipeline_trigger_state_machine: !Ref MlPipelineTriggerStateMachine
+          ml_pipeline_trigger_state_machine: "MlPipelineOrchestrator"
           glue_job_name: !Ref GlueJobNameTrigger
       Events:
         EventBridgeRule:
@@ -607,4 +607,4 @@ Outputs:
   WorkingBucket:
     Value: !Ref WorkingBucket
   MlPipeline:
-    Value: !Ref MlPipelineTriggerStateMachine
+    Value: "MlPipelineOrchestrator"
