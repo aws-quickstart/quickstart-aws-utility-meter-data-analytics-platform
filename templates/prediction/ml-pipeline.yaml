@@ -64,7 +64,7 @@ Resources:
   WorkingBucket:
     Type: AWS::S3::Bucket
 
-  MlPipelineOrchestratorStateMachine:
+  MachineLearningPipelineOrchestratorStateMachine:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
       DefinitionUri:
@@ -93,15 +93,15 @@ Resources:
               Action:
                 - "states:StartExecution"
               Resource:
-                - !Ref MlPipelineModelTrainingStateMachine
-                - !Ref MlPipelinePreCalculationStateMachine
+                - !Ref MachineLearningPipelineModelTrainingStateMachine
+                - !Ref MachineLearningPipelinePreCalculationStateMachine
         - LambdaInvokePolicy:
             FunctionName: !Ref CheckInitialPipelineRun
         - LambdaInvokePolicy:
             FunctionName: !Ref LoadPipelineParameter
 
   # init training statemachine
-  MlPipelineModelTrainingStateMachine:
+  MachineLearningPipelineModelTrainingStateMachine:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
       DefinitionUri:
@@ -151,7 +151,7 @@ Resources:
 
 
   # Step functions state machine
-  MlPipelinePreCalculationStateMachine:
+  MachineLearningPipelinePreCalculationStateMachine:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
       DefinitionUri:
