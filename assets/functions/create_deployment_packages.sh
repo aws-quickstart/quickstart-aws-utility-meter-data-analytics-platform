@@ -6,17 +6,17 @@ functions=(
            "crawler/trigger_glue_crawler" \
            "crawler/get_glue_crawler_state" \
            "redshift/consumption" \
-           "upload_result"  \
-           "split_batch"  \
-           "prepare_training"  \
-           "prepare_batch"  \
+           "ml_pipeline/upload_result"  \
+           "ml_pipeline/split_batch"  \
+           "ml_pipeline/prepare_training"  \
+           "ml_pipeline/prepare_batch"  \
            "meter_forecast" \
            "get_anomaly"  \
-           "batch_anomaly_detection" \
+           "ml_pipeline/batch_anomaly_detection" \
            "state_topic_subscription" \
-           "load_pipeline_parameter" \
+           "ml_pipeline/load_pipeline_parameter" \
            "outage_info" \
-           "check_initial_pipeline_run")
+           "ml_pipeline/check_initial_pipeline_run")
 
 for lambda_folder in ${functions[*]};
 do

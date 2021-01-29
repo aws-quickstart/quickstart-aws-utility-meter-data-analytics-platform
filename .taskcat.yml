@@ -1,5 +1,8 @@
 general:
   s3_regional_buckets: true
+  #auth:
+  #  default: uat
+
 project:
   name: quickstart-aws-utility-meter-data-analytics-platform
   owner: quickstart@amazon.com
@@ -10,6 +13,7 @@ project:
     - eu-central-1
     - ca-central-1
     - ap-south-1
+
 tests:
   full-test-all-regions:
     parameters:
