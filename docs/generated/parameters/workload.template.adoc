@@ -6,7 +6,7 @@
 (`MasterUsername`)|`**__Requires input__**`|Master user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.|Master user password
 (`MasterUserPassword`)|`**__Requires input__**`|Master user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.|Amazon Redshift cluster name
 (`ClusterName`)|`redshift-cluster-1`|Name of the Amazon Redshift cluster.|Amazon Redshift database name
-(`DBName`)|`meter-data`|Name of the Amazon Redshift database.|Amazon Redshift port
+(`DBName`)|`meter_data`|Name of the Amazon Redshift database.|Amazon Redshift port
 (`RedshiftPort`)|`5439`|Port number that you use to connect to the Amazon Redshift cluster.
 |===
 .Network configuration
@@ -24,11 +24,11 @@
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Transformer that reads the landing-zone data
-(`LandingzoneTransformer`)|`default`|Defines the transformer for the input data in the landing zone.|Create landing-zone bucket
+(`LandingzoneTransformer`)|`london`|Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.|Create landing-zone bucket
 (`CreateLandingZoneS3Bucket`)|`Yes`|Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (LandingZoneS3BucketName).|Landing-zone S3 bucket
 (`LandingZoneS3BucketName`)|`**__Blank string__**`|You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.|Number of meters
-(`NoOfMeters`)|`1-50000`|Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."|Transformer that reads the landing-zone data
-(`LandingzoneTransformer`)|`default`|Defines the transformer for the input data in the landing zone.
+(`NoOfMeters`)|`1-50K`|Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."|Transformer that reads the landing-zone data
+(`LandingzoneTransformer`)|`london`|Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.
 |===
 .AWS Quick Start configuration
 [width="100%",cols="16%,11%,73%",options="header",]

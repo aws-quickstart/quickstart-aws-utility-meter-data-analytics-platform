@@ -15,7 +15,5 @@
 :template_aws_ec2_vpcdhcpoptionsassociation:
 :template_aws_ec2_vpcendpoint:
 :template_aws_ec2_vpcgatewayattachment:
-:template_aws_sns_topic:
 :template_cloudformation:
 :template_ec2:
-:template_sns:
