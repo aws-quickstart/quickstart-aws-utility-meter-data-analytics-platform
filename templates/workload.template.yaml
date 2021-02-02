@@ -104,6 +104,20 @@ Resources:
           BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
           DBName: !Ref DBName
 
+    MachineLearningPipelineConfigStack:
+      Type: 'AWS::CloudFormation::Stack'
+      Properties:
+        TemplateURL: !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/prediction/ml-pipeline-config.yaml'
+          - S3Region:
+              !If [ UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion ]
+            S3Bucket:
+              !If [
+                  UsingDefaultBucket,
+                  !Sub '${QSS3BucketName}-${AWS::Region}',
+                  !Ref QSS3BucketName,
+              ]
+
     MachineLearningPipelineStack:
       Type: 'AWS::CloudFormation::Stack'
       Properties:
@@ -125,6 +139,7 @@ Resources:
           GlueJobNameTrigger: !GetAtt GlueStack.Outputs.JobNameTransformCleanToBusiness
           WithWeather: !Ref WithWeather
           BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
+          ConfigTable: !GetAtt MachineLearningPipelineConfigStack.Outputs.MachineLearningPipelineConfigTable
 
     PredictionApiStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -142,9 +157,8 @@ Resources:
         Parameters:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
-          QSS3BucketRegion: !Ref QSS3BucketRegion
-          AthenaQueryBucket: !GetAtt PredictionStack.Outputs.AthenaQueryBucket
-          WorkingBucket: !GetAtt PredictionStack.Outputs.WorkingBucket
+          AthenaQueryBucket: !GetAtt MachineLearningPipelineStack.Outputs.AthenaQueryBucket
+          WorkingBucket: !GetAtt MachineLearningPipelineStack.Outputs.WorkingBucket
           WithWeather: !Ref WithWeather
           DBName: !Ref DBName
           RedshiftSecret: !GetAtt RedshiftStack.Outputs.RedshiftSecret

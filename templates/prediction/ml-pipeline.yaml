@@ -56,6 +56,7 @@ Globals:
         Athena_bucket: !Ref AthenaQueryBucket
         Working_bucket: !Ref WorkingBucket
         With_weather_data: !Ref WithWeather
+        config_table: !Ref ConfigTable
 
 Resources:
   AthenaQueryBucket:
@@ -599,12 +600,14 @@ Parameters:
       0 = weather data won't be used
       1 = enable weather data use
     Type: Number
+  ConfigTable:
+    Type: String
+
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+
 Outputs:
   AthenaQueryBucket:
     Value: !Ref AthenaQueryBucket
   WorkingBucket:
     Value: !Ref WorkingBucket
-  MlPipeline:
-    Value: "MlPipelineOrchestrator"

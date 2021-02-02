@@ -1,0 +1,74 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: 'Meter Data Lake prediction pipeline configuration'
+
+Globals:
+  Function:
+    Runtime: python3.7
+    Timeout: 240
+
+Resources:
+
+  MachineLearningPipelineConfig:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: name
+        Type: String
+
+  InitializeConfigTableFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.lambda_handler
+      InlineCode: |
+          import json
+          import boto3
+          import uuid
+          import cfnresponse
+          import logging
+
+          client = boto3.resource('dynamodb')
+
+          def lambda_handler(event, context):
+              table_name = event['ResourceProperties']['DynamoTableName']
+              table = client.Table(table_name)
+              status = cfnresponse.SUCCESS
+
+              items = [
+                { "name": "Data_start", "value": "2013-06-01" },
+                { "name": "Data_end", "value": "2014-01-01" },
+                { "name": "Forecast_period", "value": 7 },
+                { "name": "Training_samples", "value": 50 },
+                { "name": "Training_instance_type", "value": "ml.c5.2xlarge" },
+                { "name": "Endpoint_instance_type", "value": "ml.m5.xlarge" },
+                { "name": "Training_job_name", "value": "training-job-{}".format(str(uuid.uuid4())) },
+                { "name": "ModelName", "value": "ml-model-{}".format(str(uuid.uuid4())) },
+                { "name": "ML_endpoint_name", "value": "ml-endpoint-{}".format(str(uuid.uuid4())) },
+                { "name": "Meter_start", "value": 1 },
+                { "name": "Meter_end", "value": 100 },
+                { "name": "Batch_size", "value": 25 }
+              ]
+
+              try:
+                with table.batch_writer() as batch:
+                      for item in items:
+                          batch.put_item(Item=item)
+              except Exception as e:
+                  logging.error('Exception: %s' % e, exc_info=True)
+                  status = cfnresponse.FAILED
+              finally:
+                  cfnresponse.send(event, context, status, {}, None)
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref MachineLearningPipelineConfig
+
+  InitializeDynamoDB:
+    Type: Custom::InitializeConfigTableFunction
+    Properties:
+      ServiceToken: !GetAtt 'InitializeConfigTableFunction.Arn'
+      DynamoTableName:
+        Ref: MachineLearningPipelineConfig
+
+Outputs:
+  MachineLearningPipelineConfigTable:
+    Value: !Ref MachineLearningPipelineConfig
