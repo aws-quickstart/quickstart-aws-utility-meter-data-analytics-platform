@@ -73,9 +73,8 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/ml-pipeline-orchestrator.asl.json'
       DefinitionSubstitutions:
-        LoadPipelineParameter: !Ref LoadPipelineParameter
-        InitialTrainingStateMachine: "MlPipelineModelTraining"
-        PredictionPipelineStateMachine: "MlPipelinePreCalculationStateMachine"
+        InitialTrainingStateMachine: !Ref MachineLearningPipelineModelTrainingStateMachine
+        PredictionPipelineStateMachine: !Ref MachineLearningPipelinePreCalculationStateMachine
         CheckInitialPipelineRun: !Ref CheckInitialPipelineRun
       Policies:
         - Version: 2012-10-17
@@ -98,8 +97,6 @@ Resources:
                 - !Ref MachineLearningPipelinePreCalculationStateMachine
         - LambdaInvokePolicy:
             FunctionName: !Ref CheckInitialPipelineRun
-        - LambdaInvokePolicy:
-            FunctionName: !Ref LoadPipelineParameter
 
   # init training statemachine
   MachineLearningPipelineModelTrainingStateMachine:
@@ -115,6 +112,7 @@ Resources:
         AccountId: !Sub ${AWS::AccountId}
         SageMakerRole: !GetAtt SageMakerRole.Arn
         TrainingImage: !FindInMap [TrainingImageMap, !Ref "AWS::Region", "image"]
+        LoadPipelineParameter: !Ref LoadPipelineParameter
       Policies:
         - Version: 2012-10-17
           Statement:
@@ -149,6 +147,8 @@ Resources:
               Resource: "arn:aws:sagemaker:*:*:*"
         - LambdaInvokePolicy:
             FunctionName: !Ref PrepareTrainingFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref LoadPipelineParameter
 
 
   # Step functions state machine
@@ -160,14 +160,13 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/ml-pipeline-pre-calculation.asl.json'
       DefinitionSubstitutions:
-        AnomalyCrawler: !Ref AnomalyCrawler
-        ForecastCrawler: !Ref ForecastCrawler
         LambdaSplitFunctionName: !Ref SplitBatchFunction
         LambdaPrepareFunctionName: !Ref PrepareBatchFunction
         LambdaResultFunctionName: !Ref UploadResultFunction
         LambdaAnomalyFunctionName: !Ref BatchAnomalyDetection
         LambdaTriggerCrawlerFunctionName: !Ref TriggerGlueCrawlerFunction
         LambdaGetCrawlerStateFunctionName: !Ref GetGlueCrawlerStateFunction
+        LoadPipelineParameter: !Ref LoadPipelineParameter
       Policies:
         - Version: 2012-10-17
           Statement:
@@ -208,6 +207,8 @@ Resources:
             FunctionName: !Ref TriggerGlueCrawlerFunction
         - LambdaInvokePolicy:
             FunctionName: !Ref GetGlueCrawlerStateFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref LoadPipelineParameter
 
   #
   # Lambda functions
@@ -220,7 +221,7 @@ Resources:
       CodeUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/load_pipeline_parameter.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_load_pipeline_parameter.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
@@ -234,7 +235,7 @@ Resources:
       CodeUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/prepare_training.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_prepare_training.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
@@ -248,7 +249,7 @@ Resources:
       CodeUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/check_initial_pipeline_run.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_check_initial_pipeline_run.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
@@ -262,12 +263,12 @@ Resources:
       CodeUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/state_topic_subscription.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_state_topic_subscription.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Environment:
         Variables:
-          ml_pipeline_trigger_state_machine: "MlPipelineOrchestrator"
+          ml_pipeline_trigger_state_machine: !Ref MachineLearningPipelineOrchestratorStateMachine
           glue_job_name: !Ref GlueJobNameTrigger
       Events:
         EventBridgeRule:
@@ -293,7 +294,7 @@ Resources:
       CodeUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/split_batch.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_split_batch.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
@@ -307,7 +308,7 @@ Resources:
       CodeUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/prepare_batch.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_prepare_batch.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
@@ -320,7 +321,7 @@ Resources:
       CodeUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/upload_result.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_upload_result.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
       Layers:
@@ -334,7 +335,7 @@ Resources:
       CodeUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/batch_anomaly_detection.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_batch_anomaly_detection.zip'
       MemorySize: 2048
       Timeout: 600
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
@@ -348,7 +349,7 @@ Resources:
       CodeUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/crawler_trigger_glue_crawler.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_crawler_trigger_glue_crawler.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
 
@@ -359,7 +360,7 @@ Resources:
       CodeUri:
         Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/crawler_get_glue_crawler_state.zip'
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_crawler_get_glue_crawler_state.zip'
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
 
@@ -526,6 +527,7 @@ Resources:
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
         - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
         - 'arn:aws:iam::aws:policy/AWSStepFunctionsFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess'
 
   SageMakerRole:
     Type: 'AWS::IAM::Role'

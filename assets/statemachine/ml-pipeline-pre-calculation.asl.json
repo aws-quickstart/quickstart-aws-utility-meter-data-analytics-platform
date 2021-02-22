@@ -1,8 +1,17 @@
 {
-  "Comment": "",
-  "StartAt": "Prepare batches",
+  "Comment": "Pipeline to pre-calculate forecasts and anomalies",
+  "StartAt": "LoadPipelineParameter",
   "States": {
-    "Prepare batches": {
+    "LoadPipelineParameter": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${LoadPipelineParameter}"
+      },
+      "OutputPath": "$.Payload",
+      "Next": "PrepareBatches"
+    },
+    "PrepareBatches": {
       "Parameters": {
         "FunctionName": "${LambdaSplitFunctionName}",
         "Payload": {
@@ -18,11 +27,11 @@
       "Resource": "arn:aws:states:::lambda:invoke",
       "Type": "Task",
       "ResultPath": "$.batchdetail",
-      "Next": "Process batches"
+      "Next": "ProcessBatches"
     },
-    "Process batches": {
+    "ProcessBatches": {
       "Type": "Map",
-      "Next": "trigger forecast crawler",
+      "Next": "Finish",
       "InputPath": "$",
       "ItemsPath": "$.batchdetail.Payload",
       "Parameters": {
@@ -36,9 +45,9 @@
         "Forecast_period.$": "$.Forecast_period"
       },
       "Iterator": {
-        "StartAt": "Anomaly detection",
+        "StartAt": "AnomalyDetection",
         "States": {
-          "Anomaly detection": {
+          "AnomalyDetection": {
             "Parameters": {
               "FunctionName": "${LambdaAnomalyFunctionName}",
               "Payload": {
@@ -51,9 +60,9 @@
             "Resource": "arn:aws:states:::lambda:invoke",
             "Type": "Task",
             "ResultPath": null,
-            "Next": "Prepare dataset"
+            "Next": "PrepareDataset"
           },
-          "Prepare dataset": {
+          "PrepareDataset": {
             "Parameters": {
               "FunctionName": "${LambdaPrepareFunctionName}",
               "Payload": {
@@ -67,9 +76,9 @@
             "Resource": "arn:aws:states:::lambda:invoke",
             "Type": "Task",
             "ResultPath": null,
-            "Next": "Transform Input Dataset"
+            "Next": "TransformInputDataset"
           },
-          "Transform Input Dataset": {
+          "TransformInputDataset": {
             "Resource": "arn:aws:states:::sagemaker:createTransformJob.sync",
             "Parameters": {
               "TransformJobName.$": "$.Batch_info.Batch_job",
@@ -95,9 +104,9 @@
             },
             "Type": "Task",
             "ResultPath": null,
-            "Next": "Store Results"
+            "Next": "StoreResults"
           },
-          "Store Results": {
+          "StoreResults": {
             "Parameters": {
               "FunctionName": "${LambdaResultFunctionName}",
               "Payload": {
@@ -115,48 +124,6 @@
           }
         }
       }
-    },
-    "trigger forecast crawler": {
-      "Type": "Task",
-      "Resource": "arn:aws:states:::lambda:invoke",
-      "Parameters": {
-        "FunctionName": "${LambdaTriggerCrawlerFunctionName}",
-        "Payload": {
-          "crawler_name": "${ForecastCrawler}"
-        }
-      },
-      "OutputPath": "$.Payload",
-      "Next": "wait for forecast crawler"
-    },
-    "wait for forecast crawler": {
-      "Type": "Wait",
-      "Seconds": 10,
-      "Next": "get forecast crawler state"
-    },
-    "get forecast crawler state": {
-      "Type": "Task",
-      "Resource": "arn:aws:states:::lambda:invoke",
-      "Parameters": {
-        "FunctionName": "${LambdaGetCrawlerStateFunctionName}",
-        "Payload": {
-          "crawler_name": "${ForecastCrawler}"
-        }
-      },
-      "OutputPath": "$.Payload",
-      "Next": "is forecast crawler ready"
-    },
-    "is forecast crawler ready": {
-      "Type": "Choice",
-      "Choices": [
-        {
-          "Not": {
-            "Variable": "$.crawler_state",
-            "StringEquals": "READY"
-          },
-          "Next": "wait for forecast crawler"
-        }
-      ],
-      "Default": "Finish"
     },
     "Finish": {
       "Type": "Succeed"

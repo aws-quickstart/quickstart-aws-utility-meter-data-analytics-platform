@@ -1,7 +1,17 @@
 {
-  "StartAt": "Prepare training dataset",
+  "Comment": "Model Training",
+  "StartAt": "LoadPipelineParameter",
   "States": {
-    "Prepare training dataset": {
+    "LoadPipelineParameter": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${LoadPipelineParameter}"
+      },
+      "OutputPath": "$.Payload",
+      "Next": "PrepareTrainingDataset"
+    },
+    "PrepareTrainingDataset": {
       "Parameters": {
         "FunctionName": "${LambdaPrepareTrainingName}",
         "Payload": {
@@ -21,9 +31,9 @@
       "ResultPath": null,
       "Resource": "arn:aws:states:::lambda:invoke",
       "Type": "Task",
-      "Next": "Model Training"
+      "Next": "ModelTraining"
     },
-    "Model Training": {
+    "ModelTraining": {
       "ResultPath": "$.TrainingOutput",
       "Resource": "arn:aws:states:::sagemaker:createTrainingJob.sync",
       "Parameters": {
@@ -77,9 +87,9 @@
         "TrainingJobName.$": "$.Training_job_name"
       },
       "Type": "Task",
-      "Next": "Save Model"
+      "Next": "SaveModel"
     },
-    "Save Model": {
+    "SaveModel": {
       "ResultPath": null,
       "Parameters": {
         "ExecutionRoleArn": "${SageMakerRole}",
@@ -92,9 +102,9 @@
       },
       "Resource": "arn:aws:states:::sagemaker:createModel",
       "Type": "Task",
-      "Next": "Create Model Endpoint Config"
+      "Next": "CreateModelEndpointConfig"
     },
-    "Create Model Endpoint Config": {
+    "CreateModelEndpointConfig": {
       "ResultPath": null,
       "Resource": "arn:aws:states:::sagemaker:createEndpointConfig",
       "Parameters": {
@@ -109,9 +119,9 @@
         ]
       },
       "Type": "Task",
-      "Next": "Update Model Endpoint"
+      "Next": "UpdateModelEndpoint"
     },
-    "Update Model Endpoint": {
+    "UpdateModelEndpoint": {
       "Resource": "arn:aws:states:::sagemaker:createEndpoint",
       "Parameters": {
         "EndpointConfigName.$": "$.ModelName",

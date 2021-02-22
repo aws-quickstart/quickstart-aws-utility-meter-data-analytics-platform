@@ -3,19 +3,19 @@
 HOME=$(pwd)
 
 functions=(
-           "crawler/trigger_glue_crawler" \
-           "crawler/get_glue_crawler_state" \
+           "outage_info"
+           "meter_forecast" \
            "redshift/consumption" \
+           "get_anomaly"  \
+           "ml_pipeline/crawler/trigger_glue_crawler" \
+           "ml_pipeline/crawler/get_glue_crawler_state" \
            "ml_pipeline/upload_result"  \
            "ml_pipeline/split_batch"  \
            "ml_pipeline/prepare_training"  \
            "ml_pipeline/prepare_batch"  \
-           "meter_forecast" \
-           "get_anomaly"  \
            "ml_pipeline/batch_anomaly_detection" \
-           "state_topic_subscription" \
+           "ml_pipeline/state_topic_subscription" \
            "ml_pipeline/load_pipeline_parameter" \
-           "outage_info" \
            "ml_pipeline/check_initial_pipeline_run")
 
 for lambda_folder in ${functions[*]};
