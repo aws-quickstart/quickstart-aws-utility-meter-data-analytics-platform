@@ -2,6 +2,8 @@
 
 HOME=$(pwd)
 
+rm packages/*.zip
+
 functions=(
            "outage_info"
            "meter_forecast" \
