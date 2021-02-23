@@ -68,7 +68,7 @@ Resources:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
       DefinitionUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/ml_pipeline_trigger_state_machine.asl.json'
       DefinitionSubstitutions:
@@ -105,7 +105,7 @@ Resources:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
       DefinitionUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-training.asl.json'
       DefinitionSubstitutions:
@@ -155,7 +155,7 @@ Resources:
     Type: 'AWS::Serverless::StateMachine'
     Properties:
       DefinitionUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/statemachine/state-machine-prediction-pipeline.asl.json'
       DefinitionSubstitutions:
@@ -217,7 +217,7 @@ Resources:
       MemorySize: 128
       Timeout: 30
       CodeUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/load_pipeline_parameter.zip'
       Handler: app.lambda_handler
@@ -231,7 +231,7 @@ Resources:
       MemorySize: 512
       Timeout: 600
       CodeUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/prepare_training.zip'
       Handler: app.lambda_handler
@@ -245,7 +245,7 @@ Resources:
       MemorySize: 128
       Timeout: 30
       CodeUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/check_initial_pipeline_run.zip'
       Handler: app.lambda_handler
@@ -259,7 +259,7 @@ Resources:
       MemorySize: 128
       Timeout: 30
       CodeUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/state_topic_subscription.zip'
       Handler: app.lambda_handler
@@ -290,7 +290,7 @@ Resources:
     Properties:
       Timeout: 300
       CodeUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/split_batch.zip'
       Handler: app.lambda_handler
@@ -304,7 +304,7 @@ Resources:
       MemorySize: 512
       Timeout: 900
       CodeUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/prepare_batch.zip'
       Handler: app.lambda_handler
@@ -317,7 +317,7 @@ Resources:
     Properties:
       Timeout: 180
       CodeUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/upload_result.zip'
       Handler: app.lambda_handler
@@ -331,7 +331,7 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.7
       CodeUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/batch_anomaly_detection.zip'
       MemorySize: 2048
@@ -345,7 +345,7 @@ Resources:
     Properties:
       Timeout: 60
       CodeUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/crawler_trigger_glue_crawler.zip'
       Handler: app.lambda_handler
@@ -356,7 +356,7 @@ Resources:
     Properties:
       Timeout: 60
       CodeUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/crawler_get_glue_crawler_state.zip'
       Handler: app.lambda_handler
@@ -371,7 +371,7 @@ Resources:
       LayerName: !Sub "ml-app-dependencies-${AWS::Region}"
       Description: Dependencies for sam app
       ContentUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/dependencies/anomaly_detection/layer.zip'
       CompatibleRuntimes:
@@ -384,7 +384,7 @@ Resources:
     Properties:
       LayerName: !Sub "common-app-dependencies-${AWS::Region}"
       ContentUri:
-        Bucket: !Ref QSS3BucketName
+        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/dependencies/common/common-layer.zip'
       CompatibleRuntimes:
@@ -580,6 +580,10 @@ Parameters:
     Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).
+  QSS3BucketRegion:
+    Type: String
+    Default: us-east-1
+    Description: AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
   DBName:
     ConstraintDescription: >-
       Name of the glue data catalog database
@@ -595,7 +599,8 @@ Parameters:
       0 = weather data won't be used
       1 = enable weather data use
     Type: Number
-
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Outputs:
   AthenaQueryBucket:
     Value: !Ref AthenaQueryBucket

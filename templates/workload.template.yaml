@@ -120,6 +120,7 @@ Resources:
         Parameters:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
+          QSS3BucketRegion: !Ref QSS3BucketRegion
           DBName: !Ref DBName
           GlueJobNameTrigger: !GetAtt GlueStack.Outputs.JobNameTransformCleanToBusiness
           WithWeather: !Ref WithWeather

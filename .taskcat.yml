@@ -11,7 +11,7 @@ project:
     - ca-central-1
     - ap-south-1
 tests:
-  full-test-central-1:
+  full-test-all-regions:
     parameters:
       MasterUsername: awsuser
       MasterUserPassword: Override_1
