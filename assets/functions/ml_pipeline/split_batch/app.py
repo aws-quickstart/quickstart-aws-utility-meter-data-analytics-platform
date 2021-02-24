@@ -7,9 +7,10 @@ sample lambda input
 }
 '''
 
-import uuid, os
-import pandas as pd
+import os
+import uuid
 
+import pandas as pd
 from pyathena import connect
 
 REGION = os.environ['AWS_REGION']
@@ -27,7 +28,8 @@ def lambda_handler(event, context):
     batch_size = event['Batch_size']
 
     # Todo, more efficient way is to create a meter list table instead of getting it from raw data
-    df_meters = pd.read_sql('''select distinct meter_id from "{}".daily order by meter_id'''.format(SCHEMA), ATHENA_CONNECTION)
+    df_meters = pd.read_sql('''select distinct meter_id from "{}".daily order by meter_id'''.format(SCHEMA),
+                            ATHENA_CONNECTION)
     meters = df_meters['meter_id'].tolist()
 
     id = uuid.uuid4().hex
@@ -39,7 +41,13 @@ def lambda_handler(event, context):
     for a in range(start, min(end, len(meters)), batch_size):
         job = {}
         meter_start = meters[a]
-        meter_end = meters[min(end - 1, a + batch_size - 1)]
+
+        upper_limit = min(end - 1, a + batch_size - 1)
+        if upper_limit > len(meters):
+            upper_limit = len(meters) - 1
+
+        meter_end = meters[upper_limit]
+
         # Sagemaker transform job name cannot be more than 64 characters.
         job['Batch_job'] = 'job-{}-{}-{}'.format(id, meter_start, meter_end)
         job['Batch_start'] = meter_start
