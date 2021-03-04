@@ -121,7 +121,7 @@ This https://www.sciencedirect.com/science/article/pii/S0169207019301888[article
 
 *Q.* Since meter data is time series data, why is the Quick Start not using TimeStream as a data store?
 
-*A.* Timestream was not available at the event of the MDA. We have plans to look into Timestream in the future. Timestream is a good option for certain use cases, i.e. real time dashboards.
+*A.* Timestream was not available at the time of the publication of this Quick Start. We are looking into updating it in future iterations. Timestream is a good option for certain use cases, i.e. real time dashboards.
 
 //== Troubleshooting
 
