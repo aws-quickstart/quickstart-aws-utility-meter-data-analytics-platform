@@ -21,7 +21,7 @@ For additional information, see https://docs.aws.amazon.com/AWSCloudFormation/la
 
 *Q.* Does the AWS Meter Data Analytics Quick Start replace the existing MDMS from ISVs that Utilities have today?
 
-*A.* AWS is an exceptionally customer obsessed company. 90% of what AWS builds is what AWS customers directly ask for, while the remaining 10% is focused on strategic interpretations of customer needs. Talking to our utility customers, they have expressed a need to breakdown the data silos and bring greater value out of their data; in this case meter data. Customers asked for AWS best practices for storing meter data in a data lake, and then help to quickly get started running analytcis and ML against that data to derive value for their own customers. This Quick Start (QS) directly answers these needs. Utilities can hydrate the AWS data lake in this QS with Data from their existing systems and continue to evolve this Open Source QS to meet their business needs. We expect our customers, solution providers and system integrators to take advantage of this QS ,which allows utilities to start exploiting ML against their meter data in a matter of days.
+*A.* Utility customers have expressed a need to breakdown the data silos and bring greater value out of their data; in this case meter data. Customers asked for AWS best practices for storing meter data in a data lake, and then help to quickly get started running analytics and ML against that data to derive value for their own customers. This Quick Start (QS) directly answers these needs. Utilities can hydrate the AWS data lake in this QS with Data from their existing systems and continue to evolve this QS to meet their business needs. We expect our customers, solution providers and system integrators to take advantage of this QS, which allows utilities to start exploiting ML against their meter data in a matter of days.
 
 ---
 
@@ -126,4 +126,3 @@ This https://www.sciencedirect.com/science/article/pii/S0169207019301888[article
 //== Troubleshooting
 
 //<Steps for troubleshooting the deployment go here.>
-
