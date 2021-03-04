@@ -69,7 +69,7 @@ For additional information, see https://docs.aws.amazon.com/AWSCloudFormation/la
 
 *Q.* Are there any other solutions like this that you are aware of, either from other cloud providers, or on-premises solutions?
 
-*A.* Some of our ISV and SI partners are attempting this. We are working with them to adopt our QS as a starting point. When it comes to On-prem, every utility has meter data and an MDM, and do some degree of analytics against the data. Very few do any form of ML against the data. Most want to do more, and do it in the cloud, to free themselves from the costs and constraint of on-prem analytics and ML.
+*A.* Some of the AWS partners are working to adopt the Quick Start as a starting point and building on top of it. When it comes to on-premises, most utility has meter data and an MDM, and do some degree of analytics against the data. Very few do any form of ML against the data. Most want to do more, and do it in the cloud, to free themselves from the costs and constraint of on-premises analytics and ML.
 
 ---
 
