@@ -836,8 +836,8 @@ p.footer-text a{color:#d7d8d8}
 <li><a href="#_faq">FAQ</a></li>
 <li><a href="#_parameter_reference">Parameter reference</a>
 <ul class="sectlevel2">
-<li><a href="#_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</a></li>
 <li><a href="#_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</a></li>
+<li><a href="#_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</a></li>
 </ul>
 </li>
 <li><a href="#_send_us_feedback">Send us feedback</a></li>
@@ -2309,7 +2309,7 @@ TBLPROPERTIES (
 <p><strong>Q.</strong> I encountered a <strong>CREATE_FAILED</strong> error when I launched the Quick Start.</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> If AWS CloudFormation fails to create the stack, we recommend that you relaunch the template with <strong>Rollback on failure</strong> set to <strong>No</strong>. (This setting is under <strong>Advanced</strong> in the AWS CloudFormation console, <strong>Options</strong> page.) With this setting, the stack’s state is retained and the instance is left running, so you can troubleshoot the issue. (For Windows, look at the log files in %ProgramFiles%\Amazon\EC2ConfigService and C:\cfn\log.)</p>
+<p><strong>A.</strong> If AWS CloudFormation fails to create the stack, relaunch the template with <strong>Rollback on failure</strong> set to <strong>No</strong>. This setting is under <strong>Advanced</strong> in the AWS CloudFormation console on the <strong>Configure stack options</strong> page. With this setting, the stack’s state is retained and the instance is left running, so you can troubleshoot the issue. (For Windows, look at the log files in %ProgramFiles%\Amazon\EC2ConfigService and C:\cfn\log.)</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -2318,7 +2318,7 @@ TBLPROPERTIES (
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, you continue to incur AWS charges for this stack. Please make sure to delete the stack when you finish troubleshooting.
+When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, you continue to incur AWS charges for this stack. Be sure to delete the stack when you finish troubleshooting.
 </td>
 </tr>
 </table>
@@ -2326,11 +2326,134 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 <div class="paragraph">
 <p>For additional information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html" target="_blank" rel="noopener">Troubleshooting AWS CloudFormation</a> on the AWS website.</p>
 </div>
+<hr>
 <div class="paragraph">
 <p><strong>Q.</strong> I encountered a size limitation error when I deployed the AWS CloudFormation templates.</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> We recommend that you launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer or from a location other than an S3 bucket, you might encounter template size limitations. For more information about AWS CloudFormation quotas, see the <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html" target="_blank" rel="noopener">AWS documentation</a>.</p>
+<p><strong>A.</strong> Launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer or from a location other than an S3 bucket, you might encounter template size limitations. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html">AWS CloudFormation quotas</a>.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> Does the AWS Meter Data Analytics Quick Start replace the existing MDMS from ISVs that utility companies have today?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> Utility customers have expressed a need to break down data silos and bring greater value out of their data, specifically case meter data. They have asked for AWS best practices for storing meter data in a data lake, and for help getting started running analytics and ML against that data to derive value for their own customers. This Quick Start directly answers these needs. Utility commpanies can hydrate the AWS data lake with data from their existing systems and continue to evolve the Quick Start architecture to meet their business needs. We expect our customers, solution providers, and system integrators to take advantage of this Quick Start so that utility companies can start exploiting ML against their meter data in a matter of days.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> Does the Quick Start include a connectivity (topology) model?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> No. However, S3 is an object store and can hold any type of data, so you can modify it to hold a copy of the topology model from a utilities Geographic Information System (GIS).</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> What meter data set is included with the Quick Start?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> The Quick Start does not include meter data, but instead includes instructions on how to download a public data set from the city of London, UK. 5,567 households, from Nov 2011 to Feb 2014.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> What weather data is included with the Quick Start?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> The Quick Start does not include weather data, but instead includes instructions on how to download a public data set. This weather data aligns with the geographical area and time period of the City of London data.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> Are there any public datasets with large volumes of sample or anonymized smart meter data available?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> We are not aware of any at this time, other than the City of London data noted above. Amazon, via the Registry of OpenData on AWS (RODA) project, is researching hosting larger data sets, if a Utility of Meter manufacturer is willing to donate a data set for <a href="https://registry.opendata.aws/">public use</a>.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> Will the register and interval reads be taken into the data lake?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> Yes, we can intake and process multiple reading types. Register and interval reads are stored in the data lake. However, only the interval data is used for the model training.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> Does the Quick Start include publically available data about homes (for example, sqft) based on address?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> No, currently the Quick Start don&#8217;t include this information.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> How is the meter data structured in the data lake, and why is the data model standardized this this way?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> See information about the internal data structure in the <strong>Table schemas</strong> section in this deployment guide. The internal data schema is the result of working backwards from the requirements and talking to Partners with a long history of industry experience. Future use cases are possible for implementation. For information about separating the data lake into three layers, see <a href="https://aws.amazon.com/blogs/industries/aws-releases-smart-meter-data-analytics-platform/">AWS releases smart meter data analytics</a>.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> Are there any other solutions like this that you are aware of, either from other cloud providers, or on-premises solutions?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> Some AWS Partners are working to adopt the Quick Start as a starting point and building on top of it. When it comes to on-premises solutions, most utility companies have meter data and an MDM, and do some degree of analytics against the data. Very few do any form of ML against the data. Most want to do more, and do it in the cloud, to free themselves from the costs and constraint of on-premises analytics and ML.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> Are the ML models pre-trained?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> No. The Quick Start contains data pipelines and notebooks for loading and training the models using your own data.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> What type of ML model is used for energy forcasting? Do I have to train a separate model for each meter?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> We use the Amazon SageMaker DeepAR forecasting algorithm, which is a supervised learning algorithm for forecasting scalar (one-dimensional) time series using recurrent neural networks (RNN). This approach automatically produces a global model from historical data of all time series data (for example, data from all your meters) in the dataset. This allows you to have one model consumption forecasting, rather than a model for each meter. Note that this doesn’t mean one model can be used forever; you should retrain the model periodically to learn new patterns.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/deepar.html">DeepAR Forecasting Algorithm</a> and <a href="https://www.sciencedirect.com/science/article/pii/S0169207019301888">DeepAR: Probabilistic forecasting with autoregressive recurrent networks</a>.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> For energy forecasting, does the ML model take weather into account? If so, how do I include weather data with meter data for training?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> Weather data is optional. See the <strong>(Optional) Prepare weather data for use in training and forecasting</strong> section in this guide for instruction on how to use weather information as part of the training pipeline, including the weather data format. The data structure that is expected for weather information is also explained.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> For energy forecasting, can you provide an example of how I would query the Forecast API for next week&#8217;s forecast energy usage with and without a weather forecast?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> See the <strong>Data schema and API I/O format</strong> section in this guide for API description with example requests that demonstrate the usage. Also, the provided Jupyter Notebook provides example implementation usage of the API.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> What model is used for anomaly detection?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> We use the <a href="https://facebook.github.io/prophet/">Prophet library</a> for anomaly detection. Prophet is a procedure for forecasting time series data based on an additive model where non-linear trends are fit with yearly, weekly, and daily seasonality, plus holiday effects. It doesn’t support a feedback loop. You can choose to use other algorithms.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> Which use cases are available in the Quick Start for anomaly detection?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> From a anomaly detection perspective, we support the detection of abnormal usage (higher or lower than expected range) in a cetrain time period based on historic data.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> Has any financial information been included for any of the forecasts, for example, to forecast the most cost-effective generation source to cover peak loads and prevent brown-outs/black-outs?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> No, the only forecast use case supported right now is meter usage.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Q.</strong> Since meter data is time series data, why is the Quick Start not using TimeStream as a data store?</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> Timestream was not available at the time of the publication of this Quick Start. We are looking into updating it in future iterations. Timestream is a good option for certain use cases such as real time dashboards.</p>
 </div>
 </div>
 </div>
@@ -2351,7 +2474,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 </table>
 </div>
 <div class="sect2">
-<h3 id="_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</h3>
+<h3 id="_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</h3>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 10. Amazon Redshift cluster configuration</caption>
 <colgroup>
@@ -2416,27 +2539,27 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Availability Zones
-(<code>AvailabilityZone</code>)</p></td>
+(<code>AvailabilityZones</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Availability Zone for subnet 1.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of Availability Zones to use for the subnets in the VPC. The logical order is preserved. You must provide two zones, according to AWS best practices. If a third Availability Zone parameter is specified, you must also provide that zone.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPC ID
-(<code>VPCID</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPC ID to create the Amazon Redshift cluster.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPC CIDR
+(<code>VPCCIDR</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/16</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for the VPC.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 1 ID
-(<code>Subnet1ID</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 1 ID to create the Amazon Redshift cluster.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Private subnet 1A CIDR
+(<code>PrivateSubnet1ACIDR</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/19</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 1A located in Availability Zone 1.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 2 ID
-(<code>Subnet2ID</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 2 ID to create the Amazon Redshift cluster.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Private subnet 2A CIDR
+(<code>PrivateSubnet2ACIDR</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.32.0/19</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 2A located in Availability Zone 2.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Remote access CIDR block
@@ -2444,16 +2567,10 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0.0.0/0</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block from which access to the Amazon Redshift cluster is allowed.</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Route table ID
-(<code>VPCRouteTableId</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Main route table ID associated with your VPC and subnets.</p></td>
-</tr>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. Glue configuration</caption>
+<caption class="title">Table 12. AWS Glue configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -2536,7 +2653,7 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 </table>
 </div>
 <div class="sect2">
-<h3 id="_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</h3>
+<h3 id="_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</h3>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 14. Amazon Redshift cluster configuration</caption>
 <colgroup>
@@ -2601,27 +2718,27 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Availability Zones
-(<code>AvailabilityZones</code>)</p></td>
+(<code>AvailabilityZone</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">List of Availability Zones to use for the subnets in the VPC. The logical order is preserved. You must provide two zones, according to AWS best practices. If a third Availability Zone parameter is specified, you must also provide that zone.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Availability Zone for subnet 1.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPC CIDR
-(<code>VPCCIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/16</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for the VPC.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPC ID
+(<code>VPCID</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPC ID to create the Amazon Redshift cluster.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Private subnet 1A CIDR
-(<code>PrivateSubnet1ACIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/19</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 1A located in Availability Zone 1.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 1 ID
+(<code>Subnet1ID</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 1 ID to create the Amazon Redshift cluster.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Private subnet 2A CIDR
-(<code>PrivateSubnet2ACIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.32.0/19</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block for private subnet 2A located in Availability Zone 2.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 2 ID
+(<code>Subnet2ID</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 2 ID to create the Amazon Redshift cluster.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Remote access CIDR block
@@ -2629,10 +2746,16 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0.0.0/0</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block from which access to the Amazon Redshift cluster is allowed.</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Route table ID
+(<code>VPCRouteTableId</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Main route table ID associated with your VPC and subnets.</p></td>
+</tr>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 16. AWS Glue configuration</caption>
+<caption class="title">Table 16. Glue configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
