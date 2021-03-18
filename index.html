@@ -2335,10 +2335,10 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 </div>
 <hr>
 <div class="paragraph">
-<p><strong>Q.</strong> Does the AWS Meter Data Analytics Quick Start replace the existing MDMS from ISVs that utility companies have today?</p>
+<p><strong>Q.</strong> Does the Quick Start replace the existing MDMS from ISVs that utility companies have today?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> Utility customers have expressed a need to break down data silos and bring greater value out of their data, specifically case meter data. They have asked for AWS best practices for storing meter data in a data lake, and for help getting started running analytics and ML against that data to derive value for their own customers. This Quick Start directly answers these needs. Utility commpanies can hydrate the AWS data lake with data from their existing systems and continue to evolve the Quick Start architecture to meet their business needs. We expect our customers, solution providers, and system integrators to take advantage of this Quick Start so that utility companies can start exploiting ML against their meter data in a matter of days.</p>
+<p><strong>A.</strong> Utility customers have expressed a need to break down data silos and bring greater value out of their data, specifically case meter data. They have asked for AWS best practices for storing meter data in a data lake, and for help getting started running analytics and ML against that data to derive value for their own customers. This Quick Start directly answers these needs. Utility commpanies can hydrate the AWS data lake with data from their existing systems and continue to evolve the Quick Start architecture to meet their business needs. Customers, solution providers, and system integrators can take advantage of this Quick Start to start applying ML against meter data in a matter of days.</p>
 </div>
 <hr>
 <div class="paragraph">
@@ -2352,49 +2352,49 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 <p><strong>Q.</strong> What meter data set is included with the Quick Start?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> The Quick Start does not include meter data, but instead includes instructions on how to download a public data set from the city of London, UK. 5,567 households, from Nov 2011 to Feb 2014.</p>
+<p><strong>A.</strong> The Quick Start does not include meter data, but instead includes instructions on how to download a public data set from the city of London, UK, including 5,567 households from November 2011 to February 2014.</p>
 </div>
 <hr>
 <div class="paragraph">
 <p><strong>Q.</strong> What weather data is included with the Quick Start?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> The Quick Start does not include weather data, but instead includes instructions on how to download a public data set. This weather data aligns with the geographical area and time period of the City of London data.</p>
+<p><strong>A.</strong> The Quick Start does not include weather data, but instead includes instructions on how to download a public data set. This weather data aligns with the geographical area and time period provided for London.</p>
 </div>
 <hr>
 <div class="paragraph">
-<p><strong>Q.</strong> Are there any public datasets with large volumes of sample or anonymized smart meter data available?</p>
+<p><strong>Q.</strong> Are any public datasets with large volumes of sample or anonymized smart meter data available?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> We are not aware of any at this time, other than the City of London data noted above. Amazon, via the Registry of OpenData on AWS (RODA) project, is researching hosting larger data sets, if a Utility of Meter manufacturer is willing to donate a data set for <a href="https://registry.opendata.aws/">public use</a>.</p>
+<p><strong>A.</strong> Not at this time, although Amazon, via the Registry of OpenData on AWS (RODA) project, is currently researching options. Utility of Meter manufacturers can donate datasets for <a href="https://registry.opendata.aws/">public use</a>.</p>
 </div>
 <hr>
 <div class="paragraph">
 <p><strong>Q.</strong> Will the register and interval reads be taken into the data lake?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> Yes, we can intake and process multiple reading types. Register and interval reads are stored in the data lake. However, only the interval data is used for the model training.</p>
+<p><strong>A.</strong> Yes, the data lake can take and process multiple reading types. Register and interval reads are stored in the data lake. However, only the interval data is used for the model training.</p>
 </div>
 <hr>
 <div class="paragraph">
 <p><strong>Q.</strong> Does the Quick Start include publically available data about homes (for example, sqft) based on address?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> No, currently the Quick Start don&#8217;t include this information.</p>
+<p><strong>A.</strong> No, currently the Quick Start doesn&#8217;t include this information.</p>
 </div>
 <hr>
 <div class="paragraph">
-<p><strong>Q.</strong> How is the meter data structured in the data lake, and why is the data model standardized this this way?</p>
+<p><strong>Q.</strong> How is the meter data structured in the data lake, and why is the data model standardized this way?</p>
 </div>
 <div class="paragraph">
 <p><strong>A.</strong> See information about the internal data structure in the <strong>Table schemas</strong> section in this deployment guide. The internal data schema is the result of working backwards from the requirements and talking to Partners with a long history of industry experience. Future use cases are possible for implementation. For information about separating the data lake into three layers, see <a href="https://aws.amazon.com/blogs/industries/aws-releases-smart-meter-data-analytics-platform/">AWS releases smart meter data analytics</a>.</p>
 </div>
 <hr>
 <div class="paragraph">
-<p><strong>Q.</strong> Are there any other solutions like this that you are aware of, either from other cloud providers, or on-premises solutions?</p>
+<p><strong>Q.</strong> Are there any other similar solutions that you are aware of, either from other cloud providers or on-premises solutions?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> Some AWS Partners are working to adopt the Quick Start as a starting point and building on top of it. When it comes to on-premises solutions, most utility companies have meter data and an MDM, and do some degree of analytics against the data. Very few do any form of ML against the data. Most want to do more, and do it in the cloud, to free themselves from the costs and constraint of on-premises analytics and ML.</p>
+<p><strong>A.</strong> Some AWS Partners are working to adopt the Quick Start as a starting point and then build on top of it. When it comes to on-premises solutions, most utility companies have meter data and an MDM, and do some degree of analytics against the data. Very few do any form of ML against the data. Most want to do more, and do it in the cloud, to free themselves from the costs and constraints of on-premises analytics and ML.</p>
 </div>
 <hr>
 <div class="paragraph">
@@ -2408,7 +2408,7 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 <p><strong>Q.</strong> What type of ML model is used for energy forcasting? Do I have to train a separate model for each meter?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> We use the Amazon SageMaker DeepAR forecasting algorithm, which is a supervised learning algorithm for forecasting scalar (one-dimensional) time series using recurrent neural networks (RNN). This approach automatically produces a global model from historical data of all time series data (for example, data from all your meters) in the dataset. This allows you to have one model consumption forecasting, rather than a model for each meter. Note that this doesn’t mean one model can be used forever; you should retrain the model periodically to learn new patterns.</p>
+<p><strong>A.</strong> The Quick Start uses the Amazon SageMaker DeepAR forecasting algorithm, which is a supervised learning algorithm for forecasting scalar (one-dimensional) time series using recurrent neural networks (RNN). This approach automatically produces a global model from historical data of all time series data (for example, data from all your meters) in the dataset. This allows you to have one model consumption forecasting, rather than a model for each meter. Note that this doesn’t mean one model can be used forever; you should retrain the model periodically to learn new patterns.</p>
 </div>
 <div class="paragraph">
 <p>For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/deepar.html">DeepAR Forecasting Algorithm</a> and <a href="https://www.sciencedirect.com/science/article/pii/S0169207019301888">DeepAR: Probabilistic forecasting with autoregressive recurrent networks</a>.</p>
@@ -2418,42 +2418,42 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 <p><strong>Q.</strong> For energy forecasting, does the ML model take weather into account? If so, how do I include weather data with meter data for training?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> Weather data is optional. See the <strong>(Optional) Prepare weather data for use in training and forecasting</strong> section in this guide for instruction on how to use weather information as part of the training pipeline, including the weather data format. The data structure that is expected for weather information is also explained.</p>
+<p><strong>A.</strong> Weather data is optional. See the <strong>(Optional) Prepare weather data for use in training and forecasting</strong> section in this guide for instructions on how to use weather information as part of the training pipeline, including the weather data format. The data structure that is expected for weather information is also explained.</p>
 </div>
 <hr>
 <div class="paragraph">
 <p><strong>Q.</strong> For energy forecasting, can you provide an example of how I would query the Forecast API for next week&#8217;s forecast energy usage with and without a weather forecast?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> See the <strong>Data schema and API I/O format</strong> section in this guide for API description with example requests that demonstrate the usage. Also, the provided Jupyter Notebook provides example implementation usage of the API.</p>
+<p><strong>A.</strong> See the <strong>Data schema and API I/O format</strong> section in this guide for API descriptions with example requests that demonstrate usage. Also, the provided Jupyter Notebook provides example implementation usage of the API.</p>
 </div>
 <hr>
 <div class="paragraph">
 <p><strong>Q.</strong> What model is used for anomaly detection?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> We use the <a href="https://facebook.github.io/prophet/">Prophet library</a> for anomaly detection. Prophet is a procedure for forecasting time series data based on an additive model where non-linear trends are fit with yearly, weekly, and daily seasonality, plus holiday effects. It doesn’t support a feedback loop. You can choose to use other algorithms.</p>
+<p><strong>A.</strong> The Quick Start uses the <a href="https://facebook.github.io/prophet/">Prophet library</a> for anomaly detection. Prophet is a procedure for forecasting time series data based on an additive model where non-linear trends are fit with yearly, weekly, and daily seasonality, plus holiday effects. It doesn’t support a feedback loop. You can choose to use other algorithms.</p>
 </div>
 <hr>
 <div class="paragraph">
 <p><strong>Q.</strong> Which use cases are available in the Quick Start for anomaly detection?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> From a anomaly detection perspective, we support the detection of abnormal usage (higher or lower than expected range) in a cetrain time period based on historic data.</p>
+<p><strong>A.</strong> From a anomaly detection perspective, the Quick Start supports the detection of abnormal usage (higher or lower than expected range) in a cetrain time period based on historic data.</p>
 </div>
 <hr>
 <div class="paragraph">
-<p><strong>Q.</strong> Has any financial information been included for any of the forecasts, for example, to forecast the most cost-effective generation source to cover peak loads and prevent brown-outs/black-outs?</p>
+<p><strong>Q.</strong> Has any financial information been included for any of the forecasts, for example, to forecast the most cost-effective generation source to cover peak loads and prevent brownouts/blackouts?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> No, the only forecast use case supported right now is meter usage.</p>
+<p><strong>A.</strong> No, currently the only forecast use case that supported is meter usage.</p>
 </div>
 <hr>
 <div class="paragraph">
 <p><strong>Q.</strong> Since meter data is time series data, why is the Quick Start not using TimeStream as a data store?</p>
 </div>
 <div class="paragraph">
-<p><strong>A.</strong> Timestream was not available at the time of the publication of this Quick Start. We are looking into updating it in future iterations. Timestream is a good option for certain use cases such as real time dashboards.</p>
+<p><strong>A.</strong> Timestream was not available at the time this Quick Start was published, although it will be considered for future iterations. Timestream is a good option for certain use cases such as real time dashboards.</p>
 </div>
 </div>
 </div>
