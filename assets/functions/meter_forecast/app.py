@@ -19,6 +19,8 @@ WORKING_BUCKET = os.environ['WORKING_BUCKET']
 ATHENA_OUTPUT_BUCKET = os.environ['Athena_bucket']
 DB_SCHEMA = os.environ['Db_schema']
 USE_WEATHER_DATA = os.environ['With_weather_data']
+DYNAMODB = boto3.resource('dynamodb')
+CONFIG_TABLE_NAME = os.environ['config_table']
 
 S3 = boto3.client('s3')
 SAGEMAKER = boto3.client('runtime.sagemaker')
@@ -69,10 +71,12 @@ def decode_response(response, freq, prediction_time):
     return pd.DataFrame(data={**predictions['quantiles'], **dict_of_samples}, index=prediction_index)
 
 
-def load_json_from_file(bucket, path):
-    data = S3.get_object(Bucket=bucket, Key=path)
+def get_config(name):
+    response = DYNAMODB.Table(CONFIG_TABLE_NAME).get_item(
+        Key={'name': name}
+    )
 
-    return json.load(data['Body'])
+    return response['Item']["value"]
 
 
 # expect request: forecast/{meter_id}?ml_endpoint_name={}&data_start={}&data_end={}
@@ -89,7 +93,7 @@ def lambda_handler(event, context):
         }
 
     meter_id = pathParameter['meter_id']
-    ml_endpoint_name = load_json_from_file(WORKING_BUCKET, "meteranalytics/initial_pass")["ML_endpoint_name"]
+    ml_endpoint_name = get_config("ML_endpoint_name")
     data_start = queryParameter['data_start']
     data_end = queryParameter['data_end']
 
