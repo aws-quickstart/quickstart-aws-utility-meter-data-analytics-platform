@@ -1,0 +1,11 @@
+meter-data/data/
+taskcat_outputs
+.taskcat
+.DS_STORE
+*.iml
+.idea
+venv
+
+**/.aws-sam/
+**/samconfig.toml
+stack-parameter*.json

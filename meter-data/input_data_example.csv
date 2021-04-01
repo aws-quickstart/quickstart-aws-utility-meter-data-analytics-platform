@@ -1,0 +1,2 @@
+MeterID;ServicePointID;ReadingType;ReadingQuality;ReadingTime;ReadingValue;ObisCode;AnsiCode;ServiceMultiplier;DSTflag;AccountNumber;SourceQualityCodes
+4711;1;kWh;;2020040616240440;15436.00;1.8.1;;;;;

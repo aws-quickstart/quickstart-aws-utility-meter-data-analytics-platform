@@ -1,0 +1,52 @@
+{
+  "Comment": "Starts the ML Pipeline and checks weather the initial training should be executed or not.",
+  "StartAt": "CheckInitialPipelineRun",
+  "States": {
+    "CheckInitialPipelineRun": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${CheckInitialPipelineRun}",
+        "Payload": {}
+      },
+      "OutputPath": "$.Payload",
+      "Next": "DecideIfModelNeedsToBeTrained"
+    },
+    "DecideIfModelNeedsToBeTrained": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.initial_pipeline_passed",
+          "BooleanEquals": false,
+          "Next": "RunModelTraining"
+        }
+      ],
+      "Default": "RunPreForecastCalculation"
+    },
+    "RunModelTraining": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution.sync:2",
+      "Parameters": {
+        "StateMachineArn": "${InitialTrainingStateMachine}",
+        "Input": {
+          "AWS_STEP_FUNCTIONS_STARTED_BY_EXECUTION_ID.$": "$$.Execution.Id"
+        }
+      },
+      "Next": "RunPreForecastCalculation"
+    },
+    "RunPreForecastCalculation": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution.sync:2",
+      "Parameters": {
+        "StateMachineArn": "${PredictionPipelineStateMachine}",
+        "Input": {
+          "AWS_STEP_FUNCTIONS_STARTED_BY_EXECUTION_ID.$": "$$.Execution.Id"
+        }
+      },
+      "Next": "Success"
+    },
+    "Success": {
+      "Type": "Succeed"
+    }
+  }
+}

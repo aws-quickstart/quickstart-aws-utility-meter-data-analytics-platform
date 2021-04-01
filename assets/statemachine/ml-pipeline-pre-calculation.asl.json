@@ -1,0 +1,132 @@
+{
+  "Comment": "Pipeline to pre-calculate forecasts and anomalies",
+  "StartAt": "LoadPipelineParameter",
+  "States": {
+    "LoadPipelineParameter": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${LoadPipelineParameter}"
+      },
+      "OutputPath": "$.Payload",
+      "Next": "PrepareBatches"
+    },
+    "PrepareBatches": {
+      "Parameters": {
+        "FunctionName": "${LambdaSplitFunctionName}",
+        "Payload": {
+          "Meter_start.$": "$.Meter_start",
+          "Meter_end.$": "$.Meter_end",
+          "Data_start.$": "$.Data_start",
+          "Data_end.$": "$.Data_end",
+          "Batch_size.$": "$.Batch_size",
+          "Forecast_period.$": "$.Forecast_period",
+          "Endpoint_instance_type.$": "$.Endpoint_instance_type"
+        }
+      },
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Type": "Task",
+      "ResultPath": "$.batchdetail",
+      "Next": "ProcessBatches"
+    },
+    "ProcessBatches": {
+      "Type": "Map",
+      "Next": "Finish",
+      "InputPath": "$",
+      "ItemsPath": "$.batchdetail.Payload",
+      "Parameters": {
+        "LambdaPrepareFunctionName": "${LambdaPrepareFunctionName}",
+        "LambdaResultFunctionName": "${LambdaResultFunctionName}",
+        "ModelName.$": "$.ModelName",
+        "Data_start.$": "$.Data_start",
+        "Data_end.$": "$.Data_end",
+        "Batch_info.$": "$$.Map.Item.Value",
+        "Endpoint_instance_type.$": "$.Endpoint_instance_type",
+        "Forecast_period.$": "$.Forecast_period"
+      },
+      "Iterator": {
+        "StartAt": "AnomalyDetection",
+        "States": {
+          "AnomalyDetection": {
+            "Parameters": {
+              "FunctionName": "${LambdaAnomalyFunctionName}",
+              "Payload": {
+                "Batch_start.$": "$.Batch_info.Batch_start",
+                "Batch_end.$": "$.Batch_info.Batch_end",
+                "Data_start.$": "$.Data_start",
+                "Data_end.$": "$.Data_end"
+              }
+            },
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Type": "Task",
+            "ResultPath": null,
+            "Next": "PrepareDataset"
+          },
+          "PrepareDataset": {
+            "Parameters": {
+              "FunctionName": "${LambdaPrepareFunctionName}",
+              "Payload": {
+                "Batch_start.$": "$.Batch_info.Batch_start",
+                "Batch_end.$": "$.Batch_info.Batch_end",
+                "Data_start.$": "$.Data_start",
+                "Data_end.$": "$.Data_end",
+                "Forecast_period.$": "$.Forecast_period"
+              }
+            },
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Type": "Task",
+            "ResultPath": null,
+            "Next": "TransformInputDataset"
+          },
+          "TransformInputDataset": {
+            "Resource": "arn:aws:states:::sagemaker:createTransformJob.sync",
+            "Parameters": {
+              "TransformJobName.$": "$.Batch_info.Batch_job",
+              "ModelName.$": "$.ModelName",
+              "TransformInput": {
+                "DataSource": {
+                  "S3DataSource": {
+                    "S3DataType": "S3Prefix",
+                    "S3Uri.$": "$.Batch_info.Batch_input"
+                  }
+                },
+                "ContentType": "application/jsonlines",
+                "SplitType": "Line"
+              },
+              "TransformOutput": {
+                "S3OutputPath.$": "$.Batch_info.Batch_output",
+                "AssembleWith": "Line"
+              },
+              "TransformResources": {
+                "InstanceCount": 1,
+                "InstanceType.$": "$.Endpoint_instance_type"
+              }
+            },
+            "Type": "Task",
+            "ResultPath": null,
+            "Next": "StoreResults"
+          },
+          "StoreResults": {
+            "Parameters": {
+              "FunctionName": "${LambdaResultFunctionName}",
+              "Payload": {
+                "Batch_start.$": "$.Batch_info.Batch_start",
+                "Batch_end.$": "$.Batch_info.Batch_end",
+                "Data_start.$": "$.Data_start",
+                "Data_end.$": "$.Data_end",
+                "Forecast_period.$": "$.Forecast_period"
+              }
+            },
+            "ResultPath": "$.mytask",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Type": "Task",
+            "End": true
+          }
+        }
+      }
+    },
+    "Finish": {
+      "Type": "Succeed"
+    }
+  }
+}

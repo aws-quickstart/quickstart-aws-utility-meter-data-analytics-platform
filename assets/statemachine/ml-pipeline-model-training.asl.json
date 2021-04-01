@@ -1,0 +1,134 @@
+{
+  "Comment": "Model Training",
+  "StartAt": "LoadPipelineParameter",
+  "States": {
+    "LoadPipelineParameter": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${LoadPipelineParameter}"
+      },
+      "OutputPath": "$.Payload",
+      "Next": "PrepareTrainingDataset"
+    },
+    "PrepareTrainingDataset": {
+      "Parameters": {
+        "FunctionName": "${LambdaPrepareTrainingName}",
+        "Payload": {
+          "Training_samples.$": "$.Training_samples",
+          "Data_start.$": "$.Data_start",
+          "Data_end.$": "$.Data_end",
+          "Forecast_period.$": "$.Forecast_period",
+          "ModelName.$": "$.ModelName",
+          "Meter_start.$": "$.Meter_start",
+          "Meter_end.$": "$.Meter_end",
+          "Batch_size.$": "$.Batch_size",
+          "Endpoint_instance_type.$": "$.Endpoint_instance_type",
+          "Training_instance_type.$": "$.Training_instance_type",
+          "ML_endpoint_name.$": "$.ML_endpoint_name"
+        }
+      },
+      "ResultPath": null,
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Type": "Task",
+      "Next": "ModelTraining"
+    },
+    "ModelTraining": {
+      "ResultPath": "$.TrainingOutput",
+      "Resource": "arn:aws:states:::sagemaker:createTrainingJob.sync",
+      "Parameters": {
+        "AlgorithmSpecification": {
+          "TrainingImage": "${TrainingImage}/forecasting-deepar:1",
+          "TrainingInputMode": "File"
+        },
+        "OutputDataConfig": {
+          "S3OutputPath": "s3://${WorkingBucket}/meteranalytics/model"
+        },
+        "StoppingCondition": {
+          "MaxRuntimeInSeconds": 86400
+        },
+        "ResourceConfig": {
+          "InstanceCount": 1,
+          "InstanceType.$": "$.Training_instance_type",
+          "VolumeSizeInGB": 30
+        },
+        "RoleArn": "${SageMakerRole}",
+        "InputDataConfig": [
+          {
+            "DataSource": {
+              "S3DataSource": {
+                "S3DataType": "S3Prefix",
+                "S3Uri": "s3://${WorkingBucket}/meteranalytics/train/",
+                "S3DataDistributionType": "FullyReplicated"
+              }
+            },
+            "ChannelName": "train"
+          },
+          {
+            "DataSource": {
+              "S3DataSource": {
+                "S3DataType": "S3Prefix",
+                "S3Uri": "s3://${WorkingBucket}/meteranalytics/test/",
+                "S3DataDistributionType": "FullyReplicated"
+              }
+            },
+            "ChannelName": "test"
+          }
+        ],
+        "HyperParameters": {
+          "time_freq": "1H",
+          "epochs": "400",
+          "early_stopping_patience": "40",
+          "mini_batch_size": "48",
+          "learning_rate": "5E-4",
+          "context_length": "168",
+          "prediction_length": "168"
+        },
+        "TrainingJobName.$": "$.Training_job_name"
+      },
+      "Type": "Task",
+      "Next": "SaveModel"
+    },
+    "SaveModel": {
+      "ResultPath": null,
+      "Parameters": {
+        "ExecutionRoleArn": "${SageMakerRole}",
+        "ModelName.$": "$.ModelName",
+        "PrimaryContainer": {
+          "Environment": {},
+          "Image": "${TrainingImage}/forecasting-deepar:1",
+          "ModelDataUrl.$": "$['TrainingOutput']['ModelArtifacts']['S3ModelArtifacts']"
+        }
+      },
+      "Resource": "arn:aws:states:::sagemaker:createModel",
+      "Type": "Task",
+      "Next": "CreateModelEndpointConfig"
+    },
+    "CreateModelEndpointConfig": {
+      "ResultPath": null,
+      "Resource": "arn:aws:states:::sagemaker:createEndpointConfig",
+      "Parameters": {
+        "EndpointConfigName.$": "$.ModelName",
+        "ProductionVariants": [
+          {
+            "InitialInstanceCount": 1,
+            "InstanceType.$": "$.Endpoint_instance_type",
+            "ModelName.$": "$.ModelName",
+            "VariantName": "AllTraffic"
+          }
+        ]
+      },
+      "Type": "Task",
+      "Next": "UpdateModelEndpoint"
+    },
+    "UpdateModelEndpoint": {
+      "Resource": "arn:aws:states:::sagemaker:createEndpoint",
+      "Parameters": {
+        "EndpointConfigName.$": "$.ModelName",
+        "EndpointName.$": "$.ML_endpoint_name"
+      },
+      "Type": "Task",
+      "End": true
+    }
+  }
+}
