@@ -6,7 +6,10 @@
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
-        "FunctionName": "${LoadPipelineParameter}"
+        "FunctionName": "${LoadPipelineParameter}",
+        "Payload": {
+          "train_model" : true
+        }
       },
       "OutputPath": "$.Payload",
       "Next": "PrepareTrainingDataset"

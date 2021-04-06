@@ -165,6 +165,7 @@ Resources:
           Subnet2ID: !Ref Subnet2ID
           VPCID: !Ref VPCID
           RemoteAccessCIDR: !Ref RemoteAccessCIDR
+          ConfigTable: !GetAtt MachineLearningPipelineConfigStack.Outputs.MachineLearningPipelineConfigTable
 
     CopyDemoDataStack:
       Type: 'AWS::CloudFormation::Stack'

@@ -527,7 +527,7 @@ Resources:
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
         - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
         - 'arn:aws:iam::aws:policy/AWSStepFunctionsFullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess'
+        - 'arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess'
 
   SageMakerRole:
     Type: 'AWS::IAM::Role'

@@ -23,7 +23,6 @@ Resources:
       InlineCode: |
           import json
           import boto3
-          import uuid
           import cfnresponse
           import logging
 
@@ -41,9 +40,6 @@ Resources:
                 { "name": "Training_samples", "value": 50 },
                 { "name": "Training_instance_type", "value": "ml.c5.2xlarge" },
                 { "name": "Endpoint_instance_type", "value": "ml.m5.xlarge" },
-                { "name": "Training_job_name", "value": "training-job-{}".format(str(uuid.uuid4())) },
-                { "name": "ModelName", "value": "ml-model-{}".format(str(uuid.uuid4())) },
-                { "name": "ML_endpoint_name", "value": "ml-endpoint-{}".format(str(uuid.uuid4())) },
                 { "name": "Meter_start", "value": 1 },
                 { "name": "Meter_end", "value": 100 },
                 { "name": "Batch_size", "value": 25 }
