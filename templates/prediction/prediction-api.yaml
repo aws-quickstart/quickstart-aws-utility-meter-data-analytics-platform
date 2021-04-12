@@ -264,7 +264,6 @@ Resources:
       CompatibleRuntimes:
         - python3.7
       LicenseInfo: 'Available under the MIT-0 license.'
-      RetentionPolicy: Retain
 
   DependencyLayer:
     Type: 'AWS::Serverless::LayerVersion'
@@ -278,7 +277,6 @@ Resources:
       CompatibleRuntimes:
         - python3.7
       LicenseInfo: 'Available under the MIT-0 license.'
-      RetentionPolicy: Retain
 
   #
   # Network
