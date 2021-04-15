@@ -113,6 +113,7 @@ Resources:
         SageMakerRole: !GetAtt SageMakerRole.Arn
         TrainingImage: !FindInMap [TrainingImageMap, !Ref "AWS::Region", "image"]
         LoadPipelineParameter: !Ref LoadPipelineParameter
+        HasEndpoint: !Ref HasEndpoint
       Policies:
         - Version: 2012-10-17
           Statement:
@@ -149,6 +150,8 @@ Resources:
             FunctionName: !Ref PrepareTrainingFunction
         - LambdaInvokePolicy:
             FunctionName: !Ref LoadPipelineParameter
+        - LambdaInvokePolicy:
+            FunctionName: !Ref HasEndpoint
 
 
   # Step functions state machine
@@ -364,6 +367,17 @@ Resources:
       Handler: app.lambda_handler
       Role: !GetAtt 'ExecuteLambdaRole.Arn'
 
+  HasEndpoint:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Timeout: 60
+      CodeUri:
+        Bucket: !If [ UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName ]
+        Key:
+          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_has_endpoint.zip'
+      Handler: app.lambda_handler
+      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+
   #
   # Lambda Dependency Layer
   #
@@ -379,7 +393,6 @@ Resources:
       CompatibleRuntimes:
         - python3.7
       LicenseInfo: 'Available under the MIT-0 license.'
-      RetentionPolicy: Retain
 
   DependencyLayer:
     Type: AWS::Serverless::LayerVersion
@@ -392,7 +405,6 @@ Resources:
       CompatibleRuntimes:
         - python3.7
       LicenseInfo: 'MIT'
-      RetentionPolicy: Retain
 
   #
   # Crawler
