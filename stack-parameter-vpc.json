@@ -17,11 +17,11 @@
   },
   {
     "ParameterKey": "QSS3BucketName",
-    "ParameterValue": "mda-qs-dev-jmousa"
+    "ParameterValue": "cf-meter-data-test"
   },
   {
     "ParameterKey": "QSS3KeyPrefix",
-    "ParameterValue": "quickstart/"
+    "ParameterValue": "temp/"
   },
   {
     "ParameterKey": "QSS3BucketRegion",
@@ -33,10 +33,6 @@
   },
   {
     "ParameterKey": "LandingzoneTransformer",
-    "ParameterValue": "default"
-  },
-  {
-    "ParameterKey": "DeploySpecialAdapters",
-    "ParameterValue": "mrasco"
+    "ParameterValue": "london"
   }
 ]
