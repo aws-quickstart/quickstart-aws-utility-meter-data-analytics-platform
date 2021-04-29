@@ -34,5 +34,9 @@
   {
     "ParameterKey": "LandingzoneTransformer",
     "ParameterValue": "london"
+  },
+  {
+    "ParameterKey": "DeploySpecialAdapters",
+    "ParameterValue": "mrasco"
   }
 ]
