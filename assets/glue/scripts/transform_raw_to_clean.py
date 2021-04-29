@@ -97,15 +97,17 @@ tableName = args['table_name'].replace("-", "_")
 datasource = glueContext.create_dynamic_frame.from_catalog(database=args['db_name'], table_name=tableName,
                                                            transformation_ctx="datasource")
 
-datasource = datasource.resolveChoice(specs = [('col3','make_cols')])
+datasource = datasource.resolveChoice(choice="make_cols")
+
+schema = datasource.schema()
 
 mapped_readings = ApplyMapping.apply(frame=datasource, mappings=[ \
-    ("col0", "long", "meter_id", "string"), \
-    ("col1", "string", "obis_code", "string"), \
-    ("col2", "long", "reading_time", "string"), \
-    ("col3_double", "double", "reading_value", "double"), \
-    ("col3_string", "string", "error_value", "string"), \
-    ("col4", "string", "reading_type", "string") \
+    (schema.fields[0].name, "long", "meter_id", "string"), \
+    (schema.fields[1].name, "string", "obis_code", "string"), \
+    (schema.fields[2].name, "long", "reading_time", "string"), \
+    (schema.fields[3].name, "double", "reading_value", "double"), \
+    (schema.fields[4].name, "string", "error_value", "string"), \
+    (schema.fields[5].name, "string", "reading_type", "string") \
     ], transformation_ctx="mapped_readings")
 
 df_readings = DynamicFrame.toDF(mapped_readings)

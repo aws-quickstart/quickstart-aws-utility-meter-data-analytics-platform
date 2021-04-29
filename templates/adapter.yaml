@@ -1,0 +1,156 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: 'AWS::Serverless-2016-10-31'
+Description: >-
+             Setting up adapters for additional meter data formats
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Adapter setup
+        Parameters:
+          - LandingZoneS3Bucket
+          - Adapter
+          - AdapterMemoryInMB
+          - AdapterTimeoutInSeconds
+          - LandingzoneTransformer
+      - Label:
+          default: Quickstart setup
+        Parameters:
+          - QSS3BucketName
+          - QSS3KeyPrefix
+    ParameterLabels:
+      LandingZoneS3Bucket:
+        default: LandingZone S3 Bucket
+      Adapter:
+        default: Deployed adapter
+      AdapterMemoryInMB:
+        default: Memory limit for Adapter trigger
+      AdapterTimeoutInSeconds:
+        default: Timeout for Adapter trigger
+      LandingzoneTransformer:
+        default: Landing zone transformer that reads the landing-zone data
+      QSS3BucketName:
+        default: Quick Start S3 bucket name
+      QSS3KeyPrefix:
+        default: Quick Start S3 key prefix
+
+Parameters:
+  Adapter:
+    Type: String
+    Default: mrasco
+    Description: >-
+      Defines the special adapters are needed for raw data.
+      This will deploy a S3 trigger that invokes a Lambda to transform files added in additional folder named
+      after adapter in landing zone bucket.
+    AllowedValues:
+      - mrasco
+
+  LandingZoneS3Bucket:
+    Type: String
+    MinLength: '1'
+    Description: You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket.
+      Otherwise, keep this box blank.
+
+  LandingzoneTransformer:
+    Type: String
+    Default: london
+    Description: 'Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.'
+    AllowedValues:
+      - default
+      - london
+
+  QSS3KeyPrefix:
+    AllowedPattern: '^[0-9a-zA-Z-/]*[/]$'
+    ConstraintDescription: >-
+      Quick Start key prefix can include numbers, lowercase letters, uppercase
+      letters, hyphens (-), and forward slash (/) and must terminate in a forward slash.
+    Default: quickstart-aws-utility-meter-data-analytics-platform/
+    Type: String
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
+
+  QSS3BucketName:
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription: >-
+      Quick Start bucket name can include numbers, lowercase letters, uppercase
+      letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Default: aws-quickstart
+    Description: >-
+      S3 bucket name for the Quick Start assets.
+      Only change this value if you customize or extend the Quick Start for your own use.
+      This string can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
+    Type: String
+
+  AdapterMemoryInMB:
+    Type: Number
+    MinValue: 128
+    MaxValue: 10240
+    Default: 256
+    Description: Memory needed in MBs for lambda function triggering adapter logic.
+
+  AdapterTimeoutInSeconds:
+    Type: Number
+    MinValue: 3
+    MaxValue: 900
+    Default: 180
+    Description: Timeout in seconds for lambda function triggering adapter logic.
+
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+
+Mappings:
+  DateFormatMap:
+    default:
+      format: "%Y%m%d%H24%M%S"
+    london:
+      format: "yyyy-MM-dd HH:mm:ss"
+
+Resources:
+  AdapterLandingZoneS3Bucket:
+    Type: "AWS::S3::Bucket"
+
+  AdapterFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      CodeUri:
+        Bucket: !If [ UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName ]
+        Key: !Sub '${QSS3KeyPrefix}assets/functions/packages/adapter_${Adapter}.zip'
+      Description: lambda to be called on object creation to adapt objects to clean format S3
+      Environment:
+        Variables:
+          TargetS3Bucket: !Ref LandingZoneS3Bucket
+          TargetS3BucketPrefix: ''
+          DATE_FORMAT: !FindInMap [DateFormatMap, !Ref LandingzoneTransformer, "format"]
+      Events:
+        AddRawFilesEvent:
+          Properties:
+            Bucket:
+              Ref: AdapterLandingZoneS3Bucket
+            Events: s3:ObjectCreated:*
+          Type: S3
+      Handler: 'app.lambda_handler'
+      MemorySize: !Ref AdapterMemoryInMB
+      Role:
+        Fn::GetAtt:
+          - ExecuteLambdaRole
+          - Arn
+      Runtime: python3.8
+      Timeout: 3
+
+
+  ExecuteLambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 'lambda.amazonaws.com'
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
