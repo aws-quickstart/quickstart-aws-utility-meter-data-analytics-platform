@@ -85,11 +85,12 @@ cleanup_temp_folder(args['temp_workflow_bucket'], 'glue_workflow_distinct_dates'
 
 tableName = args['table_name'].replace("-", "_")
 datasource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = tableName, transformation_ctx = "datasource")
+schema = datasource.schema()
 
-mapped_readings = ApplyMapping.apply(frame = datasource, mappings = [("lclid", "string", "meter_id", "string"), \
-                                                                     ("datetime", "string", "reading_time", "string"), \
-                                                                     ("KWH/hh (per half hour)", "double", "reading_value", "double")], \
-                                     transformation_ctx = "mapped_readings")
+mapped_readings = ApplyMapping.apply(frame=datasource, mappings=[(schema.fields[0].name, "string", "meter_id", "string"),
+                                                                 (schema.fields[1].name, "string", "reading_time", "string"),
+                                                                 (schema.fields[2].name, "double", "reading_value", "double")],
+                                     transformation_ctx="mapped_readings")
 
 mapped_readings_df = DynamicFrame.toDF(mapped_readings)
 
@@ -122,3 +123,4 @@ glueContext.write_dynamic_frame.from_options(
 write_job_state_information(mapped_readings_df)
 
 job.commit()
+
