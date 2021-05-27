@@ -4,5 +4,7 @@ This Quick Start supports the following Regions:
 * us-east-2, US East (Ohio)
 * us-west-2, US West (Oregon)
 * eu-central-1, Europe (Frankfurt)
+* eu-west-1, Europe (Ireland)
+* eu-west-2, Europe (London)
 * ca-central-1, Canada (Central)
 * ap-south-1, Asia Pacific (Mumbai)
