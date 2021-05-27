@@ -87,9 +87,16 @@ tableName = args['table_name'].replace("-", "_")
 datasource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = tableName, transformation_ctx = "datasource")
 schema = datasource.schema()
 
-mapped_readings = ApplyMapping.apply(frame=datasource, mappings=[(schema.fields[0].name, "string", "meter_id", "string"),
-                                                                 (schema.fields[1].name, "string", "reading_time", "string"),
-                                                                 (schema.fields[2].name, "double", "reading_value", "double")],
+if (schema.fields[1].name == 'stdorToU'):
+    # original london data field index
+    field_index = {"id": 0,"datetime": 2, "reading": 3}
+else:
+    #kaggle ldn data field index
+    field_index = {"id": 0,"datetime": 1, "reading": 2}
+
+mapped_readings = ApplyMapping.apply(frame=datasource, mappings=[(schema.fields[field_index["id"]].name, "string", "meter_id", "string"),
+                                                                 (schema.fields[field_index["datetime"]].name, "string", "reading_time", "string"),
+                                                                 (schema.fields[field_index["reading"]].name, "double", "reading_value", "double")],
                                      transformation_ctx="mapped_readings")
 
 mapped_readings_df = DynamicFrame.toDF(mapped_readings)
