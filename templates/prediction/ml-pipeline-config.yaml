@@ -75,7 +75,6 @@ Resources:
                     sagemaker.delete_endpoint(EndpointName=endpoint_name)
                   except Exception as e:
                       logging.error('Exception: %s' % e, exc_info=True)
-                      status = cfnresponse.FAILED
                   finally:
                       cfnresponse.send(event, context, status, {}, None)
 
