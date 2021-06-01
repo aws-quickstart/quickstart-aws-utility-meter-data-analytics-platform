@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta
 
-date_format = "%Y%m%d%H24%M%S"
+mrasco_date_format = "%Y%m%d"
+mrasco_datetime_format = "%Y%m%d%H%M%S"
+quickstart_date_format = "%Y%m%d%H24%M%S"
 mappings = {
     "header": ["meter_id", "obis_code", "reading_time", "reading_value", "error_code", "reading_type"],
     "D0275": {
         "25B": {
-            "new_record_row": True,
-            "parent_row": True,
+            "reading_row": False,
+            "parent_record_row": True,
             1: [
                 {
                     "field_name": "reading_type",
@@ -25,20 +27,20 @@ mappings = {
             ]
         },
         "26B": {
-            "new_record_row": False,
-            "parent_row": True,
+            "reading_row": False,
+            "parent_record_row": False,
             1: [
                 {
                     "field_name": "reading_time",
                     "mapping": lambda x, curr:
                     # offset first entry as first time a 30 mins will be added by transformation
-                    (datetime.strptime(x, "%Y%m%d") + timedelta(minutes=-30)).strftime(date_format)
+                    (datetime.strptime(x, mrasco_date_format) + timedelta(minutes=-30)).strftime(quickstart_date_format)
                 }
             ]
         },
         "27B": {
-            "new_record_row": False,
-            "parent_row": False,
+            "reading_row": True,
+            "parent_record_row": False,
 
             2: [
                 {
@@ -48,7 +50,8 @@ mappings = {
                 {
                     "field_name": "reading_time",
                     "mapping": lambda x, curr:
-                    (datetime.strptime(curr, date_format) + timedelta(minutes=30)).strftime(date_format)
+                    (datetime.strptime(curr, quickstart_date_format) + timedelta(minutes=30)).strftime(
+                        quickstart_date_format)
                 }
             ],
         }
@@ -86,7 +89,8 @@ mappings = {
             2: [
                 {
                     "field_name": "reading_time",
-                    "mapping": lambda x, curr: datetime.strptime(x, "%Y%m%d%H%M%S").strftime(date_format)
+                    "mapping": lambda x, curr:
+                    datetime.strptime(x, mrasco_datetime_format).strftime(quickstart_date_format)
                 }
             ],
             3: [

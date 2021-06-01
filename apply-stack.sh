@@ -2,7 +2,7 @@
 
 set -e
 
-REGION="us-east-1"
+REGION=${1:-us-east-1}
 
 echo "Checking if stack exists ..."
 

@@ -88,14 +88,14 @@ Parameters:
     Type: Number
     MinValue: 128
     MaxValue: 10240
-    Default: 256
+    Default: 1500
     Description: Memory needed in MBs for lambda function triggering adapter logic.
 
   AdapterTimeoutInSeconds:
     Type: Number
     MinValue: 3
     MaxValue: 900
-    Default: 180
+    Default: 300
     Description: Timeout in seconds for lambda function triggering adapter logic.
 
 Conditions:

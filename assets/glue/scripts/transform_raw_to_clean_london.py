@@ -8,6 +8,7 @@ from pyspark.context import SparkContext
 from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue.dynamicframe import DynamicFrame
+from awsglue.transforms import Map
 from pyspark.sql.functions import *
 
 s3_resource = boto3.resource('s3')
@@ -75,6 +76,9 @@ def write_job_state_information(readings):
 def schema_contains_field(schema, field_name):
     return len([x for x in schema.fields if x.name == field_name]) > 0
 
+def add_london_reading_type_if_missing (rec):
+    rec["reading_type"] = "INT" if "reading_type" not in rec else rec["reading_type"]
+
 args = getResolvedOptions(sys.argv, ['JOB_NAME', 'db_name', 'table_name', 'clean_data_bucket', 'temp_workflow_bucket', 'region'])
 
 sc = SparkContext()
@@ -100,6 +104,8 @@ if not schema_contains_field(mapped_readings_df.schema(), 'obis_code'):
 
 if not schema_contains_field(mapped_readings_df.schema(), 'reading_type'):
     mapped_readings_df = mapped_readings_df.withColumn("reading_type", lit("INT"))
+
+mapped_readings_df = Map.apply(frame=mapped_readings_df, f=add_london_reading_type_if_missing)
 
 reading_time = to_timestamp(col("reading_time"), "yyyy-MM-dd HH:mm:ss")
 mapped_readings_df = mapped_readings_df \
