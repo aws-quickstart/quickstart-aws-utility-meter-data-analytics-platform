@@ -3,6 +3,7 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: "Workload template to deploy the AWS Quick Start for the Utility Meter Data Analytics platform in an existing VPC. (qs-1r18anahd)"
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+  DeployAdapter: !Not [ !Equals [!Ref DeploySpecialAdapters, 'None'] ]
 Rules:
   LZS3BucketNameProvided:
     RuleCondition: !Equals [!Ref CreateLandingZoneS3Bucket, 'No']
@@ -86,6 +87,26 @@ Resources:
           CreateLandingZoneS3Bucket: !Ref CreateLandingZoneS3Bucket
           LandingZoneS3BucketName: !Ref LandingZoneS3BucketName
           DPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
+
+    AdapterStack:
+      Type: 'AWS::CloudFormation::Stack'
+      Condition: DeployAdapter
+      Properties:
+        TemplateURL: !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/adapter.yaml'
+          - S3Region:
+              !If [ UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion ]
+            S3Bucket:
+              !If [
+                  UsingDefaultBucket,
+                  !Sub '${QSS3BucketName}-${AWS::Region}',
+                  !Ref QSS3BucketName,
+              ]
+        Parameters:
+          QSS3BucketName: !Ref QSS3BucketName
+          QSS3KeyPrefix: !Ref QSS3KeyPrefix
+          LandingZoneS3Bucket: !GetAtt GlueStack.Outputs.LandingZoneS3Bucket
+          LandingzoneTransformer: !Ref LandingzoneTransformer
 
     GlueTablesStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -359,6 +380,17 @@ Parameters:
       0 = Weather data won't be used.
       1 = Enable use of weather data.
 
+  DeploySpecialAdapters:
+    Type: String
+    Default: None
+    Description: >-
+      Defines if special adapters are needed for raw data.
+      This will deploy a S3 trigger that invokes a Lambda to transform files added in additional folder named after adapter
+       in landing zone bucket.
+    AllowedValues:
+      - None
+      - mrasco
+
 Metadata:
   QuickStartDocumentation:
     EntrypointName: "Parameters for deploying into an existing VPC"
@@ -387,8 +419,8 @@ Metadata:
           - LandingzoneTransformer
           - CreateLandingZoneS3Bucket
           - LandingZoneS3BucketName
+          - DeploySpecialAdapters
           - NoOfMeters
-          - LandingzoneTransformer
       - Label:
           default: 'AWS Quick Start configuration'
         Parameters:
@@ -434,3 +466,5 @@ Metadata:
         default: Number of meters
       WithWeather:
         default: Weather data availability
+      DeploySpecialAdapters:
+        default: Special data adapters for metering convensions

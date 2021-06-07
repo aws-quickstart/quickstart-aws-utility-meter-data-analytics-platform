@@ -27,8 +27,8 @@ Metadata:
           - LandingzoneTransformer
           - CreateLandingZoneS3Bucket
           - LandingZoneS3BucketName
+          - DeploySpecialAdapters
           - NoOfMeters
-          - LandingzoneTransformer
       - Label:
           default: 'AWS Quick Start configuration'
         Parameters:
@@ -72,6 +72,8 @@ Metadata:
         default: Number of meters
       WithWeather:
         default: Weather data availability
+      DeploySpecialAdapters:
+        default: Special data adapters for metering convensions
 
 Resources:
   VPC:
@@ -134,6 +136,7 @@ Resources:
         - !Ref 'AvailabilityZones'
         NoOfMeters: !Ref NoOfMeters
         WithWeather: !Ref WithWeather
+        DeploySpecialAdapters: !Ref DeploySpecialAdapters
 
 Conditions:
   UsingDefaultBucket: !Equals
@@ -221,6 +224,17 @@ Parameters:
       - "1Mil-5Mil"
       - "5Mil-and-more"
     Default: "1-50K"
+
+  DeploySpecialAdapters:
+    Type: String
+    Default: None
+    Description: >-
+      Defines if special adapters are needed for raw data.
+      This will deploy a S3 trigger that invokes a Lambda to transform files added in additional folder named after adapter
+       in landing zone bucket.
+    AllowedValues:
+      - None
+      - mrasco
 
   AvailabilityZones:
     Description: >-

@@ -15,6 +15,7 @@ project:
 tests:
   full-test-all-regions:
     parameters:
+      Adapter: mrasco
       MasterUsername: awsuser
       MasterUserPassword: Override_1
       ClusterName: redshift-cluster-3

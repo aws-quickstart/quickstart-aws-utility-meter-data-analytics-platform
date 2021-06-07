@@ -5,6 +5,7 @@ HOME=$(pwd)
 rm packages/*.zip
 
 functions=(
+           "adapter/mrasco"
            "outage_info"
            "meter_forecast" \
            "redshift/consumption" \
