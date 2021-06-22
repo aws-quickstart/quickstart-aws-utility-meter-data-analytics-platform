@@ -26,4 +26,18 @@ As shown in <<architecture1>>, the Quick Start sets up the following:
 * AWS Lambda to query the partitioned business data through Amazon Athena or invoke SageMaker to provide API query results.
 * Amazon API Gateway to deliver API query results for energy usage, anomalies, and meter outages.
 
+
+Deploying MRASCO adapter
+
+:xrefstyle: short
+[#architecture_adapter1]
+.Quick Start architecture for {partner-product-name} deploying data adapters on AWS
+image::../images/adapter_architecture_diagram.png[AdapterArchitecture,width=100%,height=100%]
+
+Additionally, as shown in <<architecture_adapter1>>, the Quick Start deploys the following adapter resources (in dark background) if special data adapters were selected to be deployed:
+
+* A data pipeline to transform MRASCO data flow files to MDA landing zone format.
+** S3 bucket to store raw data flow data files.
+** Lambda function to be triggered on object creation and transform raw data flow data files to MDA landing zone.
+
 [.small]#*The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.#
