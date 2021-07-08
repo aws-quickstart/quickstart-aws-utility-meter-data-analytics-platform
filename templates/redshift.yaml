@@ -75,45 +75,7 @@ Resources:
           - arn:aws:iam::aws:policy/AWSGlueConsoleFullAccess
           - arn:aws:iam::aws:policy/AmazonAthenaFullAccess
           - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
-        Policies:
-          - PolicyName: Spectrum-Glue-Access-Policy
-            PolicyDocument:
-              Version: '2012-10-17'
-              Statement:
-                - Effect: 'Allow'
-                  Action:
-                    - s3:GetBucketLocation
-                    - s3:GetObject
-                    - s3:ListMultipartUploadParts
-                    - s3:ListBucket
-                    - s3:ListBucketMultipartUploads
-                  Resource:
-                    - '*'
-                - Effect: Allow
-                  Action:
-                    - glue:CreateDatabase
-                    - glue:DeleteDatabase
-                    - glue:GetDatabase
-                    - glue:GetDatabases
-                    - glue:UpdateDatabase
-                    - glue:CreateTable
-                    - glue:DeleteTable
-                    - glue:BatchDeleteTable
-                    - glue:UpdateTable
-                    - glue:GetTable
-                    - glue:GetTables
-                    - glue:BatchCreatePartition
-                    - glue:CreatePartition
-                    - glue:DeletePartition
-                    - glue:BatchDeletePartition
-                    - glue:UpdatePartition
-                    - glue:GetPartition
-                    - glue:GetPartitions
-                    - glue:BatchGetPartition
-                    - logs:*
-                  Resource:
-                    - '*'
-
+          - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
 
     #
     # SecretsManager

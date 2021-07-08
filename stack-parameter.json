@@ -1,10 +1,10 @@
 [
   {
-    "ParameterKey": "MasterUsername",
+    "ParameterKey": "RedshiftUsername",
     "ParameterValue": "meteradmin"
   },
   {
-    "ParameterKey": "MasterUserPassword",
+    "ParameterKey": "RedshiftUserPassword",
     "ParameterValue": "MeterAdmin2020!"
   },
   {
