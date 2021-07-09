@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: 'AWS::Serverless-2016-10-31'
 Description: >-
-             Setting up adapters for additional meter data formats
+             Setting up adapters for additional meter data formats. (qs-1r18anahd)
 
 Metadata:
   AWS::CloudFormation::Interface:
