@@ -226,7 +226,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_load_pipeline_parameter.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
@@ -240,7 +240,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_prepare_training.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
@@ -254,7 +254,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_check_initial_pipeline_run.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
@@ -268,7 +268,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_state_topic_subscription.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Environment:
         Variables:
           ml_pipeline_trigger_state_machine: !Ref MachineLearningPipelineOrchestratorStateMachine
@@ -299,7 +299,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_split_batch.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
@@ -313,7 +313,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_prepare_batch.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
@@ -326,7 +326,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_upload_result.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
@@ -341,7 +341,7 @@ Resources:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_batch_anomaly_detection.zip'
       MemorySize: 2048
       Timeout: 600
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref BatchAnomalyDependencyLayer
 
@@ -354,7 +354,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_crawler_trigger_glue_crawler.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
 
   GetGlueCrawlerStateFunction:
     Type: 'AWS::Serverless::Function'
@@ -365,7 +365,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_crawler_get_glue_crawler_state.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
 
   HasEndpoint:
     Type: 'AWS::Serverless::Function'
@@ -376,7 +376,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_has_endpoint.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
 
   #
   # Lambda Dependency Layer
@@ -522,7 +522,7 @@ Resources:
         - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess"
         - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSGlueServiceRole"
 
-  ExecuteLambdaRole:
+  RunLambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
       AssumeRolePolicyDocument:
