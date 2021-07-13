@@ -6,7 +6,10 @@
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "Parameters": {
-        "FunctionName": "${LoadPipelineParameter}"
+        "FunctionName": "${LoadPipelineParameter}",
+        "Payload": {
+          "train_model" : true
+        }
       },
       "OutputPath": "$.Payload",
       "Next": "PrepareTrainingDataset"
@@ -119,10 +122,43 @@
         ]
       },
       "Type": "Task",
-      "Next": "UpdateModelEndpoint"
+      "Next": "CheckEndpoint"
+    },
+    "CheckEndpoint": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${HasEndpoint}",
+        "Payload": {
+          "endpoint_name.$": "$.ML_endpoint_name"
+        }
+      },
+      "ResultPath": "$.HasEndpoints",
+      "Type": "Task",
+      "Next": "DoesEndpointExist"
+    },
+    "DoesEndpointExist": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.HasEndpoints.Payload.has_endpoint",
+          "BooleanEquals": true,
+          "Next": "UpdateModelEndpoint"
+        }
+      ],
+      "Default": "CreateModelEndpoint"
+    },
+    "CreateModelEndpoint": {
+      "Resource": "arn:aws:states:::sagemaker:createEndpoint",
+      "Parameters": {
+        "EndpointConfigName.$": "$.ModelName",
+        "EndpointName.$": "$.ML_endpoint_name"
+      },
+      "Type": "Task",
+      "End": true
     },
     "UpdateModelEndpoint": {
-      "Resource": "arn:aws:states:::sagemaker:createEndpoint",
+      "Resource": "arn:aws:states:::sagemaker:updateEndpoint",
       "Parameters": {
         "EndpointConfigName.$": "$.ModelName",
         "EndpointName.$": "$.ML_endpoint_name"

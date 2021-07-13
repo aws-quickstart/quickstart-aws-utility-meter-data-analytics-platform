@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.12">
+<meta name="generator" content="Asciidoctor 2.0.15">
 <title>Utility Meter Data Analytics on the AWS Cloud</title>
 <style>
 
@@ -182,7 +182,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
   padding-top:0;
   overflow:hidden;
   background:#283e5b;
-  border-bottom: 4px solid #435c7c;
+  /* border-bottom: 4px solid #435c7c; */
   width:320px;
   height:154px;
   top:0;
@@ -411,7 +411,7 @@ span.icon>.fa{cursor:default}
 a span.icon>.fa{cursor:inherit}
 .admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
 .admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
-.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";color: rgb(3, 87, 21);}
 .admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
 .admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
 .admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
@@ -747,8 +747,43 @@ p {
   font-weight  : 300 !important;
 }
 
-#toc.toc2 #toctitle{
-  background-image: url('images/AWS-Logo.svg');
+/* image layout */
+#toc.toc2 #toctitle {
+  background-image: url("images/AWS-Logo.svg");
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-position: center;
+  width: auto;
+  height: 15%;
+}
+
+/* Left Navbar size */
+#toc.toc2 {
+  width: 17%;
+  min-width: 15em;
+}
+
+/* auto width for main page */
+body.toc2 {
+  padding-left: 22%;
+  padding-right: 2%;
+}
+
+/* hide left nav bar if page size is smaller than 767px */
+@media screen and (max-width: 767px) {
+  #toc {
+      display: none !important;
+  }
+  body.toc2 {
+    padding-left: 1%;
+    padding-right: 1%;
+    position: relative;
+  }
+
+  #content {
+    padding-left: 2%;
+    padding-right: 2%;
+  }
 }
 
 /* QS Tables */
@@ -834,6 +869,7 @@ p.footer-text a{color:#d7d8d8}
 </li>
 <li><a href="#_best_practices">Best practices</a></li>
 <li><a href="#_faq">FAQ</a></li>
+<li><a href="#_customer_responsibility">Customer responsibility</a></li>
 <li><a href="#_parameter_reference">Parameter reference</a>
 <ul class="sectlevel2">
 <li><a href="#_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</a></li>
@@ -927,7 +963,7 @@ see the pricing pages for each AWS service you use. Prices are subject to change
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-After you deploy the Quick Start, <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-gettingstarted-turnonreports.html" target="_blank" rel="noopener">create AWS Cost and Usage Reports</a> to deliver billing metrics to an Amazon Simple Storage Service (Amazon S3) bucket in your account. These reports provide cost estimates based on usage throughout each month and aggregate the data at the end of the month. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-costusage.html" target="_blank" rel="noopener">What are AWS Cost and Usage Reports?</a>
+After you deploy the Quick Start, create <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-gettingstarted-turnonreports.html" target="_blank" rel="noopener">AWS Cost and Usage Reports</a> to deliver billing metrics to an Amazon Simple Storage Service (Amazon S3) bucket in your account. These reports provide cost estimates based on usage throughout each month and aggregate the data at the end of the month. For more information, see <a href="https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html" target="_blank" rel="noopener">What are AWS Cost and Usage Reports?</a>
 </td>
 </tr>
 </table>
@@ -1080,7 +1116,7 @@ deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 <div class="sect3">
 <h4 id="_resource_quotas">Resource quotas</h4>
 <div class="paragraph">
-<p>If necessary, request <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">service quota increases</a> for the following resources. You might request quota increases to avoid exceeding the default limits for any resources that are shared across multiple deployments. The <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">Service Quotas console</a> displays your usage and quotas for some aspects of some services. For more information, see <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html" target="_blank" rel="noopener">What is Service Quotas?</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html" target="_blank" rel="noopener">AWS service quotas</a>.</p>
+<p>If necessary, request <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">service quota increases</a> for the following resources. You might need to request increases if your existing deployment currently uses these resources and if this Quick Start deployment could result in exceeding the default quotas. The <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">Service Quotas console</a> displays your usage and quotas for some aspects of some services. For more information, see <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html" target="_blank" rel="noopener">What is Service Quotas?</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html" target="_blank" rel="noopener">AWS service quotas</a>.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -1159,6 +1195,12 @@ deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 </li>
 <li>
 <p>eu-central-1, Europe (Frankfurt)</p>
+</li>
+<li>
+<p>eu-west-1, Europe (Ireland)</p>
+</li>
+<li>
+<p>eu-west-2, Europe (London)</p>
 </li>
 <li>
 <p>ca-central-1, Canada (Central)</p>
@@ -1314,15 +1356,9 @@ If you’re deploying Utility Meter Data Analytics into an existing VPC, make su
 <p>Monitor the status of the stack. When the status is <strong>CREATE_COMPLETE</strong>, the Utility Meter Data Analytics deployment is ready.</p>
 </li>
 <li>
-<p>Use the values displayed in the <strong>Outputs</strong> tab for the stack, as shown in <a href="#cfn_outputs">Figure 2</a>, to view the created resources.</p>
+<p>To view the created resources, see the values displayed in the <strong>Outputs</strong> tab for the stack.</p>
 </li>
 </ol>
-</div>
-<div id="cfn_outputs" class="imageblock">
-<div class="content">
-<a class="image" href="images/cfn_outputs.png"><img src="images/cfn_outputs.png" alt="cfn_outputs" width="100%" height="100%"></a>
-</div>
-<div class="title">Figure 2. Utility Meter Data Analytics outputs after successful deployment</div>
 </div>
 </div>
 </div>
@@ -1353,6 +1389,9 @@ For using the demo dataset, you must set the <strong>LandingzoneTransformer</str
 <div class="paragraph">
 <p><a href="https://data.london.gov.uk/download/smartmeter-energy-use-data-in-london-households/3527bf39-d93e-4071-8451-df2ade1ea4f2/Power-Networks-LCL-June2015(withAcornGps).zip" target="_blank" rel="noopener">Download sample meter data</a></p>
 </div>
+<div class="paragraph">
+<p>Mirror: <a href="https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=halfhourly_dataset.zip">Donwlod from kaggle</a></p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_upload_the_dataset_to_the_landing_zone_raw_data_s3_bucket">Upload the dataset to the landing-zone (raw-data) S3 bucket</h3>
@@ -1370,7 +1409,7 @@ For using the demo dataset, you must set the <strong>LandingzoneTransformer</str
 <div class="content">
 <a class="image" href="images/1_bucket_layout.png"><img src="images/1_bucket_layout.png" alt="Bucket Layout"></a>
 </div>
-<div class="title">Figure 3. S3 bucket layout</div>
+<div class="title">Figure 2. S3 bucket layout</div>
 </div>
 </li>
 <li>
@@ -1379,7 +1418,7 @@ For using the demo dataset, you must set the <strong>LandingzoneTransformer</str
 <div class="content">
 <a class="image" href="images/2_upload_demo_data_set.png"><img src="images/2_upload_demo_data_set.png" alt="Upload demo dataset"></a>
 </div>
-<div class="title">Figure 4. Uploading the demo dataset</div>
+<div class="title">Figure 3. Uploading the demo dataset</div>
 </div>
 </li>
 <li>
@@ -1388,7 +1427,7 @@ For using the demo dataset, you must set the <strong>LandingzoneTransformer</str
 <div class="content">
 <a class="image" href="images/3_upload_demo_data_set.png"><img src="images/3_upload_demo_data_set.png" alt="Uploaded demo dataset"></a>
 </div>
-<div class="title">Figure 5. The uploaded demo dataset</div>
+<div class="title">Figure 4. The uploaded demo dataset</div>
 </div>
 </li>
 </ol>
@@ -1414,7 +1453,7 @@ Make sure that your landing-zone S3 bucket contains only meter-data files. If it
 <p><a href="https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv" target="_blank" rel="noopener">Download</a> the sample weather dataset.</p>
 </li>
 <li>
-<p>Upload the dataset to the S3 bucket.</p>
+<p>Upload the dataset to a new S3 bucket (the bucket can have any name and needs to be referenced in the following SQL statement).</p>
 </li>
 <li>
 <p>Create a weather table in the target AWS Glue database using the following SQL statement. Replace &lt;weather-data-location&gt; with the location where you upload the weather dataset.</p>
@@ -1422,7 +1461,7 @@ Make sure that your landing-zone S3 bucket contains only meter-data files. If it
 <div class="content">
 <a class="image" href="images/4_create_weather_table.png"><img src="images/4_create_weather_table.png" alt="Create weather table via Athena"></a>
 </div>
-<div class="title">Figure 6. Creating the weather table</div>
+<div class="title">Figure 5. Creating the weather table</div>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1442,7 +1481,7 @@ Make sure that your landing-zone S3 bucket contains only meter-data files. If it
 ROW FORMAT DELIMITED
       FIELDS TERMINATED BY ','
 LOCATION
-  's3://&lt;weather-data-location&gt;'
+  's3://&lt;weather-data-location&gt;/'
 TBLPROPERTIES (
   'has_encrypted_data'='false',
   'skip.header.line.count'='1');</code></pre>
@@ -1553,7 +1592,7 @@ TBLPROPERTIES (
 <div class="content">
 <a class="image" href="images/4_start_etl_workflow.png"><img src="images/4_start_etl_workflow.png" alt="AWS Glue console"></a>
 </div>
-<div class="title">Figure 7. Viewing AWS Glue workflows</div>
+<div class="title">Figure 6. Viewing AWS Glue workflows</div>
 </div>
 </li>
 <li>
@@ -1565,7 +1604,7 @@ TBLPROPERTIES (
 <div class="content">
 <a class="image" href="images/5_start_etl_workflow.png"><img src="images/5_start_etl_workflow.png" alt="Start ETL workflow"></a>
 </div>
-<div class="title">Figure 8. Start the ETL workflow</div>
+<div class="title">Figure 7. Start the ETL workflow</div>
 </div>
 </li>
 <li>
@@ -1574,7 +1613,7 @@ TBLPROPERTIES (
 <div class="content">
 <a class="image" href="images/6_start_etl_workflow.png"><img src="images/6_start_etl_workflow.png" alt="Running workflow"></a>
 </div>
-<div class="title">Figure 9. Running the workflow</div>
+<div class="title">Figure 8. Running the workflow</div>
 </div>
 </li>
 </ol>
@@ -1602,7 +1641,7 @@ TBLPROPERTIES (
 <div class="content">
 <a class="image" href="images/1_edit_etl_job.png"><img src="images/1_edit_etl_job.png" alt="AWS Glue Job console"></a>
 </div>
-<div class="title">Figure 10. Viewing AWS Glue jobs</div>
+<div class="title">Figure 9. Viewing AWS Glue jobs</div>
 </div>
 </li>
 <li>
@@ -1611,7 +1650,7 @@ TBLPROPERTIES (
 <div class="content">
 <a class="image" href="images/2_edit_etl_job.png"><img src="images/2_edit_etl_job.png" alt="Select the ETL job"></a>
 </div>
-<div class="title">Figure 11. Selecting the ETL job</div>
+<div class="title">Figure 10. Selecting the ETL job</div>
 </div>
 </li>
 <li>
@@ -1620,7 +1659,7 @@ TBLPROPERTIES (
 <div class="content">
 <a class="image" href="images/3_open_editor.png"><img src="images/3_open_editor.png" alt="Open the script editor"></a>
 </div>
-<div class="title">Figure 12. Opening the script editor</div>
+<div class="title">Figure 11. Opening the script editor</div>
 </div>
 </li>
 <li>
@@ -1748,12 +1787,12 @@ TBLPROPERTIES (
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Open the Step Functions console. Find the state machine with the prefix "PredictionPipelineStateMachine-".</p>
+<p>Open the Step Functions console. Find the state machine with the prefix <strong>"MachineLearningPipelinePreCalculationStateMachine-"</strong>.</p>
 <div id="step_function_console" class="imageblock">
 <div class="content">
 <a class="image" href="images/1_batchpipeline.png"><img src="images/1_batchpipeline.png" alt="AWS Step Functions console"></a>
 </div>
-<div class="title">Figure 13. Viewing state machines on the AWS Step Functions console</div>
+<div class="title">Figure 12. Viewing state machines on the AWS Step Functions console</div>
 </div>
 </li>
 <li>
@@ -1762,25 +1801,25 @@ TBLPROPERTIES (
 <div class="content">
 <a class="image" href="images/2_batchpipeline_execution.png"><img src="images/2_batchpipeline_execution.png" alt="Batch pipeline execution"></a>
 </div>
-<div class="title">Figure 14. Batch pipeline execution</div>
+<div class="title">Figure 13. Batch pipeline execution</div>
 </div>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>The input parameter needs to contain the following information in JSON format. You can specify the range of meters you want to process and the date range of your data. Note that <code>Batch_size</code> should not exceed 100. You can also specify a customer model that you trained in SageMaker.</p>
+<p>The input parameter can be found in the DynamoDB table <strong>MachineLearningPipelineConfig</strong>*. You can specify the range of meters you want to process, and the date range of your data. Note that <code>Batch_size</code> should not exceed 100.</p>
+</div>
+<div class="paragraph">
+<p>Adjust the following values in the DynamoDB table as needed:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
-  "Meter_start": 1,
-  "Meter_end": 50,
-  "Batch_size": 25,
-  "Data_start": "2013-01-01",
-  "Data_end": "2013-10-01",
-  "Forecast_period": 7,
-  "ModelName": "ml-model-0731"
-}</code></pre>
+<pre class="highlight"><code class="language-json" data-lang="json">"Meter_start": 1,
+"Meter_end": 50,
+"Batch_size": 25,
+"Data_start": "2013-01-01",
+"Data_end": "2013-10-01",
+"Forecast_period": 7</code></pre>
 </div>
 </div>
 </div>
@@ -1789,7 +1828,7 @@ TBLPROPERTIES (
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Open the Step Functions console. Find the state machine with prefix "InitialTrainingStateMachine-".</p>
+<p>Open the Step Functions console. Find the state machine with prefix <strong>"MachineLearningPipelineModelTrainingStateMachine-"</strong>.</p>
 </li>
 <li>
 <p>Open the state machine, and choose <strong>Definition</strong>.</p>
@@ -1800,28 +1839,30 @@ TBLPROPERTIES (
 <div class="content">
 <a class="image" href="images/3_trainingpipeline_hyperparameters.png"><img src="images/3_trainingpipeline_hyperparameters.png" alt="HyperParameters"></a>
 </div>
-<div class="title">Figure 15. Hyperparameters</div>
+<div class="title">Figure 14. Hyperparameters</div>
 </div>
 </li>
 <li>
-<p>Save the change to the state machine, and choose <strong>Start execution</strong>. The input parameter needs to contain the following information in JSON format. <code>Training_samples</code> specifies how many meters' data will be used to train the model. The more meters are used, the more accurate the model will be and the longer the training will take.</p>
-</li>
-<li>
-<p>Give a new name for <code>ModelName</code> and <code>ML_endpoint_name</code>.</p>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-json" data-lang="json">{
-  "Training_samples": 20,
-  "Data_start": "2013-01-01",
-  "Data_end": "2013-10-01",
-  "Forecast_period": 7,
-  "ModelName": "ml-model-0731",
-  "ML_endpoint_name": "ml-model-0731"
-}</code></pre>
-</div>
-</div>
+<p>Save the change to the state machine, and choose <strong>Start execution</strong>.</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>The configuration will be loaded from the DynamoDB table: <strong>MachineLearningPipelineConfig</strong>*. The following parameters can be modified:</p>
+</div>
+<div class="paragraph">
+<p><code>Training_samples</code> specifies how many meter data will be used to train the model. The more meters are used, the more accurate the model will be and the longer the training will take.</p>
+</div>
+<div class="paragraph">
+<p>A new unique <code>ModelName</code> and <code>ML_endpoint_name</code> will be generated.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">"Training_samples": 20,
+"Data_start": "2013-01-01",
+"Data_end": "2013-10-01",
+"Forecast_period": 7</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -2436,6 +2477,14 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 </div>
 </div>
 <div class="sect1">
+<h2 id="_customer_responsibility">Customer responsibility</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After you successfully deploy this Quick Start, confirm that your resources and services are updated and configured — including any required patches — to meet your security and other needs. For more information, see the <a href="https://aws.amazon.com/compliance/shared-responsibility-model/" target="_blank" rel="noopener">AWS Shared Responsibility Model</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_parameter_reference">Parameter reference</h2>
 <div class="sectionbody">
 <div class="admonitionblock note">
@@ -2445,8 +2494,7 @@ When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, 
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Unless you are customizing the Quick Start templates for your own deployment projects, we recommend that you keep the default settings for the parameters labeled <code>Quick Start S3 bucket name</code>, <code>Quick Start S3 bucket
-Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parameter settings automatically updates code references to point to a new Quick Start location. For more information, see the <a href="https://aws-quickstart.github.io/option1.html" target="_blank" rel="noopener">AWS Quick Start Contributor’s Guide</a>.
+Unless you are customizing the Quick Start templates for your own deployment projects, keep the default settings for the parameters labeled <strong>Quick Start S3 bucket name</strong>, <strong>Quick Start S3 bucket Region</strong>, and <strong>Quick Start S3 key prefix</strong>. Changing these parameter settings automatically updates code references to point to a new Quick Start location. For more information, see the <a href="https://aws-quickstart.github.io/option1.html" target="_blank" rel="noopener">AWS Quick Start Contributor’s Guide</a>.
 </td>
 </tr>
 </table>
@@ -2587,16 +2635,17 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <td class="tableblock halign-left valign-top"><p class="tableblock">You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Special data adapters for metering convensions
+(<code>DeploySpecialAdapters</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>None</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines if special adapters are needed for raw data. This will deploy a S3 trigger that invokes a Lambda to transform files added in additional folder named after adapter
+ in landing zone bucket.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Number of meters
 (<code>NoOfMeters</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1-50K</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Transformer that reads the landing-zone data
-(<code>LandingzoneTransformer</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>london</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2766,16 +2815,17 @@ Region</code>, and <code>Quick Start S3 key prefix</code>. Changing these parame
 <td class="tableblock halign-left valign-top"><p class="tableblock">You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Special data adapters for metering convensions
+(<code>DeploySpecialAdapters</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>None</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines if special adapters are needed for raw data. This will deploy a S3 trigger that invokes a Lambda to transform files added in additional folder named after adapter
+ in landing zone bucket.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Number of meters
 (<code>NoOfMeters</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1-50K</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Transformer that reads the landing-zone data
-(<code>LandingzoneTransformer</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>london</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2858,16 +2908,16 @@ and to share your customizations with others.</p>
 </div>
 <p class="footer-text">
 <!-- We can use document attributes: -->
-<!-- Generated with Asciidoctor v2.0.12. -->
+<!-- Generated with Asciidoctor v2.0.15. -->
 <a href="https://aws.amazon.com/privacy/">Privacy</a> | <a href="https://aws.amazon.com/terms/">Site terms</a> | &copy; 2021, Amazon Web Services, Inc. or its affiliates. All rights reserved.
 </p>
 </body>
 </html>
 <!--
 repo commit:
-47e94e76ecf67c5b437b80dfca0ed0d00e868d94
+bf9e949329b5fd68eb351eba3981f270ef8af3d6
 
 submodule config:
-+043db710e71444c3b66cdcc02d8b2b7c1aed26e0 docs/boilerplate (heads/main)
- 53fbedf058adaea101a587ec0fa9d84cb2a05587 submodules/quickstart-aws-vpc (v1.0-56-g53fbedf)
++81ea0b675a571b662377f9de556a26cce8dad05f docs/boilerplate (heads/main)
+ 2050f15c4e99387063ff73d765b762e9560ca115 submodules/quickstart-aws-vpc (v1.0-51-g2050f15)
 -->

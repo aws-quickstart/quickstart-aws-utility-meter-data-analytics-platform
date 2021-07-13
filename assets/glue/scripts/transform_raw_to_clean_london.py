@@ -8,6 +8,7 @@ from pyspark.context import SparkContext
 from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsglue.dynamicframe import DynamicFrame
+from awsglue.transforms import Map
 from pyspark.sql.functions import *
 
 s3_resource = boto3.resource('s3')
@@ -72,6 +73,11 @@ def write_job_state_information(readings):
 
     s3_resource.Object(args['temp_workflow_bucket'], 'glue_workflow_distinct_dates').put(Body=json.dumps(state))
 
+def schema_contains_field(schema, field_name):
+    return len([x for x in schema.fields if x.name == field_name]) > 0
+
+def add_london_reading_type_if_missing (rec):
+    rec["reading_type"] = "INT" if "reading_type" not in rec else rec["reading_type"]
 
 args = getResolvedOptions(sys.argv, ['JOB_NAME', 'db_name', 'table_name', 'clean_data_bucket', 'temp_workflow_bucket', 'region'])
 
@@ -85,16 +91,29 @@ cleanup_temp_folder(args['temp_workflow_bucket'], 'glue_workflow_distinct_dates'
 
 tableName = args['table_name'].replace("-", "_")
 datasource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = tableName, transformation_ctx = "datasource")
+schema = datasource.schema()
 
-mapped_readings = ApplyMapping.apply(frame = datasource, mappings = [("lclid", "string", "meter_id", "string"), \
-                                                                     ("datetime", "string", "reading_time", "string"), \
-                                                                     ("KWH/hh (per half hour)", "double", "reading_value", "double")], \
-                                     transformation_ctx = "mapped_readings")
+if (schema.fields[1].name == 'stdorToU'):
+    # original london data field index
+    field_index = {"id": 0,"datetime": 2, "reading": 3}
+else:
+    #kaggle ldn data field index
+    field_index = {"id": 0,"datetime": 1, "reading": 2}
+
+mapped_readings = ApplyMapping.apply(frame=datasource, mappings=[(schema.fields[field_index["id"]].name, "string", "meter_id", "string"),
+                                                                 (schema.fields[field_index["datetime"]].name, "string", "reading_time", "string"),
+                                                                 (schema.fields[field_index["reading"]].name, "double", "reading_value", "double")],
+                                     transformation_ctx="mapped_readings")
 
 mapped_readings_df = DynamicFrame.toDF(mapped_readings)
 
-mapped_readings_df = mapped_readings_df.withColumn("obis_code", lit(""))
-mapped_readings_df = mapped_readings_df.withColumn("reading_type", lit("INT"))
+if not schema_contains_field(mapped_readings_df.schema(), 'obis_code'):
+    mapped_readings_df = mapped_readings_df.withColumn("obis_code", lit(""))
+
+if not schema_contains_field(mapped_readings_df.schema(), 'reading_type'):
+    mapped_readings_df = mapped_readings_df.withColumn("reading_type", lit("INT"))
+
+mapped_readings_df = Map.apply(frame=mapped_readings_df, f=add_london_reading_type_if_missing)
 
 reading_time = to_timestamp(col("reading_time"), "yyyy-MM-dd HH:mm:ss")
 mapped_readings_df = mapped_readings_df \
@@ -122,3 +141,4 @@ glueContext.write_dynamic_frame.from_options(
 write_job_state_information(mapped_readings_df)
 
 job.commit()
+

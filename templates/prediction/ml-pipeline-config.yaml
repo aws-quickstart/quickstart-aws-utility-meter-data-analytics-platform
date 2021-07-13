@@ -23,43 +23,68 @@ Resources:
       InlineCode: |
           import json
           import boto3
-          import uuid
           import cfnresponse
           import logging
+          import uuid
 
           client = boto3.resource('dynamodb')
+          sagemaker = boto3.client('sagemaker')
+
+          def get_config(name):
+            response = DYNAMODB.Table(CONFIG_TABLE_NAME).get_item(
+                Key={'name': name}
+            )
+            return response['Item']["value"]
 
           def lambda_handler(event, context):
               table_name = event['ResourceProperties']['DynamoTableName']
               table = client.Table(table_name)
               status = cfnresponse.SUCCESS
 
-              items = [
-                { "name": "Data_start", "value": "2013-06-01" },
-                { "name": "Data_end", "value": "2014-01-01" },
-                { "name": "Forecast_period", "value": 7 },
-                { "name": "Training_samples", "value": 50 },
-                { "name": "Training_instance_type", "value": "ml.c5.2xlarge" },
-                { "name": "Endpoint_instance_type", "value": "ml.m5.xlarge" },
-                { "name": "Training_job_name", "value": "training-job-{}".format(str(uuid.uuid4())) },
-                { "name": "ModelName", "value": "ml-model-{}".format(str(uuid.uuid4())) },
-                { "name": "ML_endpoint_name", "value": "ml-endpoint-{}".format(str(uuid.uuid4())) },
-                { "name": "Meter_start", "value": 1 },
-                { "name": "Meter_end", "value": 100 },
-                { "name": "Batch_size", "value": 25 }
-              ]
+              if event['RequestType'] == 'Create':
+                  items = [
+                    { "name": "Data_start", "value": "2013-06-01" },
+                    { "name": "Data_end", "value": "2014-01-01" },
+                    { "name": "Forecast_period", "value": 7 },
+                    { "name": "Training_samples", "value": 50 },
+                    { "name": "Training_instance_type", "value": "ml.c5.2xlarge" },
+                    { "name": "Endpoint_instance_type", "value": "ml.m5.xlarge" },
+                    { "name": "ML_endpoint_name", "value": "ml-endpoint-{}".format(str(uuid.uuid4())) },
+                    { "name": "Meter_start", "value": 1 },
+                    { "name": "Meter_end", "value": 100 },
+                    { "name": "Batch_size", "value": 25 }
+                  ]
 
-              try:
-                with table.batch_writer() as batch:
-                      for item in items:
-                          batch.put_item(Item=item)
-              except Exception as e:
-                  logging.error('Exception: %s' % e, exc_info=True)
-                  status = cfnresponse.FAILED
-              finally:
-                  cfnresponse.send(event, context, status, {}, None)
+                  try:
+                    with table.batch_writer() as batch:
+                          for item in items:
+                              batch.put_item(Item=item)
+                  except Exception as e:
+                      logging.error('Exception: %s' % e, exc_info=True)
+                      status = cfnresponse.FAILED
+                  finally:
+                      cfnresponse.send(event, context, status, {}, None)
+
+              elif event['RequestType'] == 'Delete':
+                  # deleting sagemaker endpoint
+                  endpoint_name = table.get_item(
+                      Key={'name': 'ML_endpoint_name'}
+                  )['Item']['value']
+
+                  try:
+                    sagemaker.delete_endpoint(EndpointName=endpoint_name)
+                  except Exception as e:
+                      logging.error('Exception: %s' % e, exc_info=True)
+                  finally:
+                      cfnresponse.send(event, context, status, {}, None)
+
       Policies:
-        - DynamoDBWritePolicy:
+        - Statement:
+          - Sid: SageMakerDeleteEndpoint
+            Effect: Allow
+            Action: 'sagemaker:DeleteEndpoint'
+            Resource: '*'
+        - DynamoDBCrudPolicy:
             TableName: !Ref MachineLearningPipelineConfig
 
   InitializeDynamoDB:

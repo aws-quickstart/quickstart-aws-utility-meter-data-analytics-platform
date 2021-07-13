@@ -26,9 +26,10 @@
 |Parameter label (name) |Default value|Description|Transformer that reads the landing-zone data
 (`LandingzoneTransformer`)|`london`|Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.|Create landing-zone bucket
 (`CreateLandingZoneS3Bucket`)|`Yes`|Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (LandingZoneS3BucketName).|Landing-zone S3 bucket
-(`LandingZoneS3BucketName`)|`**__Blank string__**`|You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.|Number of meters
-(`NoOfMeters`)|`1-50K`|Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."|Transformer that reads the landing-zone data
-(`LandingzoneTransformer`)|`london`|Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.
+(`LandingZoneS3BucketName`)|`**__Blank string__**`|You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.|Special data adapters for metering convensions
+(`DeploySpecialAdapters`)|`None`|Defines if special adapters are needed for raw data. This will deploy a S3 trigger that invokes a Lambda to transform files added in additional folder named after adapter
+ in landing zone bucket.|Number of meters
+(`NoOfMeters`)|`1-50K`|Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."
 |===
 .AWS Quick Start configuration
 [width="100%",cols="16%,11%,73%",options="header",]
