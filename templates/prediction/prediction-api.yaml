@@ -72,6 +72,8 @@ Parameters:
     Type: AWS::EC2::Subnet::Id
   RedshiftSecret:
     Type: String
+  ConfigTable:
+    Type: String
 
 Globals:
   Function:
@@ -81,6 +83,7 @@ Globals:
         Athena_bucket: !Ref AthenaQueryBucket
         Db_schema: !Ref DBName
         With_weather_data: !Ref WithWeather
+        config_table: !Ref ConfigTable
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Resources:
@@ -108,6 +111,7 @@ Resources:
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
         - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
         - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
+        - 'arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess'
       Policies:
         - PolicyName: sagemaker_invoke_endpoint
           PolicyDocument:
@@ -260,7 +264,6 @@ Resources:
       CompatibleRuntimes:
         - python3.7
       LicenseInfo: 'Available under the MIT-0 license.'
-      RetentionPolicy: Retain
 
   DependencyLayer:
     Type: 'AWS::Serverless::LayerVersion'
@@ -274,7 +277,6 @@ Resources:
       CompatibleRuntimes:
         - python3.7
       LicenseInfo: 'Available under the MIT-0 license.'
-      RetentionPolicy: Retain
 
   #
   # Network

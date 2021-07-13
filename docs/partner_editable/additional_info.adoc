@@ -14,6 +14,9 @@ Download the sample dataset from https://data.london.gov.uk/dataset/smartmeter-e
 
 https://data.london.gov.uk/download/smartmeter-energy-use-data-in-london-households/3527bf39-d93e-4071-8451-df2ade1ea4f2/Power-Networks-LCL-June2015(withAcornGps).zip[Download sample meter data^]
 
+
+Mirror: https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=halfhourly_dataset.zip[Donwlod from kaggle]
+
 === Upload the dataset to the landing-zone (raw-data) S3 bucket
 You must upload the sample dataset to the landing-zone (raw-data) S3 bucket. The landing zone is the starting point for the AWS Glue workflow. Files that are placed in this S3 bucket are processed by the ETL pipeline. Furthermore, the AWS Glue ETL workflow tracks which files have been processed and which have not.
 
@@ -47,7 +50,7 @@ WARNING: Make sure that your landing-zone S3 bucket contains only meter-data fil
 === (Optional) Prepare weather data for use in training and forecasting
 
 . https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv[Download^] the sample weather dataset.
-. Upload the dataset to the S3 bucket.
+. Upload the dataset to a new S3 bucket (the bucket can have any name and needs to be referenced in the following SQL statement).
 . Create a weather table in the target AWS Glue database using the following SQL statement. Replace <weather-data-location> with the location where you upload the weather dataset.
 +
 [#create_weather_table]
@@ -72,7 +75,7 @@ CREATE EXTERNAL TABLE weather(
 ROW FORMAT DELIMITED
       FIELDS TERMINATED BY ','
 LOCATION
-  's3://<weather-data-location>'
+  's3://<weather-data-location>/'
 TBLPROPERTIES (
   'has_encrypted_data'='false',
   'skip.header.line.count'='1');

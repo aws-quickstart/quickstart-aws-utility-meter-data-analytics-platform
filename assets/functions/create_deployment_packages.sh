@@ -5,6 +5,7 @@ HOME=$(pwd)
 rm packages/*.zip
 
 functions=(
+           "adapter/mrasco"
            "outage_info"
            "meter_forecast" \
            "redshift/consumption" \
@@ -18,6 +19,7 @@ functions=(
            "ml_pipeline/batch_anomaly_detection" \
            "ml_pipeline/state_topic_subscription" \
            "ml_pipeline/load_pipeline_parameter" \
+           "ml_pipeline/has_endpoint" \
            "ml_pipeline/check_initial_pipeline_run")
 
 for lambda_folder in ${functions[*]};

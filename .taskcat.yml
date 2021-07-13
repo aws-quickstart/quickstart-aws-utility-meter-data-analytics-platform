@@ -10,13 +10,12 @@ project:
     - us-east-1
     - us-east-2
     - us-west-2
-    - eu-central-1
-    - ca-central-1
-    - ap-south-1
+    - eu-west-1
 
 tests:
   full-test-all-regions:
     parameters:
+      Adapter: mrasco
       MasterUsername: awsuser
       MasterUserPassword: Override_1
       ClusterName: redshift-cluster-3
