@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Creates Glue resources"
+Description: "Creates Glue resources. (qs-1r18anahd)"
 Conditions:
   CreateLZS3BucketCondition: !Equals [!Ref CreateLandingZoneS3Bucket, 'Yes']
 Mappings:
@@ -516,12 +516,12 @@ Resources:
                           "s3:*"
                       ],
                       "Resource": [
-                          "arn:aws:s3:::${BusinessZoneS3Bucket}",
-                          "arn:aws:s3:::${LandingZoneS3Bucket}",
-                          "arn:aws:s3:::${CleanZoneS3Bucket}",
-                          "arn:aws:s3:::${TempWorkflowS3Bucket}",
-                          "arn:aws:s3:::${GlueScriptsS3Bucket}",
-                          "arn:aws:s3:::${GlueTempS3Bucket}"
+                          "arn:${AWS::Partition}:s3:::${BusinessZoneS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${LandingZoneS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${CleanZoneS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${TempWorkflowS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${GlueScriptsS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${GlueTempS3Bucket}"
                       ]
                   }
               ]
@@ -536,12 +536,12 @@ Resources:
                           "s3:*"
                       ],
                       "Resource": [
-                          "arn:aws:s3:::${BusinessZoneS3Bucket}",
-                          "arn:aws:s3:::${LandingZoneS3BucketName}",
-                          "arn:aws:s3:::${CleanZoneS3Bucket}",
-                          "arn:aws:s3:::${TempWorkflowS3Bucket}",
-                          "arn:aws:s3:::${GlueScriptsS3Bucket}",
-                          "arn:aws:s3:::${GlueTempS3Bucket}"
+                          "arn:${AWS::Partition}:s3:::${BusinessZoneS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${LandingZoneS3BucketName}",
+                          "arn:${AWS::Partition}:s3:::${CleanZoneS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${TempWorkflowS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${GlueScriptsS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${GlueTempS3Bucket}"
                       ]
                   }
               ]
@@ -556,9 +556,9 @@ Resources:
       MaxSessionDuration: 3600
       ManagedPolicyArns:
         - !Ref IAMManagedPolicy
-        - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-        - "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
-        - "arn:aws:iam::aws:policy/AmazonRedshiftFullAccess"
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSGlueServiceRole'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonRedshiftFullAccess'
 
   BusinessZoneS3Bucket:
     Type: "AWS::S3::Bucket"
@@ -598,8 +598,8 @@ Resources:
         ConnectionProperties:
           "JDBC_CONNECTION_URL": !Sub "jdbc:redshift://${RedshiftClusterEndpoint}/${DBName}"
           "JDBC_ENFORCE_SSL": "false"
-          PASSWORD: !Ref MasterUserPassword
-          USERNAME: !Ref MasterUsername
+          PASSWORD: !Ref RedshiftUserPassword
+          USERNAME: !Ref RedshiftUsername
         Name: !Ref ClusterName
       CatalogId: !Ref "AWS::AccountId"
 
@@ -654,10 +654,10 @@ Outputs:
     Value: !Ref GlueJob4BusinessDailyToRedshift
 
 Parameters:
-  MasterUsername:
+  RedshiftUsername:
     Type: String
 
-  MasterUserPassword:
+  RedshiftUserPassword:
     Type: String
 
   RedshiftClusterEndpoint:

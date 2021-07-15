@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Create SageMaker notebook instance with demo notebooks loaded"
+Description: "Create SageMaker notebook instance with demo notebooks loaded. (qs-1r18anahd)"
 Parameters:
   Session:
     Type: String
@@ -28,10 +28,10 @@ Resources:
             Action:
               - sts:AssumeRole
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonSageMakerReadOnly
-        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
-        - arn:aws:iam::aws:policy/AmazonS3FullAccess
-        - arn:aws:iam::aws:policy/AWSGlueConsoleSageMakerNotebookFullAccess
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSageMakerReadOnly'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/CloudWatchLogsFullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AWSGlueConsoleSageMakerNotebookFullAccess'
       Path: /service-role/
       Policies:
         - PolicyName: !Sub "SagemakerExecution-${AWS::Region}"
@@ -42,7 +42,7 @@ Resources:
                 Action:
                   - iam:PassRole
                 Resource:
-                  - Fn::Sub: 'arn:aws:iam::${AWS::AccountId}:role/*'
+                  - Fn::Sub: 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/*'
   NotebookLifecycle:
     Type: AWS::SageMaker::NotebookInstanceLifecycleConfig
     Properties:

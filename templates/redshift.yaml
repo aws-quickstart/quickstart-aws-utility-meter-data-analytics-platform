@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Metadata:
     Generator: "former2"
-Description: "Create Redshift cluster"
+Description: "Create Redshift cluster. (qs-1r18anahd)"
 Resources:    
     RedshiftCluster:
       Type: AWS::Redshift::Cluster
@@ -12,8 +12,8 @@ Resources:
         DBName: !Ref DBName
         IamRoles: 
           - !GetAtt MyRedshiftIAMRole.Arn
-        MasterUsername: !Ref MasterUsername
-        MasterUserPassword: !Ref MasterUserPassword
+        MasterUsername: !Ref RedshiftUsername
+        MasterUserPassword: !Ref RedshiftUserPassword
         NodeType: !Ref ClusterNodeType
         NumberOfNodes: !Ref ClusterNodeCount
         PubliclyAccessible: false
@@ -72,48 +72,10 @@ Resources:
                 - 'sts:AssumeRole'
         Path: '/'
         ManagedPolicyArns:
-          - arn:aws:iam::aws:policy/AWSGlueConsoleFullAccess
-          - arn:aws:iam::aws:policy/AmazonAthenaFullAccess
-          - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
-        Policies:
-          - PolicyName: Spectrum-Glue-Access-Policy
-            PolicyDocument:
-              Version: '2012-10-17'
-              Statement:
-                - Effect: 'Allow'
-                  Action:
-                    - s3:GetBucketLocation
-                    - s3:GetObject
-                    - s3:ListMultipartUploadParts
-                    - s3:ListBucket
-                    - s3:ListBucketMultipartUploads
-                  Resource:
-                    - '*'
-                - Effect: Allow
-                  Action:
-                    - glue:CreateDatabase
-                    - glue:DeleteDatabase
-                    - glue:GetDatabase
-                    - glue:GetDatabases
-                    - glue:UpdateDatabase
-                    - glue:CreateTable
-                    - glue:DeleteTable
-                    - glue:BatchDeleteTable
-                    - glue:UpdateTable
-                    - glue:GetTable
-                    - glue:GetTables
-                    - glue:BatchCreatePartition
-                    - glue:CreatePartition
-                    - glue:DeletePartition
-                    - glue:BatchDeletePartition
-                    - glue:UpdatePartition
-                    - glue:GetPartition
-                    - glue:GetPartitions
-                    - glue:BatchGetPartition
-                    - logs:*
-                  Resource:
-                    - '*'
-
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AWSGlueConsoleFullAccess'
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonAthenaFullAccess'
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonS3ReadOnlyAccess'
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/CloudWatchLogsFullAccess'
 
     #
     # SecretsManager
@@ -123,7 +85,7 @@ Resources:
       Properties:
         Name: redshift_db_credentials
         Description: Redshift secret
-        SecretString: !Sub '{"username":"${MasterUsername}","password":"${MasterUserPassword}"}'
+        SecretString: !Sub '{"username":"${RedshiftUsername}","password":"${RedshiftUserPassword}"}'
 
     SecretRedshiftAttachment:
       Type: "AWS::SecretsManager::SecretTargetAttachment"
@@ -164,10 +126,10 @@ Outputs:
     Value: !Ref RedshiftSecret
 
 Parameters:
-  MasterUsername:
+  RedshiftUsername:
     Type: String
 
-  MasterUserPassword:
+  RedshiftUserPassword:
     Type: String
     NoEcho: True
   

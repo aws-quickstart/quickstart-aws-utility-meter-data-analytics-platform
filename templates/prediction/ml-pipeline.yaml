@@ -145,7 +145,7 @@ Resources:
                 - sagemaker:DeleteEndpoint
                 - sagemaker:UpdateEndpoint
                 - sagemaker:ListTags
-              Resource: "arn:aws:sagemaker:*:*:*"
+              Resource: !Sub "arn:${AWS::Partition}:sagemaker:*:*:*"
         - LambdaInvokePolicy:
             FunctionName: !Ref PrepareTrainingFunction
         - LambdaInvokePolicy:
@@ -197,7 +197,7 @@ Resources:
                   - sagemaker:DeleteEndpoint
                   - sagemaker:UpdateEndpoint
                   - sagemaker:ListTags
-              Resource: "arn:aws:sagemaker:*:*:*"
+              Resource: !Sub "arn:${AWS::Partition}:sagemaker:*:*:*"
         - LambdaInvokePolicy:
             FunctionName: !Ref SplitBatchFunction
         - LambdaInvokePolicy:
@@ -226,7 +226,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_load_pipeline_parameter.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
@@ -240,7 +240,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_prepare_training.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
@@ -254,7 +254,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_check_initial_pipeline_run.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
@@ -268,7 +268,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_state_topic_subscription.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Environment:
         Variables:
           ml_pipeline_trigger_state_machine: !Ref MachineLearningPipelineOrchestratorStateMachine
@@ -299,7 +299,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_split_batch.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
@@ -313,7 +313,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_prepare_batch.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
@@ -326,7 +326,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_upload_result.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
 
@@ -341,7 +341,7 @@ Resources:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_batch_anomaly_detection.zip'
       MemorySize: 2048
       Timeout: 600
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref BatchAnomalyDependencyLayer
 
@@ -354,7 +354,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_crawler_trigger_glue_crawler.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
 
   GetGlueCrawlerStateFunction:
     Type: 'AWS::Serverless::Function'
@@ -365,7 +365,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_crawler_get_glue_crawler_state.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
 
   HasEndpoint:
     Type: 'AWS::Serverless::Function'
@@ -376,7 +376,7 @@ Resources:
         Key:
           Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/ml_pipeline_has_endpoint.zip'
       Handler: app.lambda_handler
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
 
   #
   # Lambda Dependency Layer
@@ -519,10 +519,10 @@ Resources:
       AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"glue.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
       MaxSessionDuration: 3600
       ManagedPolicyArns:
-        - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-        - "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess"
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSGlueServiceRole"
 
-  ExecuteLambdaRole:
+  RunLambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
       AssumeRolePolicyDocument:
@@ -533,13 +533,13 @@ Resources:
               Service: 'lambda.amazonaws.com'
             Action: 'sts:AssumeRole'
       ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-        - 'arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole'
-        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
-        - 'arn:aws:iam::aws:policy/AWSStepFunctionsFullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSGlueServiceRole'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonAthenaFullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSageMakerFullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AWSStepFunctionsFullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonDynamoDBFullAccess'
 
   SageMakerRole:
     Type: 'AWS::IAM::Role'
@@ -552,9 +552,9 @@ Resources:
               Service: 'sagemaker.amazonaws.com'
             Action: 'sts:AssumeRole'
       ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonSageMakerFullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonAthenaFullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSageMakerFullAccess'
 
 Metadata:
   AWS::CloudFormation::Interface:
