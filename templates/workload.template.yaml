@@ -27,8 +27,8 @@ Resources:
                 !Ref QSS3BucketName,
               ]
         Parameters:
-          MasterUsername: !Ref MasterUsername
-          MasterUserPassword: !Ref MasterUserPassword
+          RootUsername: !Ref RootUsername
+          RootUserPassword: !Ref RootUserPassword
           Subnet1ID: !Ref Subnet1ID
           Subnet2ID: !Ref Subnet2ID
           VPCID: !Ref VPCID
@@ -69,8 +69,8 @@ Resources:
                 !Ref QSS3BucketName,
               ]
         Parameters:
-          MasterUsername: !Ref MasterUsername
-          MasterUserPassword: !Ref MasterUserPassword
+          RootUsername: !Ref RootUsername
+          RootUserPassword: !Ref RootUserPassword
           RedshiftClusterEndpoint: !GetAtt RedshiftStack.Outputs.RedshiftClusterEndpoint
           RedshiftSecurityGroupId: !GetAtt RedshiftStack.Outputs.RedshiftSecurityGroupId
           RedshiftPort: !Ref RedshiftPort
@@ -271,16 +271,16 @@ Outputs:
     Value: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
 
 Parameters:
-  MasterUsername:
+  RootUsername:
     Type: String
-    Description: Master user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
+    Description: Root user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
     MinLength: '1'
     MaxLength: '128'
     AllowedPattern : '([a-z])([a-z]|[0-9]|[_+.@-])*'
 
-  MasterUserPassword:
+  RootUserPassword:
     Type: String
-    Description: Master user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
+    Description: Root user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
     NoEcho: True
     MinLength: '8'
     MaxLength: '64'
@@ -399,8 +399,8 @@ Metadata:
       - Label:
           default: Amazon Redshift cluster configuration
         Parameters:
-          - MasterUsername
-          - MasterUserPassword
+          - RootUsername
+          - RootUserPassword
           - ClusterName
           - DBName
           - RedshiftPort
@@ -428,10 +428,10 @@ Metadata:
           - QSS3KeyPrefix
           - QSS3BucketRegion
     ParameterLabels:
-      MasterUsername:
-        default: Master user name
-      MasterUserPassword:
-        default: Master user password
+      RootUsername:
+        default: Root user name
+      RootUserPassword:
+        default: Root user password
       ClusterName:
         default: Amazon Redshift cluster name
       RedshiftPort:
