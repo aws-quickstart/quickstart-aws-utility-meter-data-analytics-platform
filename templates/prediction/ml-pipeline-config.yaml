@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: 'Meter Data Lake prediction pipeline configuration'
+Description: 'Meter Data Lake prediction pipeline configuration (qs-1r18anahd)'
 
 Globals:
   Function:
@@ -83,7 +83,7 @@ Resources:
           - Sid: SageMakerDeleteEndpoint
             Effect: Allow
             Action: 'sagemaker:DeleteEndpoint'
-            Resource: '*'
+            Resource: !Sub 'arn:${AWS::Partition}:sagemaker:::*'
         - DynamoDBCrudPolicy:
             TableName: !Ref MachineLearningPipelineConfig
 
