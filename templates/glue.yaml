@@ -134,7 +134,7 @@ Resources:
       MaxRetries: 0
       #AllocatedCapacity: 5
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
       MaxCapacity: !Ref DPU
 
   GlueJob2AggMonthly:
@@ -161,7 +161,7 @@ Resources:
       MaxRetries: 0
       #AllocatedCapacity: 5
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
       MaxCapacity: !Ref DPU
 
   GlueJob3AggWeekly:
@@ -188,7 +188,7 @@ Resources:
       MaxRetries: 0
       #AllocatedCapacity: 5
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
       MaxCapacity: !Ref DPU
 
   GlueJob4BusinessDailyToRedshift:
@@ -220,7 +220,7 @@ Resources:
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
 
   GlueJob5CleanToBusiness:
     Type: "AWS::Glue::Job"
@@ -249,7 +249,7 @@ Resources:
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
 
   GlueJob6RawToClean:
     Type: "AWS::Glue::Job"
@@ -282,7 +282,7 @@ Resources:
         --region: !Ref AWS::Region
       MaxRetries: 0
       Timeout: 2880
-      GlueVersion: "1.0"
+      GlueVersion: "2.0"
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
 
