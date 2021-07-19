@@ -88,7 +88,7 @@ Resources:
                     - s3:ListBucket
                     - s3:ListBucketMultipartUploads
                   Resource:
-                    - '*'
+                    - 'arn:aws:s3:::*'
                 - Effect: Allow
                   Action:
                     - glue:CreateDatabase
@@ -112,7 +112,8 @@ Resources:
                     - glue:BatchGetPartition
                     - logs:*
                   Resource:
-                    - '*'
+                    - 'arn:aws:glue:::*'
+                    - 'arn:aws:logs:::*'
 
 
     #
