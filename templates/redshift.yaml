@@ -12,8 +12,8 @@ Resources:
         DBName: !Ref DBName
         IamRoles: 
           - !GetAtt MyRedshiftIAMRole.Arn
-        MasterUsername: !Ref MasterUsername
-        MasterUserPassword: !Ref MasterUserPassword
+        MasterUsername: !Ref AdminUsername
+        MasterUserPassword: !Ref AdminUserPassword
         NodeType: !Ref ClusterNodeType
         NumberOfNodes: !Ref ClusterNodeCount
         PubliclyAccessible: false
@@ -115,7 +115,7 @@ Resources:
       Properties:
         Name: redshift_db_credentials
         Description: Redshift secret
-        SecretString: !Sub '{"username":"${MasterUsername}","password":"${MasterUserPassword}"}'
+        SecretString: !Sub '{"username":"${AdminUsername}","password":"${AdminUserPassword}"}'
 
     SecretRedshiftAttachment:
       Type: "AWS::SecretsManager::SecretTargetAttachment"
@@ -156,10 +156,10 @@ Outputs:
     Value: !Ref RedshiftSecret
 
 Parameters:
-  MasterUsername:
+  AdminUsername:
     Type: String
 
-  MasterUserPassword:
+  AdminUserPassword:
     Type: String
     NoEcho: True
   
