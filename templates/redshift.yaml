@@ -17,6 +17,7 @@ Resources:
         NodeType: !Ref ClusterNodeType
         NumberOfNodes: !Ref ClusterNodeCount
         PubliclyAccessible: false
+        Encrypted: true
         VpcSecurityGroupIds: 
           - !Ref RedshiftSecurityGroup
         ClusterParameterGroupName: !Ref RedshiftClusterParameterGroup
