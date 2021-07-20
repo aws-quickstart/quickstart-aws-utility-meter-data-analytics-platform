@@ -37,9 +37,9 @@ Metadata:
           - QSS3BucketRegion
     ParameterLabels:
       AdminUsername:
-        default: Master user name
+        default: Admin user name
       AdminUserPassword:
-        default: Master user password
+        default: Admin user password
       ClusterName:
         default: Amazon Redshift cluster name
       RedshiftPort:
@@ -146,14 +146,14 @@ Conditions:
 Parameters:
   AdminUsername:
     Type: String
-    Description: Master user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
+    Description: Admin user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
     MinLength: '1'
     MaxLength: '128'
     AllowedPattern : '([a-z])([a-z]|[0-9]|[_+.@-])*'
 
   AdminUserPassword:
     Type: String
-    Description: Master user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
+    Description: Admin user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
     NoEcho: True
     MinLength: '8'
     MaxLength: '64'

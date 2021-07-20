@@ -516,12 +516,12 @@ Resources:
                           "s3:*"
                       ],
                       "Resource": [
-                          "arn:aws:s3:::${BusinessZoneS3Bucket}",
-                          "arn:aws:s3:::${LandingZoneS3Bucket}",
-                          "arn:aws:s3:::${CleanZoneS3Bucket}",
-                          "arn:aws:s3:::${TempWorkflowS3Bucket}",
-                          "arn:aws:s3:::${GlueScriptsS3Bucket}",
-                          "arn:aws:s3:::${GlueTempS3Bucket}"
+                          "arn:${AWS::Partition}:s3:::${BusinessZoneS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${LandingZoneS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${CleanZoneS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${TempWorkflowS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${GlueScriptsS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${GlueTempS3Bucket}"
                       ]
                   }
               ]
@@ -536,12 +536,12 @@ Resources:
                           "s3:*"
                       ],
                       "Resource": [
-                          "arn:aws:s3:::${BusinessZoneS3Bucket}",
-                          "arn:aws:s3:::${LandingZoneS3BucketName}",
-                          "arn:aws:s3:::${CleanZoneS3Bucket}",
-                          "arn:aws:s3:::${TempWorkflowS3Bucket}",
-                          "arn:aws:s3:::${GlueScriptsS3Bucket}",
-                          "arn:aws:s3:::${GlueTempS3Bucket}"
+                          "arn:${AWS::Partition}:s3:::${BusinessZoneS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${LandingZoneS3BucketName}",
+                          "arn:${AWS::Partition}:s3:::${CleanZoneS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${TempWorkflowS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${GlueScriptsS3Bucket}",
+                          "arn:${AWS::Partition}:s3:::${GlueTempS3Bucket}"
                       ]
                   }
               ]
@@ -556,9 +556,9 @@ Resources:
       MaxSessionDuration: 3600
       ManagedPolicyArns:
         - !Ref IAMManagedPolicy
-        - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-        - "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
-        - "arn:aws:iam::aws:policy/AmazonRedshiftFullAccess"
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess"
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSGlueServiceRole"
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonRedshiftFullAccess"
 
   BusinessZoneS3Bucket:
     Type: "AWS::S3::Bucket"
