@@ -79,12 +79,12 @@ Resources:
       Policies:
         - Version: 2012-10-17
           Statement:
-              - Effect: Allow
-                Action:
-                  - events:PutTargets
-                  - events:PutRule
-                  - events:DescribeRule
-                Resource: !Sub arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForStepFunctionsExecutionRule
+            - Effect: Allow
+              Action:
+                - events:PutTargets
+                - events:PutRule
+                - events:DescribeRule
+              Resource: !Sub arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForStepFunctionsExecutionRule
         - StepFunctionsExecutionPolicy:
             StateMachineName: !GetAtt MachineLearningPipelineModelTrainingStateMachine.Name
         - StepFunctionsExecutionPolicy:
@@ -113,6 +113,14 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
+                - "iam:PassRole"
+              Resource: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/*"
+            - Effect: Allow
+              Action:
+                - events:DescribeRule
+              Resource: !Sub arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForSageMakerTrainingJobsRule
+            - Effect: Allow
+              Action:
                 - sagemaker:CreateTrainingJob
                 - sagemaker:DescribeTrainingJob
                 - sagemaker:StopTrainingJob
@@ -126,7 +134,11 @@ Resources:
                 - sagemaker:DeleteEndpoint
                 - sagemaker:UpdateEndpoint
                 - sagemaker:ListTags
-              Resource: !Sub 'arn:${AWS::Partition}:sagemaker:::*'
+              Resource:
+                - !Sub "arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:training-job/*"
+                - !Sub "arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:model/*"
+                - !Sub "arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:endpoint/*"
+                - !Sub "arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:endpoint-config/*"
         - LambdaInvokePolicy:
             FunctionName: !Ref PrepareTrainingFunction
         - LambdaInvokePolicy:
@@ -162,8 +174,6 @@ Resources:
               Resource: !Sub "arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:transform-job/*"
             - Effect: Allow
               Action:
-                #- events:PutTargets
-                #- events:PutRule
                 - events:DescribeRule
               Resource: !Sub arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForSageMakerTransformJobsRule
         - LambdaInvokePolicy:
