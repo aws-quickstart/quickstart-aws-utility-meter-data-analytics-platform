@@ -96,7 +96,7 @@ Resources:
   #
   # IAM
   #
-  ExecuteLambdaRole:
+  RunLambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
       AssumeRolePolicyDocument:
@@ -121,7 +121,7 @@ Resources:
                 Action: 'sagemaker:InvokeEndpoint'
                 Resource: !Sub 'arn:${AWS::Partition}:sagemaker:::*'
 
-  ExecuteRedshiftLambdaRole:
+  RunRedshiftLambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
       AssumeRolePolicyDocument:
@@ -163,7 +163,7 @@ Resources:
       Description: Lambda function to get consumption for certain meter in different aggregation levels (daily, weekly, monthly)
       MemorySize: 256
       Timeout: 180
-      Role: !GetAtt 'ExecuteRedshiftLambdaRole.Arn'
+      Role: !GetAtt 'RunRedshiftLambdaRole.Arn'
       Environment:
         Variables:
           SECRET_NAME: !Ref RedshiftSecret
@@ -194,7 +194,7 @@ Resources:
       Description: Lambda function to get anomaly for certain meter
       MemorySize: 128
       Timeout: 180
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
       Events:
@@ -217,7 +217,7 @@ Resources:
       MemorySize: 128
       Timeout: 180
       Runtime: "nodejs12.x"
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Events:
         ApiEvent:
           Type: HttpApi
@@ -237,7 +237,7 @@ Resources:
       Description: Lambda function to get meter consumption forecast
       MemorySize: 128
       Timeout: 180
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
       Events:

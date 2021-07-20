@@ -84,7 +84,7 @@ Resources:
                 - events:PutTargets
                 - events:PutRule
                 - events:DescribeRule
-              Resource: "*"
+              Resource: !Sub 'arn:${AWS::Partition}:events:::*'
             - Effect: Allow
               Action:
                 - "iam:PassRole"
@@ -122,7 +122,7 @@ Resources:
                 - events:PutTargets
                 - events:PutRule
                 - events:DescribeRule
-              Resource: "*"
+              Resource: !Sub 'arn:${AWS::Partition}:events:::*'
             - Effect: Allow
               Action:
                 - "iam:PassRole"
@@ -178,7 +178,7 @@ Resources:
                 - events:PutTargets
                 - events:PutRule
                 - events:DescribeRule
-              Resource: "*"
+              Resource: !Sub 'arn:${AWS::Partition}:events:::*'
             - Effect: Allow
               Action:
                   - sagemaker:CreateTransformJob

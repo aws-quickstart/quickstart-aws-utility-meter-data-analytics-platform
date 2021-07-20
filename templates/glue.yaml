@@ -598,8 +598,8 @@ Resources:
         ConnectionProperties:
           "JDBC_CONNECTION_URL": !Sub "jdbc:redshift://${RedshiftClusterEndpoint}/${DBName}"
           "JDBC_ENFORCE_SSL": "false"
-          PASSWORD: !Ref MasterUserPassword
-          USERNAME: !Ref MasterUsername
+          PASSWORD: !Ref AdminUserPassword
+          USERNAME: !Ref AdminUsername
         Name: !Ref ClusterName
       CatalogId: !Ref "AWS::AccountId"
 
@@ -654,10 +654,10 @@ Outputs:
     Value: !Ref GlueJob4BusinessDailyToRedshift
 
 Parameters:
-  MasterUsername:
+  AdminUsername:
     Type: String
 
-  MasterUserPassword:
+  AdminUserPassword:
     Type: String
 
   RedshiftClusterEndpoint:

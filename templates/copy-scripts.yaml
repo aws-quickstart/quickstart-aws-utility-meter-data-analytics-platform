@@ -40,7 +40,7 @@ Resources:
                 Service: lambda.amazonaws.com
               Action: sts:AssumeRole
         ManagedPolicyArns:
-          - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
         Path: /
         Policies:
           - PolicyName: lambda-copier
@@ -51,13 +51,13 @@ Resources:
                   Action:
                     - s3:GetObject
                   Resource:
-                    - !Sub 'arn:aws:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*'
+                    - !Sub 'arn:${AWS::Partition}:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*'
                 - Effect: Allow
                   Action:
                     - s3:PutObject
                     - s3:DeleteObject
                   Resource:
-                    - !Sub 'arn:aws:s3:::${GlueScriptsS3Bucket}/*'
+                    - !Sub 'arn:${AWS::Partition}:s3:::${GlueScriptsS3Bucket}/*'
 
     CopyArtifactsFunction:
       Type: AWS::Lambda::Function

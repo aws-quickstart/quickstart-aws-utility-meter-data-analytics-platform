@@ -8,7 +8,6 @@ Globals:
     Timeout: 240
 
 Resources:
-
   MachineLearningPipelineConfig:
     Type: AWS::Serverless::SimpleTable
     Properties:

@@ -135,13 +135,13 @@ Resources:
       MemorySize: !Ref AdapterMemoryInMB
       Role:
         Fn::GetAtt:
-          - ExecuteLambdaRole
+          - RunLambdaRole
           - Arn
       Runtime: python3.8
       Timeout: !Ref AdapterTimeoutInSeconds
 
 
-  ExecuteLambdaRole:
+  RunLambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
       AssumeRolePolicyDocument:
