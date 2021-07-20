@@ -79,22 +79,16 @@ Resources:
       Policies:
         - Version: 2012-10-17
           Statement:
-            - Effect: Allow
-              Action:
-                - events:PutTargets
-                - events:PutRule
-                - events:DescribeRule
-              Resource: !Sub 'arn:${AWS::Partition}:events:::*'
-            - Effect: Allow
-              Action:
-                - "iam:PassRole"
-              Resource: "*"
-            - Effect: Allow
-              Action:
-                - "states:StartExecution"
-              Resource:
-                - !Ref MachineLearningPipelineModelTrainingStateMachine
-                - !Ref MachineLearningPipelinePreCalculationStateMachine
+              - Effect: Allow
+                Action:
+                  - events:PutTargets
+                  - events:PutRule
+                  - events:DescribeRule
+                Resource: !Sub arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForStepFunctionsExecutionRule
+        - StepFunctionsExecutionPolicy:
+            StateMachineName: !GetAtt MachineLearningPipelineModelTrainingStateMachine.Name
+        - StepFunctionsExecutionPolicy:
+            StateMachineName: !GetAtt MachineLearningPipelinePreCalculationStateMachine.Name
         - LambdaInvokePolicy:
             FunctionName: !Ref CheckInitialPipelineRun
 
@@ -119,19 +113,6 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
-                - events:PutTargets
-                - events:PutRule
-                - events:DescribeRule
-              Resource: !Sub 'arn:${AWS::Partition}:events:::*'
-            - Effect: Allow
-              Action:
-                - "iam:PassRole"
-              Resource: "*"
-            - Effect: Allow
-              Action:
-                - sagemaker:CreateTransformJob
-                - sagemaker:DescribeTransformJob
-                - sagemaker:StopTransformJob
                 - sagemaker:CreateTrainingJob
                 - sagemaker:DescribeTrainingJob
                 - sagemaker:StopTrainingJob
@@ -145,7 +126,7 @@ Resources:
                 - sagemaker:DeleteEndpoint
                 - sagemaker:UpdateEndpoint
                 - sagemaker:ListTags
-              Resource: !Sub 'arn:${AWS::Partition}:sagemaker:*:*:*'
+              Resource: !Sub 'arn:${AWS::Partition}:sagemaker:::*'
         - LambdaInvokePolicy:
             FunctionName: !Ref PrepareTrainingFunction
         - LambdaInvokePolicy:
@@ -175,29 +156,16 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
-                - events:PutTargets
-                - events:PutRule
-                - events:DescribeRule
-              Resource: !Sub 'arn:${AWS::Partition}:events:::*'
-            - Effect: Allow
-              Action:
                   - sagemaker:CreateTransformJob
                   - sagemaker:DescribeTransformJob
                   - sagemaker:StopTransformJob
-                  - sagemaker:CreateTrainingJob
-                  - sagemaker:DescribeTrainingJob
-                  - sagemaker:StopTrainingJob
-                  - sagemaker:CreateHyperParameterTuningJob
-                  - sagemaker:DescribeHyperParameterTuningJob
-                  - sagemaker:StopHyperParameterTuningJob
-                  - sagemaker:CreateModel
-                  - sagemaker:CreateEndpointConfig
-                  - sagemaker:CreateEndpoint
-                  - sagemaker:DeleteEndpointConfig
-                  - sagemaker:DeleteEndpoint
-                  - sagemaker:UpdateEndpoint
-                  - sagemaker:ListTags
-              Resource: !Sub "arn:${AWS::Partition}:sagemaker:*:*:*"
+              Resource: !Sub "arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:transform-job/*"
+            - Effect: Allow
+              Action:
+                #- events:PutTargets
+                #- events:PutRule
+                - events:DescribeRule
+              Resource: !Sub arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForSageMakerTransformJobsRule
         - LambdaInvokePolicy:
             FunctionName: !Ref SplitBatchFunction
         - LambdaInvokePolicy:
