@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Creates Glue tables"
+Description: "Creates Glue tables (qs-1r18anahd)"
 
 Resources:
     GlueTableDaily:

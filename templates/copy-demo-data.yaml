@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Copies demo data to destination."
+Description: "Copies demo data to destination. (qs-1r18anahd)"
 Resources:
 
     CopyGeoData:

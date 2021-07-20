@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Metadata:
     Generator: "former2"
-Description: "Create Redshift cluster"
+Description: "Create Redshift cluster (qs-1r18anahd)"
 Resources:    
     RedshiftCluster:
       Type: AWS::Redshift::Cluster

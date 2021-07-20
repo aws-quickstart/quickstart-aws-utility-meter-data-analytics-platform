@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Creates Glue resources"
+Description: "Creates Glue resources (qs-1r18anahd)"
 Conditions:
   CreateLZS3BucketCondition: !Equals [!Ref CreateLandingZoneS3Bucket, 'Yes']
 Mappings:

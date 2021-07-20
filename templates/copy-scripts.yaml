@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Creates glue S3 buckets and upload scripts to it."
+Description: "Creates glue S3 buckets and upload scripts to it. (qs-1r18anahd)"
 Resources:
     GlueScriptsS3Bucket:
         Type: "AWS::S3::Bucket"
