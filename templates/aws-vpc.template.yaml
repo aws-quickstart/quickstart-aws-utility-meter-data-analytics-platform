@@ -1516,8 +1516,12 @@ Resources:
       cfn-lint:
         config:
           ignore_checks:
+            - EPolicyWildcardPrincipal
+            - EIAMPolicyActionWildcard
             - EIAMPolicyWildcardResource
           ignore_reasons:
+            EPolicyWildcardPrincipal: API actions do not support resource-level permission
+            EIAMPolicyActionWildcard: API actions do not support resource-level permission
             EIAMPolicyWildcardResource: API actions do not support resource-level permission
     Properties:
       PolicyDocument:
