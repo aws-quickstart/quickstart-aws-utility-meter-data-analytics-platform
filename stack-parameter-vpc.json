@@ -1,10 +1,10 @@
 [
   {
-    "ParameterKey": "MasterUsername",
+    "ParameterKey": "AdminUsername",
     "ParameterValue": "meteradmin"
   },
   {
-    "ParameterKey": "MasterUserPassword",
+    "ParameterKey": "AdminUserPassword",
     "ParameterValue": "MeterAdmin2020!"
   },
   {

@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: Create API for getting meter consumption forecast
+Description: 'Create API for getting meter consumption forecast (qs-1r18anahd)'
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -86,6 +86,7 @@ Globals:
         config_table: !Ref ConfigTable
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+
 Resources:
   #
   # Http API
@@ -96,8 +97,15 @@ Resources:
   #
   # IAM
   #
-  ExecuteLambdaRole:
+  RunLambdaRole:
     Type: 'AWS::IAM::Role'
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E9101
+          ignore_reasons:
+            E9101: Managed policy name
     Properties:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
@@ -107,11 +115,11 @@ Resources:
               Service: 'lambda.amazonaws.com'
             Action: 'sts:AssumeRole'
       ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonAthenaFullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonSageMakerReadOnly'
-        - 'arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonAthenaFullAccess'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSageMakerReadOnly'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonDynamoDBReadOnlyAccess'
       Policies:
         - PolicyName: sagemaker_invoke_endpoint
           PolicyDocument:
@@ -119,10 +127,17 @@ Resources:
             Statement:
               - Effect: Allow
                 Action: 'sagemaker:InvokeEndpoint'
-                Resource: '*'
+                Resource: !Sub 'arn:${AWS::Partition}:sagemaker:::*'
 
-  ExecuteRedshiftLambdaRole:
+  RunRedshiftLambdaRole:
     Type: 'AWS::IAM::Role'
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E9101
+          ignore_reasons:
+            E9101: Managed policy name
     Properties:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
@@ -132,8 +147,8 @@ Resources:
               Service: 'lambda.amazonaws.com'
             Action: 'sts:AssumeRole'
       ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'
       Policies:
         - PolicyName: secre_manager_read_access
           PolicyDocument:
@@ -145,7 +160,9 @@ Resources:
                   - "secretsmanager:DescribeSecret"
                   - "secretsmanager:ListSecrets"
                   - "kms:Decrypt"
-                Resource: '*'
+                Resource:
+                  - !Sub 'arn:${AWS::Partition}:secretsmanager:::*'
+                  - !Sub 'arn:${AWS::Partition}:kms:::*'
 
   #
   # Lambda
@@ -161,7 +178,7 @@ Resources:
       Description: Lambda function to get consumption for certain meter in different aggregation levels (daily, weekly, monthly)
       MemorySize: 256
       Timeout: 180
-      Role: !GetAtt 'ExecuteRedshiftLambdaRole.Arn'
+      Role: !GetAtt 'RunRedshiftLambdaRole.Arn'
       Environment:
         Variables:
           SECRET_NAME: !Ref RedshiftSecret
@@ -192,7 +209,7 @@ Resources:
       Description: Lambda function to get anomaly for certain meter
       MemorySize: 128
       Timeout: 180
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
       Events:
@@ -215,7 +232,7 @@ Resources:
       MemorySize: 128
       Timeout: 180
       Runtime: "nodejs12.x"
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Events:
         ApiEvent:
           Type: HttpApi
@@ -235,7 +252,7 @@ Resources:
       Description: Lambda function to get meter consumption forecast
       MemorySize: 128
       Timeout: 180
-      Role: !GetAtt 'ExecuteLambdaRole.Arn'
+      Role: !GetAtt 'RunLambdaRole.Arn'
       Layers:
         - !Ref DependencyLayer
       Events:

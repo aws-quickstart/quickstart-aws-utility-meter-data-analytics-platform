@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: 'Meter Data Lake prediction pipeline configuration'
+Description: 'Meter Data Lake prediction pipeline configuration (qs-1r18anahd)'
 
 Globals:
   Function:
@@ -8,9 +8,15 @@ Globals:
     Timeout: 240
 
 Resources:
-
   MachineLearningPipelineConfig:
     Type: AWS::Serverless::SimpleTable
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E9007
+          ignore_reasons:
+            E9007: Not an ARN (bug in linting)
     Properties:
       PrimaryKey:
         Name: name
@@ -83,7 +89,7 @@ Resources:
           - Sid: SageMakerDeleteEndpoint
             Effect: Allow
             Action: 'sagemaker:DeleteEndpoint'
-            Resource: '*'
+            Resource: !Sub 'arn:${AWS::Partition}:sagemaker:::*'
         - DynamoDBCrudPolicy:
             TableName: !Ref MachineLearningPipelineConfig
 
