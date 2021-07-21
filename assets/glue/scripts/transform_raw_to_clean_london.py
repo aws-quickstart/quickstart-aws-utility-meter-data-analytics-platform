@@ -90,7 +90,7 @@ tableName = args['table_name'].replace("-", "_")
 datasource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = tableName, transformation_ctx = "datasource")
 schema = datasource.schema()
 
-if (schema.fields[1].name == 'stdortou'):
+if (schema.fields[1].name.lower() == 'stdortou'):
     # original london data field index
     field_index = {"id": 0,"datetime": 2, "reading": 3}
 else:
