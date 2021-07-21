@@ -86,6 +86,7 @@ Globals:
         config_table: !Ref ConfigTable
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+
 Resources:
   #
   # Http API
@@ -97,6 +98,7 @@ Resources:
   # IAM
   #
   RunLambdaRole:
+    Type: 'AWS::IAM::Role'
     Metadata:
       cfn-lint:
         config:
@@ -104,7 +106,6 @@ Resources:
             - E9101
           ignore_reasons:
             E9101: Managed policy name
-    Type: 'AWS::IAM::Role'
     Properties:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
@@ -130,6 +131,13 @@ Resources:
 
   RunRedshiftLambdaRole:
     Type: 'AWS::IAM::Role'
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E9101
+          ignore_reasons:
+            E9101: Managed policy name
     Properties:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
