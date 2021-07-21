@@ -9,6 +9,13 @@ Globals:
 
 Resources:
   MachineLearningPipelineConfig:
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E9007
+          ignore_reasons:
+            E9007: Not an ARN (bug in linting)
     Type: AWS::Serverless::SimpleTable
     Properties:
       PrimaryKey:

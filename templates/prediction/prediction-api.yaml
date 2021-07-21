@@ -97,6 +97,13 @@ Resources:
   # IAM
   #
   RunLambdaRole:
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - E9101
+          ignore_reasons:
+            E9101: Managed policy name
     Type: 'AWS::IAM::Role'
     Properties:
       AssumeRolePolicyDocument:

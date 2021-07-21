@@ -44,11 +44,6 @@ Metadata:
           - PrivateSubnetBTag2
           - PrivateSubnetBTag3
           - VPCTenancy
-      - Label:
-          default: 'Deprecated: NAT Instance Configuration'
-        Parameters:
-          - KeyPairName
-          - NATInstanceType
     ParameterLabels:
       AvailabilityZones:
         default: Availability Zones
@@ -60,10 +55,6 @@ Metadata:
         default: Create public subnets
       CreatePrivateSubnets:
         default: Create private subnets
-      KeyPairName:
-        default: 'Deprecated: Key pair name'
-      NATInstanceType:
-        default: 'Deprecated: NAT instance type'
       NumberOfAZs:
         default: Number of Availability Zones
       PrivateSubnet1ACIDR:
@@ -149,14 +140,6 @@ Parameters:
     Default: 'true'
     Description: Set to false to create only public subnets. If false, the CIDR parameters
       for ALL private subnets will be ignored.
-    Type: String
-  KeyPairName:
-    Description: Deprecated. NAT gateways are now supported in all regions.
-    Type: String
-    Default: deprecated
-  NATInstanceType:
-    Default: deprecated
-    Description: Deprecated. NAT gateways are now supported in all regions.
     Type: String
   NumberOfAZs:
     AllowedValues:
@@ -1529,6 +1512,13 @@ Resources:
   S3VPCEndpoint:
     Condition: PrivateSubnetsCondition
     Type: AWS::EC2::VPCEndpoint
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyWildcardResource
+          ignore_reasons:
+            EIAMPolicyWildcardResource: API actions do not support resource-level permission
     Properties:
       PolicyDocument:
         Version: '2012-10-17'
