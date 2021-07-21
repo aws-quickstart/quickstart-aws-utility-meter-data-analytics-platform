@@ -118,7 +118,11 @@ Resources:
             - Effect: Allow
               Action:
                 - events:DescribeRule
-              Resource: !Sub arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForSageMakerTrainingJobsRule
+                - events:PutRule
+                - events:PutTargets
+              Resource:
+                - !Sub "arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForSageMakerTrainingJobsRule"
+                - !Sub "arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForStepFunctionsExecutionRule"
             - Effect: Allow
               Action:
                 - sagemaker:CreateTrainingJob
@@ -175,7 +179,11 @@ Resources:
             - Effect: Allow
               Action:
                 - events:DescribeRule
-              Resource: !Sub arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForSageMakerTransformJobsRule
+                - events:PutRule
+                - events:PutTargets
+              Resource:
+                - !Sub "arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForSageMakerTransformJobsRule"
+                - !Sub "arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForStepFunctionsExecutionRule"
         - LambdaInvokePolicy:
             FunctionName: !Ref SplitBatchFunction
         - LambdaInvokePolicy:
