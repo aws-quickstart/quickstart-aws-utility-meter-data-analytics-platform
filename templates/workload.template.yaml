@@ -81,7 +81,6 @@ Resources:
           RemoteAccessCIDR: !Ref RemoteAccessCIDR
           GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
           GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
-          VPCRouteTableId: !Ref VPCRouteTableId
           AvailabilityZone: !Ref AvailabilityZone
           LandingzoneTransformer: !Ref LandingzoneTransformer
           CreateLandingZoneS3Bucket: !Ref CreateLandingZoneS3Bucket
@@ -353,11 +352,6 @@ Parameters:
     Default: 5439
     Description: Port number that you use to connect to the Amazon Redshift cluster.
   
-  VPCRouteTableId:
-    Type: String
-    Description: Main route table ID associated with your VPC and subnets.
-    MinLength: '1'
-
   AvailabilityZone:
     Type: AWS::EC2::AvailabilityZone::Name
     Description: AWS Availability Zone for subnet 1.
@@ -412,7 +406,6 @@ Metadata:
           - Subnet1ID
           - Subnet2ID
           - RemoteAccessCIDR
-          - VPCRouteTableId
       - Label:
           default: 'Glue configuration'
         Parameters:
@@ -446,8 +439,6 @@ Metadata:
         default: VPC ID
       RemoteAccessCIDR:
         default: Remote access CIDR block
-      VPCRouteTableId:
-        default: Route table ID
       AvailabilityZone:
         default: Availability Zones
       QSS3BucketName:

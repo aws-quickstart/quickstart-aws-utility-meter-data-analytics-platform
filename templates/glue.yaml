@@ -625,17 +625,6 @@ Resources:
       SourceSecurityGroupId: !Ref GlueSecurityGroup
       ToPort: -1
 
-  EC2VPCEndpoint:
-    Type: "AWS::EC2::VPCEndpoint"
-    Properties:
-      VpcEndpointType: "Gateway"
-      VpcId: !Ref VPCID
-      ServiceName: !Sub "com.amazonaws.${AWS::Region}.s3"
-      PolicyDocument: "{\"Version\":\"2008-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
-      RouteTableIds:
-        - !Ref VPCRouteTableId
-      PrivateDnsEnabled: false
-
 Outputs:
   LandingZoneS3Bucket:
     Value: !If
@@ -690,9 +679,6 @@ Parameters:
     Type: String
 
   GlueTempS3Bucket:
-    Type: String
-
-  VPCRouteTableId:
     Type: String
 
   AvailabilityZone:

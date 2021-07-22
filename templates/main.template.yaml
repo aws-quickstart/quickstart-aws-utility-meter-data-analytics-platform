@@ -125,7 +125,6 @@ Resources:
         QSS3BucketRegion: !Ref QSS3BucketRegion
         DBName: !Ref DBName
         RedshiftPort: !Ref RedshiftPort
-        VPCRouteTableId: !GetAtt VPC.Outputs.PublicSubnetRouteTable
         AvailabilityZone: !Select
         - '0'
         - !Ref 'AvailabilityZones'
