@@ -640,7 +640,7 @@ Outputs:
   GlueWorkflow:
     Value: !Ref GlueWorkflow
   JobNameTransformCleanToBusiness:
-    Value: !Ref GlueJob4BusinessDailyToRedshift
+    Value: !Ref GlueJob5CleanToBusiness
 
 Parameters:
   AdminUsername:

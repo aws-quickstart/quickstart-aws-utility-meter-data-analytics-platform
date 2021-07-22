@@ -36,6 +36,8 @@ Resources:
           ClusterName: !Ref ClusterName
           ClusterNodeType: !FindInMap [MeterCountMap, !Ref "NoOfMeters", RedshiftNodeType]
           ClusterNodeCount: !FindInMap [MeterCountMap, !Ref "NoOfMeters", RedshiftNumberOfNodes]
+          QSS3BucketName: !Ref QSS3BucketName
+          QSS3KeyPrefix: !Ref QSS3KeyPrefix
           DBName: !Ref DBName
 
     CopyScriptsStack:
@@ -180,11 +182,6 @@ Resources:
           WorkingBucket: !GetAtt MachineLearningPipelineStack.Outputs.WorkingBucket
           WithWeather: !Ref WithWeather
           DBName: !Ref DBName
-          RedshiftSecret: !GetAtt RedshiftStack.Outputs.RedshiftSecret
-          Subnet1ID: !Ref Subnet1ID
-          Subnet2ID: !Ref Subnet2ID
-          VPCID: !Ref VPCID
-          RemoteAccessCIDR: !Ref RemoteAccessCIDR
           ConfigTable: !GetAtt MachineLearningPipelineConfigStack.Outputs.MachineLearningPipelineConfigTable
 
     CopyDemoDataStack:

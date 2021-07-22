@@ -1,7 +1,9 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Metadata:
-    Generator: "former2"
+Transform: 'AWS::Serverless-2016-10-31'
 Description: "Create Redshift cluster (qs-1r18anahd)"
+Globals:
+  Function:
+    Runtime: python3.7
 Resources:    
     RedshiftCluster:
       Type: AWS::Redshift::Cluster
@@ -124,6 +126,134 @@ Resources:
         TargetId: !Ref RedshiftCluster
         TargetType: AWS::Redshift::Cluster
 
+    SecretManagerVpcEndpoint:
+      Type: AWS::EC2::VPCEndpoint
+      Properties:
+        PrivateDnsEnabled: true
+        PolicyDocument: '{
+           "Version":"2012-10-17",
+           "Statement":[{
+             "Effect":"Allow",
+             "Principal": "*",
+             "Action": "*",
+             "Resource":"*"
+           }]
+        }'
+        SecurityGroupIds:
+          - !Ref LambdaVpcSecurityGroup
+        SubnetIds:
+          - !Ref Subnet1ID
+          - !Ref Subnet2ID
+        ServiceName: !Sub com.amazonaws.${AWS::Region}.secretsmanager
+        VpcEndpointType: "Interface"
+        VpcId: !Ref VPCID
+
+      #
+  # Network
+  #
+    LambdaVpcSecurityGroup:
+      Type: 'AWS::EC2::SecurityGroup'
+      Properties:
+        GroupDescription: Security group for Lambda Function
+        VpcId: !Ref VPCID
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: 0
+            ToPort: 65535
+            CidrIp: !Ref RemoteAccessCIDR
+            Description: 'Lambda to VPC CIDR'
+
+  #
+  # Http API
+  #
+    HttpApi:
+      Type: AWS::Serverless::HttpApi
+
+  #
+  # Dependency Layer
+  #
+    PostgresLayer:
+      Type: 'AWS::Serverless::LayerVersion'
+      Properties:
+        LayerName: !Sub "api-dependencies-${AWS::Region}"
+        Description: Dependencies for sam app
+        ContentUri:
+          Bucket: !If [ UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName ]
+          Key:
+            Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/dependencies/postgres/layer.zip'
+        CompatibleRuntimes:
+          - python3.7
+        LicenseInfo: 'Available under the MIT-0 license.'
+  #
+    # Lambda
+    #
+    ConsumptionApi:
+      Type: 'AWS::Serverless::Function'
+      Properties:
+        Handler: app.lambda_handler
+        CodeUri:
+          Bucket: !If [ UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName ]
+          Key:
+            Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/redshift_consumption.zip'
+        Description: Lambda function to get consumption for certain meter in different aggregation levels (daily, weekly, monthly)
+        MemorySize: 256
+        Timeout: 180
+        Role: !GetAtt 'RunRedshiftLambdaRole.Arn'
+        Environment:
+          Variables:
+            SECRET_NAME: !Ref RedshiftSecret
+            Db_schema: !Ref DBName
+        Layers:
+          - !Ref PostgresLayer
+        VpcConfig:
+          SecurityGroupIds:
+            - !Ref LambdaVpcSecurityGroup
+          SubnetIds:
+            - !Ref Subnet1ID
+            - !Ref Subnet2ID
+        Events:
+          ApiEvent:
+            Type: HttpApi
+            Properties:
+              ApiId: !Ref HttpApi
+              Method: GET
+              Path: /consumption/{requested_aggregation}/{year}/{meter_id}
+
+    RunRedshiftLambdaRole:
+      Type: 'AWS::IAM::Role'
+      Metadata:
+        cfn-lint:
+          config:
+            ignore_checks:
+              - E9101
+            ignore_reasons:
+              E9101: Managed policy name
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: 'lambda.amazonaws.com'
+              Action: 'sts:AssumeRole'
+        ManagedPolicyArns:
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'
+        Policies:
+          - PolicyName: secre_manager_read_access
+            PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - "secretsmanager:GetSecretValue"
+                    - "secretsmanager:DescribeSecret"
+                    - "secretsmanager:ListSecrets"
+                    - "kms:Decrypt"
+                  Resource:
+                    - !Sub '${RedshiftSecret}'
+                    - !Sub 'arn:${AWS::Partition}:kms:::*'
+
 Outputs:
   StackName:
     Description: 'Stack name'
@@ -154,8 +284,37 @@ Outputs:
   RedshiftSecret:
     Description: SecretManager secret reference
     Value: !Ref RedshiftSecret
+  ConsumptionApi:
+    Description: Prediction function.
+    Value: !Ref ConsumptionApi
+
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+
 
 Parameters:
+  QSS3BucketName:
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription: >-
+      Quick Start bucket name can include numbers, lowercase letters, uppercase
+      letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Default: aws-quickstart
+    Description: >-
+      S3 bucket name for the Quick Start assets.
+      Only change this value if you customize or extend the Quick Start for your own use.
+      This string can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: '^[0-9a-zA-Z-/]*[/]$'
+    ConstraintDescription: >-
+      Quick Start key prefix can include numbers, lowercase letters, uppercase
+      letters, hyphens (-), and forward slash (/) and must terminate in a forward slash.
+    Default: quickstart-aws-utility-meter-data-analytics-platform/
+    Type: String
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
   AdminUsername:
     Type: String
 

@@ -258,7 +258,6 @@ Resources:
       Environment:
         Variables:
           ml_pipeline_trigger_state_machine: !Ref MachineLearningPipelineOrchestratorStateMachine
-          glue_job_name: !Ref GlueJobNameTrigger
       Events:
         EventBridgeRule:
           Type: EventBridgeRule
