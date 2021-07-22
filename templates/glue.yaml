@@ -643,9 +643,6 @@ Parameters:
   Subnet1ID:
     Type: AWS::EC2::Subnet::Id
 
-  VPCID:
-    Type: AWS::EC2::VPC::Id
-
   GlueScriptsS3Bucket:
     Type: String
 
