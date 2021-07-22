@@ -40,6 +40,13 @@ Resources:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
           DBName: !Ref DBName
+          GlueWorkFlowToExtend: !GetAtt GlueStack.Outputs.GlueWorkflow
+          GlueCrwalerToTriggerAfter: !GetAtt GlueStack.Outputs.NameCrawlerBusinessDaily
+          GlueDPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
+          GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
+          GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
+          BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
+          TempWorkflowS3Bucket: !GetAtt GlueStack.Outputs.TempWorkflowS3Bucket
 
     CopyScriptsStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -72,17 +79,9 @@ Resources:
                 !Ref QSS3BucketName,
               ]
         Parameters:
-          AdminUsername: !Ref AdminUsername
-          AdminUserPassword: !Ref AdminUserPassword
-          RedshiftClusterEndpoint: !GetAtt RedshiftStack.Outputs.RedshiftClusterEndpoint
-          RedshiftSecurityGroupId: !GetAtt RedshiftStack.Outputs.RedshiftSecurityGroupId
-          ClusterName: !Ref ClusterName
           DBName: !Ref DBName
-          Subnet1ID: !Ref Subnet1ID
-          VPCID: !Ref VPCID
           GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
           GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
-          AvailabilityZone: !Ref AvailabilityZone
           LandingzoneTransformer: !Ref LandingzoneTransformer
           CreateLandingZoneS3Bucket: !Ref CreateLandingZoneS3Bucket
           LandingZoneS3BucketName: !Ref LandingZoneS3BucketName
