@@ -592,7 +592,6 @@ Resources:
         PhysicalConnectionRequirements:
           SubnetId: !Ref Subnet1ID
           SecurityGroupIdList:
-            - !GetAtt GlueSecurityGroup.GroupId
             - !Ref RedshiftSecurityGroupId
           AvailabilityZone: !Ref AvailabilityZone
         ConnectionProperties:
@@ -602,28 +601,6 @@ Resources:
           USERNAME: !Ref AdminUsername
         Name: !Ref ClusterName
       CatalogId: !Ref "AWS::AccountId"
-
-  GlueSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupDescription: Security group for Glue
-      VpcId: !Ref VPCID
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: !Ref RedshiftPort
-          ToPort: !Ref RedshiftPort
-          CidrIp: !Ref RemoteAccessCIDR
-          Description: 'Glue Access to VPC CIDR'
-
-  SelfReferencingIngress:
-    Type: AWS::EC2::SecurityGroupIngress
-    Properties:
-      Description: Self referencing security group ingress rule for glue access
-      FromPort: -1
-      GroupId: !Ref GlueSecurityGroup
-      IpProtocol: "-1"
-      SourceSecurityGroupId: !Ref GlueSecurityGroup
-      ToPort: -1
 
 Outputs:
   LandingZoneS3Bucket:
@@ -655,9 +632,6 @@ Parameters:
   RedshiftSecurityGroupId:
     Type: String
 
-  RedshiftPort:
-    Type: String
-
   ClusterName:
     Type: String
     Default: redshift-cluster-1
@@ -671,9 +645,6 @@ Parameters:
 
   VPCID:
     Type: AWS::EC2::VPC::Id
-
-  RemoteAccessCIDR:
-    Type: String
 
   GlueScriptsS3Bucket:
     Type: String

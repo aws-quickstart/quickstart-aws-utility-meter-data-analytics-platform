@@ -205,7 +205,9 @@ Parameters:
     Description: Name of the Amazon Redshift database.
   
   RedshiftPort:
-    Type: String
+    Type: Number
+    MinValue: 0
+    MaxValue: 65535
     Default: 5439
     Description: Port number that you use to connect to the Amazon Redshift cluster.
   

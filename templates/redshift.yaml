@@ -11,6 +11,7 @@ Resources:
         ClusterIdentifier: !Ref ClusterName
         ClusterType: multi-node
         ClusterSubnetGroupName: !Ref RedshiftClusterSubnetGroup
+        Port: !Ref RedshiftPort
         DBName: !Ref DBName
         IamRoles: 
           - !GetAtt MyRedshiftIAMRole.Arn
@@ -45,8 +46,8 @@ Resources:
         VpcId: !Ref VPCID
         SecurityGroupIngress:
           - IpProtocol: tcp
-            FromPort: 5439
-            ToPort: 5439
+            FromPort: !Ref RedshiftPort
+            ToPort: !Ref RedshiftPort
             CidrIp: !Ref RemoteAccessCIDR
             Description: 'Redshift Access to VPC CIDR'
     
@@ -349,3 +350,10 @@ Parameters:
   ClusterNodeCount:
     Type: Number
     Default: 2
+
+  RedshiftPort:
+    Type: Number
+    MinValue: 0
+    MaxValue: 65535
+    Default: 5439
+    Description: Port number that you use to connect to the Amazon Redshift cluster.

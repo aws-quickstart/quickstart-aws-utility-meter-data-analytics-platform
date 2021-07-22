@@ -34,6 +34,7 @@ Resources:
           VPCID: !Ref VPCID
           RemoteAccessCIDR: !Ref RemoteAccessCIDR
           ClusterName: !Ref ClusterName
+          RedshiftPort: !Ref RedshiftPort
           ClusterNodeType: !FindInMap [MeterCountMap, !Ref "NoOfMeters", RedshiftNodeType]
           ClusterNodeCount: !FindInMap [MeterCountMap, !Ref "NoOfMeters", RedshiftNumberOfNodes]
           QSS3BucketName: !Ref QSS3BucketName
@@ -75,12 +76,10 @@ Resources:
           AdminUserPassword: !Ref AdminUserPassword
           RedshiftClusterEndpoint: !GetAtt RedshiftStack.Outputs.RedshiftClusterEndpoint
           RedshiftSecurityGroupId: !GetAtt RedshiftStack.Outputs.RedshiftSecurityGroupId
-          RedshiftPort: !Ref RedshiftPort
           ClusterName: !Ref ClusterName
           DBName: !Ref DBName
           Subnet1ID: !Ref Subnet1ID
           VPCID: !Ref VPCID
-          RemoteAccessCIDR: !Ref RemoteAccessCIDR
           GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
           GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
           AvailabilityZone: !Ref AvailabilityZone
@@ -343,9 +342,11 @@ Parameters:
     Type: String
     Default: meter_data
     Description: Name of the Amazon Redshift database.
-  
+
   RedshiftPort:
-    Type: String
+    Type: Number
+    MinValue: 0
+    MaxValue: 65535
     Default: 5439
     Description: Port number that you use to connect to the Amazon Redshift cluster.
   
