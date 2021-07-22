@@ -8,6 +8,7 @@ Metadata:
       - Label:
           default: Amazon Redshift cluster configuration
         Parameters:
+          - IncludeRedshift
           - AdminUsername
           - AdminUserPassword
           - ClusterName
@@ -36,6 +37,8 @@ Metadata:
           - QSS3KeyPrefix
           - QSS3BucketRegion
     ParameterLabels:
+      IncludeRedshift:
+        default: Include Redshift cluster resources
       AdminUsername:
         default: Admin user name
       AdminUserPassword:
@@ -107,6 +110,7 @@ Resources:
             - !Ref 'AWS::Region'
             - !Ref 'QSS3BucketRegion'
       Parameters:
+        IncludeRedshift: !Ref IncludeRedshift
         AdminUsername: !Ref AdminUsername
         AdminUserPassword: !Ref AdminUserPassword
         ClusterName: !Ref ClusterName
@@ -136,6 +140,7 @@ Conditions:
   UsingDefaultBucket: !Equals
     - !Ref QSS3BucketName
     - 'aws-quickstart'
+  ShouldCreateRedshiftConsumption: !Equals [ 'True', !Ref IncludeRedshift ]
 
 Parameters:
   AdminUsername:
@@ -232,6 +237,12 @@ Parameters:
       - None
       - mrasco
 
+  IncludeRedshift:
+    Type: String
+    Description: Whether Amazon Redshift consumption hub should be deployed
+    AllowedValues: ['True','False']
+    Default: 'True'
+
   AvailabilityZones:
     Description: >-
       List of Availability Zones to use for the subnets in the VPC. The logical order is preserved. You must provide two zones, according to AWS best practices. If a third Availability Zone parameter is specified, you must also provide that zone.
@@ -273,9 +284,11 @@ Outputs:
   RedshiftClusterEndpoint:
     Description: Amazon Redshift cluster endpoint address with port
     Value: !GetAtt Workload.Outputs.RedshiftClusterEndpoint
+    Condition: ShouldCreateRedshiftConsumption
   RedshiftEndpoint:
     Description: Amazon Redshift endpoint address
     Value: !GetAtt Workload.Outputs.RedshiftEndpoint
+    Condition: ShouldCreateRedshiftConsumption
   GlueWorkflowName:
     Description: AWS Glue workflow name
     Value: !GetAtt Workload.Outputs.GlueWorkflowName

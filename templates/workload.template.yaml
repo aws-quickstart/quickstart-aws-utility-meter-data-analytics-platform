@@ -4,6 +4,7 @@ Description: "Workload template to deploy the AWS Quick Start for the Utility Me
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
   DeployAdapter: !Not [ !Equals [!Ref DeploySpecialAdapters, 'None'] ]
+  ShouldCreateRedshiftConsumption: !Equals [ 'True', !Ref IncludeRedshift ]
 Rules:
   LZS3BucketNameProvided:
     RuleCondition: !Equals [!Ref CreateLandingZoneS3Bucket, 'No']
@@ -15,6 +16,7 @@ Resources:
 
     RedshiftStack:
       Type: 'AWS::CloudFormation::Stack'
+      Condition: ShouldCreateRedshiftConsumption
       Properties:
         TemplateURL: !Sub
           - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/redshift.yaml'
@@ -245,9 +247,11 @@ Outputs:
   RedshiftClusterEndpoint:
     Description: Amazon Redshift cluster endpoint address with port
     Value: !GetAtt RedshiftStack.Outputs.RedshiftClusterEndpoint
+    Condition: ShouldCreateRedshiftConsumption
   RedshiftEndpoint:
     Description: Amazon Redshift endpoint address
     Value: !GetAtt RedshiftStack.Outputs.RedshiftEndpoint
+    Condition: ShouldCreateRedshiftConsumption
   GlueWorkflowName:
     Description: Glue workflow name
     Value: !GetAtt GlueStack.Outputs.GlueWorkflow
@@ -382,6 +386,12 @@ Parameters:
       - None
       - mrasco
 
+  IncludeRedshift:
+    Type: String
+    Description: Whether Amazon Redshift consumption hub should be deployed
+    AllowedValues: ['True','False']
+    Default: 'True'
+
 Metadata:
   QuickStartDocumentation:
     EntrypointName: "Parameters for deploying into an existing VPC"
@@ -390,6 +400,7 @@ Metadata:
       - Label:
           default: Amazon Redshift cluster configuration
         Parameters:
+          - IncludeRedshift
           - AdminUsername
           - AdminUserPassword
           - ClusterName
@@ -418,6 +429,8 @@ Metadata:
           - QSS3KeyPrefix
           - QSS3BucketRegion
     ParameterLabels:
+      IncludeRedshift:
+        default: Include Redshift cluster resources
       AdminUsername:
         default: Admin user name
       AdminUserPassword:
