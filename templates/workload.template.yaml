@@ -79,7 +79,6 @@ Resources:
           ClusterName: !Ref ClusterName
           DBName: !Ref DBName
           Subnet1ID: !Ref Subnet1ID
-          VPCID: !Ref VPCID
           GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
           GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
           AvailabilityZone: !Ref AvailabilityZone
