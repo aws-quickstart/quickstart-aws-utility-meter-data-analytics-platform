@@ -77,18 +77,8 @@ Metadata:
 
 Resources:
   VPC:
-    Type: 'AWS::CloudFormation::Stack'
+    Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub
-        - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/aws-vpc.template.yaml
-        - S3Bucket: !If
-            - UsingDefaultBucket
-            - !Sub 'aws-quickstart-${AWS::Region}'
-            - !Ref 'QSS3BucketName'
-          S3Region: !If
-            - UsingDefaultBucket
-            - !Ref 'AWS::Region'
-            - !Ref 'QSS3BucketRegion'
       Parameters:
         AvailabilityZones: !Join
           - ','
@@ -97,6 +87,11 @@ Resources:
         PrivateSubnet2ACIDR: !Ref 'PrivateSubnet2ACIDR'
         VPCCIDR: !Ref VPCCIDR
         NumberOfAZs: 2
+      TemplateURL:
+        !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template'
+        - S3Region: !If [ UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion ]
+          S3Bucket: !If [ UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName ]
 
   Workload:
     Type: 'AWS::CloudFormation::Stack'
@@ -130,7 +125,7 @@ Resources:
         QSS3BucketRegion: !Ref QSS3BucketRegion
         DBName: !Ref DBName
         RedshiftPort: !Ref RedshiftPort
-        VPCRouteTableId: !GetAtt VPC.Outputs.VPCRouteTable
+        VPCRouteTableId: !GetAtt VPC.Outputs.PublicSubnetRouteTable
         AvailabilityZone: !Select
         - '0'
         - !Ref 'AvailabilityZones'
