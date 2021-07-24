@@ -149,9 +149,9 @@ Resources:
         VpcEndpointType: "Interface"
         VpcId: !Ref VPCID
 
-      #
-  # Network
-  #
+    #
+    # Network
+    #
     LambdaVpcSecurityGroup:
       Type: 'AWS::EC2::SecurityGroup'
       Properties:
@@ -164,15 +164,15 @@ Resources:
             CidrIp: !Ref RemoteAccessCIDR
             Description: 'Lambda to VPC CIDR'
 
-  #
-  # Http API
-  #
+    #
+    # Http API
+    #
     HttpApi:
       Type: AWS::Serverless::HttpApi
 
-  #
-  # Dependency Layer
-  #
+    #
+    # Dependency Layer
+    #
     PostgresLayer:
       Type: 'AWS::Serverless::LayerVersion'
       Properties:
@@ -261,9 +261,12 @@ Resources:
 
     GlueConnection:
       Type: "AWS::Glue::Connection"
+      DependsOn:
+        - RedshiftCluster
+        - IAMRole
       Properties:
         ConnectionInput:
-          Description: ""
+          Description: "A connection to the meter data Redshift cluster"
           ConnectionType: "JDBC"
           PhysicalConnectionRequirements:
             SubnetId: !Ref Subnet1ID
