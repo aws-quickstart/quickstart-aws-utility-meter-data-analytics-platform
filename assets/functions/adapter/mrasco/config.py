@@ -58,8 +58,8 @@ mappings = {
     },
     "D0010": {
         "026": {
-            "new_record_row": False,
-            "parent_row": True,
+            "reading_row": False,
+            "parent_record_row": True,
             1: [
                 {
                     "field_name": "reading_type",
@@ -68,8 +68,8 @@ mappings = {
             ],
         },
         "028": {
-            "new_record_row": True,
-            "parent_row": True,
+            "reading_row": False,
+            "parent_record_row": False,
             1: [
                 {
                     "field_name": "meter_id",
@@ -78,8 +78,8 @@ mappings = {
             ],
         },
         "029": {
-            "new_record_row": False,
-            "parent_row": False,
+            "reading_row": True,
+            "parent_record_row": False,
             1: [
                 {
                     "field_name": "meter_id",
