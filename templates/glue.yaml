@@ -191,37 +191,6 @@ Resources:
       GlueVersion: "2.0"
       MaxCapacity: !Ref DPU
 
-  GlueJob4BusinessDailyToRedshift:
-    Type: "AWS::Glue::Job"
-    Properties:
-      Name: !Sub "business_daily_to_redshift-${AWS::Region}"
-      Role: !GetAtt IAMRole.Arn
-      ExecutionProperty:
-        MaxConcurrentRuns: 1
-      Command:
-        Name: "glueetl"
-        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_daily_to_redshift.py"
-        PythonVersion: "3"
-      DefaultArguments:
-        --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
-        --enable-metrics: ""
-        --enable-continuous-cloudwatch-log: "true"
-        --enable-continuous-log-filter: "true"
-        --job-bookmark-option: "job-bookmark-enable"
-        --job-language: "python"
-        --enable-s3-parquet-optimized-committer : true
-        --db_name: !Ref DBName
-        --redshift_connection: !Ref GlueConnection
-        --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
-      Connections:
-        Connections:
-          - !Ref GlueConnection
-      MaxRetries: 0
-      #AllocatedCapacity: !Ref DPU
-      MaxCapacity: !Ref DPU
-      Timeout: 2880
-      GlueVersion: "2.0"
-
   GlueJob5CleanToBusiness:
     Type: "AWS::Glue::Job"
     Properties:
@@ -286,37 +255,6 @@ Resources:
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
 
-  GlueJobImportDemoDataToRedshift:
-    Type: "AWS::Glue::Job"
-    Properties:
-      Name: !Sub "import_demo_data_to_redshift-${AWS::Region}"
-      Role: !GetAtt IAMRole.Arn
-      ExecutionProperty:
-        MaxConcurrentRuns: 1
-      Command:
-        Name: "glueetl"
-        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/import_demo_data_to_redshift.py"
-        PythonVersion: "3"
-      DefaultArguments:
-        --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
-        --enable-metrics: ""
-        --enable-continuous-cloudwatch-log: "true"
-        --enable-continuous-log-filter: "true"
-        --job-bookmark-option: "job-bookmark-enable"
-        --job-language: "python"
-        --db_name: !Ref DBName
-        --redshift_connection: !Ref GlueConnection
-        --cis_bucket: !Sub "${BusinessZoneS3Bucket}/cisdata"
-        --geo_bucket: !Sub "${BusinessZoneS3Bucket}/geodata"
-      Connections:
-        Connections:
-          - !Ref GlueConnection
-      MaxRetries: 0
-      Timeout: 2880
-      GlueVersion: "2.0"
-      #AllocatedCapacity: !Ref DPU
-      MaxCapacity: !Ref DPU
-
   GlueTrigger:
     Type: "AWS::Glue::Trigger"
     Properties:
@@ -342,21 +280,6 @@ Resources:
           - LogicalOperator: "EQUALS"
             JobName: !Ref GlueJob6RawToClean
             State: "SUCCEEDED"
-
-  GlueTrigger3:
-    Type: "AWS::Glue::Trigger"
-    Properties:
-      Name: !Sub "export-to-redshift-${AWS::Region}"
-      Type: "CONDITIONAL"
-      StartOnCreation: true
-      WorkflowName: !Ref GlueWorkflow
-      Actions:
-        - JobName: !Ref GlueJob4BusinessDailyToRedshift
-      Predicate:
-        Conditions:
-          - LogicalOperator: "EQUALS"
-            CrawlerName: !Ref GlueCrawler4BusinessDailyCrawler
-            CrawlState: "SUCCEEDED"
 
   GlueTrigger4:
     Type: "AWS::Glue::Trigger"
@@ -583,59 +506,6 @@ Resources:
         Name: !Ref DBName
       CatalogId: !Ref "AWS::AccountId"
 
-  GlueConnection:
-    Type: "AWS::Glue::Connection"
-    Properties:
-      ConnectionInput:
-        Description: ""
-        ConnectionType: "JDBC"
-        PhysicalConnectionRequirements:
-          SubnetId: !Ref Subnet1ID
-          SecurityGroupIdList:
-            - !GetAtt GlueSecurityGroup.GroupId
-            - !Ref RedshiftSecurityGroupId
-          AvailabilityZone: !Ref AvailabilityZone
-        ConnectionProperties:
-          "JDBC_CONNECTION_URL": !Sub "jdbc:redshift://${RedshiftClusterEndpoint}/${DBName}"
-          "JDBC_ENFORCE_SSL": "false"
-          PASSWORD: !Ref AdminUserPassword
-          USERNAME: !Ref AdminUsername
-        Name: !Ref ClusterName
-      CatalogId: !Ref "AWS::AccountId"
-
-  GlueSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupDescription: Security group for Glue
-      VpcId: !Ref VPCID
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: !Ref RedshiftPort
-          ToPort: !Ref RedshiftPort
-          CidrIp: !Ref RemoteAccessCIDR
-          Description: 'Glue Access to VPC CIDR'
-
-  SelfReferencingIngress:
-    Type: AWS::EC2::SecurityGroupIngress
-    Properties:
-      Description: Self referencing security group ingress rule for glue access
-      FromPort: -1
-      GroupId: !Ref GlueSecurityGroup
-      IpProtocol: "-1"
-      SourceSecurityGroupId: !Ref GlueSecurityGroup
-      ToPort: -1
-
-  EC2VPCEndpoint:
-    Type: "AWS::EC2::VPCEndpoint"
-    Properties:
-      VpcEndpointType: "Gateway"
-      VpcId: !Ref VPCID
-      ServiceName: !Sub "com.amazonaws.${AWS::Region}.s3"
-      PolicyDocument: "{\"Version\":\"2008-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"*\",\"Resource\":\"*\"}]}"
-      RouteTableIds:
-        - !Ref VPCRouteTableId
-      PrivateDnsEnabled: false
-
 Outputs:
   LandingZoneS3Bucket:
     Value: !If
@@ -651,52 +521,21 @@ Outputs:
   GlueWorkflow:
     Value: !Ref GlueWorkflow
   JobNameTransformCleanToBusiness:
-    Value: !Ref GlueJob4BusinessDailyToRedshift
+    Value: !Ref GlueJob5CleanToBusiness
+  NameCrawlerBusinessDaily:
+    Value: !Ref GlueCrawler4BusinessDailyCrawler
 
 Parameters:
-  AdminUsername:
-    Type: String
-
-  AdminUserPassword:
-    Type: String
-
-  RedshiftClusterEndpoint:
-    Type: String
-
-  RedshiftSecurityGroupId:
-    Type: String
-
-  RedshiftPort:
-    Type: String
-
-  ClusterName:
-    Type: String
-    Default: redshift-cluster-1
 
   DBName:
     Type: String
     Default: meter_data
-
-  Subnet1ID:
-    Type: AWS::EC2::Subnet::Id
-
-  VPCID:
-    Type: AWS::EC2::VPC::Id
-
-  RemoteAccessCIDR:
-    Type: String
 
   GlueScriptsS3Bucket:
     Type: String
 
   GlueTempS3Bucket:
     Type: String
-
-  VPCRouteTableId:
-    Type: String
-
-  AvailabilityZone:
-    Type: AWS::EC2::AvailabilityZone::Name
 
   LandingzoneTransformer:
     Type: String

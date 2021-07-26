@@ -57,21 +57,6 @@ Parameters:
       0 = weather data won't be used
       1 = enable weather data use
     Type: Number
-  DBName:
-    ConstraintDescription: >-
-      Name of the glue data catalog database
-    Default: meter_data
-    Type: String
-  VPCID:
-    Type: AWS::EC2::VPC::Id
-  RemoteAccessCIDR:
-    Type: String
-  Subnet1ID:
-    Type: AWS::EC2::Subnet::Id
-  Subnet2ID:
-    Type: AWS::EC2::Subnet::Id
-  RedshiftSecret:
-    Type: String
   ConfigTable:
     Type: String
 
@@ -81,7 +66,6 @@ Globals:
     Environment:
       Variables:
         Athena_bucket: !Ref AthenaQueryBucket
-        Db_schema: !Ref DBName
         With_weather_data: !Ref WithWeather
         config_table: !Ref ConfigTable
 Conditions:
@@ -128,75 +112,6 @@ Resources:
               - Effect: Allow
                 Action: 'sagemaker:InvokeEndpoint'
                 Resource: !Sub 'arn:${AWS::Partition}:sagemaker:::*'
-
-  RunRedshiftLambdaRole:
-    Type: 'AWS::IAM::Role'
-    Metadata:
-      cfn-lint:
-        config:
-          ignore_checks:
-            - E9101
-          ignore_reasons:
-            E9101: Managed policy name
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: 'lambda.amazonaws.com'
-            Action: 'sts:AssumeRole'
-      ManagedPolicyArns:
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'
-      Policies:
-        - PolicyName: secre_manager_read_access
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - "secretsmanager:GetSecretValue"
-                  - "secretsmanager:DescribeSecret"
-                  - "secretsmanager:ListSecrets"
-                  - "kms:Decrypt"
-                Resource:
-                  - !Sub 'arn:${AWS::Partition}:secretsmanager:::*'
-                  - !Sub 'arn:${AWS::Partition}:kms:::*'
-
-  #
-  # Lambda
-  #
-  ConsumptionApi:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      Handler: app.lambda_handler
-      CodeUri:
-        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
-        Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/redshift_consumption.zip'
-      Description: Lambda function to get consumption for certain meter in different aggregation levels (daily, weekly, monthly)
-      MemorySize: 256
-      Timeout: 180
-      Role: !GetAtt 'RunRedshiftLambdaRole.Arn'
-      Environment:
-        Variables:
-          SECRET_NAME: !Ref RedshiftSecret
-      Layers:
-        - !Ref PostgresLayer
-      VpcConfig:
-        SecurityGroupIds:
-          - !Ref LambdaVpcSecurityGroup
-        SubnetIds:
-          - !Ref Subnet1ID
-          - !Ref Subnet2ID
-      Events:
-        ApiEvent:
-          Type: HttpApi
-          Properties:
-            ApiId: !Ref HttpApi
-            Method: GET
-            Path: /consumption/{requested_aggregation}/{year}/{meter_id}
 
   AnomalyPredictionApi:
     Type: 'AWS::Serverless::Function'
@@ -266,22 +181,6 @@ Resources:
         Variables:
           WORKING_BUCKET: !Ref WorkingBucket
 
-  #
-  # Dependency Layer
-  #
-  PostgresLayer:
-    Type: 'AWS::Serverless::LayerVersion'
-    Properties:
-      LayerName: !Sub "api-dependencies-${AWS::Region}"
-      Description: Dependencies for sam app
-      ContentUri:
-        Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
-        Key:
-          Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/dependencies/postgres/layer.zip'
-      CompatibleRuntimes:
-        - python3.7
-      LicenseInfo: 'Available under the MIT-0 license.'
-
   DependencyLayer:
     Type: 'AWS::Serverless::LayerVersion'
     Properties:
@@ -294,44 +193,6 @@ Resources:
       CompatibleRuntimes:
         - python3.7
       LicenseInfo: 'Available under the MIT-0 license.'
-
-  #
-  # Network
-  #
-  LambdaVpcSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupDescription: Security group for Lambda Function
-      VpcId: !Ref VPCID
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 0
-          ToPort: 65535
-          CidrIp: !Ref RemoteAccessCIDR
-          Description: 'Lambda to VPC CIDR'
-
-  SecretManagerVpcEndpoint:
-    Type: AWS::EC2::VPCEndpoint
-    Properties:
-      PrivateDnsEnabled: true
-      PolicyDocument: '{
-         "Version":"2012-10-17",
-         "Statement":[{
-           "Effect":"Allow",
-           "Principal": "*",
-           "Action": "*",
-           "Resource":"*"
-         }]
-      }'
-      SecurityGroupIds:
-        - !Ref LambdaVpcSecurityGroup
-      SubnetIds:
-        - !Ref Subnet1ID
-        - !Ref Subnet2ID
-      ServiceName: !Sub com.amazonaws.${AWS::Region}.secretsmanager
-      VpcEndpointType: "Interface"
-      VpcId: !Ref VPCID
-
 
 Outputs:
   MeterForecastPredictionApi:

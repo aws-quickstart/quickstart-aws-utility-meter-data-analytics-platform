@@ -1,6 +1,5 @@
 import os
 import boto3
-import json
 
 client = boto3.client('stepfunctions')
 
@@ -24,6 +23,4 @@ def trigger_state_machine():
 
 
 def lambda_handler(event, context):
-    #glue_job_name= os.environ['glue_job_name']
-    
     trigger_state_machine()

@@ -24,6 +24,10 @@
     "ParameterValue": "temp/"
   },
   {
+    "ParameterKey": "IncludeRedshift",
+    "ParameterValue": "True"
+  },
+  {
     "ParameterKey": "QSS3BucketRegion",
     "ParameterValue": "us-east-1"
   },
