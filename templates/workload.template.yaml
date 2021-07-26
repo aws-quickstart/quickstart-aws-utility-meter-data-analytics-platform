@@ -4,6 +4,7 @@ Description: "Workload template to deploy the AWS Quick Start for the Utility Me
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
   DeployAdapter: !Not [ !Equals [!Ref DeploySpecialAdapters, 'None'] ]
+  ShouldCreateRedshiftConsumption: !Equals [ 'True', !Ref IncludeRedshift ]
 Rules:
   LZS3BucketNameProvided:
     RuleCondition: !Equals [!Ref CreateLandingZoneS3Bucket, 'No']
@@ -15,6 +16,7 @@ Resources:
 
     RedshiftStack:
       Type: 'AWS::CloudFormation::Stack'
+      Condition: ShouldCreateRedshiftConsumption
       Properties:
         TemplateURL: !Sub
           - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/redshift.yaml'
@@ -27,16 +29,27 @@ Resources:
                 !Ref QSS3BucketName,
               ]
         Parameters:
-          MasterUsername: !Ref MasterUsername
-          MasterUserPassword: !Ref MasterUserPassword
+          AdminUsername: !Ref AdminUsername
+          AdminUserPassword: !Ref AdminUserPassword
           Subnet1ID: !Ref Subnet1ID
           Subnet2ID: !Ref Subnet2ID
+          AvailabilityZone: !Ref AvailabilityZone
           VPCID: !Ref VPCID
           RemoteAccessCIDR: !Ref RemoteAccessCIDR
           ClusterName: !Ref ClusterName
+          RedshiftPort: !Ref RedshiftPort
           ClusterNodeType: !FindInMap [MeterCountMap, !Ref "NoOfMeters", RedshiftNodeType]
           ClusterNodeCount: !FindInMap [MeterCountMap, !Ref "NoOfMeters", RedshiftNumberOfNodes]
+          QSS3BucketName: !Ref QSS3BucketName
+          QSS3KeyPrefix: !Ref QSS3KeyPrefix
           DBName: !Ref DBName
+          GlueWorkFlowToExtend: !GetAtt GlueStack.Outputs.GlueWorkflow
+          GlueCrwalerToTriggerAfter: !GetAtt GlueStack.Outputs.NameCrawlerBusinessDaily
+          GlueDPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
+          GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
+          GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
+          BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
+          TempWorkflowS3Bucket: !GetAtt GlueStack.Outputs.TempWorkflowS3Bucket
 
     CopyScriptsStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -69,20 +82,9 @@ Resources:
                 !Ref QSS3BucketName,
               ]
         Parameters:
-          MasterUsername: !Ref MasterUsername
-          MasterUserPassword: !Ref MasterUserPassword
-          RedshiftClusterEndpoint: !GetAtt RedshiftStack.Outputs.RedshiftClusterEndpoint
-          RedshiftSecurityGroupId: !GetAtt RedshiftStack.Outputs.RedshiftSecurityGroupId
-          RedshiftPort: !Ref RedshiftPort
-          ClusterName: !Ref ClusterName
           DBName: !Ref DBName
-          Subnet1ID: !Ref Subnet1ID
-          VPCID: !Ref VPCID
-          RemoteAccessCIDR: !Ref RemoteAccessCIDR
           GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
           GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
-          VPCRouteTableId: !Ref VPCRouteTableId
-          AvailabilityZone: !Ref AvailabilityZone
           LandingzoneTransformer: !Ref LandingzoneTransformer
           CreateLandingZoneS3Bucket: !Ref CreateLandingZoneS3Bucket
           LandingZoneS3BucketName: !Ref LandingZoneS3BucketName
@@ -180,12 +182,6 @@ Resources:
           AthenaQueryBucket: !GetAtt MachineLearningPipelineStack.Outputs.AthenaQueryBucket
           WorkingBucket: !GetAtt MachineLearningPipelineStack.Outputs.WorkingBucket
           WithWeather: !Ref WithWeather
-          DBName: !Ref DBName
-          RedshiftSecret: !GetAtt RedshiftStack.Outputs.RedshiftSecret
-          Subnet1ID: !Ref Subnet1ID
-          Subnet2ID: !Ref Subnet2ID
-          VPCID: !Ref VPCID
-          RemoteAccessCIDR: !Ref RemoteAccessCIDR
           ConfigTable: !GetAtt MachineLearningPipelineConfigStack.Outputs.MachineLearningPipelineConfigTable
 
     CopyDemoDataStack:
@@ -251,9 +247,11 @@ Outputs:
   RedshiftClusterEndpoint:
     Description: Amazon Redshift cluster endpoint address with port
     Value: !GetAtt RedshiftStack.Outputs.RedshiftClusterEndpoint
+    Condition: ShouldCreateRedshiftConsumption
   RedshiftEndpoint:
     Description: Amazon Redshift endpoint address
     Value: !GetAtt RedshiftStack.Outputs.RedshiftEndpoint
+    Condition: ShouldCreateRedshiftConsumption
   GlueWorkflowName:
     Description: Glue workflow name
     Value: !GetAtt GlueStack.Outputs.GlueWorkflow
@@ -271,16 +269,16 @@ Outputs:
     Value: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
 
 Parameters:
-  MasterUsername:
+  AdminUsername:
     Type: String
-    Description: Master user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
+    Description: Root user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
     MinLength: '1'
     MaxLength: '128'
     AllowedPattern : '([a-z])([a-z]|[0-9]|[_+.@-])*'
 
-  MasterUserPassword:
+  AdminUserPassword:
     Type: String
-    Description: Master user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
+    Description: Root user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
     NoEcho: True
     MinLength: '8'
     MaxLength: '64'
@@ -347,17 +345,14 @@ Parameters:
     Type: String
     Default: meter_data
     Description: Name of the Amazon Redshift database.
-  
+
   RedshiftPort:
-    Type: String
+    Type: Number
+    MinValue: 0
+    MaxValue: 65535
     Default: 5439
     Description: Port number that you use to connect to the Amazon Redshift cluster.
   
-  VPCRouteTableId:
-    Type: String
-    Description: Main route table ID associated with your VPC and subnets.
-    MinLength: '1'
-
   AvailabilityZone:
     Type: AWS::EC2::AvailabilityZone::Name
     Description: AWS Availability Zone for subnet 1.
@@ -391,6 +386,12 @@ Parameters:
       - None
       - mrasco
 
+  IncludeRedshift:
+    Type: String
+    Description: Whether Amazon Redshift consumption hub should be deployed
+    AllowedValues: ['True','False']
+    Default: 'True'
+
 Metadata:
   QuickStartDocumentation:
     EntrypointName: "Parameters for deploying into an existing VPC"
@@ -399,8 +400,9 @@ Metadata:
       - Label:
           default: Amazon Redshift cluster configuration
         Parameters:
-          - MasterUsername
-          - MasterUserPassword
+          - IncludeRedshift
+          - AdminUsername
+          - AdminUserPassword
           - ClusterName
           - DBName
           - RedshiftPort
@@ -412,7 +414,6 @@ Metadata:
           - Subnet1ID
           - Subnet2ID
           - RemoteAccessCIDR
-          - VPCRouteTableId
       - Label:
           default: 'Glue configuration'
         Parameters:
@@ -428,10 +429,12 @@ Metadata:
           - QSS3KeyPrefix
           - QSS3BucketRegion
     ParameterLabels:
-      MasterUsername:
-        default: Master user name
-      MasterUserPassword:
-        default: Master user password
+      IncludeRedshift:
+        default: Include Redshift cluster resources
+      AdminUsername:
+        default: Admin user name
+      AdminUserPassword:
+        default: Admin user password
       ClusterName:
         default: Amazon Redshift cluster name
       RedshiftPort:
@@ -446,8 +449,6 @@ Metadata:
         default: VPC ID
       RemoteAccessCIDR:
         default: Remote access CIDR block
-      VPCRouteTableId:
-        default: Route table ID
       AvailabilityZone:
         default: Availability Zones
       QSS3BucketName:

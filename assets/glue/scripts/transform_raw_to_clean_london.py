@@ -76,9 +76,6 @@ def write_job_state_information(readings):
 def schema_contains_field(schema, field_name):
     return len([x for x in schema.fields if x.name == field_name]) > 0
 
-def add_london_reading_type_if_missing (rec):
-    rec["reading_type"] = "INT" if "reading_type" not in rec else rec["reading_type"]
-
 args = getResolvedOptions(sys.argv, ['JOB_NAME', 'db_name', 'table_name', 'clean_data_bucket', 'temp_workflow_bucket', 'region'])
 
 sc = SparkContext()
@@ -93,7 +90,7 @@ tableName = args['table_name'].replace("-", "_")
 datasource = glueContext.create_dynamic_frame.from_catalog(database = args['db_name'], table_name = tableName, transformation_ctx = "datasource")
 schema = datasource.schema()
 
-if (schema.fields[1].name == 'stdorToU'):
+if (schema.fields[1].name.lower() == 'stdortou'):
     # original london data field index
     field_index = {"id": 0,"datetime": 2, "reading": 3}
 else:
@@ -107,13 +104,11 @@ mapped_readings = ApplyMapping.apply(frame=datasource, mappings=[(schema.fields[
 
 mapped_readings_df = DynamicFrame.toDF(mapped_readings)
 
-if not schema_contains_field(mapped_readings_df.schema(), 'obis_code'):
+if not schema_contains_field(mapped_readings_df.schema, 'obis_code'):
     mapped_readings_df = mapped_readings_df.withColumn("obis_code", lit(""))
 
-if not schema_contains_field(mapped_readings_df.schema(), 'reading_type'):
+if not schema_contains_field(mapped_readings_df.schema, 'reading_type'):
     mapped_readings_df = mapped_readings_df.withColumn("reading_type", lit("INT"))
-
-mapped_readings_df = Map.apply(frame=mapped_readings_df, f=add_london_reading_type_if_missing)
 
 reading_time = to_timestamp(col("reading_time"), "yyyy-MM-dd HH:mm:ss")
 mapped_readings_df = mapped_readings_df \

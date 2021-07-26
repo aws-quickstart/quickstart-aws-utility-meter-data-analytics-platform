@@ -1,7 +1,9 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Metadata:
-    Generator: "former2"
-Description: "Create Redshift cluster"
+Transform: 'AWS::Serverless-2016-10-31'
+Description: "Create Redshift cluster (qs-1r18anahd)"
+Globals:
+  Function:
+    Runtime: python3.7
 Resources:    
     RedshiftCluster:
       Type: AWS::Redshift::Cluster
@@ -9,14 +11,16 @@ Resources:
         ClusterIdentifier: !Ref ClusterName
         ClusterType: multi-node
         ClusterSubnetGroupName: !Ref RedshiftClusterSubnetGroup
+        Port: !Ref RedshiftPort
         DBName: !Ref DBName
         IamRoles: 
           - !GetAtt MyRedshiftIAMRole.Arn
-        MasterUsername: !Ref MasterUsername
-        MasterUserPassword: !Ref MasterUserPassword
+        MasterUsername: !Ref AdminUsername
+        MasterUserPassword: !Ref AdminUserPassword
         NodeType: !Ref ClusterNodeType
         NumberOfNodes: !Ref ClusterNodeCount
         PubliclyAccessible: false
+        Encrypted: true
         VpcSecurityGroupIds: 
           - !Ref RedshiftSecurityGroup
         ClusterParameterGroupName: !Ref RedshiftClusterParameterGroup
@@ -42,8 +46,8 @@ Resources:
         VpcId: !Ref VPCID
         SecurityGroupIngress:
           - IpProtocol: tcp
-            FromPort: 5439
-            ToPort: 5439
+            FromPort: !Ref RedshiftPort
+            ToPort: !Ref RedshiftPort
             CidrIp: !Ref RemoteAccessCIDR
             Description: 'Redshift Access to VPC CIDR'
     
@@ -72,23 +76,15 @@ Resources:
                 - 'sts:AssumeRole'
         Path: '/'
         ManagedPolicyArns:
-          - arn:aws:iam::aws:policy/AWSGlueConsoleFullAccess
-          - arn:aws:iam::aws:policy/AmazonAthenaFullAccess
-          - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AWSGlueConsoleFullAccess'
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonAthenaFullAccess'
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonS3ReadOnlyAccess'
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/CloudWatchLogsFullAccess'
         Policies:
           - PolicyName: Spectrum-Glue-Access-Policy
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
-                - Effect: 'Allow'
-                  Action:
-                    - s3:GetBucketLocation
-                    - s3:GetObject
-                    - s3:ListMultipartUploadParts
-                    - s3:ListBucket
-                    - s3:ListBucketMultipartUploads
-                  Resource:
-                    - '*'
                 - Effect: Allow
                   Action:
                     - glue:CreateDatabase
@@ -110,9 +106,8 @@ Resources:
                     - glue:GetPartition
                     - glue:GetPartitions
                     - glue:BatchGetPartition
-                    - logs:*
                   Resource:
-                    - '*'
+                    - !Sub 'arn:${AWS::Partition}:glue:::*'
 
 
     #
@@ -123,7 +118,7 @@ Resources:
       Properties:
         Name: redshift_db_credentials
         Description: Redshift secret
-        SecretString: !Sub '{"username":"${MasterUsername}","password":"${MasterUserPassword}"}'
+        SecretString: !Sub '{"username":"${AdminUsername}","password":"${AdminUserPassword}"}'
 
     SecretRedshiftAttachment:
       Type: "AWS::SecretsManager::SecretTargetAttachment"
@@ -131,6 +126,248 @@ Resources:
         SecretId: !Ref RedshiftSecret
         TargetId: !Ref RedshiftCluster
         TargetType: AWS::Redshift::Cluster
+
+    SecretManagerVpcEndpoint:
+      Type: AWS::EC2::VPCEndpoint
+      Properties:
+        PrivateDnsEnabled: true
+        PolicyDocument: '{
+           "Version":"2012-10-17",
+           "Statement":[{
+             "Effect":"Allow",
+             "Principal": "*",
+             "Action": "*",
+             "Resource":"*"
+           }]
+        }'
+        SecurityGroupIds:
+          - !Ref LambdaVpcSecurityGroup
+        SubnetIds:
+          - !Ref Subnet1ID
+          - !Ref Subnet2ID
+        ServiceName: !Sub com.amazonaws.${AWS::Region}.secretsmanager
+        VpcEndpointType: "Interface"
+        VpcId: !Ref VPCID
+
+    #
+    # Network
+    #
+    LambdaVpcSecurityGroup:
+      Type: 'AWS::EC2::SecurityGroup'
+      Properties:
+        GroupDescription: Security group for Lambda Function
+        VpcId: !Ref VPCID
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: 0
+            ToPort: 65535
+            CidrIp: !Ref RemoteAccessCIDR
+            Description: 'Lambda to VPC CIDR'
+
+    #
+    # Http API
+    #
+    HttpApi:
+      Type: AWS::Serverless::HttpApi
+
+    #
+    # Dependency Layer
+    #
+    PostgresLayer:
+      Type: 'AWS::Serverless::LayerVersion'
+      Properties:
+        LayerName: !Sub "api-dependencies-${AWS::Region}"
+        Description: Dependencies for sam app
+        ContentUri:
+          Bucket: !If [ UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName ]
+          Key:
+            Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/dependencies/postgres/layer.zip'
+        CompatibleRuntimes:
+          - python3.7
+        LicenseInfo: 'Available under the MIT-0 license.'
+    #
+    # Lambda
+    #
+    ConsumptionApi:
+      Type: 'AWS::Serverless::Function'
+      Properties:
+        Handler: app.lambda_handler
+        CodeUri:
+          Bucket: !If [ UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName ]
+          Key:
+            Fn::Sub: '${QSS3KeyPrefix}assets/functions/packages/redshift_consumption.zip'
+        Description: Lambda function to get consumption for certain meter in different aggregation levels (daily, weekly, monthly)
+        MemorySize: 256
+        Timeout: 180
+        Role: !GetAtt 'RunRedshiftLambdaRole.Arn'
+        Environment:
+          Variables:
+            SECRET_NAME: !Ref RedshiftSecret
+            Db_schema: !Ref DBName
+        Layers:
+          - !Ref PostgresLayer
+        VpcConfig:
+          SecurityGroupIds:
+            - !Ref LambdaVpcSecurityGroup
+          SubnetIds:
+            - !Ref Subnet1ID
+            - !Ref Subnet2ID
+        Events:
+          ApiEvent:
+            Type: HttpApi
+            Properties:
+              ApiId: !Ref HttpApi
+              Method: GET
+              Path: /consumption/{requested_aggregation}/{year}/{meter_id}
+
+    RunRedshiftLambdaRole:
+      Type: 'AWS::IAM::Role'
+      Metadata:
+        cfn-lint:
+          config:
+            ignore_checks:
+              - E9101
+            ignore_reasons:
+              E9101: Managed policy name
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: 'lambda.amazonaws.com'
+              Action: 'sts:AssumeRole'
+        ManagedPolicyArns:
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+          - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'
+        Policies:
+          - PolicyName: secre_manager_read_access
+            PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - "secretsmanager:GetSecretValue"
+                    - "secretsmanager:DescribeSecret"
+                    - "secretsmanager:ListSecrets"
+                    - "kms:Decrypt"
+                  Resource:
+                    - !Sub '${RedshiftSecret}'
+                    - !Sub 'arn:${AWS::Partition}:kms:::*'
+
+    #
+    # Glue Connection, Job, Trigger
+    #
+
+    GlueConnection:
+      Type: "AWS::Glue::Connection"
+      DependsOn:
+        - RedshiftCluster
+        - IAMRole
+      Properties:
+        ConnectionInput:
+          Description: "A connection to the meter data Redshift cluster"
+          ConnectionType: "JDBC"
+          PhysicalConnectionRequirements:
+            SubnetId: !Ref Subnet1ID
+            SecurityGroupIdList:
+              - !Ref RedshiftSecurityGroup
+            AvailabilityZone: !Ref AvailabilityZone
+          ConnectionProperties:
+            "JDBC_CONNECTION_URL": !Sub "jdbc:redshift://${RedshiftCluster.Endpoint.Address}:${RedshiftCluster.Endpoint.Port}/${DBName}"
+            "JDBC_ENFORCE_SSL": "false"
+            PASSWORD: !Ref AdminUserPassword
+            USERNAME: !Ref AdminUsername
+          Name: !Ref ClusterName
+        CatalogId: !Ref "AWS::AccountId"
+
+    IAMRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+        Path: "/service-role/"
+        AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"glue.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+        MaxSessionDuration: 3600
+        ManagedPolicyArns:
+          - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess"
+          - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSGlueServiceRole"
+          - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonRedshiftFullAccess"
+
+    GlueJob4BusinessDailyToRedshift:
+      Type: "AWS::Glue::Job"
+      Properties:
+        Name: !Sub "business_daily_to_redshift-${AWS::Region}"
+        Role: !GetAtt IAMRole.Arn
+        ExecutionProperty:
+          MaxConcurrentRuns: 1
+        Command:
+          Name: "glueetl"
+          ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_daily_to_redshift.py"
+          PythonVersion: "3"
+        DefaultArguments:
+          --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
+          --enable-metrics: ""
+          --enable-continuous-cloudwatch-log: "true"
+          --enable-continuous-log-filter: "true"
+          --job-bookmark-option: "job-bookmark-enable"
+          --job-language: "python"
+          --enable-s3-parquet-optimized-committer: true
+          --db_name: !Ref DBName
+          --redshift_connection: !Ref GlueConnection
+          --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
+        Connections:
+          Connections:
+            - !Ref GlueConnection
+        MaxRetries: 0
+        #AllocatedCapacity: !Ref DPU
+        MaxCapacity: !Ref GlueDPU
+        Timeout: 2880
+        GlueVersion: "2.0"
+
+    GlueJobImportDemoDataToRedshift:
+      Type: "AWS::Glue::Job"
+      Properties:
+        Name: !Sub "import_demo_data_to_redshift-${AWS::Region}"
+        Role: !GetAtt IAMRole.Arn
+        ExecutionProperty:
+          MaxConcurrentRuns: 1
+        Command:
+          Name: "glueetl"
+          ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/import_demo_data_to_redshift.py"
+          PythonVersion: "3"
+        DefaultArguments:
+          --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
+          --enable-metrics: ""
+          --enable-continuous-cloudwatch-log: "true"
+          --enable-continuous-log-filter: "true"
+          --job-bookmark-option: "job-bookmark-enable"
+          --job-language: "python"
+          --db_name: !Ref DBName
+          --redshift_connection: !Ref GlueConnection
+          --cis_bucket: !Sub "${BusinessZoneS3Bucket}/cisdata"
+          --geo_bucket: !Sub "${BusinessZoneS3Bucket}/geodata"
+        Connections:
+          Connections:
+            - !Ref GlueConnection
+        MaxRetries: 0
+        Timeout: 2880
+        GlueVersion: "2.0"
+        #AllocatedCapacity: !Ref DPU
+        MaxCapacity: !Ref GlueDPU
+
+    GlueTrigger3:
+      Type: "AWS::Glue::Trigger"
+      Properties:
+        Name: !Sub "export-to-redshift-${AWS::Region}"
+        Type: "CONDITIONAL"
+        StartOnCreation: true
+        WorkflowName: !Ref GlueWorkFlowToExtend
+        Actions:
+          - JobName: !Ref GlueJob4BusinessDailyToRedshift
+        Predicate:
+          Conditions:
+            - LogicalOperator: "EQUALS"
+              CrawlerName: !Ref GlueCrwalerToTriggerAfter
+              CrawlState: "SUCCEEDED"
 
 Outputs:
   StackName:
@@ -162,12 +399,41 @@ Outputs:
   RedshiftSecret:
     Description: SecretManager secret reference
     Value: !Ref RedshiftSecret
+  ConsumptionApi:
+    Description: Prediction function.
+    Value: !Ref ConsumptionApi
+
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+
 
 Parameters:
-  MasterUsername:
+  QSS3BucketName:
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription: >-
+      Quick Start bucket name can include numbers, lowercase letters, uppercase
+      letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Default: aws-quickstart
+    Description: >-
+      S3 bucket name for the Quick Start assets.
+      Only change this value if you customize or extend the Quick Start for your own use.
+      This string can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: '^[0-9a-zA-Z-/]*[/]$'
+    ConstraintDescription: >-
+      Quick Start key prefix can include numbers, lowercase letters, uppercase
+      letters, hyphens (-), and forward slash (/) and must terminate in a forward slash.
+    Default: quickstart-aws-utility-meter-data-analytics-platform/
+    Type: String
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
+  AdminUsername:
     Type: String
 
-  MasterUserPassword:
+  AdminUserPassword:
     Type: String
     NoEcho: True
   
@@ -176,6 +442,10 @@ Parameters:
   
   Subnet2ID:
     Type: AWS::EC2::Subnet::Id
+
+  AvailabilityZone:
+    Type: AWS::EC2::AvailabilityZone::Name
+    Description: AWS Availability Zone for subnet 1.
   
   VPCID:
     Type: AWS::EC2::VPC::Id
@@ -198,3 +468,33 @@ Parameters:
   ClusterNodeCount:
     Type: Number
     Default: 2
+
+  RedshiftPort:
+    Type: Number
+    MinValue: 0
+    MaxValue: 65535
+    Default: 5439
+    Description: Port number that you use to connect to the Amazon Redshift cluster.
+
+  GlueWorkFlowToExtend:
+    Type: String
+
+  GlueCrwalerToTriggerAfter:
+    Type: String
+
+  GlueDPU:
+    Type: String
+    Description: No. of DPUs for Glue Job
+    Default: 10
+
+  GlueScriptsS3Bucket:
+    Type: String
+
+  GlueTempS3Bucket:
+    Type: String
+
+  BusinessZoneS3Bucket:
+    Type: String
+
+  TempWorkflowS3Bucket:
+    Type: String
