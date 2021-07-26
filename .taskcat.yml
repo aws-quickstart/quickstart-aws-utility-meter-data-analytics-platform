@@ -16,7 +16,7 @@ tests:
   full-test-all-regions:
     parameters:
       Adapter: mrasco
-      IncludeRedshift: True
+      IncludeRedshift: 'True'
       AdminUsername: awsuser
       AdminUserPassword: Override_1
       ClusterName: redshift-cluster-3
