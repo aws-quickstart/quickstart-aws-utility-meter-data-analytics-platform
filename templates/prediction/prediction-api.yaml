@@ -57,11 +57,6 @@ Parameters:
       0 = weather data won't be used
       1 = enable weather data use
     Type: Number
-  DBName:
-    ConstraintDescription: >-
-      Name of the glue data catalog database
-    Default: meter_data
-    Type: String
   ConfigTable:
     Type: String
 

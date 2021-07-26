@@ -33,6 +33,7 @@ Resources:
           AdminUserPassword: !Ref AdminUserPassword
           Subnet1ID: !Ref Subnet1ID
           Subnet2ID: !Ref Subnet2ID
+          AvailabilityZone: !Ref AvailabilityZone
           VPCID: !Ref VPCID
           RemoteAccessCIDR: !Ref RemoteAccessCIDR
           ClusterName: !Ref ClusterName
@@ -181,7 +182,6 @@ Resources:
           AthenaQueryBucket: !GetAtt MachineLearningPipelineStack.Outputs.AthenaQueryBucket
           WorkingBucket: !GetAtt MachineLearningPipelineStack.Outputs.WorkingBucket
           WithWeather: !Ref WithWeather
-          DBName: !Ref DBName
           ConfigTable: !GetAtt MachineLearningPipelineConfigStack.Outputs.MachineLearningPipelineConfigTable
 
     CopyDemoDataStack:

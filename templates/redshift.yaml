@@ -272,6 +272,7 @@ Resources:
             SubnetId: !Ref Subnet1ID
             SecurityGroupIdList:
               - !Ref RedshiftSecurityGroup
+            AvailabilityZone: !Ref AvailabilityZone
           ConnectionProperties:
             "JDBC_CONNECTION_URL": !Sub "jdbc:redshift://${RedshiftCluster.Endpoint.Address}:${RedshiftCluster.Endpoint.Port}/${DBName}"
             "JDBC_ENFORCE_SSL": "false"
@@ -441,6 +442,10 @@ Parameters:
   
   Subnet2ID:
     Type: AWS::EC2::Subnet::Id
+
+  AvailabilityZone:
+    Type: AWS::EC2::AvailabilityZone::Name
+    Description: AWS Availability Zone for subnet 1.
   
   VPCID:
     Type: AWS::EC2::VPC::Id
