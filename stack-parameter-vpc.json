@@ -42,5 +42,9 @@
   {
     "ParameterKey": "DeploySpecialAdapters",
     "ParameterValue": "mrasco"
+  },
+  {
+    "ParameterKey": "IncludeRedshift",
+    "ParameterValue": "True"
   }
 ]

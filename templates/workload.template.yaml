@@ -43,7 +43,6 @@ Resources:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
           DBName: !Ref DBName
-          GlueWorkFlowToExtend: !GetAtt GlueStack.Outputs.GlueWorkflow
           GlueCrwalerToTriggerAfter: !GetAtt GlueStack.Outputs.NameCrawlerBusinessDaily
           GlueDPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
           GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
@@ -72,7 +71,7 @@ Resources:
       Type: 'AWS::CloudFormation::Stack'
       Properties:
         TemplateURL: !Sub
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/glue.yaml'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/glue/glue.yaml'
           - S3Region:
               !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket:
@@ -89,6 +88,29 @@ Resources:
           CreateLandingZoneS3Bucket: !Ref CreateLandingZoneS3Bucket
           LandingZoneS3BucketName: !Ref LandingZoneS3BucketName
           DPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
+
+    GlueAggregationWflStack:
+      Type: 'AWS::CloudFormation::Stack'
+      Properties:
+        TemplateURL: !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/glue/glue-wfl-aggregation.yaml'
+          - S3Region:
+              !If [ UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion ]
+            S3Bucket:
+              !If [
+                  UsingDefaultBucket,
+                  !Sub '${QSS3BucketName}-${AWS::Region}',
+                  !Ref QSS3BucketName,
+              ]
+        Parameters:
+          GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
+          GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
+          DBName: !Ref DBName
+          DPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
+          TempWorkflowS3Bucket: !GetAtt GlueStack.Outputs.TempWorkflowS3Bucket
+          BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
+          GlueRoleArn: !GetAtt GlueStack.Outputs.GlueRoleArn
+          TriggerName: !GetAtt GlueStack.Outputs.NameCrawlerBusinessDaily
 
     AdapterStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -114,7 +136,7 @@ Resources:
       Type: 'AWS::CloudFormation::Stack'
       Properties:
         TemplateURL: !Sub
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/glue-tables.yaml'
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/glue/glue-tables.yaml'
           - S3Region:
               !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket:
@@ -158,7 +180,7 @@ Resources:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
           DBName: !Ref DBName
-          GlueJobNameTrigger: !GetAtt GlueStack.Outputs.JobNameTransformCleanToBusiness
+          GlueCrawlerNameTrigger: !GetAtt GlueStack.Outputs.NameCrawlerBusinessDaily
           WithWeather: !Ref WithWeather
           BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
           ConfigTable: !GetAtt MachineLearningPipelineConfigStack.Outputs.MachineLearningPipelineConfigTable

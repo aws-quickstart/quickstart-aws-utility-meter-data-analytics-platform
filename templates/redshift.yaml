@@ -259,6 +259,12 @@ Resources:
     # Glue Connection, Job, Trigger
     #
 
+    GlueWorkflow:
+      Type: AWS::Glue::Workflow
+      Properties:
+        Name: !Sub 'meter-data-redshift-pipeline-${AWS::Region}'
+        Description: Workflow for copieing meter reads to readshift
+
     GlueConnection:
       Type: "AWS::Glue::Connection"
       DependsOn:
@@ -354,20 +360,53 @@ Resources:
         #AllocatedCapacity: !Ref DPU
         MaxCapacity: !Ref GlueDPU
 
-    GlueTrigger3:
+    GlueReadshiftLoadTrigger:
       Type: "AWS::Glue::Trigger"
       Properties:
         Name: !Sub "export-to-redshift-${AWS::Region}"
-        Type: "CONDITIONAL"
-        StartOnCreation: true
-        WorkflowName: !Ref GlueWorkFlowToExtend
+        Type: "EVENT"
+        WorkflowName: !Ref GlueWorkflow
         Actions:
           - JobName: !Ref GlueJob4BusinessDailyToRedshift
-        Predicate:
-          Conditions:
-            - LogicalOperator: "EQUALS"
-              CrawlerName: !Ref GlueCrwalerToTriggerAfter
-              CrawlState: "SUCCEEDED"
+
+    InvokeGlueReadshiftWflRole:
+      Type: 'AWS::IAM::Role'
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: events.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: Glue-notify-events
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: 'glue:notifyEvent'
+                  Resource: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/*"
+
+    EventRule:
+      Type: AWS::Events::Rule
+      Properties:
+        Description: "EventRule"
+        EventPattern:
+          source:
+            - "aws.glue"
+          detail-type:
+            - "Glue Crawler State Change"
+          detail:
+            state:
+              - "Succeeded"
+            crawlerName:
+              - !Ref GlueCrwalerToTriggerAfter
+        State: "ENABLED"
+        Targets:
+          -  Arn: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/${GlueWorkflow}"
+             Id: !Ref GlueWorkflow
+             RoleArn: !GetAtt InvokeGlueReadshiftWflRole.Arn
 
 Outputs:
   StackName:
@@ -475,9 +514,6 @@ Parameters:
     MaxValue: 65535
     Default: 5439
     Description: Port number that you use to connect to the Amazon Redshift cluster.
-
-  GlueWorkFlowToExtend:
-    Type: String
 
   GlueCrwalerToTriggerAfter:
     Type: String
