@@ -45,10 +45,10 @@
   },
   {
     "ParameterKey": "IncludeRedshift",
-    "ParameterValue": "True"
+    "ParameterValue": "False"
   },
   {
     "ParameterKey": "IncludeEtlAggregationWfl",
-    "ParameterValue": "True"
+    "ParameterValue": "False"
   }
 ]
