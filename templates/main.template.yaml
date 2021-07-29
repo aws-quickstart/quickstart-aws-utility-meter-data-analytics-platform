@@ -30,6 +30,7 @@ Metadata:
           - LandingZoneS3BucketName
           - DeploySpecialAdapters
           - NoOfMeters
+          - IncludeEtlAggregationWfl
       - Label:
           default: 'AWS Quick Start configuration'
         Parameters:
@@ -39,6 +40,8 @@ Metadata:
     ParameterLabels:
       IncludeRedshift:
         default: Include Redshift cluster resources
+      IncludeEtlAggregationWfl:
+        default: Include ETL aggregation workflow
       AdminUsername:
         default: Admin user name
       AdminUserPassword:
@@ -111,6 +114,7 @@ Resources:
             - !Ref 'QSS3BucketRegion'
       Parameters:
         IncludeRedshift: !Ref IncludeRedshift
+        IncludeEtlAggregationWfl: !Ref IncludeEtlAggregationWfl
         AdminUsername: !Ref AdminUsername
         AdminUserPassword: !Ref AdminUserPassword
         ClusterName: !Ref ClusterName
@@ -276,6 +280,12 @@ Parameters:
       Enables or disables the use of weather data.
       0 = Weather data won't be used.
       1 = Enable use of weather data.
+
+  IncludeEtlAggregationWfl:
+    Type: String
+    Description: Whether the ETL aggregation workflow should be deployed
+    AllowedValues: [ 'True','False' ]
+    Default: 'True'
 
 Outputs:
   StackName:

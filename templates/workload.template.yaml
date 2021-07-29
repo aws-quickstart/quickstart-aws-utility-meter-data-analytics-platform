@@ -5,6 +5,7 @@ Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
   DeployAdapter: !Not [ !Equals [!Ref DeploySpecialAdapters, 'None'] ]
   ShouldCreateRedshiftConsumption: !Equals [ 'True', !Ref IncludeRedshift ]
+  ShouldCreateEtlAggregationWfl: !Equals [ 'True', !Ref IncludeEtlAggregationWfl ]
 Rules:
   LZS3BucketNameProvided:
     RuleCondition: !Equals [!Ref CreateLandingZoneS3Bucket, 'No']
@@ -91,6 +92,7 @@ Resources:
 
     GlueAggregationWflStack:
       Type: 'AWS::CloudFormation::Stack'
+      Condition: ShouldCreateEtlAggregationWfl
       Properties:
         TemplateURL: !Sub
           - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/glue/glue-wfl-aggregation.yaml'
@@ -414,6 +416,12 @@ Parameters:
     AllowedValues: ['True','False']
     Default: 'True'
 
+  IncludeEtlAggregationWfl:
+    Type: String
+    Description: Whether the ETL aggregation workflow should be deployed
+    AllowedValues: ['True','False']
+    Default: 'True'
+
 Metadata:
   QuickStartDocumentation:
     EntrypointName: "Parameters for deploying into an existing VPC"
@@ -444,6 +452,7 @@ Metadata:
           - LandingZoneS3BucketName
           - DeploySpecialAdapters
           - NoOfMeters
+          - IncludeEtlAggregationWfl
       - Label:
           default: 'AWS Quick Start configuration'
         Parameters:
@@ -453,6 +462,8 @@ Metadata:
     ParameterLabels:
       IncludeRedshift:
         default: Include Redshift cluster resources
+      IncludeEtlAggregationWfl:
+        default: Include ETL aggregation workflow
       AdminUsername:
         default: Admin user name
       AdminUserPassword:
