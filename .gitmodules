@@ -6,3 +6,6 @@
 	path = docs/boilerplate
 	url = https://github.com/aws-quickstart/quickstart-documentation-base-common.git
 	branch = main
+[submodule "submodules/quickstart-amazon-redshift"]
+	path = submodules/quickstart-amazon-redshift
+	url = https://github.com/aws-quickstart/quickstart-amazon-redshift.git
