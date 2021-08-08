@@ -13,7 +13,6 @@ Metadata:
           - AdminUserPassword
           - ClusterName
           - DBName
-          - RedshiftPort
       - Label:
           default: Network configuration
         Parameters:
@@ -48,8 +47,6 @@ Metadata:
         default: Admin user password
       ClusterName:
         default: Amazon Redshift cluster name
-      RedshiftPort:
-        default: Amazon Redshift port
       DBName:
         default: Amazon Redshift database name
       PrivateSubnet1ACIDR:
@@ -132,10 +129,6 @@ Resources:
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
         QSS3BucketRegion: !Ref QSS3BucketRegion
         DBName: !Ref DBName
-        RedshiftPort: !Ref RedshiftPort
-        AvailabilityZone: !Select
-        - '0'
-        - !Ref 'AvailabilityZones'
         NoOfMeters: !Ref NoOfMeters
         WithWeather: !Ref WithWeather
         DeploySpecialAdapters: !Ref DeploySpecialAdapters
@@ -210,16 +203,9 @@ Parameters:
   
   DBName:
     Type: String
-    Default: meter_data
+    Default: meterdata
     Description: Name of the Amazon Redshift database.
-  
-  RedshiftPort:
-    Type: Number
-    MinValue: 0
-    MaxValue: 65535
-    Default: 5439
-    Description: Port number that you use to connect to the Amazon Redshift cluster.
-  
+
   NoOfMeters:
     Type: String
     Description: Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."

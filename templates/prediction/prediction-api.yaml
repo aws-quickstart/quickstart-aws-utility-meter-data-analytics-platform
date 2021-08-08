@@ -60,7 +60,7 @@ Parameters:
   DBName:
     ConstraintDescription: >-
       Name of the glue data catalog database
-    Default: meter_data
+    Default: meterdata
     Type: String
   ConfigTable:
     Type: String

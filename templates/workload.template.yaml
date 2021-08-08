@@ -34,22 +34,21 @@ Resources:
           AdminUserPassword: !Ref AdminUserPassword
           Subnet1ID: !Ref Subnet1ID
           Subnet2ID: !Ref Subnet2ID
-          AvailabilityZone: !Ref AvailabilityZone
           VPCID: !Ref VPCID
           RemoteAccessCIDR: !Ref RemoteAccessCIDR
           ClusterName: !Ref ClusterName
-          RedshiftPort: !Ref RedshiftPort
           ClusterNodeType: !FindInMap [MeterCountMap, !Ref "NoOfMeters", RedshiftNodeType]
           ClusterNodeCount: !FindInMap [MeterCountMap, !Ref "NoOfMeters", RedshiftNumberOfNodes]
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
-          DBName: !Ref DBName
           GlueCrwalerToTriggerAfter: !GetAtt GlueStack.Outputs.NameCrawlerBusinessDaily
           GlueDPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
           GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
           GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
           BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
           TempWorkflowS3Bucket: !GetAtt GlueStack.Outputs.TempWorkflowS3Bucket
+          QSS3BucketRegion: !Ref QSS3BucketRegion
+          DbName: !Ref DBName
 
     CopyScriptsStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -207,6 +206,7 @@ Resources:
           WorkingBucket: !GetAtt MachineLearningPipelineStack.Outputs.WorkingBucket
           WithWeather: !Ref WithWeather
           ConfigTable: !GetAtt MachineLearningPipelineConfigStack.Outputs.MachineLearningPipelineConfigTable
+          DBName: !Ref DBName
 
     CopyDemoDataStack:
       Type: 'AWS::CloudFormation::Stack'
@@ -367,20 +367,9 @@ Parameters:
   
   DBName:
     Type: String
-    Default: meter_data
+    Default: meterdata
     Description: Name of the Amazon Redshift database.
 
-  RedshiftPort:
-    Type: Number
-    MinValue: 0
-    MaxValue: 65535
-    Default: 5439
-    Description: Port number that you use to connect to the Amazon Redshift cluster.
-  
-  AvailabilityZone:
-    Type: AWS::EC2::AvailabilityZone::Name
-    Description: AWS Availability Zone for subnet 1.
-  
   NoOfMeters:
     Type: String
     Description: Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."
@@ -435,11 +424,9 @@ Metadata:
           - AdminUserPassword
           - ClusterName
           - DBName
-          - RedshiftPort
       - Label:
           default: Network configuration
         Parameters:
-          - AvailabilityZone
           - VPCID
           - Subnet1ID
           - Subnet2ID
@@ -470,8 +457,6 @@ Metadata:
         default: Admin user password
       ClusterName:
         default: Amazon Redshift cluster name
-      RedshiftPort:
-        default: Amazon Redshift port
       DBName:
         default: Amazon Redshift database name
       Subnet1ID:
@@ -482,8 +467,6 @@ Metadata:
         default: VPC ID
       RemoteAccessCIDR:
         default: Remote access CIDR block
-      AvailabilityZone:
-        default: Availability Zones
       QSS3BucketName:
         default: Quick Start S3 bucket name
       QSS3KeyPrefix:

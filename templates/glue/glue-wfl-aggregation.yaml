@@ -240,7 +240,7 @@ Resources:
 Parameters:
   DBName:
     Type: String
-    Default: meter_data
+    Default: meterdata
   DPU:
     Type: String
     Description: No. of DPUs for Glue Job

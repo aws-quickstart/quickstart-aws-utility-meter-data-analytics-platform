@@ -309,7 +309,7 @@ Parameters:
 
   DBName:
     Type: String
-    Default: meter_data
+    Default: meterdata
 
   GlueScriptsS3Bucket:
     Type: String
