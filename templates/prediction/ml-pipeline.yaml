@@ -266,12 +266,12 @@ Resources:
               source:
                 - "aws.glue"
               detail-type:
-                - "Glue Job State Change"
+                - "Glue Crawler State Change"
               detail:
                 state:
-                  - "SUCCEEDED"
-                jobName: 
-                  - !Ref GlueJobNameTrigger
+                  - "Succeeded"
+                crawlerName:
+                  - !Ref GlueCrawlerNameTrigger
       Layers:
         - !Ref DependencyLayer
 
@@ -583,9 +583,9 @@ Parameters:
   DBName:
     ConstraintDescription: >-
       Name of the glue data catalog database
-    Default: meter_data
+    Default: meterdata
     Type: String
-  GlueJobNameTrigger:
+  GlueCrawlerNameTrigger:
     Type: String
   BusinessZoneS3Bucket:
     Type: String

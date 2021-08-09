@@ -42,5 +42,13 @@
   {
     "ParameterKey": "DeploySpecialAdapters",
     "ParameterValue": "mrasco"
+  },
+  {
+    "ParameterKey": "IncludeRedshift",
+    "ParameterValue": "True"
+  },
+  {
+    "ParameterKey": "IncludeEtlAggregationWfl",
+    "ParameterValue": "False"
   }
 ]

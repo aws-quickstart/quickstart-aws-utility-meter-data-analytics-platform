@@ -1,0 +1,259 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Aggregation workflow (qs-1r18anahd)"
+
+Resources:
+  GlueWorkflow:
+    Type: AWS::Glue::Workflow
+    Properties:
+      Name: !Sub 'meter-data-aggregation-pipeline-${AWS::Region}'
+      Description: Workflow for aggregating meter reads
+
+  LogsLogGroup:
+    Type: "AWS::Logs::LogGroup"
+
+  GlueCrawler:
+    Type: "AWS::Glue::Crawler"
+    Properties:
+      Name: "meter-data-business-aggregated-daily"
+      Role: !Ref GlueRoleArn
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${BusinessZoneS3Bucket}/aggregated/daily"
+      DatabaseName: !Ref DBName
+      SchemaChangePolicy:
+        UpdateBehavior: "UPDATE_IN_DATABASE"
+        DeleteBehavior: "DEPRECATE_IN_DATABASE"
+      TablePrefix: "aggregated_"
+
+  GlueCrawler2:
+    Type: "AWS::Glue::Crawler"
+    Properties:
+      Name: "meter-data-business-aggregated-monthly"
+      Role: !Ref GlueRoleArn
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${BusinessZoneS3Bucket}/aggregated/monthly"
+      DatabaseName: !Ref DBName
+      SchemaChangePolicy:
+        UpdateBehavior: "UPDATE_IN_DATABASE"
+        DeleteBehavior: "DEPRECATE_IN_DATABASE"
+      TablePrefix: "aggregated_"
+
+  GlueCrawler3:
+    Type: "AWS::Glue::Crawler"
+    Properties:
+      Name: "meter-data-business-aggregated-weekly"
+      Role: !Ref GlueRoleArn
+      Targets:
+        S3Targets:
+          - Path: !Sub "s3://${BusinessZoneS3Bucket}/aggregated/weekly"
+      DatabaseName: !Ref DBName
+      SchemaChangePolicy:
+        UpdateBehavior: "UPDATE_IN_DATABASE"
+        DeleteBehavior: "DEPRECATE_IN_DATABASE"
+      TablePrefix: "aggregated_"
+
+  #
+  # Glue Jobs
+  #
+  GlueJob1AggDaily:
+    Type: "AWS::Glue::Job"
+    Properties:
+      Name: !Sub "business_aggregate_daily-${AWS::Region}"
+      Role: !Ref GlueRoleArn
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: "glueetl"
+        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_aggregate_daily.py"
+        PythonVersion: "3"
+      DefaultArguments:
+        --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
+        --enable-metrics: ""
+        --enable-continuous-cloudwatch-log: "true"
+        --enable-continuous-log-filter: "true"
+        --job-language: "python"
+        --enable-s3-parquet-optimized-committer : true
+        --db_name: !Ref DBName
+        --business_zone_bucket: !Ref BusinessZoneS3Bucket
+        --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
+      MaxRetries: 0
+      #AllocatedCapacity: 5
+      Timeout: 2880
+      GlueVersion: "2.0"
+      MaxCapacity: !Ref DPU
+
+  GlueJob2AggMonthly:
+    Type: "AWS::Glue::Job"
+    Properties:
+      Name: !Sub "business_aggregate_monthly-${AWS::Region}"
+      Role: !Ref GlueRoleArn
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: "glueetl"
+        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_aggregate_monthly.py"
+        PythonVersion: "3"
+      DefaultArguments:
+        --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
+        --enable-metrics: ""
+        --enable-continuous-cloudwatch-log: "true"
+        --enable-continuous-log-filter: "true"
+        --job-language: "python"
+        --enable-s3-parquet-optimized-committer : true
+        --db_name: !Ref DBName
+        --business_zone_bucket: !Ref BusinessZoneS3Bucket
+        --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
+      MaxRetries: 0
+      #AllocatedCapacity: 5
+      Timeout: 2880
+      GlueVersion: "2.0"
+      MaxCapacity: !Ref DPU
+
+  GlueJob3AggWeekly:
+    Type: "AWS::Glue::Job"
+    Properties:
+      Name: !Sub "business_aggregate_weekly-${AWS::Region}"
+      Role: !Ref GlueRoleArn
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: "glueetl"
+        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_aggregate_weekly.py"
+        PythonVersion: "3"
+      DefaultArguments:
+        --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
+        --enable-metrics: ""
+        --enable-continuous-cloudwatch-log: "true"
+        --enable-continuous-log-filter: "true"
+        --job-language: "python"
+        --db_name: !Ref DBName
+        --enable-s3-parquet-optimized-committer : true
+        --business_zone_bucket: !Ref BusinessZoneS3Bucket
+        --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
+      MaxRetries: 0
+      #AllocatedCapacity: 5
+      Timeout: 2880
+      GlueVersion: "2.0"
+      MaxCapacity: !Ref DPU
+
+  #
+  # Workflow
+  #
+  InvokeGlueWflRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: Glue-notify-events
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 'glue:notifyEvent'
+                Resource: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/*"
+
+  EventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "EventRule"
+      EventPattern:
+        source:
+          - "aws.glue"
+        detail-type:
+          - "Glue Crawler State Change"
+        detail:
+          state:
+            - "Succeeded"
+          crawlerName:
+            - !Ref TriggerName
+      State: "ENABLED"
+      Targets:
+        -  Arn: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/${GlueWorkflow}"
+           Id: !Ref GlueWorkflow
+           RoleArn: !GetAtt InvokeGlueWflRole.Arn
+
+  EventBridgeTrigger:
+    Type: "AWS::Glue::Trigger"
+    Properties:
+      Name: "trigger-daily-aggregate"
+      Type: "EVENT"
+      StartOnCreation: false
+      WorkflowName: !Ref GlueWorkflow
+      Actions:
+        - JobName: !Ref GlueJob1AggDaily
+        - JobName: !Ref GlueJob2AggMonthly
+        - JobName: !Ref GlueJob3AggWeekly
+
+
+  CrawlDailyAggTrigger:
+    Type: "AWS::Glue::Trigger"
+    Properties:
+      Name: "trigger-daily-agg-crawler"
+      Type: "CONDITIONAL"
+      StartOnCreation: true
+      WorkflowName: !Ref GlueWorkflow
+      Actions:
+        - CrawlerName: !Ref GlueCrawler
+      Predicate:
+        Conditions:
+          - LogicalOperator: "EQUALS"
+            JobName: !Ref GlueJob1AggDaily
+            State: "SUCCEEDED"
+
+  CrawlMonthlyAggTrigger:
+    Type: "AWS::Glue::Trigger"
+    Properties:
+      Name: "trigger-monthly-agg-crawler"
+      Type: "CONDITIONAL"
+      StartOnCreation: true
+      WorkflowName: !Ref GlueWorkflow
+      Actions:
+        - CrawlerName: !Ref GlueCrawler2
+      Predicate:
+        Conditions:
+          - LogicalOperator: "EQUALS"
+            JobName: !Ref GlueJob2AggMonthly
+            State: "SUCCEEDED"
+
+  CrawlWeeklyAggTrigger:
+    Type: "AWS::Glue::Trigger"
+    Properties:
+      Name: "trigger-weekly-agg-crawler"
+      Type: "CONDITIONAL"
+      StartOnCreation: true
+      WorkflowName: !Ref GlueWorkflow
+      Actions:
+        - CrawlerName: !Ref GlueCrawler3
+      Predicate:
+        Conditions:
+          - LogicalOperator: "EQUALS"
+            JobName: !Ref GlueJob3AggWeekly
+            State: "SUCCEEDED"
+
+Parameters:
+  DBName:
+    Type: String
+    Default: meterdata
+  DPU:
+    Type: String
+    Description: No. of DPUs for Glue Job
+    Default: 10
+  TempWorkflowS3Bucket:
+    Type: String
+  BusinessZoneS3Bucket:
+    Type: String
+  GlueRoleArn:
+    Type: String
+  TriggerName:
+    Type: String
+  GlueScriptsS3Bucket:
+    Type: String
+  GlueTempS3Bucket:
+    Type: String
