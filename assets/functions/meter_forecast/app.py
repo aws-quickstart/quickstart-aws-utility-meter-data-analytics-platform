@@ -108,6 +108,13 @@ def lambda_handler(event, context):
     result = pd.read_sql(query, connection)
     result = result.set_index('datetime')
 
+    if result.empty:
+        # if data frame is empty, return empty object.
+        return {
+            "statusCode": 200,
+            "body": '{"consumption":{}}'
+        }
+
     data_kw = result.resample('1H').sum()
     timeseries = data_kw.iloc[:, 0]  # np.trim_zeros(data_kw.iloc[:,0], trim='f')
 
