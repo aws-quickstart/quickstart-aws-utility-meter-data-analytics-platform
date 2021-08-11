@@ -117,7 +117,7 @@ Resources:
             Statement:
               - Effect: Allow
                 Action: 'sagemaker:InvokeEndpoint'
-                Resource: !Sub 'arn:${AWS::Partition}:sagemaker:::*'
+                Resource: !Sub 'arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS:AccountId}:endpoint/*'
 
   AnomalyPredictionApi:
     Type: 'AWS::Serverless::Function'
