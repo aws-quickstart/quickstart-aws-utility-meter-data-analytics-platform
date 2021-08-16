@@ -1,10 +1,18 @@
 '''
 Testing event
 {
-  "Data_start": "2013-06-01",
-  "Data_end": "2014-01-01",
-  "Meter_id": "MAC004534",
-  "ML_endpoint_name": "ml-endpoint-0001"
+  "version": "2.0",
+  "routeKey": "GET /forecast/{meter_id}",
+  "rawPath": "/forecast/MAC000002",
+  "rawQueryString": "data_start=2013-05-01&data_end=2013-10-01",
+  "queryStringParameters": {
+    "data_end": "2013-10-01",
+    "data_start": "2013-05-01"
+  },
+  "pathParameters": {
+    "meter_id": "MAC000002"
+  },
+  "isBase64Encoded": false
 }
 '''
 
