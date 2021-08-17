@@ -872,8 +872,8 @@ p.footer-text a{color:#d7d8d8}
 <li><a href="#_customer_responsibility">Customer responsibility</a></li>
 <li><a href="#_parameter_reference">Parameter reference</a>
 <ul class="sectlevel2">
-<li><a href="#_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</a></li>
 <li><a href="#_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</a></li>
+<li><a href="#_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</a></li>
 </ul>
 </li>
 <li><a href="#_send_us_feedback">Send us feedback</a></li>
@@ -1180,35 +1180,10 @@ deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 <div class="sect3">
 <h4 id="_supported_aws_regions">Supported AWS Regions</h4>
 <div class="paragraph">
-<p>This Quick Start supports the following Regions:</p>
+<p>For any Quick Start to work in a Region other than its default Region, all the services it deploys must be supported in that Region. You can launch a Quick Start in any Region and see if it works. If you get an error such as “Unrecognized resource type,” the Quick Start is not supported in that Region.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>us-east-1, US East (N. Virginia)</p>
-</li>
-<li>
-<p>us-east-2, US East (Ohio)</p>
-</li>
-<li>
-<p>us-west-2, US West (Oregon)</p>
-</li>
-<li>
-<p>eu-central-1, Europe (Frankfurt)</p>
-</li>
-<li>
-<p>eu-west-1, Europe (Ireland)</p>
-</li>
-<li>
-<p>eu-west-2, Europe (London)</p>
-</li>
-<li>
-<p>ca-central-1, Canada (Central)</p>
-</li>
-<li>
-<p>ap-south-1, Asia Pacific (Mumbai)</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>For an up-to-date list of AWS Regions and the AWS services they support, see <a href="https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/" target="_blank" rel="noopener">AWS Regional Services</a>.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -2500,9 +2475,189 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 </table>
 </div>
 <div class="sect2">
-<h3 id="_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</h3>
+<h3 id="_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</h3>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 10. Amazon Redshift cluster configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Include Redshift cluster resources
+(<code>IncludeRedshift</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>True</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether Amazon Redshift consumption hub should be deployed</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Admin user name
+(<code>AdminUsername</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Root user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Admin user password
+(<code>AdminUserPassword</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Root user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift cluster name
+(<code>ClusterName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>redshift-cluster-1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift database name
+(<code>DBName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meterdata</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the Amazon Redshift database.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 11. Network configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPC ID
+(<code>VPCID</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPC ID to create the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 1 ID
+(<code>Subnet1ID</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 1 ID to create the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 2 ID
+(<code>Subnet2ID</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 2 ID to create the Amazon Redshift cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Remote access CIDR block
+(<code>RemoteAccessCIDR</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0.0.0/0</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block from which access to the Amazon Redshift cluster is allowed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 12. Glue configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transformer that reads the landing-zone data
+(<code>LandingzoneTransformer</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>london</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create landing-zone bucket
+(<code>CreateLandingZoneS3Bucket</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Yes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (LandingZoneS3BucketName).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Landing-zone S3 bucket
+(<code>LandingZoneS3BucketName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Blank string</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Special data adapters for metering convensions
+(<code>DeploySpecialAdapters</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>None</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines if special adapters are needed for raw data. This will deploy a S3 trigger that invokes a Lambda to transform files added in additional folder named after adapter
+ in landing zone bucket.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of meters
+(<code>NoOfMeters</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1-50K</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Include ETL aggregation workflow
+(<code>IncludeEtlAggregationWfl</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>True</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether the ETL aggregation workflow should be deployed</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 13. AWS Quick Start configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket name
+(<code>QSS3BucketName</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>aws-quickstart</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket that you created for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This bucket name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 key prefix
+(<code>QSS3KeyPrefix</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quickstart-aws-utility-meter-data-analytics-platform/</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3 key prefix that is used to simulate a directory for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html" class="bare">https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket Region
+(<code>QSS3BucketRegion</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>us-east-1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</h3>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 14. Amazon Redshift cluster configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -2543,19 +2698,13 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift database name
 (<code>DBName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meter_data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meterdata</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Name of the Amazon Redshift database.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift port
-(<code>RedshiftPort</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>5439</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Port number that you use to connect to the Amazon Redshift cluster.</p></td>
 </tr>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. Network configuration</caption>
+<caption class="title">Table 15. Network configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -2602,7 +2751,7 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. AWS Glue configuration</caption>
+<caption class="title">Table 16. AWS Glue configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -2647,191 +2796,11 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1-50K</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."</p></td>
 </tr>
-</tbody>
-</table>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. AWS Quick Start configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
 <tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket name
-(<code>QSS3BucketName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>aws-quickstart</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 bucket that you created for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This bucket name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 key prefix
-(<code>QSS3KeyPrefix</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>quickstart-aws-utility-meter-data-analytics-platform/</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">S3 key prefix that is used to simulate a directory for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html" class="bare">https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html</a>.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Quick Start S3 bucket Region
-(<code>QSS3BucketRegion</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>us-east-1</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</h3>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 14. Amazon Redshift cluster configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Include Redshift cluster resources
-(<code>IncludeRedshift</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Include ETL aggregation workflow
+(<code>IncludeEtlAggregationWfl</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>True</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Whether Amazon Redshift consumption hub should be deployed</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Admin user name
-(<code>AdminUsername</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Root user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Admin user password
-(<code>AdminUserPassword</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Root user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift cluster name
-(<code>ClusterName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>redshift-cluster-1</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the Amazon Redshift cluster.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift database name
-(<code>DBName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>meter_data</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the Amazon Redshift database.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Amazon Redshift port
-(<code>RedshiftPort</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>5439</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Port number that you use to connect to the Amazon Redshift cluster.</p></td>
-</tr>
-</tbody>
-</table>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 15. Network configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Availability Zones
-(<code>AvailabilityZone</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Availability Zone for subnet 1.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPC ID
-(<code>VPCID</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VPC ID to create the Amazon Redshift cluster.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 1 ID
-(<code>Subnet1ID</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 1 ID to create the Amazon Redshift cluster.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 2 ID
-(<code>Subnet2ID</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Subnet 2 ID to create the Amazon Redshift cluster.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Remote access CIDR block
-(<code>RemoteAccessCIDR</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.0.0.0/0</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CIDR block from which access to the Amazon Redshift cluster is allowed.</p></td>
-</tr>
-</tbody>
-</table>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 16. Glue configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Transformer that reads the landing-zone data
-(<code>LandingzoneTransformer</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>london</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Create landing-zone bucket
-(<code>CreateLandingZoneS3Bucket</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Yes</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (LandingZoneS3BucketName).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Landing-zone S3 bucket
-(<code>LandingZoneS3BucketName</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Blank string</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Special data adapters for metering convensions
-(<code>DeploySpecialAdapters</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>None</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Defines if special adapters are needed for raw data. This will deploy a S3 trigger that invokes a Lambda to transform files added in additional folder named after adapter
- in landing zone bucket.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number of meters
-(<code>NoOfMeters</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1-50K</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether the ETL aggregation workflow should be deployed</p></td>
 </tr>
 </tbody>
 </table>
@@ -2921,9 +2890,10 @@ and to share your customizations with others.</p>
 </html>
 <!--
 repo commit:
-5de76cd7c11bdb8ae7e9497ccbef3019238a4c01
+718076da7a765100cd48f198cb0b135651feaefc
 
 submodule config:
- 6f77ca5b064a055ec8269614e4daf68406eacdca docs/boilerplate (heads/main)
+ 4ee94d6b60ec455e5b452e8ad9841eb825704b70 docs/boilerplate (heads/main)
+ 8ad074c57bcbf134ac573ba238a3c3d242ffb66d submodules/quickstart-amazon-redshift (v.01-99-g8ad074c)
  ffc7af4e59a09dbf52199a3ecf70f3805abeff48 submodules/quickstart-aws-vpc (v1.0-58-gffc7af4)
 -->

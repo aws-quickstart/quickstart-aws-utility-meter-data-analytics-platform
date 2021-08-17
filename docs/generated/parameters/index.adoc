@@ -1,6 +1,6 @@
 
-=== Parameters for deploying into a new VPC
-include::main.template.adoc[]
-
 === Parameters for deploying into an existing VPC
 include::workload.template.adoc[]
+
+=== Parameters for deploying into a new VPC
+include::main.template.adoc[]

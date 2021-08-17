@@ -57,6 +57,11 @@ Parameters:
       0 = weather data won't be used
       1 = enable weather data use
     Type: Number
+  DBName:
+    ConstraintDescription: >-
+      Name of the glue data catalog database
+    Default: meterdata
+    Type: String
   ConfigTable:
     Type: String
 
@@ -67,6 +72,7 @@ Globals:
       Variables:
         Athena_bucket: !Ref AthenaQueryBucket
         With_weather_data: !Ref WithWeather
+        Db_schema: !Ref DBName
         config_table: !Ref ConfigTable
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
@@ -111,7 +117,7 @@ Resources:
             Statement:
               - Effect: Allow
                 Action: 'sagemaker:InvokeEndpoint'
-                Resource: !Sub 'arn:${AWS::Partition}:sagemaker:::*'
+                Resource: !Sub 'arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:endpoint/*'
 
   AnomalyPredictionApi:
     Type: 'AWS::Serverless::Function'
