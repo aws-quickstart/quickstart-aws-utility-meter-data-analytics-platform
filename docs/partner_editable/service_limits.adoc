@@ -18,7 +18,7 @@
 
 // Additional resources for adapter
 
-Deploying data adapter would also add to the above resources
+Deploying the MRASCO data adapter adds the following resources:
 
 |===
 |Resource |Additional adapter resources
