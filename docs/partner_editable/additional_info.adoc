@@ -50,8 +50,8 @@ WARNING: Make sure that your landing-zone S3 bucket contains only meter-data fil
 === (Optional) Prepare weather data for use in training and forecasting
 
 . https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv[Download^] the sample weather dataset.
-. Upload the dataset to a new S3 bucket (the bucket can have any name and needs to be referenced in the following SQL statement).
-. Create a weather table in the target AWS Glue database using the following SQL statement. Replace <weather-data-location> with the location where you upload the weather dataset.
+. Upload the dataset to a new S3 bucket. The bucket can have any name. You must reference the bucket in the following SQL statement.
+. Create a weather table in the target AWS Glue database using the following SQL statement. Replace <weather-data-location> with the location of the S3 bucket where you upload the weather dataset.
 +
 [#create_weather_table]
 .Creating the weather table
