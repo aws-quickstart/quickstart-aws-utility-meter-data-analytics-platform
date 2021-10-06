@@ -273,14 +273,14 @@ Outputs:
 Parameters:
   RedshiftUsername:
     Type: String
-    Description: Redshift user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
+    Description: Amazon Redshift user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
     MinLength: '1'
     MaxLength: '128'
     AllowedPattern : '([a-z])([a-z]|[0-9]|[_+.@-])*'
 
   RedshiftUserPassword:
     Type: String
-    Description: Redshift user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
+    Description: Amazon Redshift user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
     NoEcho: True
     MinLength: '8'
     MaxLength: '64'
@@ -429,9 +429,9 @@ Metadata:
           - QSS3BucketRegion
     ParameterLabels:
       RedshiftUsername:
-        default: Redshift user name
+        default: Amazon Redshift user name
       RedshiftUserPassword:
-        default: Redshift user password
+        default: Amazon Redshift user password
       ClusterName:
         default: Amazon Redshift cluster name
       RedshiftPort:
@@ -467,4 +467,4 @@ Metadata:
       WithWeather:
         default: Weather data availability
       DeploySpecialAdapters:
-        default: Special data adapters for metering convensions
+        default: Special data adapters for metering conversions
