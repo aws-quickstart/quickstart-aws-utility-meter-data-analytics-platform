@@ -3,13 +3,13 @@ Description: "Creates glue S3 buckets and upload scripts to it. (qs-1r18anahd)"
 Resources:
     GlueScriptsS3Bucket:
         Type: "AWS::S3::Bucket"
-        Properties:
-          BucketName: !Sub 'aws-glue-scripts-${AWS::AccountId}-${AWS::Region}'
+        # Properties:
+          # BucketName: !Sub 'aws-glue-scripts-${AWS::AccountId}-${AWS::Region}'
 
     GlueTempS3Bucket:
         Type: "AWS::S3::Bucket"
-        Properties:
-          BucketName: !Sub 'aws-glue-temporary-${AWS::AccountId}-${AWS::Region}'
+        # Properties:
+          # BucketName: !Sub 'aws-glue-temporary-${AWS::AccountId}-${AWS::Region}'
 
     CopyArtifacts:
       Type: Custom::CopyArtifacts

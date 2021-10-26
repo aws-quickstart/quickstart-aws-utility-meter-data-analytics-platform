@@ -397,7 +397,7 @@ Resources:
   ForecastCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
-      Name: !Sub "meter-data-forecast-crawler-${AWS::Region}"
+      # Name: !Sub "meter-data-forecast-crawler-${AWS::Region}"
       Role: !Sub "service-role/${CrawlerRole}"
       Targets:
         S3Targets:
@@ -410,7 +410,7 @@ Resources:
   AnomalyCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
-      Name: !Sub "meter-data-anomaly-crawler-${AWS::Region}"
+      # Name: !Sub "meter-data-anomaly-crawler-${AWS::Region}"
       Role: !Sub "service-role/${CrawlerRole}"
       Targets:
         S3Targets:
