@@ -9,3 +9,6 @@
 [submodule "submodules/quickstart-amazon-redshift"]
 	path = submodules/quickstart-amazon-redshift
 	url = https://github.com/aws-quickstart/quickstart-amazon-redshift.git
+[submodule "submodules/quickstart-amazon-aurora-postgresql"]
+	path = submodules/quickstart-amazon-aurora-postgresql
+	url = https://github.com/aws-quickstart/quickstart-amazon-aurora-postgresql
