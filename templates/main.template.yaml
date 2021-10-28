@@ -132,6 +132,7 @@ Resources:
         NoOfMeters: !Ref NoOfMeters
         WithWeather: !Ref WithWeather
         DeploySpecialAdapters: !Ref DeploySpecialAdapters
+        NotebookSession: !Ref NotebookSession
 
 Conditions:
   UsingDefaultBucket: !Equals
@@ -272,6 +273,11 @@ Parameters:
     Description: Whether the ETL aggregation workflow should be deployed
     AllowedValues: [ 'True','False' ]
     Default: 'True'
+
+  NotebookSession:
+    Type: String
+    Description: Name for Sagemaker Notebook
+    Default: "meter-data-demo"
 
 Outputs:
   StackName:

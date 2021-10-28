@@ -5,7 +5,7 @@ Resources:
   GlueWorkflow:
     Type: AWS::Glue::Workflow
     Properties:
-      Name: !Sub 'meter-data-aggregation-pipeline-${AWS::Region}'
+      # Name: !Sub 'meter-data-aggregation-pipeline-${AWS::Region}'
       Description: Workflow for aggregating meter reads
 
   LogsLogGroup:
@@ -14,7 +14,7 @@ Resources:
   GlueCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
-      Name: "meter-data-business-aggregated-daily"
+      # Name: "meter-data-business-aggregated-daily"
       Role: !Ref GlueRoleArn
       Targets:
         S3Targets:
@@ -28,7 +28,7 @@ Resources:
   GlueCrawler2:
     Type: "AWS::Glue::Crawler"
     Properties:
-      Name: "meter-data-business-aggregated-monthly"
+      # Name: "meter-data-business-aggregated-monthly"
       Role: !Ref GlueRoleArn
       Targets:
         S3Targets:
@@ -42,7 +42,7 @@ Resources:
   GlueCrawler3:
     Type: "AWS::Glue::Crawler"
     Properties:
-      Name: "meter-data-business-aggregated-weekly"
+      # Name: "meter-data-business-aggregated-weekly"
       Role: !Ref GlueRoleArn
       Targets:
         S3Targets:
@@ -59,7 +59,7 @@ Resources:
   GlueJob1AggDaily:
     Type: "AWS::Glue::Job"
     Properties:
-      Name: !Sub "business_aggregate_daily-${AWS::Region}"
+      # Name: !Sub "business_aggregate_daily-${AWS::Region}"
       Role: !Ref GlueRoleArn
       ExecutionProperty:
         MaxConcurrentRuns: 1
@@ -86,7 +86,7 @@ Resources:
   GlueJob2AggMonthly:
     Type: "AWS::Glue::Job"
     Properties:
-      Name: !Sub "business_aggregate_monthly-${AWS::Region}"
+      # Name: !Sub "business_aggregate_monthly-${AWS::Region}"
       Role: !Ref GlueRoleArn
       ExecutionProperty:
         MaxConcurrentRuns: 1
@@ -113,7 +113,7 @@ Resources:
   GlueJob3AggWeekly:
     Type: "AWS::Glue::Job"
     Properties:
-      Name: !Sub "business_aggregate_weekly-${AWS::Region}"
+      # Name: !Sub "business_aggregate_weekly-${AWS::Region}"
       Role: !Ref GlueRoleArn
       ExecutionProperty:
         MaxConcurrentRuns: 1
@@ -182,7 +182,7 @@ Resources:
   EventBridgeTrigger:
     Type: "AWS::Glue::Trigger"
     Properties:
-      Name: "trigger-daily-aggregate"
+      # Name: "trigger-daily-aggregate"
       Type: "EVENT"
       StartOnCreation: false
       WorkflowName: !Ref GlueWorkflow
@@ -195,7 +195,7 @@ Resources:
   CrawlDailyAggTrigger:
     Type: "AWS::Glue::Trigger"
     Properties:
-      Name: "trigger-daily-agg-crawler"
+      # Name: "trigger-daily-agg-crawler"
       Type: "CONDITIONAL"
       StartOnCreation: true
       WorkflowName: !Ref GlueWorkflow
@@ -210,7 +210,7 @@ Resources:
   CrawlMonthlyAggTrigger:
     Type: "AWS::Glue::Trigger"
     Properties:
-      Name: "trigger-monthly-agg-crawler"
+      # Name: "trigger-monthly-agg-crawler"
       Type: "CONDITIONAL"
       StartOnCreation: true
       WorkflowName: !Ref GlueWorkflow
@@ -225,7 +225,7 @@ Resources:
   CrawlWeeklyAggTrigger:
     Type: "AWS::Glue::Trigger"
     Properties:
-      Name: "trigger-weekly-agg-crawler"
+      # Name: "trigger-weekly-agg-crawler"
       Type: "CONDITIONAL"
       StartOnCreation: true
       WorkflowName: !Ref GlueWorkflow

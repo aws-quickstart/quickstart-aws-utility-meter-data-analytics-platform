@@ -242,6 +242,7 @@ Resources:
         Parameters:
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
+          Session: !Ref NotebookSession
 
 
 
@@ -364,7 +365,7 @@ Parameters:
     Type: String
     Default: us-east-1
     Description: AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
-  
+
   DBName:
     Type: String
     Default: meterdata
@@ -410,6 +411,11 @@ Parameters:
     Description: Whether the ETL aggregation workflow should be deployed
     AllowedValues: ['True','False']
     Default: 'True'
+  
+  NotebookSession:
+    Type: String
+    Description: Name for Sagemaker Notebook
+    Default: "meter-data-demo"
 
 Metadata:
   QuickStartDocumentation:
@@ -440,6 +446,7 @@ Metadata:
           - DeploySpecialAdapters
           - NoOfMeters
           - IncludeEtlAggregationWfl
+          - Session
       - Label:
           default: 'AWS Quick Start configuration'
         Parameters:
@@ -485,3 +492,5 @@ Metadata:
         default: Weather data availability
       DeploySpecialAdapters:
         default: Special data adapters for metering convensions
+      Session:
+        default: Sagemaker notebook name

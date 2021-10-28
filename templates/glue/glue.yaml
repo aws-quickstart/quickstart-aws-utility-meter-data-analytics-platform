@@ -13,7 +13,7 @@ Resources:
   GlueWorkflow:
     Type: AWS::Glue::Workflow
     Properties:
-      Name: !Sub 'meter-data-pipeline-${AWS::Region}'
+      # Name: !Sub 'meter-data-pipeline-${AWS::Region}'
       Description: Workflow for manufactured meter data analytics
 
   LogsLogGroup:
@@ -22,7 +22,7 @@ Resources:
   GlueCrawler4BusinessDailyCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
-      Name: !Sub 'meter-data-business-daily-crawler-${AWS::Region}'
+      # Name: !Sub 'meter-data-business-daily-crawler-${AWS::Region}'
       Role: !Sub "service-role/${IAMRole}"
       Targets:
         S3Targets:
@@ -35,7 +35,7 @@ Resources:
   GlueCrawler5CleanCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
-      Name: !Sub "meter-data-clean-crawler-${AWS::Region}"
+      # Name: !Sub "meter-data-clean-crawler-${AWS::Region}"
       Role: !Sub "service-role/${IAMRole}"
       Targets:
         S3Targets:
@@ -48,7 +48,7 @@ Resources:
   GlueCrawler6RawCrawler:
     Type: "AWS::Glue::Crawler"
     Properties:
-      Name: !Sub "meter-data-raw-crawler-${AWS::Region}"
+      # Name: !Sub "meter-data-raw-crawler-${AWS::Region}"
       Role: !Sub "service-role/${IAMRole}"
       Targets:
         S3Targets:
@@ -68,7 +68,7 @@ Resources:
   GlueJob5CleanToBusiness:
     Type: "AWS::Glue::Job"
     Properties:
-      Name: !Sub "transform_clean_to_business_partition-${AWS::Region}"
+      # Name: !Sub "transform_clean_to_business_partition-${AWS::Region}"
       Role: !GetAtt IAMRole.Arn
       ExecutionProperty:
         MaxConcurrentRuns: 1
@@ -97,7 +97,7 @@ Resources:
   GlueJob6RawToClean:
     Type: "AWS::Glue::Job"
     Properties:
-      Name: !Sub "transform_raw_to_clean-${AWS::Region}"
+      # Name: !Sub "transform_raw_to_clean-${AWS::Region}"
       Role: !GetAtt IAMRole.Arn
       ExecutionProperty:
         MaxConcurrentRuns: 1
@@ -134,7 +134,7 @@ Resources:
     Properties:
       Actions:
         - CrawlerName: !Ref GlueCrawler6RawCrawler
-      Name: !Sub "ScheduledStart-${AWS::Region}"
+      # Name: !Sub "ScheduledStart-${AWS::Region}"
       Type: SCHEDULED
       Description: "Scheduled trigger, 9am each day"
       Schedule: cron(0 */9 * * ? *)
@@ -145,7 +145,7 @@ Resources:
     Properties:
       Actions:
         - CrawlerName: !Ref GlueCrawler5CleanCrawler
-      Name: !Sub "clean-data-crawler-${AWS::Region}"
+      # Name: !Sub "clean-data-crawler-${AWS::Region}"
       Type: "CONDITIONAL"
       StartOnCreation: true
       WorkflowName: !Ref GlueWorkflow
@@ -158,7 +158,7 @@ Resources:
   GlueTrigger4:
     Type: "AWS::Glue::Trigger"
     Properties:
-      Name: !Sub "trigger-business-daily-crawler-${AWS::Region}"
+      # Name: !Sub "trigger-business-daily-crawler-${AWS::Region}"
       Type: "CONDITIONAL"
       StartOnCreation: true
       WorkflowName: !Ref GlueWorkflow
@@ -173,7 +173,7 @@ Resources:
   GlueTrigger5:
     Type: "AWS::Glue::Trigger"
     Properties:
-      Name: !Sub "trigger-clean-to-business-${AWS::Region}"
+      # Name: !Sub "trigger-clean-to-business-${AWS::Region}"
       Type: "CONDITIONAL"
       StartOnCreation: true
       WorkflowName: !Ref GlueWorkflow
@@ -188,7 +188,7 @@ Resources:
   GlueTrigger10:
     Type: "AWS::Glue::Trigger"
     Properties:
-      Name: !Sub "trigger-raw-to-clean-${AWS::Region}"
+      # Name: !Sub "trigger-raw-to-clean-${AWS::Region}"
       Type: "CONDITIONAL"
       StartOnCreation: true
       WorkflowName: !Ref GlueWorkflow
@@ -203,7 +203,7 @@ Resources:
   IAMManagedPolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      ManagedPolicyName: !Sub "MeterData-S3Bucket-Access-Policy-${AWS::Region}"
+      # ManagedPolicyName: !Sub "MeterData-S3Bucket-Access-Policy-${AWS::Region}"
       Path: "/service-role/"
       PolicyDocument: !If
         - CreateLZS3BucketCondition
