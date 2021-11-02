@@ -121,7 +121,7 @@ Resources:
           Fn::GetAtt: [VPC, Outputs.PrivateSubnet2AID]
         VPCID: 
           Fn::GetAtt: [VPC, Outputs.VPCID]
-        RemoteAccessCIDR: !Ref RemoteAccessCIDR
+        RemoteAccessCIDR: !GetAtt VPC.Outputs.VPCCIDR
         LandingzoneTransformer: !Ref LandingzoneTransformer
         CreateLandingZoneS3Bucket: !Ref CreateLandingZoneS3Bucket
         LandingZoneS3BucketName: !Ref LandingZoneS3BucketName

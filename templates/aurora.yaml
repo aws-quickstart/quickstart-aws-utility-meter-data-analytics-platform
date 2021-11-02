@@ -1,231 +1,229 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Transform: 'AWS::Serverless-2016-10-31'
+Transform: "AWS::Serverless-2016-10-31"
 Description: "Create Aurora cluster (qs-1r18anahd)"
 Globals:
   Function:
     Runtime: python3.7
 
 Resources:
-    AuroraDatabase:
-      Type: AWS::CloudFormation::Stack
-      Properties:
-        TemplateURL:
-          !Sub
-          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-amazon-aurora-postgresql/templates/aurora_postgres.template.yaml'
-          - S3Region: !If [ UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion ]
-            S3Bucket: !If [ UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName ]
-        Parameters:
-          DBMasterUsername: !Ref AdminUsername
-          DBMasterUserPassword: !Ref AdminUserPassword
-          VPCID: !Ref VPCID
-          Subnet1ID: !Ref Subnet1ID
-          Subnet2ID: !Ref Subnet2ID
-          DBAccessCIDR: !Ref RemoteAccessCIDR
-          DBMultiAZ: !Ref DBMultiAZ
-          NodeType: !Ref ClusterNodeType
-          DBName: !Ref DbName
-          EnableEventSubscription: "false"
-          CustomDBSecurityGroup: !Ref AuroraGlueConnectSecurityGroup
-          DBEngineVersion: 10.14
+  AuroraDatabase:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - "https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-amazon-aurora-postgresql/templates/aurora_postgres.template.yaml"
+        - S3Region:
+            !If [UsingDefaultBucket, !Ref "AWS::Region", !Ref QSS3BucketRegion]
+          S3Bucket:
+            !If [
+              UsingDefaultBucket,
+              !Sub "${QSS3BucketName}-${AWS::Region}",
+              !Ref QSS3BucketName,
+            ]
+      Parameters:
+        DBMasterUsername: !Ref AdminUsername
+        DBMasterUserPassword: !Ref AdminUserPassword
+        VPCID: !Ref VPCID
+        Subnet1ID: !Ref Subnet1ID
+        Subnet2ID: !Ref Subnet2ID
+        DBAccessCIDR: !Ref RemoteAccessCIDR
+        DBMultiAZ: !Ref DBMultiAZ
+        DBInstanceClass: !Ref DBInstanceClass
+        DBName: !Ref DBName
+        EnableEventSubscription: "false"
+        DBEngineVersion: !Ref DBEngineVersion
 
-    AuroraGlueConnectSecurityGroup:
-      Type: 'AWS::EC2::SecurityGroup'
-      Properties:
-        GroupDescription: Security group for Aurora cluster to help Glue connect to the cluster
-        VpcId: !Ref VPCID
-        SecurityGroupIngress:
-          - IpProtocol: tcp
-            FromPort: !GetAtt AuroraDatabase.Outputs.AuroraPort
-            ToPort: !GetAtt AuroraDatabase.Outputs.AuroraPort
-            CidrIp: !Ref RemoteAccessCIDR
-            Description: 'Aurora Access to VPC CIDR'
+  AuroraGlueConnectSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Security group for Aurora cluster to help Glue connect to the cluster
+      VpcId: !Ref VPCID
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: !GetAtt AuroraDatabase.Outputs.RDSEndPointPort
+          ToPort: !GetAtt AuroraDatabase.Outputs.RDSEndPointPort
+          CidrIp: !Ref RemoteAccessCIDR
+          Description: "Aurora Access to VPC CIDR"
 
-    SelfReferencingIngress:
-      Type: AWS::EC2::SecurityGroupIngress
-      Properties:
-        Description: Self referencing security group ingress rule for Aurora cluster
-        FromPort: -1
-        GroupId: !Ref AuroraGlueConnectSecurityGroup
-        IpProtocol: "-1"
-        SourceSecurityGroupId: !Ref AuroraGlueConnectSecurityGroup
-        ToPort: -1
+  SelfReferencingIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Self referencing security group ingress rule for Aurora cluster
+      FromPort: -1
+      GroupId: !Ref AuroraGlueConnectSecurityGroup
+      IpProtocol: "-1"
+      SourceSecurityGroupId: !Ref AuroraGlueConnectSecurityGroup
+      ToPort: -1
 
-    #
-    # Glue Connection, Job, Trigger
-    #
-    GlueWorkflow:
-      Type: AWS::Glue::Workflow
-      Properties:
-        Name: !Sub 'meter-data-Aurora-pipeline-${AWS::Region}'
-        Description: Workflow for copieing meter reads to readshift
+  #
+  # Glue Connection, Job, Trigger
+  #
+  GlueWorkflow:
+    Type: AWS::Glue::Workflow
+    Properties:
+      Name: !Sub "meter-data-Aurora-pipeline-${AWS::Region}"
+      Description: Workflow for copieing meter reads to readshift
 
-    GlueConnection:
-      Type: "AWS::Glue::Connection"
-      DependsOn:
-        - AuroraDatabase
-        - IAMRole
-      Properties:
-        ConnectionInput:
-          Description: "A connection to the meter data Aurora cluster"
-          ConnectionType: "JDBC"
-          PhysicalConnectionRequirements:
-            SubnetId: !Ref Subnet1ID
-            SecurityGroupIdList:
-              - !Ref AuroraGlueConnectSecurityGroup
-            AvailabilityZone: !Select
-              - 0
-              - !GetAZs
-                Ref: 'AWS::Region'
-          ConnectionProperties:
-            "JDBC_CONNECTION_URL": !Sub "jdbc:postgresql://${AuroraDatabase.Outputs.AuroraDatabaseEndpoint}/${AuroraDatabase.Outputs.AuroraDatabaseName}"
-            "JDBC_ENFORCE_SSL": "true"
-            PASSWORD: !Ref AdminUserPassword
-            USERNAME: !Ref AdminUsername
-          Name: !Ref ClusterName
-        CatalogId: !Ref "AWS::AccountId"
+  GlueConnection:
+    Type: "AWS::Glue::Connection"
+    DependsOn:
+      - AuroraDatabase
+      - IAMRole
+    Properties:
+      ConnectionInput:
+        Description: "A connection to the meter data Aurora cluster"
+        ConnectionType: "JDBC"
+        PhysicalConnectionRequirements:
+          SubnetId: !Ref Subnet1ID
+          SecurityGroupIdList:
+            - !Ref AuroraGlueConnectSecurityGroup
+          AvailabilityZone: !Select
+            - 0
+            - !GetAZs
+              Ref: "AWS::Region"
+        ConnectionProperties:
+          "JDBC_CONNECTION_URL": !Sub "jdbc:postgresql://${AuroraDatabase.Outputs.RDSEndPoints}"
+          "JDBC_ENFORCE_SSL": "true"
+          PASSWORD: !Ref AdminUserPassword
+          USERNAME: !Ref AdminUsername
+        Name: !Ref ClusterName
+      CatalogId: !Ref "AWS::AccountId"
 
-    IAMRole:
-      Type: "AWS::IAM::Role"
-      Properties:
-        Path: "/service-role/"
-        AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"glue.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
-        MaxSessionDuration: 3600
-        ManagedPolicyArns:
-          - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess"
-          - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSGlueServiceRole"
-          - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonAuroraFullAccess"
+  IAMRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      Path: "/service-role/"
+      AssumeRolePolicyDocument: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"glue.amazonaws.com"},"Action":"sts:AssumeRole"}]}'
+      MaxSessionDuration: 3600
+      ManagedPolicyArns:
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess"
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSGlueServiceRole"
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonRDSFullAccess"
 
-    GlueJob4BusinessDailyToAurora:
-      Type: "AWS::Glue::Job"
-      Properties:
-        Name: !Sub "business_daily_to_Aurora-${AWS::Region}"
-        Role: !GetAtt IAMRole.Arn
-        ExecutionProperty:
-          MaxConcurrentRuns: 1
-        Command:
-          Name: "glueetl"
-          ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_daily_to_Aurora.py"
-          PythonVersion: "3"
-        DefaultArguments:
-          --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
-          --enable-metrics: ""
-          --enable-continuous-cloudwatch-log: "true"
-          --enable-continuous-log-filter: "true"
-          --job-bookmark-option: "job-bookmark-enable"
-          --job-language: "python"
-          --enable-s3-parquet-optimized-committer: true
-          --db_name: !Ref DbName
-          --Aurora_connection: !Ref GlueConnection
-          --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
+  GlueJob4BusinessDailyToAurora:
+    Type: "AWS::Glue::Job"
+    Properties:
+      Name: !Sub "business_daily_to_Aurora-${AWS::Region}"
+      Role: !GetAtt IAMRole.Arn
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: "glueetl"
+        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_daily_to_Aurora.py"
+        PythonVersion: "3"
+      DefaultArguments:
+        --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
+        --enable-metrics: ""
+        --enable-continuous-cloudwatch-log: "true"
+        --enable-continuous-log-filter: "true"
+        --job-bookmark-option: "job-bookmark-enable"
+        --job-language: "python"
+        --enable-s3-parquet-optimized-committer: true
+        --db_name: !Ref DBName
+        --Aurora_connection: !Ref GlueConnection
+        --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
+      Connections:
         Connections:
-          Connections:
-            - !Ref GlueConnection
-        MaxRetries: 0
-        #AllocatedCapacity: !Ref DPU
-        MaxCapacity: !Ref GlueDPU
-        Timeout: 2880
-        GlueVersion: "2.0"
+          - !Ref GlueConnection
+      MaxRetries: 0
+      #AllocatedCapacity: !Ref DPU
+      MaxCapacity: !Ref GlueDPU
+      Timeout: 2880
+      GlueVersion: "2.0"
 
-    GlueJobImportDemoDataToAurora:
-      Type: "AWS::Glue::Job"
-      Properties:
-        Name: !Sub "import_demo_data_to_Aurora-${AWS::Region}"
-        Role: !GetAtt IAMRole.Arn
-        ExecutionProperty:
-          MaxConcurrentRuns: 1
-        Command:
-          Name: "glueetl"
-          ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/import_demo_data_to_Aurora.py"
-          PythonVersion: "3"
-        DefaultArguments:
-          --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
-          --enable-metrics: ""
-          --enable-continuous-cloudwatch-log: "true"
-          --enable-continuous-log-filter: "true"
-          --job-bookmark-option: "job-bookmark-enable"
-          --job-language: "python"
-          --db_name: !GetAtt [AuroraDatabase, Outputs.AuroraDatabaseName]
-          --Aurora_connection: !Ref GlueConnection
-          --cis_bucket: !Sub "${BusinessZoneS3Bucket}/cisdata"
-          --geo_bucket: !Sub "${BusinessZoneS3Bucket}/geodata"
+  GlueJobImportDemoDataToAurora:
+    Type: "AWS::Glue::Job"
+    Properties:
+      Name: !Sub "import_demo_data_to_Aurora-${AWS::Region}"
+      Role: !GetAtt IAMRole.Arn
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: "glueetl"
+        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/import_demo_data_to_Aurora.py"
+        PythonVersion: "3"
+      DefaultArguments:
+        --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
+        --enable-metrics: ""
+        --enable-continuous-cloudwatch-log: "true"
+        --enable-continuous-log-filter: "true"
+        --job-bookmark-option: "job-bookmark-enable"
+        --job-language: "python"
+        --db_name: !GetAtt [AuroraDatabase, Outputs.DBName]
+        --Aurora_connection: !Ref GlueConnection
+        --cis_bucket: !Sub "${BusinessZoneS3Bucket}/cisdata"
+        --geo_bucket: !Sub "${BusinessZoneS3Bucket}/geodata"
+      Connections:
         Connections:
-          Connections:
-            - !Ref GlueConnection
-        MaxRetries: 0
-        Timeout: 2880
-        GlueVersion: "2.0"
-        #AllocatedCapacity: !Ref DPU
-        MaxCapacity: !Ref GlueDPU
+          - !Ref GlueConnection
+      MaxRetries: 0
+      Timeout: 2880
+      GlueVersion: "2.0"
+      #AllocatedCapacity: !Ref DPU
+      MaxCapacity: !Ref GlueDPU
 
-    GlueReadshiftLoadTrigger:
-      Type: "AWS::Glue::Trigger"
-      Properties:
-        Name: !Sub "export-to-Aurora-${AWS::Region}"
-        Type: "EVENT"
-        WorkflowName: !Ref GlueWorkflow
-        Actions:
-          - JobName: !Ref GlueJob4BusinessDailyToAurora
+  GlueReadshiftLoadTrigger:
+    Type: "AWS::Glue::Trigger"
+    Properties:
+      Name: !Sub "export-to-Aurora-${AWS::Region}"
+      Type: "EVENT"
+      WorkflowName: !Ref GlueWorkflow
+      Actions:
+        - JobName: !Ref GlueJob4BusinessDailyToAurora
 
-    InvokeGlueReadshiftWflRole:
-      Type: 'AWS::IAM::Role'
-      Properties:
-        AssumeRolePolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Effect: Allow
-              Principal:
-                Service: events.amazonaws.com
-              Action: sts:AssumeRole
-        Policies:
-          - PolicyName: Glue-notify-events
-            PolicyDocument:
-              Version: "2012-10-17"
-              Statement:
-                - Effect: Allow
-                  Action: 'glue:notifyEvent'
-                  Resource: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/*"
+  InvokeGlueReadshiftWflRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: Glue-notify-events
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: "glue:notifyEvent"
+                Resource: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/*"
 
-    EventRule:
-      Type: AWS::Events::Rule
-      Properties:
-        Description: "EventRule"
-        EventPattern:
-          source:
-            - "aws.glue"
-          detail-type:
-            - "Glue Crawler State Change"
-          detail:
-            state:
-              - "Succeeded"
-            crawlerName:
-              - !Ref GlueCrwalerToTriggerAfter
-        State: "ENABLED"
-        Targets:
-          -  Arn: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/${GlueWorkflow}"
-             Id: !Ref GlueWorkflow
-             RoleArn: !GetAtt InvokeGlueReadshiftWflRole.Arn
+  EventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "EventRule"
+      EventPattern:
+        source:
+          - "aws.glue"
+        detail-type:
+          - "Glue Crawler State Change"
+        detail:
+          state:
+            - "Succeeded"
+          crawlerName:
+            - !Ref GlueCrwalerToTriggerAfter
+      State: "ENABLED"
+      Targets:
+        - Arn: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/${GlueWorkflow}"
+          Id: !Ref GlueWorkflow
+          RoleArn: !GetAtt InvokeGlueReadshiftWflRole.Arn
 
 Outputs:
   StackName:
-    Description: 'Stack name'
-    Value: !Sub '${AWS::StackName}'
-  AuroraSecret:
-    Description: SecretManager secret reference
-    Value: !Ref AuroraSecret
-  ConsumptionApi:
-    Description: Prediction function.
-    Value: !Ref ConsumptionApi
+    Description: "Stack name"
+    Value: !Sub "${AWS::StackName}"
   AuroraDatabaseEndpoint:
-    Value: !GetAtt AuroraDatabase.Outputs.AuroraDatabaseEndpoint
+    Value: !GetAtt AuroraDatabase.Outputs.RDSEndPoints
   AuroraEndpoint:
-    Value: !GetAtt AuroraDatabase.Outputs.AuroraEndpoint
+    Value: !GetAtt AuroraDatabase.Outputs.RDSEndPoints
 
 Conditions:
-  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, "aws-quickstart"]
 
 Parameters:
   QSS3BucketName:
-    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    AllowedPattern: "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$"
     ConstraintDescription: >-
       Quick Start bucket name can include numbers, lowercase letters, uppercase
       letters, and hyphens (-). It cannot start or end with a hyphen (-).
@@ -236,46 +234,37 @@ Parameters:
       This string can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
     Type: String
+
   QSS3KeyPrefix:
-    AllowedPattern: '^[0-9a-zA-Z-/]*[/]$'
+    AllowedPattern: "^[0-9a-zA-Z-/]*[/]$"
     ConstraintDescription: >-
       Quick Start key prefix can include numbers, lowercase letters, uppercase
       letters, hyphens (-), and forward slash (/) and must terminate in a forward slash.
     Default: quickstart-aws-utility-meter-data-analytics-platform/
     Type: String
-    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+    Description:
+      S3 key prefix for the Quick Start assets. Quick Start key prefix
       can include numbers, lowercase letters, uppercase letters, hyphens (-), and
       forward slash (/).
+
   AdminUsername:
     Type: String
 
   AdminUserPassword:
     Type: String
     NoEcho: True
-  
+
   Subnet1ID:
     Type: AWS::EC2::Subnet::Id
-  
+
   Subnet2ID:
     Type: AWS::EC2::Subnet::Id
 
   VPCID:
     Type: AWS::EC2::VPC::Id
-  
+
   RemoteAccessCIDR:
     Type: String
-  
-  ClusterName:
-    Type: String
-    Default: Aurora-cluster-1
-
-  ClusterNodeType:
-    Type: String
-    Default: ra3.4xlarge
-
-  ClusterNodeCount:
-    Type: Number
-    Default: 2
 
   GlueCrwalerToTriggerAfter:
     Type: String
@@ -300,5 +289,48 @@ Parameters:
   QSS3BucketRegion:
     Type: String
 
-  DbName:
+  ClusterName:
     Type: String
+    Default: Aurora-cluster-1
+
+  DBInstanceClass:
+    AllowedPattern: "db\\.[a-z0-9]*\\.[a-z0-9]*"
+    ConstraintDescription: "Must select a valid database instance type."
+    Default: db.r5.large
+    Description: "The name of the compute and memory capacity class of the database instance."
+    Type: String
+
+  DBName:
+    AllowedPattern: "[a-zA-Z0-9]*"
+    Description: "Name of the Amazon Aurora database."
+    MaxLength: "64"
+    MinLength: "0"
+    Default: "MeterDataAnalyticsDB"
+    Type: String
+
+  DBMultiAZ:
+    AllowedValues:
+      - "true"
+      - "false"
+    Default: "false"
+    Description: "Specifies if the database instance is a multiple Availability Zone deployment."
+    Type: String
+
+  DBEngineVersion:
+    Description: Select Database Engine Version
+    Type: String
+    Default: 12.4
+    AllowedValues:
+      - 9.6.16
+      - 9.6.17
+      - 9.6.18
+      - 9.6.19
+      - 10.11
+      - 10.12
+      - 10.13
+      - 10.14
+      - 11.6
+      - 11.7
+      - 11.8
+      - 11.9
+      - 12.4
