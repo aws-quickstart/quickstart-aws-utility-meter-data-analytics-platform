@@ -102,13 +102,13 @@ Resources:
   GlueJob4BusinessDailyToAurora:
     Type: "AWS::Glue::Job"
     Properties:
-      Name: !Sub "business_daily_to_Aurora-${AWS::Region}"
+      Name: !Sub "business_daily_to_aurora-${AWS::Region}"
       Role: !GetAtt IAMRole.Arn
       ExecutionProperty:
         MaxConcurrentRuns: 1
       Command:
         Name: "glueetl"
-        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_daily_to_Aurora.py"
+        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/business_daily_to_aurora.py"
         PythonVersion: "3"
       DefaultArguments:
         --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
@@ -139,7 +139,7 @@ Resources:
         MaxConcurrentRuns: 1
       Command:
         Name: "glueetl"
-        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/import_demo_data_to_Aurora.py"
+        ScriptLocation: !Sub "s3://${GlueScriptsS3Bucket}/admin/import_demo_data_to_aurora.py"
         PythonVersion: "3"
       DefaultArguments:
         --TempDir: !Sub "s3://${GlueTempS3Bucket}/admin"
