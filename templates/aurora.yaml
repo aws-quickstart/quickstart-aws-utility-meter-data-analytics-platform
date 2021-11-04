@@ -60,8 +60,8 @@ Resources:
   GlueWorkflow:
     Type: AWS::Glue::Workflow
     Properties:
-      Name: !Sub "meter-data-Aurora-pipeline-${AWS::Region}"
-      Description: Workflow for copieing meter reads to readshift
+      Name: !Sub "meter-data-aurora-pipeline-${AWS::Region}"
+      Description: Workflow for copying meter reads to aurora
 
   GlueConnection:
     Type: "AWS::Glue::Connection"
@@ -133,7 +133,7 @@ Resources:
   GlueJobImportDemoDataToAurora:
     Type: "AWS::Glue::Job"
     Properties:
-      Name: !Sub "import_demo_data_to_Aurora-${AWS::Region}"
+      Name: !Sub "import_demo_data_to_aurora-${AWS::Region}"
       Role: !GetAtt IAMRole.Arn
       ExecutionProperty:
         MaxConcurrentRuns: 1
@@ -161,10 +161,10 @@ Resources:
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref GlueDPU
 
-  GlueReadshiftLoadTrigger:
+  GlueAuroraLoadTrigger:
     Type: "AWS::Glue::Trigger"
     Properties:
-      Name: !Sub "export-to-Aurora-${AWS::Region}"
+      Name: !Sub "export-to-aurora-${AWS::Region}"
       Type: "EVENT"
       WorkflowName: !Ref GlueWorkflow
       Actions:
