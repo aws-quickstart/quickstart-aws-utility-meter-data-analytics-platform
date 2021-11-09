@@ -119,7 +119,7 @@ Resources:
         --job-language: "python"
         --enable-s3-parquet-optimized-committer: true
         --db_name: !Ref DBName
-        --Aurora_connection: !Ref GlueConnection
+        --aurora_connection: !Ref GlueConnection
         --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
       Connections:
         Connections:
@@ -149,7 +149,7 @@ Resources:
         --job-bookmark-option: "job-bookmark-enable"
         --job-language: "python"
         --db_name: !GetAtt [AuroraDatabase, Outputs.DBName]
-        --Aurora_connection: !Ref GlueConnection
+        --aurora_connection: !Ref GlueConnection
         --cis_bucket: !Sub "${BusinessZoneS3Bucket}/cisdata"
         --geo_bucket: !Sub "${BusinessZoneS3Bucket}/geodata"
       Connections:
