@@ -40,7 +40,6 @@ cis_mapping = ApplyMapping.apply(frame = cis_datasource, mappings = [("col0", "s
 glueContext.write_dynamic_frame.from_jdbc_conf(frame = cis_mapping, \
                                                catalog_connection = args['aurora_connection'], \
                                                connection_options = {"dbtable": "cis_data", "database": args['db_name']}, \
-                                               aurora_tmp_dir = args["TempDir"], \
                                                transformation_ctx = "cisData")
 
 """
@@ -62,7 +61,6 @@ geo_mapping = ApplyMapping.apply(frame = geo_datasource, mappings = [("col0", "s
 glueContext.write_dynamic_frame.from_jdbc_conf(frame = geo_mapping, \
                                                catalog_connection = args['aurora_connection'], \
                                                connection_options = {"dbtable": "geo_data", "database": args['db_name']}, \
-                                               aurora_tmp_dir = args["TempDir"], \
                                                transformation_ctx = "cisData")
 
 job.commit()

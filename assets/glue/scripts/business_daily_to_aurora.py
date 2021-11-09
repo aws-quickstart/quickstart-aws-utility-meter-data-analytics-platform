@@ -38,6 +38,6 @@ allDaily = glueContext.create_dynamic_frame.from_catalog(database = args['db_nam
 glueContext.write_dynamic_frame.from_jdbc_conf(frame = allDaily, \
                                                catalog_connection = args['aurora_connection'], \
                                                connection_options = {"preactions":create_table_sql, "dbtable": "daily", "database": args['db_name']}, \
-                                               aurora_tmp_dir = args["TempDir"], transformation_ctx = "allDaily")
+                                               transformation_ctx = "allDaily")
 
 job.commit()
