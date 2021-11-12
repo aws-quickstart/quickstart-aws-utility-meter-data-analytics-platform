@@ -2,14 +2,10 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: "Creates glue S3 buckets and upload scripts to it. (qs-1r18anahd)"
 Resources:
     GlueScriptsS3Bucket:
-        Type: "AWS::S3::Bucket"
-        # Properties:
-          # BucketName: !Sub 'aws-glue-scripts-${AWS::AccountId}-${AWS::Region}'
+        Type: AWS::S3::Bucket
 
     GlueTempS3Bucket:
-        Type: "AWS::S3::Bucket"
-        # Properties:
-          # BucketName: !Sub 'aws-glue-temporary-${AWS::AccountId}-${AWS::Region}'
+        Type: AWS::S3::Bucket
 
     CopyArtifacts:
       Type: Custom::CopyArtifacts
