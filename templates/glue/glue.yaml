@@ -10,20 +10,18 @@ Mappings:
       script: "transform_raw_to_clean_london.py"
 
 Resources:
-  GlueWorkflow:
+  MeterDataGlueWorkflow:
     Type: AWS::Glue::Workflow
     Properties:
-      # Name: !Sub 'meter-data-pipeline-${AWS::Region}'
       Description: Workflow for manufactured meter data analytics
 
   LogsLogGroup:
-    Type: "AWS::Logs::LogGroup"
+    Type: AWS::Logs::LogGroup
 
-  GlueCrawler4BusinessDailyCrawler:
-    Type: "AWS::Glue::Crawler"
+  MeterDataBusinessDailyCrawler:
+    Type: AWS::Glue::Crawler
     Properties:
-      # Name: !Sub 'meter-data-business-daily-crawler-${AWS::Region}'
-      Role: !Sub "service-role/${IAMRole}"
+      Role: !Sub "service-role/${GlueIamRole}"
       Targets:
         S3Targets:
           - Path: !Sub "s3://${BusinessZoneS3Bucket}/daily"
@@ -32,11 +30,10 @@ Resources:
         UpdateBehavior: "LOG"
         DeleteBehavior: "DEPRECATE_IN_DATABASE"
 
-  GlueCrawler5CleanCrawler:
-    Type: "AWS::Glue::Crawler"
+  MeterDataCleanCrawler:
+    Type: AWS::Glue::Crawler
     Properties:
-      # Name: !Sub "meter-data-clean-crawler-${AWS::Region}"
-      Role: !Sub "service-role/${IAMRole}"
+      Role: !Sub "service-role/${GlueIamRole}"
       Targets:
         S3Targets:
           - Path: !Sub "s3://${CleanZoneS3Bucket}"
@@ -45,11 +42,10 @@ Resources:
         UpdateBehavior: "LOG"
         DeleteBehavior: "DEPRECATE_IN_DATABASE"
 
-  GlueCrawler6RawCrawler:
-    Type: "AWS::Glue::Crawler"
+  MeterDataRawGlueCrawler:
+    Type: AWS::Glue::Crawler
     Properties:
-      # Name: !Sub "meter-data-raw-crawler-${AWS::Region}"
-      Role: !Sub "service-role/${IAMRole}"
+      Role: !Sub "service-role/${GlueIamRole}"
       Targets:
         S3Targets:
           - Path: !If
@@ -65,11 +61,10 @@ Resources:
   #
   # Glue Jobs
   #
-  GlueJob5CleanToBusiness:
-    Type: "AWS::Glue::Job"
+  TransformCleanToBusinessPartitionGlueJob:
+    Type: AWS::Glue::Job
     Properties:
-      # Name: !Sub "transform_clean_to_business_partition-${AWS::Region}"
-      Role: !GetAtt IAMRole.Arn
+      Role: !GetAtt GlueIamRole.Arn
       ExecutionProperty:
         MaxConcurrentRuns: 1
       Command:
@@ -94,11 +89,10 @@ Resources:
       Timeout: 2880
       GlueVersion: "2.0"
 
-  GlueJob6RawToClean:
-    Type: "AWS::Glue::Job"
+  TransformRawToCleanGlueJob:
+    Type: AWS::Glue::Job
     Properties:
-      # Name: !Sub "transform_raw_to_clean-${AWS::Region}"
-      Role: !GetAtt IAMRole.Arn
+      Role: !GetAtt GlueIamRole.Arn
       ExecutionProperty:
         MaxConcurrentRuns: 1
       Command:
@@ -129,81 +123,76 @@ Resources:
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref DPU
 
-  GlueTrigger:
-    Type: "AWS::Glue::Trigger"
+  ScheduledStartGlueTrigger:
+    Type: AWS::Glue::Trigger
     Properties:
       Actions:
-        - CrawlerName: !Ref GlueCrawler6RawCrawler
-      # Name: !Sub "ScheduledStart-${AWS::Region}"
+        - CrawlerName: !Ref MeterDataRawGlueCrawler
       Type: SCHEDULED
       Description: "Scheduled trigger, 9am each day"
-      Schedule: cron(0 */9 * * ? *)
-      WorkflowName: !Ref GlueWorkflow
+      Schedule: cron(0 9 * * ? *)
+      StartOnCreation: true
+      WorkflowName: !Ref MeterDataGlueWorkflow
 
-  GlueTrigger2:
-    Type: "AWS::Glue::Trigger"
+  CleanDataCrawlerGlueTrigger:
+    Type: AWS::Glue::Trigger
     Properties:
       Actions:
-        - CrawlerName: !Ref GlueCrawler5CleanCrawler
-      # Name: !Sub "clean-data-crawler-${AWS::Region}"
+        - CrawlerName: !Ref MeterDataCleanCrawler
       Type: "CONDITIONAL"
       StartOnCreation: true
-      WorkflowName: !Ref GlueWorkflow
+      WorkflowName: !Ref MeterDataGlueWorkflow
       Predicate:
         Conditions:
           - LogicalOperator: "EQUALS"
-            JobName: !Ref GlueJob6RawToClean
+            JobName: !Ref TransformRawToCleanGlueJob
             State: "SUCCEEDED"
 
-  GlueTrigger4:
-    Type: "AWS::Glue::Trigger"
+  BusinessDailyCrawlerGlueTrigger:
+    Type: AWS::Glue::Trigger
     Properties:
-      # Name: !Sub "trigger-business-daily-crawler-${AWS::Region}"
       Type: "CONDITIONAL"
       StartOnCreation: true
-      WorkflowName: !Ref GlueWorkflow
+      WorkflowName: !Ref MeterDataGlueWorkflow
       Actions:
-        - CrawlerName: !Ref GlueCrawler4BusinessDailyCrawler
+        - CrawlerName: !Ref MeterDataBusinessDailyCrawler
       Predicate:
         Conditions:
           - LogicalOperator: "EQUALS"
-            JobName: !Ref GlueJob5CleanToBusiness
+            JobName: !Ref TransformCleanToBusinessPartitionGlueJob
             State: "SUCCEEDED"
 
-  GlueTrigger5:
-    Type: "AWS::Glue::Trigger"
+  CleanToBusinessGlueTrigger:
+    Type: AWS::Glue::Trigger
     Properties:
-      # Name: !Sub "trigger-clean-to-business-${AWS::Region}"
       Type: "CONDITIONAL"
       StartOnCreation: true
-      WorkflowName: !Ref GlueWorkflow
+      WorkflowName: !Ref MeterDataGlueWorkflow
       Actions:
-        - JobName: !Ref GlueJob5CleanToBusiness
+        - JobName: !Ref TransformCleanToBusinessPartitionGlueJob
       Predicate:
         Conditions:
           - LogicalOperator: "EQUALS"
-            CrawlerName: !Ref GlueCrawler5CleanCrawler
+            CrawlerName: !Ref MeterDataCleanCrawler
             CrawlState: "SUCCEEDED"
 
-  GlueTrigger10:
-    Type: "AWS::Glue::Trigger"
+  RawToCleanGlueTrigger:
+    Type: AWS::Glue::Trigger
     Properties:
-      # Name: !Sub "trigger-raw-to-clean-${AWS::Region}"
       Type: "CONDITIONAL"
       StartOnCreation: true
-      WorkflowName: !Ref GlueWorkflow
+      WorkflowName: !Ref MeterDataGlueWorkflow
       Actions:
-        - JobName: !Ref GlueJob6RawToClean
+        - JobName: !Ref TransformRawToCleanGlueJob
       Predicate:
         Conditions:
           - LogicalOperator: "EQUALS"
-            CrawlerName: !Ref GlueCrawler6RawCrawler
+            CrawlerName: !Ref MeterDataRawGlueCrawler
             CrawlState: "SUCCEEDED"
 
-  IAMManagedPolicy:
-    Type: "AWS::IAM::ManagedPolicy"
+  MeterDataS3ManagedPolicy:
+    Type: AWS::IAM::ManagedPolicy
     Properties:
-      # ManagedPolicyName: !Sub "MeterData-S3Bucket-Access-Policy-${AWS::Region}"
       Path: "/service-role/"
       PolicyDocument: !If
         - CreateLZS3BucketCondition
@@ -249,36 +238,36 @@ Resources:
           }
 
 
-  IAMRole:
-    Type: "AWS::IAM::Role"
+  GlueIamRole:
+    Type: AWS::IAM::Role
     Properties:
       Path: "/service-role/"
       AssumeRolePolicyDocument: "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"glue.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
       MaxSessionDuration: 3600
       ManagedPolicyArns:
-        - !Ref IAMManagedPolicy
+        - !Ref MeterDataS3ManagedPolicy
         - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonS3FullAccess"
         - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSGlueServiceRole"
         - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonRedshiftFullAccess"
 
   BusinessZoneS3Bucket:
-    Type: "AWS::S3::Bucket"
+    Type: AWS::S3::Bucket
 
   LandingZoneS3Bucket:
-    Type: "AWS::S3::Bucket"
+    Type: AWS::S3::Bucket
     Condition: CreateLZS3BucketCondition
 
   CleanZoneS3Bucket:
-    Type: "AWS::S3::Bucket"
+    Type: AWS::S3::Bucket
 
   TempWorkflowS3Bucket:
-    Type: "AWS::S3::Bucket"
+    Type: AWS::S3::Bucket
 
   CisS3Bucket:
-    Type: "AWS::S3::Bucket"
+    Type: AWS::S3::Bucket
 
   GlueDatabase:
-    Type: "AWS::Glue::Database"
+    Type: AWS::Glue::Database
     Properties:
       DatabaseInput:
         Name: !Ref DBName
@@ -297,13 +286,13 @@ Outputs:
   BusinessZoneS3Bucket:
     Value: !Ref BusinessZoneS3Bucket
   GlueWorkflow:
-    Value: !Ref GlueWorkflow
+    Value: !Ref MeterDataGlueWorkflow
   JobNameTransformCleanToBusiness:
-    Value: !Ref GlueJob5CleanToBusiness
+    Value: !Ref TransformCleanToBusinessPartitionGlueJob
   NameCrawlerBusinessDaily:
-    Value: !Ref GlueCrawler4BusinessDailyCrawler
+    Value: !Ref MeterDataBusinessDailyCrawler
   GlueRoleArn:
-    Value: !GetAtt IAMRole.Arn
+    Value: !GetAtt GlueIamRole.Arn
 
 Parameters:
 
