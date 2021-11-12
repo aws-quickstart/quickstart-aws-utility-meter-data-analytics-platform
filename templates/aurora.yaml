@@ -80,7 +80,6 @@ Resources:
           "JDBC_ENFORCE_SSL": "true"
           PASSWORD: !Ref AdminUserPassword
           USERNAME: !Ref AdminUsername
-        Name: !Ref ClusterName
       CatalogId: !Ref "AWS::AccountId"
 
   AuroraGlueIAMRole:
