@@ -202,7 +202,7 @@ Resources:
           state:
             - "Succeeded"
           crawlerName:
-            - !Ref GlueCrwalerToTriggerAfter
+            - !Ref GlueCrawlerToTriggerAfter
       State: "ENABLED"
       Targets:
         - Arn: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/${GlueWorkflow}"
@@ -266,7 +266,7 @@ Parameters:
   RemoteAccessCIDR:
     Type: String
 
-  GlueCrwalerToTriggerAfter:
+  GlueCrawlerToTriggerAfter:
     Type: String
 
   GlueDPU:
