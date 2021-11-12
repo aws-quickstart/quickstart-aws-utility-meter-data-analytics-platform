@@ -2,19 +2,17 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: "Aggregation workflow (qs-1r18anahd)"
 
 Resources:
-  GlueWorkflow:
+  MeterDataAggregationGlueWorkflow:
     Type: AWS::Glue::Workflow
     Properties:
-      # Name: !Sub 'meter-data-aggregation-pipeline-${AWS::Region}'
       Description: Workflow for aggregating meter reads
 
   LogsLogGroup:
-    Type: "AWS::Logs::LogGroup"
+    Type: AWS::Logs::LogGroup
 
-  GlueCrawler:
-    Type: "AWS::Glue::Crawler"
+  MeterDataBusinessAggregatedDailyGlueCrawler:
+    Type: AWS::Glue::Crawler
     Properties:
-      # Name: "meter-data-business-aggregated-daily"
       Role: !Ref GlueRoleArn
       Targets:
         S3Targets:
@@ -25,10 +23,9 @@ Resources:
         DeleteBehavior: "DEPRECATE_IN_DATABASE"
       TablePrefix: "aggregated_"
 
-  GlueCrawler2:
-    Type: "AWS::Glue::Crawler"
+  MeterDataBusinessAggregatedMonthlyGlueCrawler:
+    Type: AWS::Glue::Crawler
     Properties:
-      # Name: "meter-data-business-aggregated-monthly"
       Role: !Ref GlueRoleArn
       Targets:
         S3Targets:
@@ -39,10 +36,9 @@ Resources:
         DeleteBehavior: "DEPRECATE_IN_DATABASE"
       TablePrefix: "aggregated_"
 
-  GlueCrawler3:
-    Type: "AWS::Glue::Crawler"
+  MeterDataBusinessAggregatedWeeklyGlueCrawler:
+    Type: AWS::Glue::Crawler
     Properties:
-      # Name: "meter-data-business-aggregated-weekly"
       Role: !Ref GlueRoleArn
       Targets:
         S3Targets:
@@ -56,10 +52,9 @@ Resources:
   #
   # Glue Jobs
   #
-  GlueJob1AggDaily:
-    Type: "AWS::Glue::Job"
+  AggDailyGlueJob:
+    Type: AWS::Glue::Job
     Properties:
-      # Name: !Sub "business_aggregate_daily-${AWS::Region}"
       Role: !Ref GlueRoleArn
       ExecutionProperty:
         MaxConcurrentRuns: 1
@@ -83,10 +78,9 @@ Resources:
       GlueVersion: "2.0"
       MaxCapacity: !Ref DPU
 
-  GlueJob2AggMonthly:
-    Type: "AWS::Glue::Job"
+  AggMonthlyGlueJob:
+    Type: AWS::Glue::Job
     Properties:
-      # Name: !Sub "business_aggregate_monthly-${AWS::Region}"
       Role: !Ref GlueRoleArn
       ExecutionProperty:
         MaxConcurrentRuns: 1
@@ -110,10 +104,9 @@ Resources:
       GlueVersion: "2.0"
       MaxCapacity: !Ref DPU
 
-  GlueJob3AggWeekly:
-    Type: "AWS::Glue::Job"
+  AggWeeklyGlueJob:
+    Type: AWS::Glue::Job
     Properties:
-      # Name: !Sub "business_aggregate_weekly-${AWS::Region}"
       Role: !Ref GlueRoleArn
       ExecutionProperty:
         MaxConcurrentRuns: 1
@@ -141,7 +134,7 @@ Resources:
   # Workflow
   #
   InvokeGlueWflRole:
-    Type: 'AWS::IAM::Role'
+    Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
@@ -159,10 +152,10 @@ Resources:
                 Action: 'glue:notifyEvent'
                 Resource: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/*"
 
-  EventRule:
+  MeterDataAggGlueWorkflowEventRule:
     Type: AWS::Events::Rule
     Properties:
-      Description: "EventRule"
+      Description: "EventRule for the Meter Data Aggregation Glue Workflow"
       EventPattern:
         source:
           - "aws.glue"
@@ -175,66 +168,62 @@ Resources:
             - !Ref TriggerName
       State: "ENABLED"
       Targets:
-        -  Arn: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/${GlueWorkflow}"
-           Id: !Ref GlueWorkflow
+        -  Arn: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/${MeterDataAggregationGlueWorkflow}"
+           Id: !Ref MeterDataAggregationGlueWorkflow
            RoleArn: !GetAtt InvokeGlueWflRole.Arn
 
-  EventBridgeTrigger:
-    Type: "AWS::Glue::Trigger"
+  AggregationTrigger:
+    Type: AWS::Glue::Trigger
     Properties:
-      # Name: "trigger-daily-aggregate"
       Type: "EVENT"
       StartOnCreation: false
-      WorkflowName: !Ref GlueWorkflow
+      WorkflowName: !Ref MeterDataAggregationGlueWorkflow
       Actions:
-        - JobName: !Ref GlueJob1AggDaily
-        - JobName: !Ref GlueJob2AggMonthly
-        - JobName: !Ref GlueJob3AggWeekly
+        - JobName: !Ref AggDailyGlueJob
+        - JobName: !Ref AggMonthlyGlueJob
+        - JobName: !Ref AggWeeklyGlueJob
 
 
-  CrawlDailyAggTrigger:
-    Type: "AWS::Glue::Trigger"
+  DailyAggregationCrawlerTrigger:
+    Type: AWS::Glue::Trigger
     Properties:
-      # Name: "trigger-daily-agg-crawler"
       Type: "CONDITIONAL"
       StartOnCreation: true
-      WorkflowName: !Ref GlueWorkflow
+      WorkflowName: !Ref MeterDataAggregationGlueWorkflow
       Actions:
-        - CrawlerName: !Ref GlueCrawler
+        - CrawlerName: !Ref MeterDataBusinessAggregatedDailyGlueCrawler
       Predicate:
         Conditions:
           - LogicalOperator: "EQUALS"
-            JobName: !Ref GlueJob1AggDaily
+            JobName: !Ref AggDailyGlueJob
             State: "SUCCEEDED"
 
-  CrawlMonthlyAggTrigger:
-    Type: "AWS::Glue::Trigger"
+  MonthlyAggregationCrawlerTrigger:
+    Type: AWS::Glue::Trigger
     Properties:
-      # Name: "trigger-monthly-agg-crawler"
       Type: "CONDITIONAL"
       StartOnCreation: true
-      WorkflowName: !Ref GlueWorkflow
+      WorkflowName: !Ref MeterDataAggregationGlueWorkflow
       Actions:
-        - CrawlerName: !Ref GlueCrawler2
+        - CrawlerName: !Ref MeterDataBusinessAggregatedMonthlyGlueCrawler
       Predicate:
         Conditions:
           - LogicalOperator: "EQUALS"
-            JobName: !Ref GlueJob2AggMonthly
+            JobName: !Ref AggMonthlyGlueJob
             State: "SUCCEEDED"
 
-  CrawlWeeklyAggTrigger:
-    Type: "AWS::Glue::Trigger"
+  WeeklyAggregationCrawlerTrigger:
+    Type: AWS::Glue::Trigger
     Properties:
-      # Name: "trigger-weekly-agg-crawler"
       Type: "CONDITIONAL"
       StartOnCreation: true
-      WorkflowName: !Ref GlueWorkflow
+      WorkflowName: !Ref MeterDataAggregationGlueWorkflow
       Actions:
-        - CrawlerName: !Ref GlueCrawler3
+        - CrawlerName: !Ref MeterDataBusinessAggregatedWeeklyGlueCrawler
       Predicate:
         Conditions:
           - LogicalOperator: "EQUALS"
-            JobName: !Ref GlueJob3AggWeekly
+            JobName: !Ref AggWeeklyGlueJob
             State: "SUCCEEDED"
 
 Parameters:
