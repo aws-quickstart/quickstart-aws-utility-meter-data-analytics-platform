@@ -170,7 +170,7 @@ Resources:
       Actions:
         - JobName: !Ref GlueJob4BusinessDailyToAurora
 
-  InvokeGlueReadshiftWflRole:
+  InvokeGlueAuroraWflRole:
     Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
@@ -207,7 +207,7 @@ Resources:
       Targets:
         - Arn: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/${GlueWorkflow}"
           Id: !Ref GlueWorkflow
-          RoleArn: !GetAtt InvokeGlueReadshiftWflRole.Arn
+          RoleArn: !GetAtt InvokeGlueAuroraWflRole.Arn
 
 Outputs:
   StackName:
