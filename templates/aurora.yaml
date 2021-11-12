@@ -77,7 +77,7 @@ Resources:
               Ref: "AWS::Region"
         ConnectionProperties:
           "JDBC_CONNECTION_URL": !Sub "jdbc:postgresql://${MeterDataAuroraDatabaseStack.Outputs.RDSEndPoints}"
-          "JDBC_ENFORCE_SSL": "true"
+          "JDBC_ENFORCE_SSL": "false"
           PASSWORD: !Ref AdminUserPassword
           USERNAME: !Ref AdminUsername
       CatalogId: !Ref "AWS::AccountId"
