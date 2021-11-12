@@ -41,7 +41,7 @@ Resources:
           ClusterNodeCount: !FindInMap [MeterCountMap, !Ref "NoOfMeters", RedshiftNumberOfNodes]
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
-          GlueCrwalerToTriggerAfter: !GetAtt GlueStack.Outputs.NameCrawlerBusinessDaily
+          GlueCrawlerToTriggerAfter: !GetAtt GlueStack.Outputs.NameCrawlerBusinessDaily
           GlueDPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
           GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
           GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
@@ -73,7 +73,7 @@ Resources:
           ClusterName: !Ref ClusterName
           QSS3BucketName: !Ref QSS3BucketName
           QSS3KeyPrefix: !Ref QSS3KeyPrefix
-          GlueCrwalerToTriggerAfter: !GetAtt GlueStack.Outputs.NameCrawlerBusinessDaily
+          GlueCrawlerToTriggerAfter: !GetAtt GlueStack.Outputs.NameCrawlerBusinessDaily
           GlueDPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
           GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
           GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
