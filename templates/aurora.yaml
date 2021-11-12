@@ -1,12 +1,8 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Transform: "AWS::Serverless-2016-10-31"
 Description: "Create Aurora cluster (qs-1r18anahd)"
-Globals:
-  Function:
-    Runtime: python3.7
 
 Resources:
-  AuroraDatabase:
+  MeterDataAuroraDatabaseStack:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub
@@ -33,18 +29,18 @@ Resources:
         DBEngineVersion: !Ref DBEngineVersion
 
   AuroraGlueConnectSecurityGroup:
-    Type: "AWS::EC2::SecurityGroup"
+    Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Security group for Aurora cluster to help Glue connect to the cluster
       VpcId: !Ref VPCID
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: !GetAtt AuroraDatabase.Outputs.RDSEndPointPort
-          ToPort: !GetAtt AuroraDatabase.Outputs.RDSEndPointPort
+          FromPort: !GetAtt MeterDataAuroraDatabaseStack.Outputs.RDSEndPointPort
+          ToPort: !GetAtt MeterDataAuroraDatabaseStack.Outputs.RDSEndPointPort
           CidrIp: !Ref RemoteAccessCIDR
           Description: "Aurora Access to VPC CIDR"
 
-  SelfReferencingIngress:
+  AuroraGlueSelfReferencingIngress:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       Description: Self referencing security group ingress rule for Aurora cluster
@@ -57,17 +53,16 @@ Resources:
   #
   # Glue Connection, Job, Trigger
   #
-  GlueWorkflow:
+  MeterDataAuroraGlueWorkflow:
     Type: AWS::Glue::Workflow
     Properties:
-      Name: !Sub "meter-data-aurora-pipeline-${AWS::Region}"
       Description: Workflow for copying meter reads to aurora
 
-  GlueConnection:
-    Type: "AWS::Glue::Connection"
+  MeterDataAuroraGlueConnection:
+    Type: AWS::Glue::Connection
     DependsOn:
-      - AuroraDatabase
-      - IAMRole
+      - MeterDataAuroraDatabaseStack
+      - AuroraGlueIAMRole
     Properties:
       ConnectionInput:
         Description: "A connection to the meter data Aurora cluster"
@@ -81,15 +76,15 @@ Resources:
             - !GetAZs
               Ref: "AWS::Region"
         ConnectionProperties:
-          "JDBC_CONNECTION_URL": !Sub "jdbc:postgresql://${AuroraDatabase.Outputs.RDSEndPoints}"
+          "JDBC_CONNECTION_URL": !Sub "jdbc:postgresql://${MeterDataAuroraDatabaseStack.Outputs.RDSEndPoints}"
           "JDBC_ENFORCE_SSL": "true"
           PASSWORD: !Ref AdminUserPassword
           USERNAME: !Ref AdminUsername
         Name: !Ref ClusterName
       CatalogId: !Ref "AWS::AccountId"
 
-  IAMRole:
-    Type: "AWS::IAM::Role"
+  AuroraGlueIAMRole:
+    Type: AWS::IAM::Role
     Properties:
       Path: "/service-role/"
       AssumeRolePolicyDocument: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"glue.amazonaws.com"},"Action":"sts:AssumeRole"}]}'
@@ -99,11 +94,10 @@ Resources:
         - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSGlueServiceRole"
         - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonRDSFullAccess"
 
-  GlueJob4BusinessDailyToAurora:
-    Type: "AWS::Glue::Job"
+  BusinessDailyToAuroraGlueJob:
+    Type: AWS::Glue::Job
     Properties:
-      Name: !Sub "business_daily_to_aurora-${AWS::Region}"
-      Role: !GetAtt IAMRole.Arn
+      Role: !GetAtt AuroraGlueIAMRole.Arn
       ExecutionProperty:
         MaxConcurrentRuns: 1
       Command:
@@ -119,22 +113,21 @@ Resources:
         --job-language: "python"
         --enable-s3-parquet-optimized-committer: true
         --db_name: !Ref DBName
-        --aurora_connection: !Ref GlueConnection
+        --aurora_connection: !Ref MeterDataAuroraGlueConnection
         --temp_workflow_bucket: !Ref TempWorkflowS3Bucket
       Connections:
         Connections:
-          - !Ref GlueConnection
+          - !Ref MeterDataAuroraGlueConnection
       MaxRetries: 0
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref GlueDPU
       Timeout: 2880
       GlueVersion: "2.0"
 
-  GlueJobImportDemoDataToAurora:
-    Type: "AWS::Glue::Job"
+  ImportDemoDataToAuroraGlueJob:
+    Type: AWS::Glue::Job
     Properties:
-      Name: !Sub "import_demo_data_to_aurora-${AWS::Region}"
-      Role: !GetAtt IAMRole.Arn
+      Role: !GetAtt AuroraGlueIAMRole.Arn
       ExecutionProperty:
         MaxConcurrentRuns: 1
       Command:
@@ -148,30 +141,29 @@ Resources:
         --enable-continuous-log-filter: "true"
         --job-bookmark-option: "job-bookmark-enable"
         --job-language: "python"
-        --db_name: !GetAtt [AuroraDatabase, Outputs.DBName]
-        --aurora_connection: !Ref GlueConnection
+        --db_name: !GetAtt [MeterDataAuroraDatabaseStack, Outputs.DBName]
+        --aurora_connection: !Ref MeterDataAuroraGlueConnection
         --cis_bucket: !Sub "${BusinessZoneS3Bucket}/cisdata"
         --geo_bucket: !Sub "${BusinessZoneS3Bucket}/geodata"
       Connections:
         Connections:
-          - !Ref GlueConnection
+          - !Ref MeterDataAuroraGlueConnection
       MaxRetries: 0
       Timeout: 2880
       GlueVersion: "2.0"
       #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref GlueDPU
 
-  GlueAuroraLoadTrigger:
-    Type: "AWS::Glue::Trigger"
+  ExportToAuroraGlueTrigger:
+    Type: AWS::Glue::Trigger
     Properties:
-      Name: !Sub "export-to-aurora-${AWS::Region}"
       Type: "EVENT"
-      WorkflowName: !Ref GlueWorkflow
+      WorkflowName: !Ref MeterDataAuroraGlueWorkflow
       Actions:
-        - JobName: !Ref GlueJob4BusinessDailyToAurora
+        - JobName: !Ref BusinessDailyToAuroraGlueJob
 
   InvokeGlueAuroraWflRole:
-    Type: "AWS::IAM::Role"
+    Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
@@ -189,10 +181,10 @@ Resources:
                 Action: "glue:notifyEvent"
                 Resource: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/*"
 
-  EventRule:
+  AuroraGlueWorkflowEventRule:
     Type: AWS::Events::Rule
     Properties:
-      Description: "EventRule"
+      Description: "EventRule for the Aurora Glue Workflow"
       EventPattern:
         source:
           - "aws.glue"
@@ -205,8 +197,8 @@ Resources:
             - !Ref GlueCrawlerToTriggerAfter
       State: "ENABLED"
       Targets:
-        - Arn: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/${GlueWorkflow}"
-          Id: !Ref GlueWorkflow
+        - Arn: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/${MeterDataAuroraGlueWorkflow}"
+          Id: !Ref MeterDataAuroraGlueWorkflow
           RoleArn: !GetAtt InvokeGlueAuroraWflRole.Arn
 
 Outputs:
@@ -214,9 +206,9 @@ Outputs:
     Description: "Stack name"
     Value: !Sub "${AWS::StackName}"
   AuroraDatabaseEndpoint:
-    Value: !GetAtt AuroraDatabase.Outputs.RDSEndPoints
+    Value: !GetAtt MeterDataAuroraDatabaseStack.Outputs.RDSEndPoints
   AuroraEndpoint:
-    Value: !GetAtt AuroraDatabase.Outputs.RDSEndPoints
+    Value: !GetAtt MeterDataAuroraDatabaseStack.Outputs.RDSEndPoints
 
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, "aws-quickstart"]
