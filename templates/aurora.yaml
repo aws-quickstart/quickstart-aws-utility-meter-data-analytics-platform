@@ -118,7 +118,6 @@ Resources:
         Connections:
           - !Ref MeterDataAuroraGlueConnection
       MaxRetries: 0
-      #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref GlueDPU
       Timeout: 2880
       GlueVersion: "2.0"
@@ -150,7 +149,6 @@ Resources:
       MaxRetries: 0
       Timeout: 2880
       GlueVersion: "2.0"
-      #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref GlueDPU
 
   ExportToAuroraGlueTrigger:
