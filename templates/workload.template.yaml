@@ -50,6 +50,38 @@ Resources:
           QSS3BucketRegion: !Ref QSS3BucketRegion
           DbName: !Ref DBName
 
+    AuroraStack:
+      Type: 'AWS::CloudFormation::Stack'
+      Properties:
+        TemplateURL: !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/aurora.yaml'
+          - S3Region:
+              !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket:
+              !If [
+                UsingDefaultBucket,
+                !Sub '${QSS3BucketName}-${AWS::Region}',
+                !Ref QSS3BucketName,
+              ]
+        Parameters:
+          AdminUsername: !Ref AdminUsername
+          AdminUserPassword: !Ref AdminUserPassword
+          Subnet1ID: !Ref Subnet1ID
+          Subnet2ID: !Ref Subnet2ID
+          VPCID: !Ref VPCID
+          RemoteAccessCIDR: !Ref RemoteAccessCIDR
+          ClusterName: !Ref ClusterName
+          QSS3BucketName: !Ref QSS3BucketName
+          QSS3KeyPrefix: !Ref QSS3KeyPrefix
+          GlueCrwalerToTriggerAfter: !GetAtt GlueStack.Outputs.NameCrawlerBusinessDaily
+          GlueDPU: !FindInMap [MeterCountMap, !Ref "NoOfMeters", DPU]
+          GlueScriptsS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueScriptsS3Bucket
+          GlueTempS3Bucket: !GetAtt CopyScriptsStack.Outputs.GlueTempS3Bucket
+          BusinessZoneS3Bucket: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
+          TempWorkflowS3Bucket: !GetAtt GlueStack.Outputs.TempWorkflowS3Bucket
+          QSS3BucketRegion: !Ref QSS3BucketRegion
+          DBName: !Ref DBName
+
     CopyScriptsStack:
       Type: 'AWS::CloudFormation::Stack'
       Properties:
@@ -308,6 +340,7 @@ Parameters:
     MinLength: '8'
     MaxLength: '64'
     AllowedPattern: '^(?=.*[A-Z])(?=.*[\W_])(?=.*[0-9])(?=.*[a-z])(?!.*[@"/\\]).{8,64}$'
+
   ClusterName:
     Type: String
     Default: redshift-cluster-1
