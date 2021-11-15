@@ -7,7 +7,7 @@ Globals:
 
 Resources:
   AuroraDatabase:
-    Type: AWS::CloudFormation::Stack
+    Type: "AWS::CloudFormation::Stack"
     Properties:
       TemplateURL: !Sub
         - "https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-amazon-aurora-postgresql/templates/aurora_postgres.template.yaml"
@@ -45,7 +45,7 @@ Resources:
           Description: "Aurora Access to VPC CIDR"
 
   SelfReferencingIngress:
-    Type: AWS::EC2::SecurityGroupIngress
+    Type: "AWS::EC2::SecurityGroupIngress"
     Properties:
       Description: Self referencing security group ingress rule for Aurora cluster
       FromPort: -1
@@ -58,10 +58,10 @@ Resources:
   # Glue Connection, Job, Trigger
   #
   GlueWorkflow:
-    Type: AWS::Glue::Workflow
+    Type: "AWS::Glue::Workflow"
     Properties:
       Name: !Sub "meter-data-Aurora-pipeline-${AWS::Region}"
-      Description: Workflow for copieing meter reads to readshift
+      Description: Workflow for copying meter reads to Aurora
 
   GlueConnection:
     Type: "AWS::Glue::Connection"
@@ -125,7 +125,6 @@ Resources:
         Connections:
           - !Ref GlueConnection
       MaxRetries: 0
-      #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref GlueDPU
       Timeout: 2880
       GlueVersion: "2.0"
@@ -158,10 +157,9 @@ Resources:
       MaxRetries: 0
       Timeout: 2880
       GlueVersion: "2.0"
-      #AllocatedCapacity: !Ref DPU
       MaxCapacity: !Ref GlueDPU
 
-  GlueReadshiftLoadTrigger:
+  GlueAuroraLoadTrigger:
     Type: "AWS::Glue::Trigger"
     Properties:
       Name: !Sub "export-to-Aurora-${AWS::Region}"
@@ -170,7 +168,7 @@ Resources:
       Actions:
         - JobName: !Ref GlueJob4BusinessDailyToAurora
 
-  InvokeGlueReadshiftWflRole:
+  InvokeGlueAuroraWflRole:
     Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
@@ -207,7 +205,7 @@ Resources:
       Targets:
         - Arn: !Sub "arn:${AWS::Partition}:glue:${AWS::Region}:${AWS::AccountId}:workflow/${GlueWorkflow}"
           Id: !Ref GlueWorkflow
-          RoleArn: !GetAtt InvokeGlueReadshiftWflRole.Arn
+          RoleArn: !GetAtt InvokeGlueAuroraWflRole.Arn
 
 Outputs:
   StackName:
