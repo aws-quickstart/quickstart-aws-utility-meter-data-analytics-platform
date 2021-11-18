@@ -8,11 +8,11 @@ Metadata:
       - Label:
           default: Amazon Redshift cluster configuration
         Parameters:
-          - RedshiftUsername
-          - RedshiftUserPassword
+          - IncludeRedshift
+          - AdminUsername
+          - AdminUserPassword
           - ClusterName
           - DBName
-          - RedshiftPort
       - Label:
           default: Network configuration
         Parameters:
@@ -29,6 +29,7 @@ Metadata:
           - LandingZoneS3BucketName
           - DeploySpecialAdapters
           - NoOfMeters
+          - IncludeEtlAggregationWfl
       - Label:
           default: 'AWS Quick Start configuration'
         Parameters:
@@ -36,14 +37,16 @@ Metadata:
           - QSS3KeyPrefix
           - QSS3BucketRegion
     ParameterLabels:
-      RedshiftUsername:
-        default: Amazon Redshift user name
-      RedshiftUserPassword:
-        default: Amazon Redshift user password
+      IncludeRedshift:
+        default: Include Redshift cluster resources
+      IncludeEtlAggregationWfl:
+        default: Include ETL aggregation workflow
+      AdminUsername:
+        default: Admin user name
+      AdminUserPassword:
+        default: Admin user password
       ClusterName:
         default: Amazon Redshift cluster name
-      RedshiftPort:
-        default: Amazon Redshift port
       DBName:
         default: Amazon Redshift database name
       PrivateSubnet1ACIDR:
@@ -77,18 +80,8 @@ Metadata:
 
 Resources:
   VPC:
-    Type: 'AWS::CloudFormation::Stack'
+    Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub
-        - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/aws-vpc.template.yaml
-        - S3Bucket: !If
-            - UsingDefaultBucket
-            - !Sub 'aws-quickstart-${AWS::Region}'
-            - !Ref 'QSS3BucketName'
-          S3Region: !If
-            - UsingDefaultBucket
-            - !Ref 'AWS::Region'
-            - !Ref 'QSS3BucketRegion'
       Parameters:
         AvailabilityZones: !Join
           - ','
@@ -97,6 +90,11 @@ Resources:
         PrivateSubnet2ACIDR: !Ref 'PrivateSubnet2ACIDR'
         VPCCIDR: !Ref VPCCIDR
         NumberOfAZs: 2
+      TemplateURL:
+        !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template.yaml'
+        - S3Region: !If [ UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion ]
+          S3Bucket: !If [ UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName ]
 
   Workload:
     Type: 'AWS::CloudFormation::Stack'
@@ -112,8 +110,10 @@ Resources:
             - !Ref 'AWS::Region'
             - !Ref 'QSS3BucketRegion'
       Parameters:
-        RedshiftUsername: !Ref RedshiftUsername
-        RedshiftUserPassword: !Ref RedshiftUserPassword
+        IncludeRedshift: !Ref IncludeRedshift
+        IncludeEtlAggregationWfl: !Ref IncludeEtlAggregationWfl
+        AdminUsername: !Ref AdminUsername
+        AdminUserPassword: !Ref AdminUserPassword
         ClusterName: !Ref ClusterName
         Subnet1ID: 
           Fn::GetAtt: [VPC, Outputs.PrivateSubnet1AID]
@@ -129,11 +129,6 @@ Resources:
         QSS3KeyPrefix: !Ref QSS3KeyPrefix
         QSS3BucketRegion: !Ref QSS3BucketRegion
         DBName: !Ref DBName
-        RedshiftPort: !Ref RedshiftPort
-        VPCRouteTableId: !GetAtt VPC.Outputs.VPCRouteTable
-        AvailabilityZone: !Select
-        - '0'
-        - !Ref 'AvailabilityZones'
         NoOfMeters: !Ref NoOfMeters
         WithWeather: !Ref WithWeather
         DeploySpecialAdapters: !Ref DeploySpecialAdapters
@@ -142,18 +137,19 @@ Conditions:
   UsingDefaultBucket: !Equals
     - !Ref QSS3BucketName
     - 'aws-quickstart'
+  ShouldCreateRedshiftConsumption: !Equals [ 'True', !Ref IncludeRedshift ]
 
 Parameters:
-  RedshiftUsername:
+  AdminUsername:
     Type: String
-    Description: Amazon Redshift user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
+    Description: Admin user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
     MinLength: '1'
     MaxLength: '128'
     AllowedPattern : '([a-z])([a-z]|[0-9]|[_+.@-])*'
 
-  RedshiftUserPassword:
+  AdminUserPassword:
     Type: String
-    Description: Amazon Redshift user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
+    Description: Admin user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
     NoEcho: True
     MinLength: '8'
     MaxLength: '64'
@@ -207,14 +203,9 @@ Parameters:
   
   DBName:
     Type: String
-    Default: meter_data
+    Default: meterdata
     Description: Name of the Amazon Redshift database.
-  
-  RedshiftPort:
-    Type: String
-    Default: 5439
-    Description: Port number that you use to connect to the Amazon Redshift cluster.
-  
+
   NoOfMeters:
     Type: String
     Description: Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."
@@ -235,6 +226,12 @@ Parameters:
     AllowedValues:
       - None
       - mrasco
+
+  IncludeRedshift:
+    Type: String
+    Description: Whether Amazon Redshift consumption hub should be deployed
+    AllowedValues: ['True','False']
+    Default: 'True'
 
   AvailabilityZones:
     Description: >-
@@ -270,6 +267,12 @@ Parameters:
       0 = Weather data won't be used.
       1 = Enable use of weather data.
 
+  IncludeEtlAggregationWfl:
+    Type: String
+    Description: Whether the ETL aggregation workflow should be deployed
+    AllowedValues: [ 'True','False' ]
+    Default: 'True'
+
 Outputs:
   StackName:
     Description: 'Stack name'
@@ -277,9 +280,11 @@ Outputs:
   RedshiftClusterEndpoint:
     Description: Amazon Redshift cluster endpoint address with port
     Value: !GetAtt Workload.Outputs.RedshiftClusterEndpoint
+    Condition: ShouldCreateRedshiftConsumption
   RedshiftEndpoint:
     Description: Amazon Redshift endpoint address
     Value: !GetAtt Workload.Outputs.RedshiftEndpoint
+    Condition: ShouldCreateRedshiftConsumption
   GlueWorkflowName:
     Description: AWS Glue workflow name
     Value: !GetAtt Workload.Outputs.GlueWorkflowName

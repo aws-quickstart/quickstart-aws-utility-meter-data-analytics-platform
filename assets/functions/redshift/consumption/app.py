@@ -2,6 +2,8 @@ import json, os, datetime
 import psycopg2
 import boto3
 
+from botocore.exceptions import ClientError
+
 REGION = os.environ['AWS_REGION']
 SECRET_NAME = os.environ["SECRET_NAME"]
 

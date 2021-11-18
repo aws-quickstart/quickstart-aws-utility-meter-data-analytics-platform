@@ -51,17 +51,17 @@ Resources:
           Fn::Base64: !Sub |
             #!/bin/bash -xe
 
-            name="Meter_demo"
+            name="meter_demo"
 
             cd /home/ec2-user/SageMaker
-            aws s3 cp s3://${QSS3BucketName}/${QSS3KeyPrefix}assets/notebooks/mdm_demos.ipynb .
+            aws s3 cp s3://${QSS3BucketName}/${QSS3KeyPrefix}assets/notebooks/mda_demos.ipynb .
 
             # Create a Jupyter kernel for your new environment
 
             sudo -u ec2-user -i <<EOF 
             source /home/ec2-user/anaconda3/bin/activate
-            /home/ec2-user/anaconda3/bin/pip install --quiet altair vega_datasets pyathena 
-            /home/ec2-user/anaconda3/bin/python -m ipykernel install --name "$name" --display-name "$name" --user
+            nohub /home/ec2-user/anaconda3/bin/pip install --quiet altair vega_datasets pyathena
+            nohub /home/ec2-user/anaconda3/bin/python -m ipykernel install --name "$name" --display-name "$name" --user
             source /home/ec2-user/anaconda3/bin/deactivate
             EOF
 

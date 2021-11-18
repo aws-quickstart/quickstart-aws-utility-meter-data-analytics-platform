@@ -1,10 +1,10 @@
 [
   {
-    "ParameterKey": "RedshiftUsername",
+    "ParameterKey": "AdminUsername",
     "ParameterValue": "meteradmin"
   },
   {
-    "ParameterKey": "RedshiftUserPassword",
+    "ParameterKey": "AdminUserPassword",
     "ParameterValue": "MeterAdmin2020!"
   },
   {
@@ -50,5 +50,9 @@
   {
     "ParameterKey": "LandingzoneTransformer",
     "ParameterValue": "london"
+  },
+  {
+    "ParameterKey": "IncludeRedshift",
+    "ParameterValue": "True"
   }
 ]

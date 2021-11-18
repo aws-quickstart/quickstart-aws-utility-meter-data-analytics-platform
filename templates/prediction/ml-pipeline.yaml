@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: 'Meter Data Lake prediction pipeline'
+Description: 'Meter Data Lake prediction pipeline (qs-1r18anahd)'
 
 Mappings:
   TrainingImageMap:
@@ -84,17 +84,11 @@ Resources:
                 - events:PutTargets
                 - events:PutRule
                 - events:DescribeRule
-              Resource: "*"
-            - Effect: Allow
-              Action:
-                - "iam:PassRole"
-              Resource: "*"
-            - Effect: Allow
-              Action:
-                - "states:StartExecution"
-              Resource:
-                - !Ref MachineLearningPipelineModelTrainingStateMachine
-                - !Ref MachineLearningPipelinePreCalculationStateMachine
+              Resource: !Sub arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForStepFunctionsExecutionRule
+        - StepFunctionsExecutionPolicy:
+            StateMachineName: !GetAtt MachineLearningPipelineModelTrainingStateMachine.Name
+        - StepFunctionsExecutionPolicy:
+            StateMachineName: !GetAtt MachineLearningPipelinePreCalculationStateMachine.Name
         - LambdaInvokePolicy:
             FunctionName: !Ref CheckInitialPipelineRun
 
@@ -119,19 +113,18 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
-                - events:PutTargets
-                - events:PutRule
-                - events:DescribeRule
-              Resource: "*"
-            - Effect: Allow
-              Action:
                 - "iam:PassRole"
-              Resource: "*"
+              Resource: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/*"
             - Effect: Allow
               Action:
-                - sagemaker:CreateTransformJob
-                - sagemaker:DescribeTransformJob
-                - sagemaker:StopTransformJob
+                - events:DescribeRule
+                - events:PutRule
+                - events:PutTargets
+              Resource:
+                - !Sub "arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForSageMakerTrainingJobsRule"
+                - !Sub "arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForStepFunctionsExecutionRule"
+            - Effect: Allow
+              Action:
                 - sagemaker:CreateTrainingJob
                 - sagemaker:DescribeTrainingJob
                 - sagemaker:StopTrainingJob
@@ -145,7 +138,11 @@ Resources:
                 - sagemaker:DeleteEndpoint
                 - sagemaker:UpdateEndpoint
                 - sagemaker:ListTags
-              Resource: !Sub "arn:${AWS::Partition}:sagemaker:*:*:*"
+              Resource:
+                - !Sub "arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:training-job/*"
+                - !Sub "arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:model/*"
+                - !Sub "arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:endpoint/*"
+                - !Sub "arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:endpoint-config/*"
         - LambdaInvokePolicy:
             FunctionName: !Ref PrepareTrainingFunction
         - LambdaInvokePolicy:
@@ -175,29 +172,18 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
-                - events:PutTargets
-                - events:PutRule
-                - events:DescribeRule
-              Resource: "*"
-            - Effect: Allow
-              Action:
                   - sagemaker:CreateTransformJob
                   - sagemaker:DescribeTransformJob
                   - sagemaker:StopTransformJob
-                  - sagemaker:CreateTrainingJob
-                  - sagemaker:DescribeTrainingJob
-                  - sagemaker:StopTrainingJob
-                  - sagemaker:CreateHyperParameterTuningJob
-                  - sagemaker:DescribeHyperParameterTuningJob
-                  - sagemaker:StopHyperParameterTuningJob
-                  - sagemaker:CreateModel
-                  - sagemaker:CreateEndpointConfig
-                  - sagemaker:CreateEndpoint
-                  - sagemaker:DeleteEndpointConfig
-                  - sagemaker:DeleteEndpoint
-                  - sagemaker:UpdateEndpoint
-                  - sagemaker:ListTags
-              Resource: !Sub "arn:${AWS::Partition}:sagemaker:*:*:*"
+              Resource: !Sub "arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:transform-job/*"
+            - Effect: Allow
+              Action:
+                - events:DescribeRule
+                - events:PutRule
+                - events:PutTargets
+              Resource:
+                - !Sub "arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForSageMakerTransformJobsRule"
+                - !Sub "arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForStepFunctionsExecutionRule"
         - LambdaInvokePolicy:
             FunctionName: !Ref SplitBatchFunction
         - LambdaInvokePolicy:
@@ -272,7 +258,6 @@ Resources:
       Environment:
         Variables:
           ml_pipeline_trigger_state_machine: !Ref MachineLearningPipelineOrchestratorStateMachine
-          glue_job_name: !Ref GlueJobNameTrigger
       Events:
         EventBridgeRule:
           Type: EventBridgeRule
@@ -281,12 +266,12 @@ Resources:
               source:
                 - "aws.glue"
               detail-type:
-                - "Glue Job State Change"
+                - "Glue Crawler State Change"
               detail:
                 state:
-                  - "SUCCEEDED"
-                jobName: 
-                  - !Ref GlueJobNameTrigger
+                  - "Succeeded"
+                crawlerName:
+                  - !Ref GlueCrawlerNameTrigger
       Layers:
         - !Ref DependencyLayer
 
@@ -598,9 +583,9 @@ Parameters:
   DBName:
     ConstraintDescription: >-
       Name of the glue data catalog database
-    Default: meter_data
+    Default: meterdata
     Type: String
-  GlueJobNameTrigger:
+  GlueCrawlerNameTrigger:
     Type: String
   BusinessZoneS3Bucket:
     Type: String

@@ -18,12 +18,14 @@ tests:
       Adapter: mrasco
       RedshiftUsername: awsuser
       RedshiftUserPassword: Override_1
+      IncludeRedshift: 'True'
+      IncludeEtlAggregationWfl: 'True'
+      AdminUsername: awsuser
+      AdminUserPassword: Override_1
       ClusterName: redshift-cluster-3
-      RedshiftPort: 5439
-      DBName: sample-data
+      DBName: sampledata
       LandingzoneTransformer: default
       CreateLandingZoneS3Bucket: 'Yes'
-      LandingZoneS3BucketName: 'sample-meter-data'
       AvailabilityZones: $[taskcat_getaz_2]
       QSS3BucketName: $[taskcat_autobucket]
       QSS3KeyPrefix: quickstart-aws-utility-meter-data-analytics-platform/

@@ -1,10 +1,10 @@
 [
   {
-    "ParameterKey": "RedshiftUsername",
+    "ParameterKey": "AdminUsername",
     "ParameterValue": "meteradmin"
   },
   {
-    "ParameterKey": "RedshiftUserPassword",
+    "ParameterKey": "AdminUserPassword",
     "ParameterValue": "MeterAdmin2020!"
   },
   {
@@ -24,6 +24,10 @@
     "ParameterValue": "temp/"
   },
   {
+    "ParameterKey": "IncludeRedshift",
+    "ParameterValue": "True"
+  },
+  {
     "ParameterKey": "QSS3BucketRegion",
     "ParameterValue": "us-east-1"
   },
@@ -38,5 +42,13 @@
   {
     "ParameterKey": "DeploySpecialAdapters",
     "ParameterValue": "mrasco"
+  },
+  {
+    "ParameterKey": "IncludeRedshift",
+    "ParameterValue": "True"
+  },
+  {
+    "ParameterKey": "IncludeEtlAggregationWfl",
+    "ParameterValue": "False"
   }
 ]
