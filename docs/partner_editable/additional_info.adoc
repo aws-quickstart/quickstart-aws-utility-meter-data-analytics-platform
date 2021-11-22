@@ -22,7 +22,7 @@ You must upload the sample dataset to the landing-zone (raw-data) S3 bucket. The
 
 To upload the sample dataset to the landing-zone S3 bucket, follow these steps:
 
-. Choose the S3 bucket with the name that contains "landingzones." This is the starting point for the ETL process.
+. Choose the S3 bucket with the name that contains `landingzones`. This is the starting point for the ETL process.
 + 
 [#bucket_layout]
 .S3 bucket layout
@@ -36,22 +36,22 @@ image::../images/1_bucket_layout.png[Bucket Layout]
 [link=images/2_upload_demo_data_set.png]
 image::../images/2_upload_demo_data_set.png[Upload demo dataset]
 
-. After the demo data is uploaded, verify that the directory contains one file with meter data and no subdirectories.
+. Verify that the directory contains one file with meter data and no subdirectories.
 +
 [#uploaded_demo_dataset]
 .The uploaded demo dataset
 [link=images/3_upload_demo_data_set.png]
 image::../images/3_upload_demo_data_set.png[Uploaded demo dataset]
 
-WARNING: The ETL workflow fails is the S3 bucket contains subdirectories.
+WARNING: The ETL workflow fails if the S3 bucket contains subdirectories.
 
 //[TODO EC2 command line steps]
 
 === (Optional) Prepare weather data for use in training and forecasting
-
+:xrefstyle: short
 . https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv[Download^] the sample weather dataset.
-. Upload the dataset to a new S3 bucket. The bucket can have any name. You must reference the bucket in the following SQL statement.
-. Create a weather table in the target AWS Glue database using the following SQL statement. Replace <weather-data-location> with the location of the S3 bucket where you upload the weather dataset.
+. Upload the dataset to a new S3 bucket. The bucket can have any name. You must reference the bucket in a SQL statement in the next step.
+. Create a weather table in the target AWS Glue database using the SQL statement in <<create_weather_table>>. Replace `<weather-data-location>` in the code with the location of the S3 bucket with the weather dataset.
 +
 [#create_weather_table]
 .Creating the weather table
@@ -91,10 +91,10 @@ If you have another weather dataset you want to use, verify that it contains at 
 |Type
 |Mandatory
 |Format
-|time|string|X|  yyyy-MM-dd HH:mm:ss
-|temperature| double|X|
-|apparenttemperature|double|X|
-|humidity|double|X|
+|time|string|yes|  `yyyy-MM-dd HH:mm:ss`
+|temperature| double|yes|
+|apparenttemperature|double|yes|
+|humidity|double|yes|
 |===
 
 NOTE: To enable the use of weather data, set the `WithWeather` parameter to `1` during Quick Start deployment.
@@ -157,21 +157,21 @@ To update the data mapping, you can edit the AWS Glue job directly in the web ed
 [link=images/1_edit_etl_job.png]
 image::../images/1_edit_etl_job.png[AWS Glue Job console]
 
-. Select the ETL job ("transform_raw_to_clean-*").
+. Select the ETL job `transform_raw_to_clean-`.
 +
 [#edit_etl_job]
 .Selecting the ETL job
 [link=images/2_edit_etl_job.png]
 image::../images/2_edit_etl_job.png[Select the ETL job]
 
-. Open the script editor, and edit the input mapping.
+. Choose *Action, Edit script*. Edit the input mapping in the script editor.
 +
 [#open_editor]
 .Opening the script editor
 [link=images/3_open_editor.png]
 image::../images/3_open_editor.png[Open the script editor]
 
-. To adopt a different input format, look for the `ApplyMapping` call and adjust it to your needs to reflect your custom input format. The internal model works with the following schema:
+. To adopt a different input format, edit the `ApplyMapping` call. The internal model works with the following schema:
 +
 [cols="1,1,1,1", options="header"]
 .Schema
@@ -181,17 +181,17 @@ image::../images/3_open_editor.png[Open the script editor]
 |Mandatory
 |Format
 
-|meter_id| String| X|
-|reading_value| double| X|0.000
-|reading_type| String| X|AGG\|INT
-|reading_date_time| Timestamp| X|yyyy-MM-dd HH:mm:ss.SSS
-|date_str| String|X| yyyyMMdd
-|obis_code| String| |
-|week_of_year| int| |
-|month| int| |
-|year| int| |
-|hour| int| |
-|minute| int| |
+|meter_id| String| yes|
+|reading_value| double| yes|0.000
+|reading_type| String| yes|AGG\|INT
+|reading_date_time| Timestamp| yes|yyyy-MM-dd HH:mm:ss.SSS
+|date_str| String|yes| yyyyMMdd
+|obis_code| String|no |
+|week_of_year| int|no |
+|month| int|no |
+|year| int|no |
+|hour| int|no |
+|minute| int|no |
 |===
 
 include::./ml_pipeline.adoc[]
@@ -200,4 +200,4 @@ include::./ml_pipeline.adoc[]
 include::./data_format.adoc[]
 
 == Best practices
-Use Amazon S3 Glacier to archive the meter data from raw, clean, and business S3 buckets for long-term storage and cost savings.
+Use https://aws.amazon.com/s3/glacier/[Amazon S3 Glacier] to archive meter data from raw, clean, and business S3 buckets for long-term storage and cost savings.
