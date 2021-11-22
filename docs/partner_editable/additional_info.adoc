@@ -2,13 +2,13 @@
 //Should any sections not be applicable, remove them
 :xrefstyle: short
 
-== Post-deployment steps
+== Postdeployment steps
 
 To see the capabilities of the QuickStart, follow the steps in this section to use the dataset of meter reads from the City of London between 2011 and 2014. The link:#_customize_this_quick_start[Customize this Quick Start] section explains how to edit the raw-data ETL script to work with your own meter data.
 
-=== Download sample (demo) dataset
+=== Download demo dataset
 
-NOTE: For using the demo dataset, you must set the **LandingzoneTransformer** to London during the Quick Start deployment.
+NOTE: For using the demo dataset, you must set the `LandingzoneTransformer` parameter to `London` during Quick Start deployment.
 
 Download the sample dataset from https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households[SmartMeter Energy Consumption Data in London Households^]. The file can be downloaded to your local machine, unzipped, and then uploaded to Amazon S3. However, given the size of the unzipped file (~11 GB), it's faster to run an EC2 instance with sufficient permissions to write to Amazon S3, download the file to the EC2 instance, unzip it, and upload the data from there.
 
@@ -17,12 +17,12 @@ https://data.london.gov.uk/download/smartmeter-energy-use-data-in-london-househo
 
 Mirror: https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=halfhourly_dataset.zip[Donwlod from kaggle]
 
-=== Upload the dataset to the landing-zone (raw-data) S3 bucket
-You must upload the sample dataset to the landing-zone (raw-data) S3 bucket. The landing zone is the starting point for the AWS Glue workflow. Files that are placed in this S3 bucket are processed by the ETL pipeline. Furthermore, the AWS Glue ETL workflow tracks which files have been processed and which have not.
+=== Upload the dataset to the landing-zone S3 bucket
+You must upload the sample dataset to the landing-zone (raw-data) S3 bucket. The landing zone is the starting point for the AWS Glue workflow. Files that are placed in this S3 bucket are processed by the ETL pipeline. Furthermore, the AWS Glue extract, transform, and load (ETL) workflow tracks which files have been processed and which have not.
 
 To upload the sample dataset to the landing-zone S3 bucket, follow these steps:
 
-. Choose the landing-zone bucket. Bucket names are generated. Find the name that contains "landingzones." This is the starting point for the ETL process.
+. Choose the S3 bucket with the name that contains "landingzones." This is the starting point for the ETL process.
 + 
 [#bucket_layout]
 .S3 bucket layout
@@ -36,14 +36,14 @@ image::../images/1_bucket_layout.png[Bucket Layout]
 [link=images/2_upload_demo_data_set.png]
 image::../images/2_upload_demo_data_set.png[Upload demo dataset]
 
-. After the demo data is uploaded, verify that the directory contains one file with all the meter reads.
+. After the demo data is uploaded, verify that the directory contains one file with meter data and no subdirectories.
 +
 [#uploaded_demo_dataset]
 .The uploaded demo dataset
 [link=images/3_upload_demo_data_set.png]
 image::../images/3_upload_demo_data_set.png[Uploaded demo dataset]
 
-WARNING: Make sure that your landing-zone S3 bucket contains only meter-data files. If it contains any subdirectories, the ETL workflow fails.
+WARNING: The ETL workflow fails is the S3 bucket contains subdirectories.
 
 //[TODO EC2 command line steps]
 
@@ -81,7 +81,7 @@ TBLPROPERTIES (
   'skip.header.line.count'='1');
 ```
 
-If you have another weather dataset you want to use, make sure that it contains at least the four columns shown in <<weather_data_schema>>.
+If you have another weather dataset you want to use, verify that it contains at least the four columns shown in <<weather_data_schema>>.
 
 [cols="1,1,1,1", options="header"]
 [#weather_data_schema]
@@ -97,11 +97,11 @@ If you have another weather dataset you want to use, make sure that it contains 
 |humidity|double|X|
 |===
 
-The AWS CloudFormation parameter `WithWeather` should have been set to 1 to indicate that weather data is available to use for generating the ML model.
+NOTE: To enable the use of weather data, set the `WithWeather` parameter to `1` during Quick Start deployment.
 
 === (Optional) Prepare geolocation data
 
-This Quick Start requires geolocation data to be uploaded to the `geodata` directory in the business-zone S3 bucket. You can get the name of this bucket from the output section in the AWS CloudFormation stack. The S3 path of geodata location should be `s3://<business-zone-s3-bucket-name>/geodata/`. The data should be in a CSV file format with the following structure, where all three fields (meter id, latitude, and longitude) are mandatory as comma-separated values.
+This Quick Start requires geolocation data to be uploaded to the `geodata` directory in the business-zone S3 bucket. The name of this bucket appears in the *Outputs* section in the AWS CloudFormation stack. The S3 path of the geolocation data should be `s3://<business-zone-s3-bucket-name>/geodata/`. The data should be in a CSV file format with the following structure:
 
 [cols="1,1", options="header"]
 .Geolocation data schema
@@ -113,14 +113,12 @@ This Quick Start requires geolocation data to be uploaded to the `geodata` direc
 |longitude |string
 |===
 
-If this data is missing, any API request to get meter-outage information returns an error.
+`meter id`, `latitude`, and `longitude` are mandatory. If data are missing, API requests for meter-outage information returns an error.
 
 
 === Start the AWS Glue ETL and ML training pipeline
 
-By default, the pipeline is triggered each day at 09:00 and to process the newly arrived data in the landing-zone S3 bucket. To process the uploaded data without waiting, you trigger the ETL pipeline manually. When you do, the AWS Glue workflow orchestrates the steps of the ETL process. Then, the model training state machine is triggered to build the ML model and prepare the data for forecasting energy usage and reporting on anomalies.
-
-To trigger the ETL pipeline manually, follow these steps.
+By default, the pipeline is invoked each day at 9:00 a.m. to process the newly arrived data in the landing-zone S3 bucket. To start the ETL pipeline manually, do the following:
 
 . Open the AWS Glue console. Choose *Workflows*.
 +
@@ -137,7 +135,7 @@ image::../images/4_start_etl_workflow.png[AWS Glue console]
 [link=images/5_start_etl_workflow.png]
 image::../images/5_start_etl_workflow.png[Start ETL workflow]
 
-. In the *History* tab, make sure that the workflow's run status is *Running*.
+. In the *History* tab, ensure that the workflow run status is *Running*.
 +
 [#running_workflow]
 .Running the workflow
