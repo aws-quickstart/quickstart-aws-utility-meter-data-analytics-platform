@@ -116,9 +116,9 @@ This Quick Start requires geolocation data to be uploaded to the `geodata` direc
 `meter id`, `latitude`, and `longitude` are mandatory. If data are missing, API requests for meter-outage information returns an error.
 
 
-=== Start the AWS Glue ETL and ML training pipeline
+=== Start the AWS Glue ETL and ML training pipeline manually
 
-By default, the pipeline is invoked each day at 9:00 a.m. to process the newly arrived data in the landing-zone S3 bucket. To start the ETL pipeline manually, do the following:
+By default, the pipeline is invoked each day at 9:00 a.m. to process newly arrived data in the landing-zone S3 bucket. To start the ETL pipeline manually, do the following:
 
 . Open the AWS Glue console. Choose *Workflows*.
 +
@@ -144,7 +144,7 @@ image::../images/6_start_etl_workflow.png[Running workflow]
 
 == Customize this Quick Start
 
-You can customize this Quick Start for use with your own data format. To do that, you adjust the first AWS Glue job to map the incoming data to the internal meter-data-lake schema. The following steps describe how.
+You can customize this Quick Start for use with your own data format. To do that, adjust the first AWS Glue job to map the incoming data to the internal meter-data-lake schema. The following steps describe how.
 
 The first AWS Glue job in the ETL workflow transforms the raw data in the landing-zone S3 bucket to clean data in the clean-zone S3 bucket. This step also maps the inbound data to the internal data schema, which is used by the rest of the steps in the AWS ETL workflow and the ML state machines.
 
