@@ -8,14 +8,14 @@ To see the capabilities of the QuickStart, follow the steps in this section to u
 
 === Download demo dataset
 
-NOTE: For using the demo dataset, you must set the `LandingzoneTransformer` parameter to `London` during Quick Start deployment.
+NOTE: To use the demo dataset, you must set the `LandingzoneTransformer` parameter to `London` during Quick Start deployment.
 
-Download the sample dataset from https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households[SmartMeter Energy Consumption Data in London Households^]. The file can be downloaded to your local machine, unzipped, and then uploaded to Amazon S3. However, given the size of the unzipped file (~11 GB), it's faster to run an EC2 instance with sufficient permissions to write to Amazon S3, download the file to the EC2 instance, unzip it, and upload the data from there.
+Download the sample dataset from  https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households[SmartMeter Energy Consumption Data in London Households^]. The file can be downloaded to your local machine, unzipped, and then uploaded to Amazon S3. However, given the size of the unzipped file (~11 GB), it's faster to run an EC2 instance with sufficient permissions to write to Amazon S3, download the file to the EC2 instance, unzip it, and upload the data from there.
 
 https://data.london.gov.uk/download/smartmeter-energy-use-data-in-london-households/3527bf39-d93e-4071-8451-df2ade1ea4f2/Power-Networks-LCL-June2015(withAcornGps).zip[Download sample meter data^]
 
 
-Mirror: https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=halfhourly_dataset.zip[Donwlod from kaggle]
+Mirror: https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=halfhourly_dataset.zip[Download from kaggle]
 
 === Upload the dataset to the landing-zone S3 bucket
 You must upload the sample dataset to the landing-zone (raw-data) S3 bucket. The landing zone is the starting point for the AWS Glue workflow. Files that are placed in this S3 bucket are processed by the ETL pipeline. Furthermore, the AWS Glue extract, transform, and load (ETL) workflow tracks which files have been processed and which have not.

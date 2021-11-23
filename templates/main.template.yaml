@@ -246,7 +246,7 @@ Parameters:
   DeploySpecialAdapters:
     Type: String
     Default: None
-    Description: Select `mrasco` to deploy  Defines if special adapters are needed for raw data. This will deploy a S3 trigger that invokes a Lambda to transform files added in additional folder named after adapter in landing zone bucket.
+    Description: Select `mrasco` to deploy the https://www.mrasco.com/[MRA Service Company (MRASCo)] data adapter. This includes an S3 bucket to store MRASCo data, an AWS Lambda function to transform MRASCo data to MDA format, and an S3 agent to invoke the function.
     AllowedValues:
       - None
       - mrasco
