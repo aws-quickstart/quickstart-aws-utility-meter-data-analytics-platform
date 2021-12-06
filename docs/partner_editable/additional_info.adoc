@@ -4,7 +4,7 @@
 
 == MRASCo data adapter option
 
-If you choose `mrasco` for the `DeploySpecialAdapters` parameter during deployment, the Quick Start will deploy the following resources.
+This Quick Start features a MRASCo data adapter option to transform MRASCo data flow files to MDA landing zone format. To deploy this feature, choose `mrasco` for the `DeploySpecialAdapters` parameter during deployment. The MRASCo data adapter option deploys the following resources:
 
 * An S3 bucket to store MRASCo data files. The S3 bucket is configured with an agent to invoke an AWS Lambda function when files are uploaded.
 * An AWS Lambda function to retrieve MRASCo data files from the S3 bucket and transform them to MDA landing zone format.
