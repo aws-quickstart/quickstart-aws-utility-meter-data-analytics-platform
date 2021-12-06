@@ -2,27 +2,34 @@
 //Should any sections not be applicable, remove them
 :xrefstyle: short
 
-== Post-deployment steps
+== MRASCo data adapter option
+
+This Quick Start features a MRASCo data adapter option to transform MRASCo data flow files to MDA landing zone format. To deploy this feature, choose `mrasco` for the `DeploySpecialAdapters` parameter during deployment. The MRASCo data adapter option deploys the following resources:
+
+* An S3 bucket to store MRASCo data files. The S3 bucket is configured with an agent to invoke an AWS Lambda function when files are uploaded.
+* An AWS Lambda function to retrieve MRASCo data files from the S3 bucket and transform them to MDA landing zone format.
+
+== Postdeployment steps
 
 To see the capabilities of the QuickStart, follow the steps in this section to use the dataset of meter reads from the City of London between 2011 and 2014. The link:#_customize_this_quick_start[Customize this Quick Start] section explains how to edit the raw-data ETL script to work with your own meter data.
 
-=== Download sample (demo) dataset
+=== Download demo dataset
 
-NOTE: For using the demo dataset, you must set the **LandingzoneTransformer** to London during the Quick Start deployment.
+NOTE: To use the demo dataset, you must set the `LandingzoneTransformer` parameter to `London` during Quick Start deployment.
 
-Download the sample dataset from https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households[SmartMeter Energy Consumption Data in London Households^]. The file can be downloaded to your local machine, unzipped, and then uploaded to Amazon S3. However, given the size of the unzipped file (~11 GB), it's faster to run an EC2 instance with sufficient permissions to write to Amazon S3, download the file to the EC2 instance, unzip it, and upload the data from there.
+Download the sample dataset from  https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households[SmartMeter Energy Consumption Data in London Households^]. The file can be downloaded to your local machine, unzipped, and then uploaded to Amazon S3. However, given the size of the unzipped file (~11 GB), it's faster to run an EC2 instance with sufficient permissions to write to Amazon S3, download the file to the EC2 instance, unzip it, and upload the data from there.
 
 https://data.london.gov.uk/download/smartmeter-energy-use-data-in-london-households/3527bf39-d93e-4071-8451-df2ade1ea4f2/Power-Networks-LCL-June2015(withAcornGps).zip[Download sample meter data^]
 
 
-Mirror: https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=halfhourly_dataset.zip[Donwlod from kaggle]
+Mirror: https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=halfhourly_dataset.zip[Download from kaggle]
 
-=== Upload the dataset to the landing-zone (raw-data) S3 bucket
-You must upload the sample dataset to the landing-zone (raw-data) S3 bucket. The landing zone is the starting point for the AWS Glue workflow. Files that are placed in this S3 bucket are processed by the ETL pipeline. Furthermore, the AWS Glue ETL workflow tracks which files have been processed and which have not.
+=== Upload the dataset to the landing-zone S3 bucket
+You must upload the sample dataset to the landing-zone (raw-data) S3 bucket. The landing zone is the starting point for the AWS Glue workflow. Files that are placed in this S3 bucket are processed by the ETL pipeline. Furthermore, the AWS Glue extract, transform, and load (ETL) workflow tracks which files have been processed and which have not.
 
 To upload the sample dataset to the landing-zone S3 bucket, follow these steps:
 
-. Choose the landing-zone bucket. Bucket names are generated. Find the name that contains "landingzones." This is the starting point for the ETL process.
+. Choose the S3 bucket with the name that contains `landingzones`. This is the starting point for the ETL process.
 + 
 [#bucket_layout]
 .S3 bucket layout
@@ -36,22 +43,22 @@ image::../images/1_bucket_layout.png[Bucket Layout]
 [link=images/2_upload_demo_data_set.png]
 image::../images/2_upload_demo_data_set.png[Upload demo dataset]
 
-. After the demo data is uploaded, verify that the directory contains one file with all the meter reads.
+. Verify that the directory contains one file with meter data and no subdirectories.
 +
 [#uploaded_demo_dataset]
 .The uploaded demo dataset
 [link=images/3_upload_demo_data_set.png]
 image::../images/3_upload_demo_data_set.png[Uploaded demo dataset]
 
-WARNING: Make sure that your landing-zone S3 bucket contains only meter-data files. If it contains any subdirectories, the ETL workflow fails.
+WARNING: The ETL workflow fails if the S3 bucket contains subdirectories.
 
 //[TODO EC2 command line steps]
 
 === (Optional) Prepare weather data for use in training and forecasting
-
+:xrefstyle: short
 . https://www.kaggle.com/jeanmidev/smart-meters-in-london?select=weather_hourly_darksky.csv[Download^] the sample weather dataset.
-. Upload the dataset to a new S3 bucket. The bucket can have any name. You must reference the bucket in the following SQL statement.
-. Create a weather table in the target AWS Glue database using the following SQL statement. Replace <weather-data-location> with the location of the S3 bucket where you upload the weather dataset.
+. Upload the dataset to a new S3 bucket. The bucket can have any name. You must reference the bucket in a SQL statement in the next step.
+. Create a weather table in the target AWS Glue database using the SQL statement in <<create_weather_table>>. Replace `<weather-data-location>` in the code with the location of the S3 bucket with the weather dataset.
 +
 [#create_weather_table]
 .Creating the weather table
@@ -81,7 +88,7 @@ TBLPROPERTIES (
   'skip.header.line.count'='1');
 ```
 
-If you have another weather dataset you want to use, make sure that it contains at least the four columns shown in <<weather_data_schema>>.
+If you have another weather dataset you want to use, verify that it contains at least the four columns shown in <<weather_data_schema>>.
 
 [cols="1,1,1,1", options="header"]
 [#weather_data_schema]
@@ -91,17 +98,17 @@ If you have another weather dataset you want to use, make sure that it contains 
 |Type
 |Mandatory
 |Format
-|time|string|X|  yyyy-MM-dd HH:mm:ss
-|temperature| double|X|
-|apparenttemperature|double|X|
-|humidity|double|X|
+|time|string|yes|  `yyyy-MM-dd HH:mm:ss`
+|temperature| double|yes|
+|apparenttemperature|double|yes|
+|humidity|double|yes|
 |===
 
-The AWS CloudFormation parameter `WithWeather` should have been set to 1 to indicate that weather data is available to use for generating the ML model.
+NOTE: To enable the use of weather data, set the `WithWeather` parameter to `1` during Quick Start deployment.
 
 === (Optional) Prepare geolocation data
 
-This Quick Start requires geolocation data to be uploaded to the `geodata` directory in the business-zone S3 bucket. You can get the name of this bucket from the output section in the AWS CloudFormation stack. The S3 path of geodata location should be `s3://<business-zone-s3-bucket-name>/geodata/`. The data should be in a CSV file format with the following structure, where all three fields (meter id, latitude, and longitude) are mandatory as comma-separated values.
+This Quick Start requires geolocation data to be uploaded to the `geodata` directory in the business-zone S3 bucket. The name of this bucket appears in the *Outputs* section in the AWS CloudFormation stack. The S3 path of the geolocation data should be `s3://<business-zone-s3-bucket-name>/geodata/`. The data should be in a CSV file format with the following structure:
 
 [cols="1,1", options="header"]
 .Geolocation data schema
@@ -113,14 +120,11 @@ This Quick Start requires geolocation data to be uploaded to the `geodata` direc
 |longitude |string
 |===
 
-If this data is missing, any API request to get meter-outage information returns an error.
+`meter id`, `latitude`, and `longitude` are mandatory. If data are missing, API requests for meter-outage information returns an error.
 
+=== Start the AWS Glue ETL and ML training pipeline manually
 
-=== Start the AWS Glue ETL and ML training pipeline
-
-By default, the pipeline is triggered each day at 09:00 and to process the newly arrived data in the landing-zone S3 bucket. To process the uploaded data without waiting, you trigger the ETL pipeline manually. When you do, the AWS Glue workflow orchestrates the steps of the ETL process. Then, the model training state machine is triggered to build the ML model and prepare the data for forecasting energy usage and reporting on anomalies.
-
-To trigger the ETL pipeline manually, follow these steps.
+By default, the pipeline is invoked each day at 9:00 a.m. to process newly arrived data in the landing-zone S3 bucket. To start the ETL pipeline manually, do the following:
 
 . Open the AWS Glue console. Choose *Workflows*.
 +
@@ -137,7 +141,7 @@ image::../images/4_start_etl_workflow.png[AWS Glue console]
 [link=images/5_start_etl_workflow.png]
 image::../images/5_start_etl_workflow.png[Start ETL workflow]
 
-. In the *History* tab, make sure that the workflow's run status is *Running*.
+. In the *History* tab, ensure that the workflow run status is *Running*.
 +
 [#running_workflow]
 .Running the workflow
@@ -146,7 +150,7 @@ image::../images/6_start_etl_workflow.png[Running workflow]
 
 == Customize this Quick Start
 
-You can customize this Quick Start for use with your own data format. To do that, you adjust the first AWS Glue job to map the incoming data to the internal meter-data-lake schema. The following steps describe how.
+You can customize this Quick Start for use with your own data format. To do that, adjust the first AWS Glue job to map the incoming data to the internal meter-data-lake schema. The following steps describe how.
 
 The first AWS Glue job in the ETL workflow transforms the raw data in the landing-zone S3 bucket to clean data in the clean-zone S3 bucket. This step also maps the inbound data to the internal data schema, which is used by the rest of the steps in the AWS ETL workflow and the ML state machines.
 
@@ -159,21 +163,21 @@ To update the data mapping, you can edit the AWS Glue job directly in the web ed
 [link=images/1_edit_etl_job.png]
 image::../images/1_edit_etl_job.png[AWS Glue Job console]
 
-. Select the ETL job ("transform_raw_to_clean-*").
+. Select the ETL job `transform_raw_to_clean-`.
 +
 [#edit_etl_job]
 .Selecting the ETL job
 [link=images/2_edit_etl_job.png]
 image::../images/2_edit_etl_job.png[Select the ETL job]
 
-. Open the script editor, and edit the input mapping.
+. Choose *Action, Edit script*. Edit the input mapping in the script editor.
 +
 [#open_editor]
 .Opening the script editor
 [link=images/3_open_editor.png]
 image::../images/3_open_editor.png[Open the script editor]
 
-. To adopt a different input format, look for the `ApplyMapping` call and adjust it to your needs to reflect your custom input format. The internal model works with the following schema:
+. To adopt a different input format, edit the `ApplyMapping` call. The internal model works with the following schema:
 +
 [cols="1,1,1,1", options="header"]
 .Schema
@@ -183,17 +187,17 @@ image::../images/3_open_editor.png[Open the script editor]
 |Mandatory
 |Format
 
-|meter_id| String| X|
-|reading_value| double| X|0.000
-|reading_type| String| X|AGG\|INT
-|reading_date_time| Timestamp| X|yyyy-MM-dd HH:mm:ss.SSS
-|date_str| String|X| yyyyMMdd
-|obis_code| String| |
-|week_of_year| int| |
-|month| int| |
-|year| int| |
-|hour| int| |
-|minute| int| |
+|meter_id| String| yes|
+|reading_value| double| yes|0.000
+|reading_type| String| yes|AGG\|INT
+|reading_date_time| Timestamp| yes|yyyy-MM-dd HH:mm:ss.SSS
+|date_str| String|yes| yyyyMMdd
+|obis_code| String|no |
+|week_of_year| int|no |
+|month| int|no |
+|year| int|no |
+|hour| int|no |
+|minute| int|no |
 |===
 
 include::./ml_pipeline.adoc[]
@@ -202,4 +206,4 @@ include::./ml_pipeline.adoc[]
 include::./data_format.adoc[]
 
 == Best practices
-Use Amazon S3 Glacier to archive the meter data from raw, clean, and business S3 buckets for long-term storage and cost savings.
+Use https://aws.amazon.com/s3/glacier/[Amazon S3 Glacier] to archive meter data from raw, clean, and business S3 buckets for long-term storage and cost savings.

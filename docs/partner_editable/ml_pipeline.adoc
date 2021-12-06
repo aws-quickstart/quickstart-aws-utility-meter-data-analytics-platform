@@ -12,7 +12,7 @@ You can also use a custom model for batch pipeline and forecast API.
 === Run the batch prediction pipeline
 The batch pipeline is implemented by AWS Step Functions. 
 
-. Open the Step Functions console. Find the state machine with the prefix *"MachineLearningPipelinePreCalculationStateMachine-"*.
+. Open the Step Functions console. Find the state machine with the prefix `MachineLearningPipelinePreCalculationStateMachine-"`.
 +
 :xrefstyle: short
 [#step_function_console]
@@ -28,7 +28,7 @@ image::../images/1_batchpipeline.png[AWS Step Functions console]
 [link=images/2_batchpipeline_execution.png]
 image::../images/2_batchpipeline_execution.png[Batch pipeline execution]
 
-The input parameter can be found in the DynamoDB table *MachineLearningPipelineConfig**. You can specify the range of meters you want to process, and the date range of your data. Note that `Batch_size` should not exceed 100.
+The input parameter can be found in the DynamoDB table `MachineLearningPipelineConfig`. You can specify the range of meters you want to process, and the date range of your data. Note that `Batch_size` should not exceed 100.
 
 Adjust the following values in the DynamoDB table as needed:
 ```json
@@ -45,9 +45,9 @@ Adjust the following values in the DynamoDB table as needed:
 
 === Retrain the model with different parameters
 
-. Open the Step Functions console. Find the state machine with prefix *"MachineLearningPipelineModelTrainingStateMachine-"*.
+. Open the Step Functions console. Find the state machine with prefix `MachineLearningPipelineModelTrainingStateMachine-`.
 . Open the state machine, and choose *Definition*. 
-. Find the `HyperParameters` part, and modify the parameters or add more parameters. See https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html[DeepAR Hyperparameters^].  
+. In the `HyperParameters` section, modify or add more parameters. For more information, see https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html[DeepAR Hyperparameters^].  
 +
 :xrefstyle: short
 [#hyperparameters]
@@ -57,9 +57,9 @@ image::../images/3_trainingpipeline_hyperparameters.png[HyperParameters]
 
 . Save the change to the state machine, and choose *Start execution*.
 
-The configuration will be loaded from the DynamoDB table: *MachineLearningPipelineConfig**. The following parameters can be modified:
+The configuration will be loaded from the DynamoDB table `MachineLearningPipelineConfig`. The following parameters can be modified:
 
-`Training_samples` specifies how many meter data will be used to train the model. The more meters are used, the more accurate the model will be and the longer the training will take.
+`Training_samples` specifies how many meter data will be used to train the model. The more meters that are used, the more accurate the model will be and the longer the training will take.
 
 A new unique `ModelName` and `ML_endpoint_name` will be generated.
 
