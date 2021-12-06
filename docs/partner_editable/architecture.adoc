@@ -27,15 +27,3 @@ As shown in <<architecture1>>, the Quick Start sets up the following:
 * Amazon API Gateway to deliver API query results for energy usage, anomalies, and meter outages.
 
 [.small]#*The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.#
-
-## MRASCo data adapter option
-
-If you choose `mrasco` for the `DeploySpecialAdapters` parameter during deployment, the Quick Start will deploy the following additional resources.
-
-* An S3 bucket to store MRASCo data files. The S3 bucket is configured with an agent to invoke an AWS Lambda function when files are uploaded.
-* An AWS Lambda function to retrieve MRASCo data files from the S3 bucket and transform them to MDA landing zone format.
-
-
-
-
-
