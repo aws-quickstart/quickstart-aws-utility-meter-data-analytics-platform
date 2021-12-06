@@ -305,7 +305,7 @@ Parameters:
 
   AdminUserPassword:
     Type: String
-    Description: Administrator user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
+    Description: Administrator user password for the Amazon Redshift cluster. The password must be 8–64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
     NoEcho: True
     MinLength: '8'
     MaxLength: '64'
@@ -335,7 +335,7 @@ Parameters:
   LandingzoneTransformer:
     Type: String
     Default: london
-    Description: 'Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.'
+    Description: Defines the transformer for the input data in the landing zone. The default is the transformer that works with the London test data set.
     AllowedValues:
       - default
       - london
@@ -343,7 +343,7 @@ Parameters:
   CreateLandingZoneS3Bucket:
     Type: String
     Default: 'Yes'
-    Description: Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (LandingZoneS3BucketName).
+    Description: Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (`LandingZoneS3BucketName`).
     AllowedValues:
       - 'Yes'
       - 'No'
@@ -402,7 +402,7 @@ Parameters:
 
   NoOfMeters:
     Type: String
-    Description: Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."
+    Description: Approximate number of meters in your dataset that need to be processed by the pipeline. This is used to configure the appropriate number of Data Processing Units (DPUs) for the AWS Glue job. The default value works for sample datasets or evaluation purposes. For a production deployment with millions of meters, choose `5Mil-and-more.`
     AllowedValues:
       - "1-50K"
       - "50K-1Mil"
@@ -421,23 +421,20 @@ Parameters:
   DeploySpecialAdapters:
     Type: String
     Default: None
-    Description: >-
-      Defines if special adapters are needed for raw data.
-      This will deploy a S3 trigger that invokes a Lambda to transform files added in additional folder named after adapter
-       in landing zone bucket.
+    Description: Choose `mrasco` to deploy the https://www.mrasco.com/[MRA Service Company (MRASCo)] data adapter. This includes an S3 bucket to store MRASCo data, an AWS Lambda function to transform MRASCo data to MDA format, and an S3 agent to invoke the function.
     AllowedValues:
       - None
       - mrasco
 
   IncludeRedshift:
     Type: String
-    Description: Whether Amazon Redshift consumption hub should be deployed
+    Description: Deploy Amazon Redshift consumption hub.
     AllowedValues: ['True','False']
     Default: 'True'
 
   IncludeEtlAggregationWfl:
     Type: String
-    Description: Whether the ETL aggregation workflow should be deployed
+    Description: Deploy the ETL aggregation workflow.
     AllowedValues: ['True','False']
     Default: 'True'
 
