@@ -16,6 +16,8 @@ tests:
   full-test-all-regions:
     parameters:
       Adapter: mrasco
+      RedshiftUsername: awsuser
+      RedshiftUserPassword: Override_1
       IncludeRedshift: 'True'
       IncludeEtlAggregationWfl: 'True'
       AdminUsername: awsuser

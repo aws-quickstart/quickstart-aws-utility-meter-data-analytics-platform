@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Create SageMaker notebook instance with demo notebooks loaded (qs-1r18anahd)"
+Description: "Create SageMaker notebook instance with demo notebooks loaded. (qs-1r18anahd)"
 Parameters:
   Session:
     Type: String

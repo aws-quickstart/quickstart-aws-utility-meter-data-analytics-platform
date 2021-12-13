@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: 'Create API for getting meter consumption forecast (qs-1r18anahd)'
+Description: Create API for getting meter consumption forecast. (qs-1r18anahd)
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:

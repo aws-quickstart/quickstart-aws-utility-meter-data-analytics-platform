@@ -15,3 +15,15 @@
 |Amazon Redshift instances |1
 |AWS Step Functions state machines |3
 |===
+
+// Additional resources for adapter
+
+Deploying the link:#_mrasco_data_adapter_option[MRASCo data adapter option] adds the following resources:
+
+|===
+|Resource |Additional adapter resources
+
+// Space needed to maintain table headers
+|Amazon S3 buckets |1
+|AWS Lambda functions |1
+|===

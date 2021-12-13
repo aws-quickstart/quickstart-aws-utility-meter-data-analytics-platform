@@ -291,18 +291,21 @@ Outputs:
   BusinessZoneS3Bucket:
     Description: Business zone S3 bucket name
     Value: !GetAtt GlueStack.Outputs.BusinessZoneS3Bucket
+  Postdeployment:
+    Description: See the deployment guide for postdeployment steps.
+    Value: https://aws.amazon.com/quickstart/?quickstart-all.sort-by=item.additionalFields.sortDate&quickstart-all.sort-order=desc&awsm.page-quickstart-all=5
 
 Parameters:
   AdminUsername:
     Type: String
-    Description: Root user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
+    Description: Administrator user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.
     MinLength: '1'
     MaxLength: '128'
     AllowedPattern : '([a-z])([a-z]|[0-9]|[_+.@-])*'
 
   AdminUserPassword:
     Type: String
-    Description: Root user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
+    Description: Administrator user password for the Amazon Redshift cluster. The password must be 8–64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.
     NoEcho: True
     MinLength: '8'
     MaxLength: '64'
@@ -310,7 +313,7 @@ Parameters:
   ClusterName:
     Type: String
     Default: redshift-cluster-1
-    Description: Name of the Amazon Redshift cluster.
+    Description: Amazon Redshift cluster name.
 
   Subnet1ID:
     Type: AWS::EC2::Subnet::Id
@@ -332,7 +335,7 @@ Parameters:
   LandingzoneTransformer:
     Type: String
     Default: london
-    Description: 'Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.'
+    Description: Defines the transformer for the input data in the landing zone. The default is the transformer that works with the London test data set.
     AllowedValues:
       - default
       - london
@@ -340,7 +343,7 @@ Parameters:
   CreateLandingZoneS3Bucket:
     Type: String
     Default: 'Yes'
-    Description: Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (LandingZoneS3BucketName).
+    Description: Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (`LandingZoneS3BucketName`).
     AllowedValues:
       - 'Yes'
       - 'No'
@@ -351,19 +354,46 @@ Parameters:
     Description: You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.
 
   QSS3BucketName:
-    Type: String
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription:
+      The Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a 
+      hyphen (-).
     Default: aws-quickstart
-    Description: S3 bucket that you created for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This bucket name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-).
+    Description:
+      Name of the S3 bucket for your copy of the Quick Start assets. 
+      Keep the default name unless you are customizing the template. 
+      Changing the name updates code references to point to a new Quick 
+      Start location. This name can include numbers, lowercase letters, 
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-). 
+      See https://aws-quickstart.github.io/option1.html.
+    Type: String
   
   QSS3KeyPrefix:
-    Type: String
+    AllowedPattern: '^[0-9a-zA-Z-/]*$'
+    ConstraintDescription:
+      The Quick Start S3 key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slashes (/). The prefix should
+      end with a forward slash (/).
     Default: quickstart-aws-utility-meter-data-analytics-platform/
-    Description: S3 key prefix that is used to simulate a directory for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html.
+    Description:
+      S3 key prefix that is used to simulate a directory for your copy of the 
+      Quick Start assets. Keep the default prefix unless you are customizing 
+      the template. Changing this prefix updates code references to point to 
+      a new Quick Start location. This prefix can include numbers, lowercase 
+      letters, uppercase letters, hyphens (-), and forward slashes (/). End with 
+      a forward slash. See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html 
+      and https://aws-quickstart.github.io/option1.html.
+    Type: String
   
   QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'AWS Region where the Quick Start S3 bucket (QSS3BucketName) is 
+    hosted. Keep the default Region unless you are customizing the template. 
+    Changing this Region updates code references to point to a new Quick Start location. 
+    When using your own bucket, specify the Region. 
+    See https://aws-quickstart.github.io/option1.html.'
     Type: String
-    Default: us-east-1
-    Description: AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
   
   DBName:
     Type: String
@@ -372,7 +402,7 @@ Parameters:
 
   NoOfMeters:
     Type: String
-    Description: Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."
+    Description: Approximate number of meters in your dataset that need to be processed by the pipeline. This is used to configure the appropriate number of Data Processing Units (DPUs) for the AWS Glue job. The default value works for sample datasets or evaluation purposes. For a production deployment with millions of meters, choose `5Mil-and-more.`
     AllowedValues:
       - "1-50K"
       - "50K-1Mil"
@@ -391,23 +421,20 @@ Parameters:
   DeploySpecialAdapters:
     Type: String
     Default: None
-    Description: >-
-      Defines if special adapters are needed for raw data.
-      This will deploy a S3 trigger that invokes a Lambda to transform files added in additional folder named after adapter
-       in landing zone bucket.
+    Description: Choose `mrasco` to deploy the https://www.mrasco.com/[MRA Service Company (MRASCo)] data adapter. This includes an S3 bucket to store MRASCo data, an AWS Lambda function to transform MRASCo data to MDA format, and an S3 agent to invoke the function.
     AllowedValues:
       - None
       - mrasco
 
   IncludeRedshift:
     Type: String
-    Description: Whether Amazon Redshift consumption hub should be deployed
+    Description: Deploy Amazon Redshift consumption hub.
     AllowedValues: ['True','False']
     Default: 'True'
 
   IncludeEtlAggregationWfl:
     Type: String
-    Description: Whether the ETL aggregation workflow should be deployed
+    Description: Deploy the ETL aggregation workflow.
     AllowedValues: ['True','False']
     Default: 'True'
 
@@ -484,4 +511,4 @@ Metadata:
       WithWeather:
         default: Weather data availability
       DeploySpecialAdapters:
-        default: Special data adapters for metering convensions
+        default: Special data adapters for metering conversions

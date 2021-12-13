@@ -106,7 +106,7 @@ Mappings:
     default:
       format: "%Y%m%d%H24%M%S"
     london:
-      format: "yyyy-MM-dd HH:mm:ss"
+      format: "%Y-%m-%d %H:%M:%S"
 
 Resources:
   AdapterLandingZoneS3Bucket:

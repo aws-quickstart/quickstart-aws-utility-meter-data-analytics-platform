@@ -18,8 +18,8 @@ As shown in <<architecture1>>, the Quick Start sets up the following:
 *** Data Catalog to store metadata and source information about the meter data.
 * An ML pipeline:
 ** Two AWS Step Functions workflows:
-*** Model training, which uses the partitioned business data to build an ML model.
 *** Batch processing, which uses the partitioned business data and the data from the model as a basis for forecasting. 
+*** Model training, which uses the partitioned business data to build an ML model.
 ** Amazon S3 for storing the processed data.
 ** Amazon SageMaker for real-time forecasting of energy usage.
 ** A Jupyter notebook with sample code to perform data science and data visualization.

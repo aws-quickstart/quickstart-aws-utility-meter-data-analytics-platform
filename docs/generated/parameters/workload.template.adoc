@@ -3,10 +3,10 @@
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Include Redshift cluster resources
-(`IncludeRedshift`)|`True`|Whether Amazon Redshift consumption hub should be deployed|Admin user name
-(`AdminUsername`)|`**__Requires input__**`|Root user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.|Admin user password
-(`AdminUserPassword`)|`**__Requires input__**`|Root user password for the Amazon Redshift cluster. The password must be 8 - 64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.|Amazon Redshift cluster name
-(`ClusterName`)|`redshift-cluster-1`|Name of the Amazon Redshift cluster.|Amazon Redshift database name
+(`IncludeRedshift`)|`True`|Deploy Amazon Redshift consumption hub.|Admin user name
+(`AdminUsername`)|`**__Requires input__**`|Administrator user name for the Amazon Redshift cluster. The user name must be lowercase, begin with a letter, contain only alphanumeric characters, '_', '+', '.', '@', or '-', and be less than 128 characters.|Admin user password
+(`AdminUserPassword`)|`**__Requires input__**`|Administrator user password for the Amazon Redshift cluster. The password must be 8–64 characters, contain at least one uppercase letter, at least one lowercase letter, and at least one number. It can only contain ASCII characters (ASCII codes 33-126), except ' (single quotation mark), " (double quotation mark), /, \, or @.|Amazon Redshift cluster name
+(`ClusterName`)|`redshift-cluster-1`|Amazon Redshift cluster name.|Amazon Redshift database name
 (`DBName`)|`meterdata`|Name of the Amazon Redshift database.
 |===
 .Network configuration
@@ -22,19 +22,18 @@
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Transformer that reads the landing-zone data
-(`LandingzoneTransformer`)|`london`|Defines the transformer for the input data in the landing zone. Default: Transformer that works with the London test data set.|Create landing-zone bucket
-(`CreateLandingZoneS3Bucket`)|`Yes`|Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (LandingZoneS3BucketName).|Landing-zone S3 bucket
-(`LandingZoneS3BucketName`)|`**__Blank string__**`|You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.|Special data adapters for metering convensions
-(`DeploySpecialAdapters`)|`None`|Defines if special adapters are needed for raw data. This will deploy a S3 trigger that invokes a Lambda to transform files added in additional folder named after adapter
- in landing zone bucket.|Number of meters
-(`NoOfMeters`)|`1-50K`|Approximate number of meters you have in your dataset, which needs to be processed by the pipeline. This is used to configure the appropriate number of DPUs for the AWS Glue job. The default value works for sample dataset or evaluation purposes. For a production deployment with millions of meters, choose "50001-and-more."|Include ETL aggregation workflow
-(`IncludeEtlAggregationWfl`)|`True`|Whether the ETL aggregation workflow should be deployed
+(`LandingzoneTransformer`)|`london`|Defines the transformer for the input data in the landing zone. The default is the transformer that works with the London test data set.|Create landing-zone bucket
+(`CreateLandingZoneS3Bucket`)|`Yes`|Choose "No" only if you have an existing S3 bucket with raw meter data that you want to use. If you choose "No," you must provide a value for the landing-zone S3 bucket name (`LandingZoneS3BucketName`).|Landing-zone S3 bucket
+(`LandingZoneS3BucketName`)|`**__Blank string__**`|You must provide a value if you chose "No" for the parameter CreateLandingZoneS3Bucket. Otherwise, keep this box blank.|Special data adapters for metering conversions
+(`DeploySpecialAdapters`)|`None`|Choose `mrasco` to deploy the https://www.mrasco.com/[MRA Service Company (MRASCo)] data adapter. This includes an S3 bucket to store MRASCo data, an AWS Lambda function to transform MRASCo data to MDA format, and an S3 agent to invoke the function.|Number of meters
+(`NoOfMeters`)|`1-50K`|Approximate number of meters in your dataset that need to be processed by the pipeline. This is used to configure the appropriate number of Data Processing Units (DPUs) for the AWS Glue job. The default value works for sample datasets or evaluation purposes. For a production deployment with millions of meters, choose `5Mil-and-more.`|Include ETL aggregation workflow
+(`IncludeEtlAggregationWfl`)|`True`|Deploy the ETL aggregation workflow.
 |===
 .AWS Quick Start configuration
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Quick Start S3 bucket name
-(`QSS3BucketName`)|`aws-quickstart`|S3 bucket that you created for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This bucket name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-).|Quick Start S3 key prefix
-(`QSS3KeyPrefix`)|`quickstart-aws-utility-meter-data-analytics-platform/`|S3 key prefix that is used to simulate a directory for your copy of Quick Start assets. Use this if you decide to customize the Quick Start. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html.|Quick Start S3 bucket Region
-(`QSS3BucketRegion`)|`us-east-1`|AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
+(`QSS3BucketName`)|`aws-quickstart`|Name of the S3 bucket for your copy of the Quick Start assets. Keep the default name unless you are customizing the template. Changing the name updates code references to point to a new Quick Start location. This name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-). See https://aws-quickstart.github.io/option1.html.|Quick Start S3 key prefix
+(`QSS3KeyPrefix`)|`quickstart-aws-utility-meter-data-analytics-platform/`|S3 key prefix that is used to simulate a directory for your copy of the Quick Start assets. Keep the default prefix unless you are customizing the template. Changing this prefix updates code references to point to a new Quick Start location. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). End with a forward slash. See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html and https://aws-quickstart.github.io/option1.html.|Quick Start S3 bucket Region
+(`QSS3BucketRegion`)|`us-east-1`|AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. Keep the default Region unless you are customizing the template. Changing this Region updates code references to point to a new Quick Start location. When using your own bucket, specify the Region. See https://aws-quickstart.github.io/option1.html.
 |===
