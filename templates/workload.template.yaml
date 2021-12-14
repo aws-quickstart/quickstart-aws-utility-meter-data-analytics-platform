@@ -421,7 +421,7 @@ Parameters:
   DeploySpecialAdapters:
     Type: String
     Default: None
-    Description: Choose `mrasco` to deploy the https://www.mrasco.com/[MRA Service Company (MRASCo)] data adapter. This includes an S3 bucket to store MRASCo data, an AWS Lambda function to transform MRASCo data to MDA format, and an S3 agent to invoke the function.
+    Description: Choose `mrasco` to deploy the MRA Service Company (MRASCo) data adapter. This includes an S3 bucket to store MRASCo data, an AWS Lambda function to transform MRASCo data to MDA format, and an S3 agent to invoke the function.
     AllowedValues:
       - None
       - mrasco
