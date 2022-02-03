@@ -63,7 +63,7 @@ CREATE EXTERNAL TABLE weather(
   visibility double,
   windbearing bigint,
   temperature double,
-  time string,
+  time timestamp,
   dewpoint double,
   pressure double,
   apparenttemperature double,
