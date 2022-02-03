@@ -101,7 +101,7 @@ The AWS CloudFormation parameter `WithWeather` should have been set to 1 to indi
 
 === (Optional) Prepare geolocation data
 
-This Quick Start requires geolocation data to be uploaded to the `geodata` directory in the business-zone S3 bucket. You can get the name of this bucket from the output section in the AWS CloudFormation stack. The S3 path of geodata location should be `s3://<business-zone-s3-bucket-name>/geodata/`. The data should be in a CSV file format with the following structure, where all three fields (meter id, latitude, and longitude) are mandatory as comma-separated values.
+This Quick Start requires geolocation data to be uploaded to the `geodata` directory in the business-zone S3 bucket. You can get the name of this bucket from the output section in the AWS CloudFormation stack. The S3 path of geodata location should be `s3://<business-zone-s3-bucket-name>/geodata/`. The data should be in a CSV file format with the following structure, where all three fields (meter id, latitude, and longitude) are mandatory as comma-separated values. Sample data is located in quickstart-aws-utility-meter-data-analytics-platform/assets/data/meter-geo-data.csv
 
 [cols="1,1", options="header"]
 .Geolocation data schema
