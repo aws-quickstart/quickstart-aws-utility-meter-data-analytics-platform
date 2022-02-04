@@ -1,7 +1,7 @@
 == Setting up Amazon Managed Grafana for Meter Data Analytics
 This Quick Start includes a set of dashboards built in Amazon Managed Grafana. These dashboards leverage Amazon Athena to query data stored in the data lake, and depend on several of the optional datasets for full functionality.
 
-As of Q4 2021, Amazon Managed Grafana only supports SAML and AWS SSO, for authentication. If your organization does not have SAML or AWS SSO set up, you should work with your AWS Admins to activate AWS SSO. Also as of this time there is no Cloudformation support for Amazon Managed Grafana, so these steps will walk you through:
+As of January 2022, Amazon Managed Grafana only supports SAML and AWS SSO, for authentication. If your organization does not have SAML or AWS SSO set up, you should work with your AWS Admins to activate AWS SSO. Also as of this time there is no Cloudformation support for Amazon Managed Grafana, so these steps will walk you through:
 
 * Creating a Grafana workspace
 * Setting up AWS SSO for workspace access
@@ -29,8 +29,8 @@ image::../images/grafana-create-workspace.png[Grafana Create Workspace]
 . Specify *Workspace Name* and optionally *Workspace Description*.
 +
 :xrefstyle: short
-[#create_workspace]
-.Create Workspace
+[#grafana_details]
+.Grafana Details
 [link=/images/grafana-details.png]
 image::../images/grafana-details.png[Grafana Workspace Details]
 
@@ -60,32 +60,35 @@ image::../images/grafana-service-managed-permissions.png[Grafana Create Workspac
 
 Review your workspace details and then select *Create workspace*.
 
+=== Set up SSO or SAML
 After the workspace finishes creating, you'll need to go in and select the SSO users and groups you wish to give access to Grafana. Once that is done, you should be able to log into your Grafana instance through the *Grafana workspace URL* provided in the console. 
+
+=== Set up Athena Data Source in Grafana
+Follow the AWS or Grafana docs for setting up Athena as a Data Source in Grafana:
+
+. https://docs.aws.amazon.com/grafana/latest/userguide/AWS-Athena.html:[AWS Docs]
+. https://grafana.com/docs/grafana/latest/datasources/add-a-data-source/[Grafana Docs]
 
 
 === Import the dashboards into Grafana
 
-. Open the Step Functions console. Find the state machine with prefix *"MachineLearningPipelineModelTrainingStateMachine-"*.
-. Open the state machine, and choose *Definition*. 
-. Find the `HyperParameters` part, and modify the parameters or add more parameters. See https://docs.aws.amazon.com/sagemaker/latest/dg/deepar_hyperparameters.html[DeepAR Hyperparameters^].  
+. Login into the Grafana console using either SAML or SSO.
+. Select the *+* icon and go to import
+
 +
 :xrefstyle: short
-[#hyperparameters]
-.Hyperparameters
-[link=images/3_trainingpipeline_hyperparameters.png]
-image::../images/3_trainingpipeline_hyperparameters.png[HyperParameters]
+[#home-import]
+.Home Page Import
+[link=images/grafana-home-import.png]
+image::../images/grafana-home-import.png[HomeImport]
 
-. Save the change to the state machine, and choose *Start execution*.
+. Either copy in json from the /grafana/<dashboard-name>.json files in the repo or directly upload the json files
 
-The configuration will be loaded from the DynamoDB table: *MachineLearningPipelineConfig**. The following parameters can be modified:
++
+:xrefstyle: short
+[#copy-json]
+.Copy JSON
+[link=images/grafana-copy-json.png]
+image::../images/grafana-copy-json.png[CopyJson]
 
-`Training_samples` specifies how many meter data will be used to train the model. The more meters are used, the more accurate the model will be and the longer the training will take.
-
-A new unique `ModelName` and `ML_endpoint_name` will be generated.
-
-```json
-"Training_samples": 20,
-"Data_start": "2013-01-01",
-"Data_end": "2013-10-01",
-"Forecast_period": 7
-```
+After importing the tables, there may be some updates needed to match the configured data sources and glue database names chosen. If many errors pop up, go in and check the panels' data sources as well as the variables in the dashboard settings menus.

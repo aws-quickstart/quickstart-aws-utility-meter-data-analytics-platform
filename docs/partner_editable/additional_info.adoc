@@ -230,6 +230,8 @@ image::../images/3_open_editor.png[Open the script editor]
 
 include::./ml_pipeline.adoc[]
 
+include::./grafana.adoc[]
+
 == Data schema and API I/O format
 include::./data_format.adoc[]
 
