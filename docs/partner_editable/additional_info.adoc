@@ -115,6 +115,38 @@ This Quick Start requires geolocation data to be uploaded to the `geodata` direc
 
 If this data is missing, any API request to get meter-outage information returns an error.
 
+The grafana dashboards require a fuller set of geolocation data. This data is located in quickstart-aws-utility-meter-data-analytics-platform/assets/data/Full-Geodata.csv. To add this data, upload to the same s3 bucket as your weather data and run the following in Athena.
+```sql
+CREATE EXTERNAL TABLE `full_geo`(
+  `id` string, 
+  `lat` double, 
+  `long` double, 
+  `streetnumber` string, 
+  `streetname` string, 
+  `municipalitysubdivision` string, 
+  `municipality` string, 
+  `countrysecondarysubdivision` string, 
+  `countrysubdivision` string, 
+  `country` string, 
+  `countrycode` string, 
+  `countrycodeiso3` string, 
+  `postalcode` string, 
+  `order` int, 
+  `daily_outages` int, 
+  `weekly_outages` int, 
+  `monthly_outages` int)
+ROW FORMAT DELIMITED 
+  FIELDS TERMINATED BY ',' 
+STORED AS INPUTFORMAT 
+  'org.apache.hadoop.mapred.TextInputFormat' 
+OUTPUTFORMAT 
+  'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+LOCATION
+  's3://<full-geo-data-location>/'
+TBLPROPERTIES (
+  'has_encrypted_data'='false',
+  'skip.header.line.count'='1');
+```
 
 === Start the AWS Glue ETL and ML training pipeline
 
