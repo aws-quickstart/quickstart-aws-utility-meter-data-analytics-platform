@@ -42,21 +42,29 @@ image::../images/grafana-details.png[Grafana Workspace Details]
 [link=/images/grafana-authentication-settings.png]
 image::../images/grafana-authentication-settings.png[Grafana Create Workspace]
 
-. Select *Cusomter Managed IAM Policy* and choose the GrafanaRole created in CloudFormation.
+. Select *Service Managed IAM Policy*.
 +
 :xrefstyle: short
 [#select_iam_permissions]
 .IAM Permissions
-[link=/images/grafana-iam-permissions.png]
-image::../images/grafana-iam-permissions.png[Grafana Create Workspace]
+[link=/images/grafana-service-managed-policy.png]
+image::../images/grafana-service-managed-policy.png[Grafana Create Workspace]
 
-. Skip the service managed permissions as these won't apply.
+. Select *Current Account*.
 +
 :xrefstyle: short
 [#service_managed_perms]
 .Service Managed Permissions
 [link=/images/grafana-service-managed-permissions.png]
 image::../images/grafana-service-managed-permissions.png[Grafana Create Workspace]
+
+. Select *Athena*.
++
+:xrefstyle: short
+[#data_sources]
+.Data Sources
+[link=/images/grafana-data-sources.png]
+image::../images/grafana-data-sources.png[Grafana Data Sources]
 
 Review your workspace details and then select *Create workspace*.
 
