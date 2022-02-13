@@ -15,7 +15,7 @@ Resources:
           Value: "true"
       WorkGroupConfiguration:
         ResultConfiguration:
-          OutputLocation: !Ref AthenaQueryBucket 
+          OutputLocation: !Sub 's3://${AthenaQueryBucket}'  
 
 Parameters:
   AthenaQueryBucket:
