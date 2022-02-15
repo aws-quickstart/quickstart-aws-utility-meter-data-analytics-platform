@@ -72,8 +72,6 @@ Resources:
         Fn::GetAtt:
           - SageMakerRole
           - Arn
-      NotebookInstanceName:
-        Ref: Session
       InstanceType: "ml.m5.xlarge"
       RootAccess: Enabled
       LifecycleConfigName:
