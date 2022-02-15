@@ -132,6 +132,7 @@ Resources:
         NoOfMeters: !Ref NoOfMeters
         WithWeather: !Ref WithWeather
         DeploySpecialAdapters: !Ref DeploySpecialAdapters
+        GrafanaAthenaWorkgroup: !Ref GrafanaAthenaWorkgroup
 
 Conditions:
   UsingDefaultBucket: !Equals
@@ -272,6 +273,12 @@ Parameters:
     Description: Whether the ETL aggregation workflow should be deployed
     AllowedValues: [ 'True','False' ]
     Default: 'True'
+  
+  GrafanaAthenaWorkgroup:
+    Type: String
+    Default: grafana-athena-workgroup
+    Description: Name of the athena workgroup grafana will use to query.
+
 
 Outputs:
   StackName:
