@@ -1,11 +1,30 @@
-import json, os, datetime
-import psycopg2
-import boto3
+# MIT No Attribution
 
+# Copyright 2021 Amazon Web Services
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this
+# software and associated documentation files (the "Software"), to deal in the Software
+# without restriction, including without limitation the rights to use, copy, modify,
+# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+import boto3
+import datetime
+import json
+import os
+import psycopg2
 from botocore.exceptions import ClientError
 
 REGION = os.environ['AWS_REGION']
 SECRET_NAME = os.environ["SECRET_NAME"]
+
 
 class JSONDateTimeEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -93,5 +112,10 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 200,
+        "headers": {
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET"
+        },
         'body': json.dumps(daily_reads, cls=JSONDateTimeEncoder)
     }
