@@ -1,10 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Create SageMaker notebook instance with demo notebooks loaded. (qs-1r18anahd)"
 Parameters:
-  Session:
-    Type: String
-    Description: Session name must satisfy regular expression pattern ^[a-zA-Z0-9](-*[a-zA-Z0-9])*
-    Default: "meter-data-demo"
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
     Default: aws-quickstart
