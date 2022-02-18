@@ -1,0 +1,1395 @@
+[
+  {
+    "address": "1531 BELMONT AVE",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.61506676",
+    "longitude": "-122.32485293"
+  },
+  {
+    "address": "3600 NE 73RD PL",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.68191074",
+    "longitude": "-122.28921011"
+  },
+  {
+    "address": "4301 STONE WAY N",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.65942018",
+    "longitude": "-122.34256735"
+  },
+  {
+    "address": "6040 CALIFORNIA AVE SW",
+    "zip": "98136",
+    "city": "SEATTLE",
+    "latitude": "47.54731204",
+    "longitude": "-122.38657767"
+  },
+  {
+    "address": "4821 FAUNTLEROY WAY SW",
+    "zip": "98116",
+    "city": "SEATTLE",
+    "latitude": "47.55857638",
+    "longitude": "-122.38187414"
+  },
+  {
+    "address": "4422 FRANCIS AVE N",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.66091076",
+    "longitude": "-122.35291007"
+  },
+  {
+    "address": "3621 NE 73RD PL",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.68148452",
+    "longitude": "-122.28839774"
+  },
+  {
+    "address": "2233 NW 58TH ST",
+    "zip": "98107",
+    "city": "SEATTLE",
+    "latitude": "47.67077447",
+    "longitude": "-122.38629583"
+  },
+  {
+    "address": "6511 35TH AVE SW",
+    "zip": "98126",
+    "city": "SEATTLE",
+    "latitude": "47.54427627",
+    "longitude": "-122.37692563"
+  },
+  {
+    "address": "10735 ROOSEVELT WAY NE",
+    "zip": "98125",
+    "city": "SEATTLE",
+    "latitude": "47.7072226",
+    "longitude": "-122.31921954"
+  },
+  {
+    "address": "1706 N 46TH ST",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.66237933",
+    "longitude": "-122.33726309"
+  },
+  {
+    "address": "2300 ELLIOTT AVE",
+    "zip": "98121",
+    "city": "SEATTLE",
+    "latitude": "47.61245984",
+    "longitude": "-122.34837308"
+  },
+  {
+    "address": "306 BLANCHARD ST",
+    "zip": "98121",
+    "city": "SEATTLE",
+    "latitude": "47.61419579",
+    "longitude": "-122.34355459"
+  },
+  {
+    "address": "609 THOMAS ST",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.62071502",
+    "longitude": "-122.3444463"
+  },
+  {
+    "address": "7432 4TH AVE NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.68227509",
+    "longitude": "-122.32460842"
+  },
+  {
+    "address": "5038 17TH AVE NE",
+    "zip": "98105",
+    "city": "SEATTLE",
+    "latitude": "47.66600525",
+    "longitude": "-122.30914891"
+  },
+  {
+    "address": "600 7TH AVE",
+    "zip": "98104",
+    "city": "SEATTLE",
+    "latitude": "47.60502235",
+    "longitude": "-122.32706483"
+  },
+  {
+    "address": "8551 GREENWOOD AVE N",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.69200995",
+    "longitude": "-122.35562587"
+  },
+  {
+    "address": "535 PONTIUS AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.62381484",
+    "longitude": "-122.33209486"
+  },
+  {
+    "address": "14002 LINDEN AVE N",
+    "zip": "98133",
+    "city": "SEATTLE",
+    "latitude": "47.73074207",
+    "longitude": "-122.34724807"
+  },
+  {
+    "address": "9200 2ND AVE SW",
+    "zip": "98106",
+    "city": "SEATTLE",
+    "latitude": "47.52119281",
+    "longitude": "-122.33549478"
+  },
+  {
+    "address": "9220 2ND AVE SW",
+    "zip": "98106",
+    "city": "SEATTLE",
+    "latitude": "47.52052261",
+    "longitude": "-122.33506001"
+  },
+  {
+    "address": "9200 15th AVE SW",
+    "zip": "98106",
+    "city": "SEATTLE",
+    "latitude": "47.52086746",
+    "longitude": "-122.35375737"
+  },
+  {
+    "address": "326 W MERCER ST",
+    "zip": "98119",
+    "city": "SEATTLE",
+    "latitude": "47.62477814",
+    "longitude": "-122.36155332"
+  },
+  {
+    "address": "2800 ELLIOTT AVE",
+    "zip": "98121",
+    "city": "SEATTLE",
+    "latitude": "47.61529176",
+    "longitude": "-122.35330557"
+  },
+  {
+    "address": "2801 WESTERN AVE",
+    "zip": "98121",
+    "city": "SEATTLE",
+    "latitude": "47.61566331",
+    "longitude": "-122.35336543"
+  },
+  {
+    "address": "13716 LAKE CITY WAY NE",
+    "zip": "98125",
+    "city": "SEATTLE",
+    "latitude": "47.72892592",
+    "longitude": "-122.29184614"
+  },
+  {
+    "address": "2515 4TH AVE",
+    "zip": "98121",
+    "city": "SEATTLE",
+    "latitude": "47.61679059",
+    "longitude": "-122.34699263"
+  },
+  {
+    "address": "2550 3RD AVE",
+    "zip": "98121",
+    "city": "SEATTLE",
+    "latitude": "47.61658114",
+    "longitude": "-122.34732226"
+  },
+  {
+    "address": "1415 1st AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.63187933",
+    "longitude": "-122.35583098"
+  },
+  {
+    "address": "1317 6th AVE N",
+    "zip": "98109",
+    "city": "Seattle",
+    "latitude": "47.63107229",
+    "longitude": "-122.34541433"
+  },
+  {
+    "address": "3440 14TH AVE S",
+    "zip": "98144",
+    "city": "SEATTLE",
+    "latitude": "47.57267273",
+    "longitude": "-122.31440502"
+  },
+  {
+    "address": "816 1ST AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.62681649",
+    "longitude": "-122.35503106"
+  },
+  {
+    "address": "422 1ST AVE W",
+    "zip": "98119",
+    "city": "SEATTLE",
+    "latitude": "47.6228231",
+    "longitude": "-122.35785279"
+  },
+  {
+    "address": "120 A E ROANOKE ST",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.64336826",
+    "longitude": "-122.32630221"
+  },
+  {
+    "address": "7400 RAINIER AVE S",
+    "zip": "98118",
+    "city": "SEATTLE",
+    "latitude": "47.53580207",
+    "longitude": "-122.26957602"
+  },
+  {
+    "address": "2208 2ND AVE",
+    "zip": "98121",
+    "city": "SEATTLE",
+    "latitude": "47.61361573",
+    "longitude": "-122.34462774"
+  },
+  {
+    "address": "13030 LINDEN AVE N",
+    "zip": "98133",
+    "city": "SEATTLE",
+    "latitude": "47.72435767",
+    "longitude": "-122.34698741"
+  },
+  {
+    "address": "13000 LINDEN AVE N",
+    "zip": "98133",
+    "city": "SEATTLE",
+    "latitude": "47.72357266",
+    "longitude": "-122.34767003"
+  },
+  {
+    "address": "3621 33RD AVE S",
+    "zip": "98144",
+    "city": "SEATTLE",
+    "latitude": "47.57108137",
+    "longitude": "-122.29161815"
+  },
+  {
+    "address": "12740 30TH AVE NE",
+    "zip": "98125",
+    "city": "SEATTLE",
+    "latitude": "47.72235255",
+    "longitude": "-122.29585301"
+  },
+  {
+    "address": "2312 3RD AVE",
+    "zip": "98121",
+    "city": "SEATTLE",
+    "latitude": "47.61534278",
+    "longitude": "-122.3451604"
+  },
+  {
+    "address": "620 8TH AVE",
+    "zip": "98104",
+    "city": "SEATTLE",
+    "latitude": "47.60538775",
+    "longitude": "-122.32571047"
+  },
+  {
+    "address": "521 S WELLER ST",
+    "zip": "98104",
+    "city": "SEATTLE",
+    "latitude": "47.59732318",
+    "longitude": "-122.32701793"
+  },
+  {
+    "address": "2424 NW 59TH ST",
+    "zip": "98107",
+    "city": "SEATTLE",
+    "latitude": "47.67182871",
+    "longitude": "-122.38882617"
+  },
+  {
+    "address": "4344 UNIVERSITY WAY NE",
+    "zip": "98105",
+    "city": "SEATTLE",
+    "latitude": "47.66112125",
+    "longitude": "-122.31286537"
+  },
+  {
+    "address": "1735 DEXTER AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.63491484",
+    "longitude": "-122.34267297"
+  },
+  {
+    "address": "3250 SW AVALON WAY",
+    "zip": "98126",
+    "city": "SEATTLE",
+    "latitude": "47.56430794",
+    "longitude": "-122.37475063"
+  },
+  {
+    "address": "4113 LINDEN AVE N",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.65719277",
+    "longitude": "-122.34901048"
+  },
+  {
+    "address": "1711 BELLEVUE AVE",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.61752721",
+    "longitude": "-122.32726219"
+  },
+  {
+    "address": "6805 WOODLAWN AVE NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.67772831",
+    "longitude": "-122.32806755"
+  },
+  {
+    "address": "2339 FRANKLIN AVE E",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.64084052",
+    "longitude": "-122.32505789"
+  },
+  {
+    "address": "920 NE 63RD ST",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.67426648",
+    "longitude": "-122.31771651"
+  },
+  {
+    "address": "615 SUMMIT AVE E",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.62477462",
+    "longitude": "-122.32582105"
+  },
+  {
+    "address": "1901 E JEFFERSON ST",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.60593026",
+    "longitude": "-122.30738867"
+  },
+  {
+    "address": "9403 16TH AVE SW",
+    "zip": "98106",
+    "city": "SEATTLE",
+    "latitude": "47.51897785",
+    "longitude": "-122.35562426"
+  },
+  {
+    "address": "201 17TH AVE E",
+    "zip": "98112",
+    "city": "SEATTLE",
+    "latitude": "47.61990343",
+    "longitude": "-122.31038121"
+  },
+  {
+    "address": "708 N 35TH ST",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.65061424",
+    "longitude": "-122.34946964"
+  },
+  {
+    "address": "700 E OLIVE ST",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.61690429",
+    "longitude": "-122.3226326"
+  },
+  {
+    "address": "400 LAKESIDE AVE S",
+    "zip": "98144",
+    "city": "SEATTLE",
+    "latitude": "47.59887551",
+    "longitude": "-122.2863549"
+  },
+  {
+    "address": "117 20TH AVE E",
+    "zip": "98112",
+    "city": "SEATTLE",
+    "latitude": "47.61910734",
+    "longitude": "-122.30649924"
+  },
+  {
+    "address": "1027 BELLEVUE CT E",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.62769015",
+    "longitude": "-122.32734946"
+  },
+  {
+    "address": "1819 BELLEVUE AVE",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.61838424",
+    "longitude": "-122.32693493"
+  },
+  {
+    "address": "3425 14TH AVE W",
+    "zip": "98119",
+    "city": "SEATTLE",
+    "latitude": "47.65115418",
+    "longitude": "-122.37529509"
+  },
+  {
+    "address": "600 BELLEVUE AVE E",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.62455367",
+    "longitude": "-122.32637415"
+  },
+  {
+    "address": "401 N 87TH ST",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.69219492",
+    "longitude": "-122.35375755"
+  },
+  {
+    "address": "10725 GREENWOOD AVE N",
+    "zip": "98133",
+    "city": "SEATTLE",
+    "latitude": "47.70773225",
+    "longitude": "-122.3559904"
+  },
+  {
+    "address": "8409 5TH AVE NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.69000145",
+    "longitude": "-122.32338404"
+  },
+  {
+    "address": "6813 WEEDIN PL NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.67831206",
+    "longitude": "-122.32198481"
+  },
+  {
+    "address": "1744 DEXTER AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.63523125",
+    "longitude": "-122.34171176"
+  },
+  {
+    "address": "11254 GREENWOOD AVE N",
+    "zip": "98133",
+    "city": "SEATTLE",
+    "latitude": "47.71219354",
+    "longitude": "-122.35507052"
+  },
+  {
+    "address": "104 N 104TH ST",
+    "zip": "98133",
+    "city": "SEATTLE",
+    "latitude": "47.70461211",
+    "longitude": "-122.357858"
+  },
+  {
+    "address": "8746 PHINNEY AVE N",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.69372105",
+    "longitude": "-122.35366182"
+  },
+  {
+    "address": "8544 PHINNEY AVE N",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.69196563",
+    "longitude": "-122.35374309"
+  },
+  {
+    "address": "13202 GREENWOOD AVE N",
+    "zip": "98133",
+    "city": "SEATTLE",
+    "latitude": "47.72518242",
+    "longitude": "-122.35510142"
+  },
+  {
+    "address": "407 N 87TH ST",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.69221217",
+    "longitude": "-122.35343789"
+  },
+  {
+    "address": "5408 MERIDIAN AVE N",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.66817629",
+    "longitude": "-122.33338801"
+  },
+  {
+    "address": "7400 5TH AVE NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.68225315",
+    "longitude": "-122.32261408"
+  },
+  {
+    "address": "7201 6TH AVE NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.68112553",
+    "longitude": "-122.32204045"
+  },
+  {
+    "address": "7101 ROOSEVELT WAY NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.68037932",
+    "longitude": "-122.31786897"
+  },
+  {
+    "address": "7000 ROOSEVELT WAY NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.67969326",
+    "longitude": "-122.31714349"
+  },
+  {
+    "address": "500 NE 70TH ST",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.67973945",
+    "longitude": "-122.32255597"
+  },
+  {
+    "address": "6568 4TH AVE NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.67755816",
+    "longitude": "-122.32558227"
+  },
+  {
+    "address": "5307 RAVENNA PL NE",
+    "zip": "98105",
+    "city": "SEATTLE",
+    "latitude": "47.66741072",
+    "longitude": "-122.30270029"
+  },
+  {
+    "address": "4901 PHINNEY AVE N",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.66454476",
+    "longitude": "-122.35419055"
+  },
+  {
+    "address": "4459 FREMONT AVE N",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.66111347",
+    "longitude": "-122.35036016"
+  },
+  {
+    "address": "1221 TAYLOR AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.63017197",
+    "longitude": "-122.34678338"
+  },
+  {
+    "address": "3618 FRANCIS AVE N",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.65273305",
+    "longitude": "-122.35317397"
+  },
+  {
+    "address": "615 14TH AVE E",
+    "zip": "98112",
+    "city": "SEATTLE",
+    "latitude": "47.62471601",
+    "longitude": "-122.31496997"
+  },
+  {
+    "address": "2839 NW 56TH ST",
+    "zip": "98107",
+    "city": "SEATTLE",
+    "latitude": "47.66927697",
+    "longitude": "-122.39486247"
+  },
+  {
+    "address": "2138 N 112TH ST",
+    "zip": "98133",
+    "city": "SEATTLE",
+    "latitude": "47.70977397",
+    "longitude": "-122.33248057"
+  },
+  {
+    "address": "6748 MARY AVE NW",
+    "zip": "98117",
+    "city": "SEATTLE",
+    "latitude": "47.67939951",
+    "longitude": "-122.3758879"
+  },
+  {
+    "address": "504 E REPUBLICAN ST",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.62323632",
+    "longitude": "-122.32518904"
+  },
+  {
+    "address": "929 QUEEN ANNE AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.62801296",
+    "longitude": "-122.35702838"
+  },
+  {
+    "address": "520 BELLEVUE AVE E",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.62386261",
+    "longitude": "-122.32645622"
+  },
+  {
+    "address": "1123 TAYLOR AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.62950098",
+    "longitude": "-122.34647994"
+  },
+  {
+    "address": "430 18TH AVE E",
+    "zip": "98112",
+    "city": "SEATTLE",
+    "latitude": "47.6230282",
+    "longitude": "-122.30838175"
+  },
+  {
+    "address": "4110 12TH AVE NE",
+    "zip": "98105",
+    "city": "SEATTLE",
+    "latitude": "47.65727653",
+    "longitude": "-122.31528608"
+  },
+  {
+    "address": "26 HARRISON ST",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.62228462",
+    "longitude": "-122.35596322"
+  },
+  {
+    "address": "1401 NW 90TH ST",
+    "zip": "98117",
+    "city": "SEATTLE",
+    "latitude": "47.6940027",
+    "longitude": "-122.37465065"
+  },
+  {
+    "address": "1619 BELMONT AVE",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.61584238",
+    "longitude": "-122.32474838"
+  },
+  {
+    "address": "1631 BELMONT AVE",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.61618664",
+    "longitude": "-122.32489014"
+  },
+  {
+    "address": "312 N 39TH ST",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.65437133",
+    "longitude": "-122.35486565"
+  },
+  {
+    "address": "509 BELLEVUE AVE E",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.62345227",
+    "longitude": "-122.32714247"
+  },
+  {
+    "address": "3419 WALLINGFORD AVE N",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.6487256",
+    "longitude": "-122.3366617"
+  },
+  {
+    "address": "533 HARVARD AVE E",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.62408483",
+    "longitude": "-122.32232757"
+  },
+  {
+    "address": "3040 NW MARKET ST",
+    "zip": "98107",
+    "city": "SEATTLE",
+    "latitude": "47.66896527",
+    "longitude": "-122.39773383"
+  },
+  {
+    "address": "5412 47TH AVE SW",
+    "zip": "98136",
+    "city": "SEATTLE",
+    "latitude": "47.55356551",
+    "longitude": "-122.39196664"
+  },
+  {
+    "address": "6536 42ND AVE SW",
+    "zip": "",
+    "city": "SEATTLE",
+    "latitude": "",
+    "longitude": ""
+  },
+  {
+    "address": "528 17TH AVE",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.6070606",
+    "longitude": "-122.30967102"
+  },
+  {
+    "address": "201 WESTLAKE AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.61997251",
+    "longitude": "-122.33887308"
+  },
+  {
+    "address": "415 NW MARKET ST",
+    "zip": "98107",
+    "city": "SEATTLE",
+    "latitude": "47.66846037",
+    "longitude": "-122.36258576"
+  },
+  {
+    "address": "1135 S WEBSTER ST",
+    "zip": "98108",
+    "city": "SEATTLE",
+    "latitude": "47.53493218",
+    "longitude": "-122.31789882"
+  },
+  {
+    "address": "5117 S MORGAN ST",
+    "zip": "98118",
+    "city": "SEATTLE",
+    "latitude": "47.54411284",
+    "longitude": "-122.26918512"
+  },
+  {
+    "address": "1151 N 82ND ST",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.688231",
+    "longitude": "-122.34224156"
+  },
+  {
+    "address": "4317 PHINNEY AVE N",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.6595552",
+    "longitude": "-122.35467008"
+  },
+  {
+    "address": "420 PONTIUS AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.62245604",
+    "longitude": "-122.33147942"
+  },
+  {
+    "address": "3536 S HUDSON ST",
+    "zip": "98118",
+    "city": "SEATTLE",
+    "latitude": "47.5572714",
+    "longitude": "-122.28719181"
+  },
+  {
+    "address": "14037 3RD AVE NW",
+    "zip": "98177",
+    "city": "SEATTLE",
+    "latitude": "47.73170375",
+    "longitude": "-122.36174615"
+  },
+  {
+    "address": "5270 RAINIER AVE S",
+    "zip": "98118",
+    "city": "SEATTLE",
+    "latitude": "47.55455574",
+    "longitude": "-122.28141663"
+  },
+  {
+    "address": "5530 NE PENRITH RD",
+    "zip": "98105",
+    "city": "SEATTLE",
+    "latitude": "47.66694297",
+    "longitude": "-122.26735198"
+  },
+  {
+    "address": "4713 W RUFFNER ST",
+    "zip": "98199",
+    "city": "SEATTLE",
+    "latitude": "47.65153296",
+    "longitude": "-122.41879738"
+  },
+  {
+    "address": "13034 39TH AVE NE",
+    "zip": "98125",
+    "city": "SEATTLE",
+    "latitude": "47.72397346",
+    "longitude": "-122.28560589"
+  },
+  {
+    "address": "4732 22ND AVE NE",
+    "zip": "98105",
+    "city": "SEATTLE",
+    "latitude": "47.6640523",
+    "longitude": "-122.30388601"
+  },
+  {
+    "address": "400 23RD AVE",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.60598865",
+    "longitude": "-122.30157198"
+  },
+  {
+    "address": "170 LAKE DELL AVE",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.60251028",
+    "longitude": "-122.28944451"
+  },
+  {
+    "address": "5055 4TH AVE S",
+    "zip": "98134",
+    "city": "SEATTLE",
+    "latitude": "47.55732768",
+    "longitude": "-122.3298059"
+  },
+  {
+    "address": "2938 SW AVALON WAY",
+    "zip": "98126",
+    "city": "SEATTLE",
+    "latitude": "47.57000617",
+    "longitude": "-122.37114769"
+  },
+  {
+    "address": "5601 1ST AVE S",
+    "zip": "98108",
+    "city": "SEATTLE",
+    "latitude": "47.5523158",
+    "longitude": "-122.33488099"
+  },
+  {
+    "address": "4414 46TH AVE SW",
+    "zip": "98116",
+    "city": "SEATTLE",
+    "latitude": "47.56420985",
+    "longitude": "-122.39062954"
+  },
+  {
+    "address": "2001 W GARFIELD ST",
+    "zip": "98119",
+    "city": "SEATTLE",
+    "latitude": "47.63100625",
+    "longitude": "-122.38282969"
+  },
+  {
+    "address": "1215 W WHEELER ST",
+    "zip": "98119",
+    "city": "SEATTLE",
+    "latitude": "47.64054103",
+    "longitude": "-122.37339518"
+  },
+  {
+    "address": "90 S DEARBORN ST",
+    "zip": "98134",
+    "city": "SEATTLE",
+    "latitude": "47.59672977",
+    "longitude": "-122.33491499"
+  },
+  {
+    "address": "2 BROAD ST",
+    "zip": "98121",
+    "city": "SEATTLE",
+    "latitude": "47.615825",
+    "longitude": "-122.35626318"
+  },
+  {
+    "address": "1530 EASTLAKE AVE E",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.63300256",
+    "longitude": "-122.32508645"
+  },
+  {
+    "address": "4414 NE 77TH ST",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.68503903",
+    "longitude": "-122.28044791"
+  },
+  {
+    "address": "2151 N NORTHLAKE WAY",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.64810523",
+    "longitude": "-122.33242442"
+  },
+  {
+    "address": "1823 TERRY AVE",
+    "zip": "98101",
+    "city": "SEATTLE",
+    "latitude": "47.61589484",
+    "longitude": "-122.33343611"
+  },
+  {
+    "address": "1341 N NORTHLAKE WAY",
+    "zip": "98103",
+    "city": "SEATTLE",
+    "latitude": "47.64747091",
+    "longitude": "-122.34087878"
+  },
+  {
+    "address": "6819 17TH AVE NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.67821093",
+    "longitude": "-122.3101308"
+  },
+  {
+    "address": "600 3RD AVE",
+    "zip": "98104",
+    "city": "SEATTLE",
+    "latitude": "47.6033626",
+    "longitude": "-122.33119984"
+  },
+  {
+    "address": "200 40TH AVE E",
+    "zip": "98112",
+    "city": "SEATTLE",
+    "latitude": "47.62059885",
+    "longitude": "-122.28098189"
+  },
+  {
+    "address": "4101 29TH AVE S",
+    "zip": "98108",
+    "city": "SEATTLE",
+    "latitude": "47.56585383",
+    "longitude": "-122.29808611"
+  },
+  {
+    "address": "2645 CALIFORNIA AVE SW",
+    "zip": "98116",
+    "city": "SEATTLE",
+    "latitude": "47.57950121",
+    "longitude": "-122.38724918"
+  },
+  {
+    "address": "2419 E SPRING ST",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.61141501",
+    "longitude": "-122.30055783"
+  },
+  {
+    "address": "5038 31ST AVE S",
+    "zip": "98108",
+    "city": "SEATTLE",
+    "latitude": "47.55596514",
+    "longitude": "-122.29269667"
+  },
+  {
+    "address": "13506 DENSMORE AVE N",
+    "zip": "98133",
+    "city": "SEATTLE",
+    "latitude": "47.72713846",
+    "longitude": "-122.33789238"
+  },
+  {
+    "address": "5405 BALLARD AVE NW",
+    "zip": "98107",
+    "city": "SEATTLE",
+    "latitude": "47.66751649",
+    "longitude": "-122.38495241"
+  },
+  {
+    "address": "1601 3RD AVE",
+    "zip": "98101",
+    "city": "SEATTLE",
+    "latitude": "47.61101275",
+    "longitude": "-122.33948065"
+  },
+  {
+    "address": "4423 S BARTON ST",
+    "zip": "98118",
+    "city": "SEATTLE",
+    "latitude": "47.52079846",
+    "longitude": "-122.27704658"
+  },
+  {
+    "address": "3857 24TH AVE W",
+    "zip": "98199",
+    "city": "SEATTLE",
+    "latitude": "47.65573205",
+    "longitude": "-122.38769462"
+  },
+  {
+    "address": "7024 51ST AVE NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.6801564",
+    "longitude": "-122.27263298"
+  },
+  {
+    "address": "1931 2ND AVE",
+    "zip": "98101",
+    "city": "SEATTLE",
+    "latitude": "47.61144375",
+    "longitude": "-122.34168734"
+  },
+  {
+    "address": "9050 SEWARD PARK AVE S",
+    "zip": "98118",
+    "city": "SEATTLE",
+    "latitude": "47.52170351",
+    "longitude": "-122.26392268"
+  },
+  {
+    "address": "2801 ALASKAN WAY",
+    "zip": "98121",
+    "city": "SEATTLE",
+    "latitude": "47.61472875",
+    "longitude": "-122.35567671"
+  },
+  {
+    "address": "901 FAIRVIEW AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.62774795",
+    "longitude": "-122.33385278"
+  },
+  {
+    "address": "129 WARREN AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.61948661",
+    "longitude": "-122.35451808"
+  },
+  {
+    "address": "3423 40TH AVE SW",
+    "zip": "98116",
+    "city": "SEATTLE",
+    "latitude": "47.5724752",
+    "longitude": "-122.38285229"
+  },
+  {
+    "address": "1724 NE 120TH ST",
+    "zip": "98125",
+    "city": "SEATTLE",
+    "latitude": "47.71621532",
+    "longitude": "-122.30865887"
+  },
+  {
+    "address": "3204 SW HOLLY ST",
+    "zip": "98126",
+    "city": "SEATTLE",
+    "latitude": "47.54303399",
+    "longitude": "-122.37410679"
+  },
+  {
+    "address": "9264 LIMA TER S",
+    "zip": "98118",
+    "city": "SEATTLE",
+    "latitude": "47.51974255",
+    "longitude": "-122.25990389"
+  },
+  {
+    "address": "8556 SAND POINT WAY NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.69167434",
+    "longitude": "-122.26807585"
+  },
+  {
+    "address": "2511 EVERETT AVE E",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.6421374",
+    "longitude": "-122.31423849"
+  },
+  {
+    "address": "2328 EYRES PL W",
+    "zip": "98199",
+    "city": "SEATTLE",
+    "latitude": "47.63913611",
+    "longitude": "-122.40500861"
+  },
+  {
+    "address": "225 AURORA AVE N",
+    "zip": "",
+    "city": "SEATTLE",
+    "latitude": "47.62031512",
+    "longitude": "-122.34383359"
+  },
+  {
+    "address": "2212 NE 125TH ST",
+    "zip": "98125",
+    "city": "SEATTLE",
+    "latitude": "47.7199907",
+    "longitude": "-122.30504043"
+  },
+  {
+    "address": "12036 25TH AVE NE",
+    "zip": "98125",
+    "city": "SEATTLE",
+    "latitude": "47.71673888",
+    "longitude": "-122.30158331"
+  },
+  {
+    "address": "2671 36TH AVE SW",
+    "zip": "98126",
+    "city": "SEATTLE",
+    "latitude": "47.57956967",
+    "longitude": "-122.37733655"
+  },
+  {
+    "address": "167 PROSPECT ST",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.62873456",
+    "longitude": "-122.35324252"
+  },
+  {
+    "address": "2301 W RAYE ST",
+    "zip": "98199",
+    "city": "SEATTLE",
+    "latitude": "47.64274914",
+    "longitude": "-122.38605609"
+  },
+  {
+    "address": "129 21ST AVE E",
+    "zip": "98112",
+    "city": "SEATTLE",
+    "latitude": "47.6194368",
+    "longitude": "-122.30502613"
+  },
+  {
+    "address": "7416 5TH AVE NE",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.68246239",
+    "longitude": "-122.32257121"
+  },
+  {
+    "address": "6020 WEST MARGINAL WAY SW",
+    "zip": "98106",
+    "city": "SEATTLE",
+    "latitude": "47.54657833",
+    "longitude": "-122.34110581"
+  },
+  {
+    "address": "1220 W NICKERSON ST",
+    "zip": "98119",
+    "city": "SEATTLE",
+    "latitude": "47.65575729",
+    "longitude": "-122.37323504"
+  },
+  {
+    "address": "3915 S EDDY ST",
+    "zip": "98118",
+    "city": "SEATTLE",
+    "latitude": "47.54514067",
+    "longitude": "-122.2826191"
+  },
+  {
+    "address": "12053 35TH AVE NE",
+    "zip": "98125",
+    "city": "SEATTLE",
+    "latitude": "47.71691609",
+    "longitude": "-122.29204001"
+  },
+  {
+    "address": "223 12TH AVE E",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.62064636",
+    "longitude": "-122.31724934"
+  },
+  {
+    "address": "1524 E OLIVE WAY",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.61825574",
+    "longitude": "-122.32610258"
+  },
+  {
+    "address": "7703 18TH AVE SW",
+    "zip": "98106",
+    "city": "SEATTLE",
+    "latitude": "47.53352577",
+    "longitude": "-122.35820234"
+  },
+  {
+    "address": "2519 NE 135TH ST",
+    "zip": "98125",
+    "city": "SEATTLE",
+    "latitude": "47.72633295",
+    "longitude": "-122.30109069"
+  },
+  {
+    "address": "2619 W GALER ST",
+    "zip": "98199",
+    "city": "SEATTLE",
+    "latitude": "47.63185603",
+    "longitude": "-122.39160926"
+  },
+  {
+    "address": "2712 NE 113TH ST",
+    "zip": "98125",
+    "city": "SEATTLE",
+    "latitude": "47.71033229",
+    "longitude": "-122.29853206"
+  },
+  {
+    "address": "2730 WESTLAKE AVE N",
+    "zip": "98109",
+    "city": "SEATTLE",
+    "latitude": "47.64459062",
+    "longitude": "-122.34538266"
+  },
+  {
+    "address": "2040 E MADISON ST",
+    "zip": "",
+    "city": "SEATTLE",
+    "latitude": "47.61767457",
+    "longitude": "-122.3051476"
+  },
+  {
+    "address": "1542 GRAND AVE",
+    "zip": "98122",
+    "city": "SEATTLE",
+    "latitude": "47.61450654",
+    "longitude": "-122.28379659"
+  },
+  {
+    "address": "6038 33RD AVE S",
+    "zip": "98118",
+    "city": "SEATTLE",
+    "latitude": "47.54678431",
+    "longitude": "-122.29006213"
+  },
+  {
+    "address": "900 VIRGINIA ST",
+    "zip": "98101",
+    "city": "SEATTLE",
+    "latitude": "47.61674034",
+    "longitude": "-122.33558511"
+  },
+  {
+    "address": "3839 24TH AVE W",
+    "zip": "98199",
+    "city": "SEATTLE",
+    "latitude": "47.65519984",
+    "longitude": "-122.38783886"
+  },
+  {
+    "address": "2559 26TH AVE W",
+    "zip": "98199",
+    "city": "SEATTLE",
+    "latitude": "47.64265881",
+    "longitude": "-122.39067939"
+  },
+  {
+    "address": "2843 FRANKLIN AVE E",
+    "zip": "98102",
+    "city": "SEATTLE",
+    "latitude": "47.64676845",
+    "longitude": "-122.32388043"
+  },
+  {
+    "address": "4048 32ND AVE W",
+    "zip": "98199",
+    "city": "SEATTLE",
+    "latitude": "47.65710981",
+    "longitude": "-122.39798986"
+  },
+  {
+    "address": "3510 BEACH DR SW",
+    "zip": "98116",
+    "city": "SEATTLE",
+    "latitude": "47.57298825",
+    "longitude": "-122.41418681"
+  },
+  {
+    "address": "3091 S HUDSON ST",
+    "zip": "98108",
+    "city": "SEATTLE",
+    "latitude": "47.55685274",
+    "longitude": "-122.2931071"
+  },
+  {
+    "address": "13100 STONE AVE N",
+    "zip": "98133",
+    "city": "SEATTLE",
+    "latitude": "47.72471287",
+    "longitude": "-122.34121597"
+  },
+  {
+    "address": "5225 EAST MARGINAL WAY S",
+    "zip": "98134",
+    "city": "SEATTLE",
+    "latitude": "47.55460077",
+    "longitude": "-122.3382536"
+  },
+  {
+    "address": "5755 28TH AVE NE",
+    "zip": "98105",
+    "city": "SEATTLE",
+    "latitude": "47.67160642",
+    "longitude": "-122.29776121"
+  },
+  {
+    "address": "800 UNION ST",
+    "zip": "98101",
+    "city": "SEATTLE",
+    "latitude": "47.61195348",
+    "longitude": "-122.33168609"
+  },
+  {
+    "address": "6670 NE 60TH ST",
+    "zip": "98115",
+    "city": "SEATTLE",
+    "latitude": "47.67140957",
+    "longitude": "-122.25355877"
+  },
+  {
+    "address": "2553 21ST AVE W",
+    "zip": "98199",
+    "city": "SEATTLE",
+    "latitude": "47.64236053",
+    "longitude": "-122.38370702"
+  }
+]
