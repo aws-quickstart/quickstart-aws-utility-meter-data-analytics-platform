@@ -1,7 +1,15 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: 'Meter Data Lake prediction pipeline configuration. (qs-1r18anahd)'
-
+Metadata:
+  cfn-lint:
+    config:
+      configure_rules:
+        RuleId: E9007
+      ignore_checks:
+        - E9007
+      ignore_reasons:
+        - "A combination of Serverless Transform and metadata not being passed through (yet) means that we need to globally exclude E9007 until an upstream workaround is available."
 Globals:
   Function:
     Runtime: python3.7
@@ -10,13 +18,6 @@ Globals:
 Resources:
   MachineLearningPipelineConfig:
     Type: AWS::Serverless::SimpleTable
-    Metadata:
-      cfn-lint:
-        config:
-          ignore_checks:
-            - E9007
-          ignore_reasons:
-            E9007: Not an ARN (bug in linting)
     Properties:
       PrimaryKey:
         Name: name

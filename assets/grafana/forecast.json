@@ -1,0 +1,697 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 3,
+  "iteration": 1643935224374,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "content": "<center> <h1> Welcome John Smith </h1> </center>\n  \n<center> Your forecast for the next week </center>",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  reading_date_time AS \"time\",\n  reading_value\nFROM daily\nWHERE\n  $__timeFilter(reading_date_time)\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "reading_value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "daily",
+          "timeColumn": "reading_date_time",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "text"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 3
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "/^Reading$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default"
+          },
+          "format": 1,
+          "rawSQL": "select sum(reading_value * $CostPerKWh * 10) as Reading,\n  week_of_year as \"Week of Year\"\nfrom daily\nwhere year = $year\nand meter_id='$meter_id'\nGROUP BY 2",
+          "refId": "Average Weekly Cost"
+        },
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default"
+          },
+          "format": 1,
+          "hide": true,
+          "rawSQL": "select consumption * $CostPerKWh * 10 as amount\nfrom forecast\nwhere meter_id = '$meter_id'",
+          "refId": "Forecast Weekly Cost"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Average Weekly Cost for ${meter_id} in ${year}",
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {
+            "include": "Average Weekly Cost"
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "-- Dashboard --",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "yellow",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 8,
+        "y": 3
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "panelId": 4,
+          "refId": "A"
+        }
+      ],
+      "title": "Forecast Weekly Cost for $meter_id",
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {
+            "include": "Forecast Weekly Cost"
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "-- Dashboard --",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "super-light-green",
+                "value": null
+              },
+              {
+                "color": "super-light-red",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 3
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^Percent Change$/",
+          "values": true
+        },
+        "text": {
+          "valueSize": 80
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "panelId": 4,
+          "refId": "A"
+        }
+      ],
+      "title": "Forecasted % Change",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "mode": "reduceFields",
+            "reducers": [
+              "mean",
+              "sum"
+            ]
+          }
+        },
+        {
+          "id": "concatenate",
+          "options": {}
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Difference",
+            "binary": {
+              "left": "Forecast Weekly Cost · amount Total",
+              "operator": "-",
+              "reducer": "sum",
+              "right": "Average Weekly Cost · Reading Mean"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Percent Change",
+            "binary": {
+              "left": "Difference",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "Average Weekly Cost · Reading Mean"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "Percent Change"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "stepBefore",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "B forecast amount"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 6,
+      "maxDataPoints": 490,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.2.2",
+      "targets": [
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default"
+          },
+          "format": 1,
+          "rawSQL": "SELECT date_trunc('day', reading_date_time) date, sum(reading_value * 10 * $CostPerKWh) amount\nFROM daily\nWHERE METER_ID='$meter_id' and $__dateFilter(reading_date_time)\nand reading_date_time < date '2014-01-01'\ngroup by 1\norder by 1",
+          "refId": "Actual"
+        },
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default"
+          },
+          "format": 1,
+          "hide": false,
+          "rawSQL": "select date_trunc('day', cast(datetime as timestamp)) as date,\n  -- sum(consumption) * $CostPerKWh * 10 as amount\n  sum(consumption) as amount\nfrom forecast\nwhere meter_id = '$meter_id'\ngroup by 1\norder by 1",
+          "refId": "Forecast"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Daily Costs",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "kWh Usage (Average)",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "fillOpacity": 80,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "forecast_avg"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F2CC0C",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 8,
+      "options": {
+        "barWidth": 0.97,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "text": {},
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "connectionArgs": {
+            "catalog": "__default",
+            "database": "__default",
+            "region": "__default"
+          },
+          "format": 0,
+          "rawSQL": "select actual_avg as \"Actual Average\", forecast_avg as \"Forecast Average\",\n  cast(a.hour as varchar) from\n  (select hour(reading_date_time) as Hour,\n  sum(reading_value) as actual_avg,\n  date_format(reading_date_time, '%v') as week\nfrom daily\nwhere METER_ID='$meter_id' AND date_format(reading_date_time, '%W') = '$day_of_week'\nAND date_format(reading_date_time, '%Y') = '$year'\ngroup by 3,1\norder by 1) a\njoin (\nselect hour(cast(datetime as timestamp)) as Hour,\nsum(consumption) as forecast_avg,\ndate_format(cast(datetime as timestamp), '%v') as week\nfrom forecast\nwhere METER_ID='$meter_id' AND date_format(cast(datetime as timestamp), '%W') = '$day_of_week'\ngroup by 3,1\norder by 1) b\non a.hour = b.hour\nand a.week = b.week\norder by a.hour",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Average Forecast vs. Average Hourly Usage for $day_of_week ",
+      "type": "barchart"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 32,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "2013",
+          "value": "2013"
+        },
+        "datasource": null,
+        "definition": "",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "year",
+        "multi": false,
+        "name": "year",
+        "options": [],
+        "query": {
+          "rawSQL": "SELECT DISTINCT year\nFROM aggregated_monthly"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 4,
+        "type": "query"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "MAC000002",
+          "value": "MAC000002"
+        },
+        "datasource": null,
+        "definition": "",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "meter id",
+        "multi": false,
+        "name": "meter_id",
+        "options": [],
+        "query": {
+          "rawSQL": "SELECT DISTINCT meter_id\nFROM aggregated_monthly\nWHERE year='$year'"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 5,
+        "type": "query"
+      },
+      {
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "label": null,
+        "name": "CostPerKWh",
+        "query": ".11",
+        "skipUrlSync": false,
+        "type": "constant"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "Thursday",
+          "value": "Thursday"
+        },
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "day of week",
+        "multi": false,
+        "name": "day_of_week",
+        "options": [
+          {
+            "selected": false,
+            "text": "Sunday",
+            "value": "Sunday"
+          },
+          {
+            "selected": false,
+            "text": "Monday",
+            "value": "Monday"
+          },
+          {
+            "selected": false,
+            "text": "Tuesday",
+            "value": "Tuesday"
+          },
+          {
+            "selected": false,
+            "text": "Wednesday",
+            "value": "Wednesday"
+          },
+          {
+            "selected": true,
+            "text": "Thursday",
+            "value": "Thursday"
+          },
+          {
+            "selected": false,
+            "text": "Friday",
+            "value": "Friday"
+          },
+          {
+            "selected": false,
+            "text": "Saturday",
+            "value": "Saturday"
+          }
+        ],
+        "query": "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "2013-12-01T08:00:00.000Z",
+    "to": "2014-01-11T07:59:59.000Z"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Forecast Dashboard",
+  "uid": "-aegVSp7k",
+  "version": 4
+}

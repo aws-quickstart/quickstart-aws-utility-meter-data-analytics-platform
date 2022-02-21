@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Create Grafana Role for accessing Athena. (qs-1r18anahd)"
+
+Resources:
+
+  GrafanaAthenaWorkgroup:
+    Type: AWS::Athena::WorkGroup
+    Properties:
+      Name: !Ref AthenaWorkgroup
+      Description: Athena Workgroup for Amazon Grafana
+      RecursiveDeleteOption: false
+      State: ENABLED
+      Tags:
+        - Key: "GrafanaDataSource"
+          Value: "true"
+      WorkGroupConfiguration:
+        ResultConfiguration:
+          OutputLocation: !Sub 's3://${AthenaQueryBucket}'  
+
+Parameters:
+  AthenaQueryBucket:
+    AllowedPattern: '^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$'
+    ConstraintDescription: >-
+      Athena Query bucket name can include numbers, lowercase letters, uppercase
+      letters, and hyphens (-). It cannot start or end with a hyphen (-).
+    Description: >-
+      S3 bucket name to save Athena Query results.
+      This string can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
+    Type: String
+  AthenaWorkgroup:
+    Type: String
+    Default: grafana-athena-workgroup
+    Description: Name of the athena workgroup grafana will use to query.
