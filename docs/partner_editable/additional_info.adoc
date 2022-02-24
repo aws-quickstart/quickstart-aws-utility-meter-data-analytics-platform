@@ -70,7 +70,7 @@ CREATE EXTERNAL TABLE weather(
   visibility double,
   windbearing bigint,
   temperature double,
-  time string,
+  time timestamp,
   dewpoint double,
   pressure double,
   apparenttemperature double,
@@ -108,7 +108,7 @@ NOTE: To enable the use of weather data, set the `WithWeather` parameter to `1` 
 
 === (Optional) Prepare geolocation data
 
-This Quick Start requires geolocation data to be uploaded to the `geodata` directory in the business-zone S3 bucket. The name of this bucket appears in the *Outputs* section in the AWS CloudFormation stack. The S3 path of the geolocation data should be `s3://<business-zone-s3-bucket-name>/geodata/`. The data should be in a CSV file format with the following structure:
+This Quick Start requires geolocation data to be uploaded to the `geodata` directory in the business-zone S3 bucket. The name of this bucket appears in the *Outputs* section in the AWS CloudFormation stack. The S3 path of geodata location should be `s3://<business-zone-s3-bucket-name>/geodata/`. The data should be in a CSV file format with the following structure, where all three fields (meter id, latitude, and longitude) are mandatory as comma-separated values. Sample data is located in quickstart-aws-utility-meter-data-analytics-platform/assets/data/meter-geo-data.csv
 
 [cols="1,1", options="header"]
 .Geolocation data schema
@@ -121,6 +121,39 @@ This Quick Start requires geolocation data to be uploaded to the `geodata` direc
 |===
 
 `meter id`, `latitude`, and `longitude` are mandatory. If data are missing, API requests for meter-outage information returns an error.
+
+The grafana dashboards require a fuller set of geolocation data. This data is located in quickstart-aws-utility-meter-data-analytics-platform/assets/data/Full-Geodata.csv. To add this data, upload to the same s3 bucket as your weather data and run the following in Athena.
+```sql
+CREATE EXTERNAL TABLE `full_geo`(
+  `id` string, 
+  `lat` double, 
+  `long` double, 
+  `streetnumber` string, 
+  `streetname` string, 
+  `municipalitysubdivision` string, 
+  `municipality` string, 
+  `countrysecondarysubdivision` string, 
+  `countrysubdivision` string, 
+  `country` string, 
+  `countrycode` string, 
+  `countrycodeiso3` string, 
+  `postalcode` string, 
+  `order` int, 
+  `daily_outages` int, 
+  `weekly_outages` int, 
+  `monthly_outages` int)
+ROW FORMAT DELIMITED 
+  FIELDS TERMINATED BY ',' 
+STORED AS INPUTFORMAT 
+  'org.apache.hadoop.mapred.TextInputFormat' 
+OUTPUTFORMAT 
+  'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+LOCATION
+  's3://<full-geo-data-location>/'
+TBLPROPERTIES (
+  'has_encrypted_data'='false',
+  'skip.header.line.count'='1');
+```
 
 === Start the AWS Glue ETL and ML training pipeline manually
 
@@ -201,6 +234,8 @@ image::../images/3_open_editor.png[Open the script editor]
 |===
 
 include::./ml_pipeline.adoc[]
+
+include::./grafana.adoc[]
 
 == Data schema and API I/O format
 include::./data_format.adoc[]
