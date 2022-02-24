@@ -1,0 +1,972 @@
+﻿ID,Lat,Long,StreetNumber,StreetName,MunicipalitySubdivision,Municipality,CountrySecondarySubdivision,CountrySubdivision,Country,CountryCode,CountryCodeISO3,PostalCode,Order,Daily Outages,Weekly Outages,Monthly Outages
+MAC004728,40.755451,-73.924042,3501,37th Street,Astoria,New York,Queens,NY,United States,US,USA,11101,1,3,3,20
+MAC005457,40.767452,-73.920937,2842,31st Street,Astoria,New York,Queens,NY,United States,US,USA,11102,1,3,4,20
+MAC000447,40.768784,-73.924965,2916,Crescent Street,Astoria,New York,Queens,NY,United States,US,USA,11102,1,2,3,15
+MAC000396,40.769665,-73.918533,2534,31st Street,Astoria,New York,Queens,NY,United States,US,USA,11102,1,4,4,25
+MAC000876,40.770229,-73.928551,1427,30th Avenue,Astoria,New York,Queens,NY,United States,US,USA,11102,1,0,0,5
+MAC002550,40.770741,-73.934357,3055,Vernon Boulevard,Astoria,New York,Queens,NY,United States,US,USA,11102,1,1,1,10
+MAC005498,40.770996,-73.924316,2315,Newtown Avenue,Astoria,New York,Queens,NY,United States,US,USA,11102,1,2,2,15
+MAC001382,40.771015,-73.916939,3105,31st Street,Astoria,New York,Queens,NY,United States,US,USA,11102,1,1,2,10
+MAC003138,40.772816,-73.916145,2901,24th Avenue,Astoria,New York,Queens,NY,United States,US,USA,11102,1,2,3,15
+MAC005211,40.773922,-73.930901,902,27th Avenue,Astoria,New York,Queens,NY,United States,US,USA,11102,1,0,1,5
+MAC005149,40.774487,-73.924133,2502,21st Street,Astoria,New York,Queens,NY,United States,US,USA,11102,1,4,5,25
+MAC002643,40.774529,-73.918571,2519,24th Avenue,Astoria,New York,Queens,NY,United States,US,USA,11102,1,2,3,15
+MAC002463,40.775036,-73.934410,223,27th Avenue,Astoria,New York,Queens,NY,United States,US,USA,11102,1,2,3,15
+MAC000939,40.776566,-73.927673,1210,Astoria Park South,Astoria,New York,Queens,NY,United States,US,USA,11102,1,0,0,5
+MAC004515,40.757385,-73.916985,3215,43rd Street,Astoria,New York,Queens,NY,United States,US,USA,11103,1,3,4,20
+MAC000021,40.759468,-73.914330,4318,Newtown Road,Astoria,New York,Queens,NY,United States,US,USA,11103,1,4,5,25
+MAC001172,40.761120,-73.916664,4010,31st Avenue,Astoria,New York,Queens,NY,United States,US,USA,11103,1,2,3,15
+MAC000587,40.764050,-73.910660,4319,28th Avenue,Astoria,New York,Queens,NY,United States,US,USA,11103,1,0,0,5
+MAC004813,40.765636,-73.913574,2598,Steinway Street,Astoria,New York,Queens,NY,United States,US,USA,11103,1,3,3,20
+MAC000440,40.767048,-73.917046,3423,28th Avenue,Astoria,New York,Queens,NY,United States,US,USA,11103,1,4,5,25
+MAC000733,40.770199,-73.911964,2392,37th Street,Astoria,New York,Queens,NY,United States,US,USA,11105,1,3,3,20
+MAC002615,40.771328,-73.907921,2273,Steinway Street,Astoria,New York,Queens,NY,United States,US,USA,11105,1,3,4,20
+MAC001412,40.774700,-73.912468,2270,31st Street,Astoria,New York,Queens,NY,United States,US,USA,11105,1,4,4,25
+MAC005512,40.776131,-73.915382,2617,23rd Avenue,Astoria,New York,Queens,NY,United States,US,USA,11105,1,3,3,20
+MAC003154,40.777718,-73.922295,2371,19th Street,Astoria,New York,Queens,NY,United States,US,USA,11105,1,2,3,15
+MAC004385,40.778645,-73.914619,2204,Crescent Street,Astoria,New York,Queens,NY,United States,US,USA,11105,1,3,3,20
+MAC000477,40.781536,-73.918350,1855,Ditmars Boulevard,Astoria,New York,Queens,NY,United States,US,USA,11105,1,0,0,5
+MAC001874,40.756508,-73.929588,3101,36th Avenue,Astoria,New York,Queens,NY,United States,US,USA,11106,1,0,1,5
+MAC003890,40.756813,-73.926254,3506,34th Street,Astoria,New York,Queens,NY,United States,US,USA,11106,1,2,2,15
+MAC004115,40.756954,-73.932762,3611,28th Street,Astoria,New York,Queens,NY,United States,US,USA,11106,1,4,4,25
+MAC005111,40.757927,-73.924263,3412,35th Street,Astoria,New York,Queens,NY,United States,US,USA,11106,1,3,4,20
+MAC003245,40.759487,-73.932182,3502,Crescent Street,Astoria,New York,Queens,NY,United States,US,USA,11106,1,0,1,5
+MAC004345,40.760040,-73.922554,3215,35th Street,Astoria,New York,Queens,NY,United States,US,USA,11106,1,3,3,20
+MAC003965,40.760315,-73.936378,3540,21st Street,Astoria,New York,Queens,NY,United States,US,USA,11106,1,4,4,25
+MAC002742,40.760990,-73.930771,3405,Crescent Street,Astoria,New York,Queens,NY,United States,US,USA,11106,1,2,3,15
+MAC004150,40.761513,-73.941124,913,36th Avenue,Astoria,New York,Queens,NY,United States,US,USA,11106,1,1,1,10
+MAC004583,40.761703,-73.925591,3212,31st Street,Astoria,New York,Queens,NY,United States,US,USA,11106,1,2,3,15
+MAC003788,40.762161,-73.939301,3526,11th Street,Astoria,New York,Queens,NY,United States,US,USA,11106,1,2,3,15
+MAC003034,40.763092,-73.920876,3404,31st Avenue,Astoria,New York,Queens,NY,United States,US,USA,11106,1,1,2,10
+MAC001219,40.763187,-73.934753,1437,34th Avenue,Astoria,New York,Queens,NY,United States,US,USA,11106,1,2,3,15
+MAC003242,40.763187,-73.939865,920,35th Avenue,Astoria,New York,Queens,NY,United States,US,USA,11106,1,1,1,10
+MAC005027,40.763264,-73.928574,3202,Crescent Street,Astoria,New York,Queens,NY,United States,US,USA,11106,1,3,3,20
+MAC001753,40.764095,-73.936699,1201,34th Avenue,Astoria,New York,Queens,NY,United States,US,USA,11106,1,0,0,5
+MAC001093,40.764706,-73.924057,3001,31st Avenue,Astoria,New York,Queens,NY,United States,US,USA,11106,1,4,5,25
+MAC000842,40.765785,-73.935059,1212,33rd Avenue,Astoria,New York,Queens,NY,United States,US,USA,11106,1,4,5,25
+MAC001049,40.765823,-73.926613,2401,31st Avenue,Astoria,New York,Queens,NY,United States,US,USA,11106,1,1,2,10
+MAC000267,40.766224,-73.931175,1456,31st Drive,Astoria,New York,Queens,NY,United States,US,USA,11106,1,2,2,15
+MAC001729,40.767220,-73.937485,3227,Vernon Boulevard,Astoria,New York,Queens,NY,United States,US,USA,11106,1,3,4,20
+MAC000742,40.768368,-73.932327,1236,31st Avenue,Astoria,New York,Queens,NY,United States,US,USA,11106,1,4,4,25
+MAC003288,40.769283,-73.935509,3101,Vernon Boulevard,Astoria,New York,Queens,NY,United States,US,USA,11106,1,4,4,25
+MAC003309,40.705677,-74.016708,"",Hudson River Greenway,Battery Park City,New York,New York,NY,United States,US,USA,10004,1,1,2,10
+MAC000907,40.708363,-74.017029,295,West Thames Street,Battery Park City,New York,New York,NY,United States,US,USA,10280,1,1,2,10
+MAC004612,40.711552,-74.014534,120,West Street,Battery Park City,New York,New York,NY,United States,US,USA,10281,1,1,2,10
+MAC000109,40.715374,-74.016556,184,Barclay Street,Battery Park City,New York,New York,NY,United States,US,USA,10282,1,4,5,25
+MAC002369,40.717716,-74.014038,345,Chambers Street,Battery Park City,New York,New York,NY,United States,US,USA,10282,1,2,3,15
+MAC000068,40.719288,-74.071297,142,Monticello Avenue,Bergen Hill,Jersey City,Hudson,NJ,United States,US,USA,07304,1,4,4,25
+MAC003084,40.721989,-74.071281,104,Jewett Avenue,Bergen Hill,Jersey City,Hudson,NJ,United States,US,USA,07304,1,0,1,5
+MAC005079,40.722988,-74.064781,50,Baldwin Avenue,Bergen Hill,Jersey City,Hudson,NJ,United States,US,USA,07304,1,0,0,5
+MAC001079,40.725784,-74.071976,355,Fairmount Avenue,Bergen Hill,Jersey City,Hudson,NJ,United States,US,USA,07306,1,2,2,15
+MAC000127,40.813499,-73.930702,115,East 138th Street,Bronx,New York,Bronx,NY,United States,US,USA,10451,1,0,0,5
+MAC004710,40.814564,-73.924927,267,East 142nd Street,Bronx,New York,Bronx,NY,United States,US,USA,10451,1,1,2,10
+MAC000383,40.816380,-73.927605,168,East 144th Street,Bronx,New York,Bronx,NY,United States,US,USA,10451,1,1,2,10
+MAC003670,40.817280,-73.922539,272,East 149th Street,Bronx,New York,Bronx,NY,United States,US,USA,10451,1,4,4,25
+MAC003423,40.819843,-73.921646,655,Morris Avenue,Bronx,New York,Bronx,NY,United States,US,USA,10451,1,0,0,5
+MAC004179,40.800457,-73.914085,83,Willow Avenue,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,1,2,10
+MAC001577,40.800751,-73.910553,131,Rose Feiss Boulevard,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,0,0,5
+MAC002653,40.802486,-73.917213,639,East 133rd Street,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,4,4,25
+MAC000121,40.802914,-73.920273,500,"Saint Ann's Avenue",Bronx,New York,Bronx,NY,United States,US,USA,10454,1,2,3,15
+MAC004494,40.804340,-73.911552,762,East 138th Street,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,0,1,5
+MAC000875,40.805824,-73.921066,499,East 135th Street,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,4,4,25
+MAC003508,40.806046,-73.924896,122,Willis Avenue,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,1,2,10
+MAC001423,40.808292,-73.923584,175,Willis Avenue,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,3,3,20
+MAC003616,40.808578,-73.928947,145,Lincoln Avenue,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,4,4,25
+MAC005235,40.808853,-73.910843,708,"Saint Mary's Street",Bronx,New York,Bronx,NY,United States,US,USA,10454,1,3,3,20
+MAC004438,40.809650,-73.918221,494,East 141st Street,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,0,0,5
+MAC001456,40.810173,-73.927719,188,Lincoln Avenue,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,1,2,10
+MAC004633,40.810814,-73.921669,312,Willis Avenue,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,0,0,5
+MAC005248,40.811428,-73.914604,423,"Saint Ann's Avenue",Bronx,New York,Bronx,NY,United States,US,USA,10454,1,0,0,5
+MAC003753,40.811798,-73.917282,483,East 144th Street,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,4,5,25
+MAC002893,40.812134,-73.920265,401,East 143rd Street,Bronx,New York,Bronx,NY,United States,US,USA,10454,1,0,0,5
+MAC003732,40.686348,-73.993660,276,Warren Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,3,4,20
+MAC000376,40.686790,-73.990608,70,Bergen Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,2,2,15
+MAC004502,40.688175,-73.995148,185,Congress Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,4,4,25
+MAC003463,40.688450,-73.984703,227,Schermerhorn Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,0,1,5
+MAC003758,40.689117,-73.983337,2,Bond Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,0,1,5
+MAC000181,40.689404,-73.989166,259,State Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,3,3,20
+MAC002984,40.689926,-73.980820,50,Dekalb Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,0,1,5
+MAC004194,40.690094,-73.992165,123,Court Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,4,5,25
+MAC002995,40.691044,-73.991936,43,Schermerhorn Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,0,0,5
+MAC002320,40.691105,-73.996063,309,Henry Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,2,3,15
+MAC000193,40.691414,-73.998482,59,Atlantic Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,3,4,20
+MAC003131,40.692001,-73.981140,160,Willoughby Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,2,3,15
+MAC003847,40.692169,-73.978935,135,Ashland Place,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,1,2,10
+MAC004724,40.692234,-73.989296,250,Joralemon Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,0,1,5
+MAC005147,40.692268,-73.984322,196,Duffield Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,3,3,20
+MAC003400,40.692360,-73.993347,140,Clinton Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,0,0,5
+MAC002553,40.692566,-73.986244,120,Lawrence Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,3,4,20
+MAC004052,40.694221,-73.992218,177,Montague Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,2,3,15
+MAC004483,40.694813,-73.983452,160,Johnson Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,4,5,25
+MAC004256,40.695023,-73.995949,212,Hicks Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,3,3,20
+MAC005292,40.695175,-73.990120,271,Cadman Plaza East,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,4,5,25
+MAC003231,40.695324,-73.993492,100,Pierrepont Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,2,2,15
+MAC000576,40.695511,-73.987129,300,Jay Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,2,3,15
+MAC004873,40.696430,-73.978020,65,Park Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,2,3,15
+MAC001194,40.697540,-73.993362,71,Clark Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,3,3,20
+MAC003509,40.697601,-73.984657,165,Concord Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,2,3,15
+MAC002970,40.697853,-73.980530,46,Navy Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,4,5,25
+MAC004250,40.699112,-73.989845,165,Cadman Plaza East,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,2,3,15
+MAC005528,40.700367,-73.991608,20,Henry Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,4,4,25
+MAC000427,40.700417,-73.996109,130,Furman Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,0,1,5
+MAC001319,40.700424,-73.995529,"",Brooklyn Queens Expressway,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,1,1,10
+MAC004096,40.701332,-73.986763,110,Jay Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,2,3,15
+MAC001561,40.702282,-73.982498,240,Front Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,3,3,20
+MAC004058,40.702431,-73.986946,151,Front Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,2,3,15
+MAC005039,40.702507,-73.989273,111,Front Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,2,3,15
+MAC004202,40.702747,-73.993889,9,Old Fulton Street,Brooklyn,New York,Kings,NY,United States,US,USA,11201,1,1,1,10
+MAC003413,40.687645,-73.972717,271,Cumberland Street,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,2,3,15
+MAC004382,40.688629,-73.964958,36,Saint James Place,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,4,5,25
+MAC002655,40.689445,-73.968796,252,Dekalb Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,2,3,15
+MAC002177,40.690666,-73.957527,491,Dekalb Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,2,3,15
+MAC004589,40.691742,-73.973549,100,Washington Park,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,3,4,20
+MAC002270,40.691902,-73.965240,165,Willoughby Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,4,5,25
+MAC002426,40.692982,-73.971840,157,Adelphi Street,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,3,4,20
+MAC000221,40.693260,-73.953552,409,Willoughby Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,0,0,5
+MAC002529,40.693317,-73.968842,154,Clinton Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,0,0,5
+MAC002689,40.693409,-73.976921,277,Myrtle Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,1,2,10
+MAC000248,40.693600,-73.962166,123,Emerson Place,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,0,0,5
+MAC001404,40.694580,-73.958046,141,Franklin Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,2,3,15
+MAC001573,40.695240,-73.952553,144,Nostrand Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,1,2,10
+MAC002317,40.695656,-73.971359,65,Clermont Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,0,0,5
+MAC001574,40.695774,-73.973434,60,Carlton Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,2,2,15
+MAC000634,40.696220,-73.967453,88,Washington Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,0,1,5
+MAC001914,40.697433,-73.969666,1,Clinton Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,0,1,5
+MAC002233,40.697777,-73.973763,1,Carlton Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11205,1,3,4,20
+MAC003998,40.693455,-73.939827,285,Pulaski Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,2,10
+MAC004076,40.694210,-73.946243,580,Willoughby Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,2,2,15
+MAC002460,40.695343,-73.949562,818,Myrtle Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,2,10
+MAC002424,40.696518,-73.943626,220,Throop Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,4,4,25
+MAC001849,40.696716,-73.937553,1103,Myrtle Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,3,3,20
+MAC004183,40.697544,-73.935875,14,Melrose Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,3,4,20
+MAC002008,40.698463,-73.941849,834,Park Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,0,1,5
+MAC003390,40.699802,-73.947174,3,Tompkins Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,2,10
+MAC004998,40.700981,-73.939026,9,Beaver Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,2,10
+MAC005411,40.701000,-73.936607,489,Bushwick Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,4,5,25
+MAC001350,40.701069,-73.930420,67,Central Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,2,3,15
+MAC005405,40.701572,-73.933502,55,Evergreen Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,1,10
+MAC003675,40.701656,-73.944145,66,Whipple Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,0,1,5
+MAC004568,40.701836,-73.950264,57,Union Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,1,10
+MAC002431,40.702621,-73.933121,1,Central Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,3,3,20
+MAC002710,40.702908,-73.929985,102,George Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,1,10
+MAC003451,40.703434,-73.940811,50,Humboldt Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,2,10
+MAC003030,40.704079,-73.948357,30,Throop Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,3,3,20
+MAC004139,40.704411,-73.934975,32,White Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,1,10
+MAC001692,40.705063,-73.944084,102,McKibben Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,3,3,20
+MAC001649,40.705502,-73.939484,315,Bushwick Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,2,2,15
+MAC003694,40.705799,-73.936562,279,McKibben Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,1,10
+MAC001048,40.706047,-73.946350,68,Leonard Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,2,10
+MAC001414,40.706802,-73.935760,87,White Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,2,2,15
+MAC001787,40.707626,-73.940125,223,Montrose Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,4,4,25
+MAC004952,40.708660,-73.944756,124,Scholes Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,2,3,15
+MAC000194,40.708828,-73.950562,1,Stagg Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,3,4,20
+MAC002870,40.709827,-73.939941,171,Stagg Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,1,10
+MAC001705,40.710163,-73.947037,178,Leonard Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,2,2,15
+MAC004649,40.710327,-73.937286,80,Waterbury Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,3,3,20
+MAC003105,40.710529,-73.934074,361,Stagg Street,Brooklyn,New York,Kings,NY,United States,US,USA,11206,1,1,1,10
+MAC004914,40.676884,-73.903381,26,Van Sinderen Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11207,1,3,4,20
+MAC005299,40.680744,-73.906670,1855,Broadway,Brooklyn,New York,Kings,NY,United States,US,USA,11207,1,3,3,20
+MAC004100,40.682682,-73.906174,1509,Bushwick Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11207,1,1,1,10
+MAC000120,40.684715,-73.909172,58,Moffat Street,Brooklyn,New York,Kings,NY,United States,US,USA,11207,1,4,5,25
+MAC002324,40.686390,-73.913406,50,Eldert Street,Brooklyn,New York,Kings,NY,United States,US,USA,11207,1,2,3,15
+MAC001045,40.688213,-73.908089,1160,Decatur Street,Brooklyn,New York,Kings,NY,United States,US,USA,11207,1,3,3,20
+MAC001154,40.688950,-73.912056,1100,Halsey Street,Brooklyn,New York,Kings,NY,United States,US,USA,11207,1,3,3,20
+MAC000864,40.689030,-73.904945,236,Moffat Street,Brooklyn,New York,Kings,NY,United States,US,USA,11207,1,4,4,25
+MAC001225,40.689327,-73.909340,161,Covert Street,Brooklyn,New York,Kings,NY,United States,US,USA,11207,1,4,4,25
+MAC004713,40.690708,-73.904449,249,Cooper Street,Brooklyn,New York,Kings,NY,United States,US,USA,11207,1,0,1,5
+MAC003051,40.705631,-73.950584,501,Broadway,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,2,2,15
+MAC004991,40.706757,-73.954514,10,Harrison Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,3,4,20
+MAC004405,40.707096,-73.957993,"",Brooklyn Queens Expressway,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,0,0,5
+MAC000047,40.708309,-73.964272,449,Bedford Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,2,3,15
+MAC005251,40.709148,-73.960632,224,South 8th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,3,4,20
+MAC000590,40.709274,-73.955750,299,South 4th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,0,1,5
+MAC002186,40.710503,-73.960938,"",South 5th Place,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,4,5,25
+MAC003558,40.711655,-73.951607,169,Hope Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,0,1,5
+MAC000225,40.711899,-73.943924,271,Graham Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,3,4,20
+MAC003934,40.712513,-73.940956,78,Bushwick Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,4,4,25
+MAC001720,40.712818,-73.956993,309,Grand Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,3,4,20
+MAC004626,40.713108,-73.939140,269,Powers Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,4,4,25
+MAC002356,40.713318,-73.949112,53,Devoe Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,1,1,10
+MAC003063,40.713745,-73.935448,345,Devoe Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,0,1,5
+MAC004350,40.714066,-73.952362,500,Metropolitan Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,0,0,5
+MAC002874,40.714363,-73.932846,1101,Metropolitan Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,2,2,15
+MAC005223,40.714691,-73.957390,146,Roebling Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,3,3,20
+MAC005443,40.715103,-73.944481,357,Graham Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,2,3,15
+MAC002880,40.715309,-73.938522,8,Sharon Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,0,0,5
+MAC002829,40.715389,-73.959831,162,North 3rd Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,2,3,15
+MAC000585,40.716190,-73.951981,525,Union Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,4,4,25
+MAC002242,40.716278,-73.948471,75,Jackson Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,1,2,10
+MAC005458,40.716530,-73.936218,366,Morgan Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,2,3,15
+MAC004815,40.716999,-73.944786,405,Graham Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,3,4,20
+MAC003436,40.717705,-73.948746,71,Frost Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,1,2,10
+MAC002910,40.717770,-73.940559,266,Withers Street,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,0,0,5
+MAC005289,40.718311,-73.955078,489,Driggs Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,4,4,25
+MAC001293,40.719177,-73.952484,627,Union Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11211,1,0,0,5
+MAC004731,40.678776,-73.941315,31,Kingston Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11213,1,0,1,5
+MAC002878,40.661076,-73.979454,"",West Drive,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,2,2,15
+MAC002197,40.663723,-73.983734,386,14th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,1,1,10
+MAC005105,40.665043,-73.976479,133,Prospect Park West,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,1,1,10
+MAC004067,40.666199,-73.981873,546,10th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,0,1,5
+MAC002485,40.666241,-73.988960,249,14th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,4,4,25
+MAC001517,40.666370,-73.985321,486,6th Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,3,3,20
+MAC004523,40.668133,-73.973640,"",West Drive,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,2,2,15
+MAC003673,40.668339,-73.983681,441,6th Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,3,3,20
+MAC003924,40.668583,-73.993408,543,3rd Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,0,0,5
+MAC001634,40.668762,-73.990669,206,12th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,4,4,25
+MAC000207,40.668819,-73.980293,476,6th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,0,0,5
+MAC000744,40.668827,-73.987320,356,10th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,0,1,5
+MAC001276,40.670395,-73.978294,506,3rd Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,3,3,20
+MAC002803,40.670460,-73.988541,421,4th Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,0,1,5
+MAC001335,40.670570,-73.985687,323,7th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,0,1,5
+MAC004945,40.670605,-73.982269,402,5th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,4,5,25
+MAC004730,40.671387,-73.975113,264,Garfield Place,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,3,4,20
+MAC004169,40.671726,-73.993301,124,10th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,0,0,5
+MAC004837,40.672581,-73.989830,213,7th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,2,2,15
+MAC002357,40.672882,-73.983467,363,3rd Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,3,3,20
+MAC000955,40.674080,-73.978592,700,Carroll Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,3,3,20
+MAC003604,40.674809,-73.987450,229,3rd Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,1,2,10
+MAC002434,40.675255,-73.981583,62,Carroll Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,1,1,10
+MAC002756,40.676983,-73.986420,294,3rd Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,3,3,20
+MAC001156,40.677322,-73.982796,626,Union Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,4,4,25
+MAC004500,40.679203,-73.987640,533,Union Street,Brooklyn,New York,Kings,NY,United States,US,USA,11215,1,2,2,15
+MAC000240,40.670780,-73.957550,341,Eastern Parkway,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,4,4,25
+MAC002628,40.672729,-73.954056,746,Sterling Place,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,0,1,5
+MAC002804,40.674110,-73.956436,641,Park Place,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,1,2,10
+MAC000965,40.676476,-73.952965,1372,Bedford Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,0,0,5
+MAC002584,40.680008,-73.938438,32,Albany Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,4,5,25
+MAC003234,40.680470,-73.947716,29,Verona Place,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,3,3,20
+MAC003175,40.681019,-73.950157,24,Macon Street,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,0,1,5
+MAC004132,40.682083,-73.953934,48,Hancock Street,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,2,3,15
+MAC002299,40.682449,-73.944252,225,Halsey Street,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,2,3,15
+MAC002336,40.682640,-73.937988,418,Marcus Garvey Boulevard,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,1,1,10
+MAC005508,40.684055,-73.949837,280,Putnam Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,0,0,5
+MAC001032,40.685104,-73.953751,134,Monroe Street,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,2,2,15
+MAC003982,40.686146,-73.944679,337,Monroe Street,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,3,4,20
+MAC004634,40.688438,-73.950928,494,Greene Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,1,1,10
+MAC001904,40.690269,-73.947945,661,Lafayette Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,3,3,20
+MAC002922,40.690639,-73.951263,89,Kosciuszko Street,Brooklyn,New York,Kings,NY,United States,US,USA,11216,1,2,2,15
+MAC002172,40.673222,-73.971268,47,Plaza Street West,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,3,3,20
+MAC005550,40.675007,-73.971207,5,Plaza Street West,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,4,4,25
+MAC001862,40.675179,-73.975227,160,Berkeley Place,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,1,1,10
+MAC005426,40.676456,-73.978531,52,Berkeley Place,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,3,3,20
+MAC005050,40.677521,-73.973389,1,7th Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,1,1,10
+MAC003756,40.679218,-73.981522,141,Douglass Street,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,1,2,10
+MAC004920,40.679226,-73.975105,74,Prospect Place,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,4,5,25
+MAC001266,40.679707,-73.978638,669,Baltic Street,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,2,2,15
+MAC003767,40.680351,-73.984436,269,Douglass Street,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,0,1,5
+MAC004909,40.680950,-73.975624,472,Bergen Street,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,0,0,5
+MAC001741,40.681950,-73.990601,426,Degraw Street,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,1,1,10
+MAC001755,40.682957,-73.978775,387,Dean Street,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,3,4,20
+MAC002132,40.683384,-73.983932,259,Wyckoff Street,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,1,2,10
+MAC002311,40.683617,-73.976486,608,Atlantic Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,0,0,5
+MAC002690,40.684402,-73.989265,194,Hoyt Street,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,1,1,10
+MAC004588,40.684853,-73.986237,152,Bond Street,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,1,2,10
+MAC004628,40.685143,-73.977669,1,Hanson Place,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,0,1,5
+MAC005263,40.685280,-73.974236,130,South Portland Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,2,3,15
+MAC004987,40.685383,-73.982925,455,Pacific Street,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,3,4,20
+MAC001653,40.686417,-73.987633,138A,Dean Street,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,4,5,25
+MAC003255,40.686947,-73.977112,38,Lafayette Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,1,1,10
+MAC002483,40.687050,-73.979568,61,Flatbush Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,0,1,5
+MAC003155,40.689697,-73.974823,145,Dekalb Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11217,1,2,2,15
+MAC005381,40.685017,-73.941498,495,Putnam Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,2,2,15
+MAC005383,40.686218,-73.935707,280,Lewis Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,3,3,20
+MAC001052,40.686787,-73.916504,979,Hancock Street,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,3,4,20
+MAC004526,40.688080,-73.919579,1447,Broadway,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,2,3,15
+MAC003914,40.689457,-73.941940,665,Greene Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,1,2,10
+MAC004557,40.690105,-73.914452,1168,Jefferson Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,0,1,5
+MAC001167,40.690525,-73.911873,550,Central Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,0,1,5
+MAC002832,40.690689,-73.923355,2,Grove Street,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,0,0,5
+MAC002739,40.691242,-73.916832,1079,Madison Street,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,4,4,25
+MAC002116,40.691326,-73.945267,232,Kosciuszko Street,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,2,2,15
+MAC003799,40.691433,-73.921539,1025,Bushwick Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,2,2,15
+MAC002658,40.692253,-73.925995,584,Van Buren Street,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,0,0,5
+MAC001475,40.692268,-73.937050,432,Kosciuszko Street,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,1,1,10
+MAC000506,40.692825,-73.915909,440,Central Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,3,4,20
+MAC003815,40.693317,-73.928383,662,Kosciuszko Street,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,4,5,25
+MAC003848,40.693489,-73.925262,894,Bushwick Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,4,4,25
+MAC001474,40.693901,-73.909737,730,Knickerbocker Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,4,4,25
+MAC002403,40.695045,-73.928146,790,Bushwick Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,3,3,20
+MAC001324,40.695362,-73.919815,120,Menahan Street,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,2,2,15
+MAC004353,40.695572,-73.932159,4,Suydam Street,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,0,0,5
+MAC004218,40.696651,-73.922661,270,Central Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,2,3,15
+MAC001894,40.696850,-73.927940,48,Cedar Street,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,3,4,20
+MAC004718,40.696915,-73.915962,251,Linden Street,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,4,5,25
+MAC005491,40.697617,-73.930984,945,Willoughby Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,1,1,10
+MAC001153,40.697887,-73.926254,96,Cedar Street,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,1,1,10
+MAC001972,40.699932,-73.928413,126,Central Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11221,1,4,4,25
+MAC005326,40.718967,-73.939468,289,Frost Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,0,0,5
+MAC002422,40.719055,-73.942268,211,Richardson Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,2,3,15
+MAC001359,40.719097,-73.949036,78,Bayard Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,4,5,25
+MAC001013,40.719101,-73.945259,457,Graham Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,2,2,15
+MAC000914,40.720860,-73.948372,500,Manhattan Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,1,2,10
+MAC005194,40.721611,-73.945465,129,Engert Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,2,2,15
+MAC004906,40.721813,-73.950470,334,Driggs Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,0,0,5
+MAC001233,40.722412,-73.938835,535,Morgan Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,0,0,5
+MAC004911,40.723213,-73.942894,101,Driggs Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,0,0,5
+MAC001969,40.723679,-73.951385,18,Bedford Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,0,1,5
+MAC005454,40.723923,-73.949837,558,Leonard Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,4,5,25
+MAC004908,40.724102,-73.955940,50,North 15th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,3,3,20
+MAC002308,40.724842,-73.947525,146A,Nassau Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,0,0,5
+MAC003796,40.725636,-73.944359,207,Nassau Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,0,1,5
+MAC000704,40.725651,-73.941643,273,Kingsland Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,4,5,25
+MAC004627,40.726425,-73.956345,238,Banker Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,2,3,15
+MAC002902,40.727009,-73.952950,105,Meserole Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,3,4,20
+MAC003369,40.727940,-73.954170,1091,Lorimer Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,4,4,25
+MAC003389,40.729145,-73.957832,77,Milton Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,2,2,15
+MAC001121,40.729763,-73.948364,293,Calyer Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,0,0,5
+MAC001096,40.730244,-73.953835,147,Greenpoint Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,0,0,5
+MAC003179,40.731300,-73.951721,266,McGuinness Boulevard,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,2,2,15
+MAC005479,40.731804,-73.960129,14,India Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,3,3,20
+MAC003093,40.732285,-73.955124,127,India Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,4,4,25
+MAC001142,40.732666,-73.958565,78,Huron Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,1,1,10
+MAC004086,40.734013,-73.951958,226,Green Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,2,3,15
+MAC000822,40.735512,-73.952881,373,McGuinness Boulevard,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,3,4,20
+MAC001179,40.735920,-73.958549,280,Franklin Street,Brooklyn,New York,Kings,NY,United States,US,USA,11222,1,4,4,25
+MAC003024,40.662766,-73.956818,124,Sterling Street,Brooklyn,New York,Kings,NY,United States,US,USA,11225,1,4,5,25
+MAC001370,40.663166,-73.953804,396,Rogers Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11225,1,4,4,25
+MAC005282,40.663338,-73.960167,44,Empire Boulevard,Brooklyn,New York,Kings,NY,United States,US,USA,11225,1,4,5,25
+MAC004376,40.664326,-73.956963,112,Sullivan Place,Brooklyn,New York,Kings,NY,United States,US,USA,11225,1,1,1,10
+MAC001226,40.666031,-73.956741,1650,Bedford Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11225,1,2,3,15
+MAC003183,40.666458,-73.960480,122A,Montgomery Street,Brooklyn,New York,Kings,NY,United States,US,USA,11225,1,3,4,20
+MAC003770,40.667973,-73.958710,974,Carroll Street,Brooklyn,New York,Kings,NY,United States,US,USA,11225,1,0,0,5
+MAC001756,40.668480,-73.961113,925,Carroll Street,Brooklyn,New York,Kings,NY,United States,US,USA,11225,1,2,3,15
+MAC000660,40.669186,-73.954880,1141,Union Street,Brooklyn,New York,Kings,NY,United States,US,USA,11225,1,0,0,5
+MAC000686,40.672619,-74.004951,825,Henry Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,6,16,57
+MAC004446,40.672707,-74.008781,160,Sigourney Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,3,13,15
+MAC001831,40.673424,-74.012115,152,Dwight Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,6,16,57
+MAC000102,40.674213,-74.002037,615,Clinton Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,7,15,43
+MAC001682,40.674664,-73.997803,478,Smith Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,4,14,29
+MAC001833,40.675045,-74.007500,505,Columbia Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,9,17,71
+MAC004901,40.675453,-74.010132,7,Wolcott Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,6,15,43
+MAC001394,40.675911,-74.014587,8,Van Brunt Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,5,15,43
+MAC004159,40.676384,-74.003555,77,West 9th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,7,16,57
+MAC001902,40.676399,-73.998779,481,Court Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,7,15,43
+MAC001715,40.677021,-74.006554,443,Columbia Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,5,14,29
+MAC002616,40.677223,-74.012756,89,Wolcott Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,7,17,71
+MAC001885,40.677223,-74.015556,147,Coffey Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,8,17,71
+MAC002622,40.677731,-73.993507,72,3rd Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,7,15,43
+MAC005009,40.678185,-74.009209,85,Richards Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,7,16,57
+MAC004270,40.678215,-74.000145,520,Clinton Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,6,15,43
+MAC001949,40.678558,-73.990105,371,Carroll Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,5,15,43
+MAC000128,40.678642,-73.995895,385,Smith Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,7,15,43
+MAC004209,40.679146,-74.011345,138,Pioneer Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,9,17,71
+MAC001557,40.679245,-74.008003,80,Richards Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,8,16,57
+MAC000104,40.680737,-73.995361,242,Carroll Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,5,15,43
+MAC000794,40.680939,-73.999115,46,1st Place,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,7,15,43
+MAC004864,40.681190,-74.008751,88,Commerce Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,5,14,29
+MAC000879,40.682751,-73.999863,175,President Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,5,14,29
+MAC000425,40.682896,-74.003120,69,Carroll Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,4,14,29
+MAC000657,40.682968,-73.993195,356,Degraw Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,4,13,15
+MAC001662,40.683155,-73.997765,396,Clinton Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,4,13,15
+MAC001060,40.684616,-73.999168,486,Henry Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,4,13,15
+MAC003809,40.684929,-73.994141,12,Butler Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,6,14,29
+MAC002867,40.685905,-74.002281,182,Columbia Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,8,16,57
+MAC001301,40.686218,-73.996727,201,Kane Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,5,15,43
+MAC002240,40.687588,-74.001465,119,Columbia Street,Brooklyn,New York,Kings,NY,United States,US,USA,11231,1,6,14,29
+MAC003338,40.655460,-74.010796,168,39th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11232,1,3,3,20
+MAC003877,40.656937,-74.008766,627,2nd Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11232,1,1,2,10
+MAC004164,40.679295,-73.929428,1741,Fulton Street,Brooklyn,New York,Kings,NY,United States,US,USA,11233,1,0,0,5
+MAC000892,40.679512,-73.904739,176,Somers Street,Brooklyn,New York,Kings,NY,United States,US,USA,11233,1,2,3,15
+MAC002583,40.681477,-73.934761,411,Lewis Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11233,1,2,3,15
+MAC001955,40.683308,-73.911705,8,Rockaway Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11233,1,2,3,15
+MAC000031,40.685730,-73.915718,960,Halsey Street,Brooklyn,New York,Kings,NY,United States,US,USA,11233,1,3,3,20
+MAC002648,40.693188,-73.908478,763,Knickerbocker Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,4,5,25
+MAC002354,40.694630,-73.906670,501,Irving Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,2,3,15
+MAC004645,40.695255,-73.911697,1399,Putnam Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,3,3,20
+MAC001529,40.698021,-73.909004,1544,Putnam Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,4,5,25
+MAC002973,40.698055,-73.912682,344,Irving Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,2,3,15
+MAC002521,40.698483,-73.919098,1309,Greene Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,2,2,15
+MAC003674,40.699120,-73.915359,1480,Myrtle Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,0,0,5
+MAC004495,40.699444,-73.922806,161,Stockholm Street,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,1,1,10
+MAC001686,40.699455,-73.913460,343,Linden Street,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,1,1,10
+MAC000596,40.701012,-73.914276,345,Menahan Street,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,2,3,15
+MAC001578,40.701023,-73.917923,217,Irving Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,0,0,5
+MAC004336,40.701698,-73.927475,93,Wilson Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,0,0,5
+MAC002338,40.702122,-73.923744,264,Suydam Street,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,0,1,5
+MAC005245,40.702732,-73.920921,142,Irving Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,4,5,25
+MAC003314,40.703545,-73.917633,332,Stanhope Street,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,2,2,15
+MAC002337,40.704460,-73.928261,146,Knickerbocker Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,2,2,15
+MAC000230,40.704941,-73.919785,971,Hart Street,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,0,1,5
+MAC000811,40.705372,-73.929817,97,Knickerbocker Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,2,3,15
+MAC000106,40.705429,-73.925179,343,Jefferson Street,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,3,3,20
+MAC001022,40.705563,-73.921516,1301,Willoughby Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,2,3,15
+MAC000305,40.706505,-73.919373,432,Suydam Street,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,3,3,20
+MAC003790,40.706924,-73.928391,122,Harrison Place,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,0,0,5
+MAC001545,40.706928,-73.923447,4,Wyckoff Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,4,5,25
+MAC002585,40.708145,-73.925591,69,Stewart Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,2,3,15
+MAC004938,40.708752,-73.921829,476,Jefferson Street,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,3,3,20
+MAC005068,40.713749,-73.927956,224,Stewart Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11237,1,4,4,25
+MAC000144,40.671726,-73.963333,186,Eastern Parkway,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,2,3,15
+MAC003613,40.672215,-73.960922,461,Lincoln Place,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,1,2,10
+MAC003328,40.673706,-73.963493,446,"Saint John's Place",Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,3,4,20
+MAC003471,40.673763,-73.967163,224,Underhill Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,2,2,15
+MAC005159,40.675728,-73.956139,656,Franklin Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,4,4,25
+MAC001927,40.676262,-73.959572,694,Classon Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,3,3,20
+MAC002173,40.676735,-73.968979,262,Park Place,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,1,2,10
+MAC001679,40.676937,-73.965378,330,Prospect Place,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,2,2,15
+MAC001360,40.677620,-73.955704,1046,Dean Street,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,1,1,10
+MAC005272,40.677895,-73.962357,588,Grand Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,2,2,15
+MAC004461,40.679104,-73.958817,1036,Pacific Street,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,3,3,20
+MAC003765,40.679337,-73.967773,651,Bergen Street,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,4,4,25
+MAC000611,40.680313,-73.956078,19599,Lefferts Place,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,3,3,20
+MAC003092,40.680523,-73.964714,18,Underhill Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,3,4,20
+MAC005304,40.681007,-73.971077,551,Carlton Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,3,3,20
+MAC003457,40.681919,-73.959427,1059,Fulton Street,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,0,0,5
+MAC004184,40.683300,-73.966003,882,Fulton Street,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,4,4,25
+MAC002776,40.684528,-73.958786,7,Monroe Street,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,3,4,20
+MAC000335,40.684570,-73.970108,782,Fulton Street,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,2,2,15
+MAC005406,40.684956,-73.963120,73,Cambridge Place,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,0,1,5
+MAC003466,40.686409,-73.965462,406,Washington Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,1,2,10
+MAC005082,40.686714,-73.959282,65,Lexington Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,0,0,5
+MAC003067,40.687580,-73.969765,340,Clermont Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,1,1,10
+MAC002732,40.688854,-73.960236,378,Lafayette Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11238,1,1,2,10
+MAC003598,40.707390,-73.968414,475,Kent Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11249,1,2,2,15
+MAC001422,40.710453,-73.965248,100,Broadway,Brooklyn,New York,Kings,NY,United States,US,USA,11249,1,1,2,10
+MAC000003,40.712685,-73.962997,117,South 3rd Street,Brooklyn,New York,Kings,NY,United States,US,USA,11249,1,0,0,5
+MAC004595,40.712944,-73.966034,52,South 4th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11249,1,3,4,20
+MAC005242,40.716904,-73.963242,233,Wythe Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11249,1,0,0,5
+MAC004796,40.717445,-73.958542,147,North 6th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11249,1,4,4,25
+MAC004717,40.719048,-73.958549,105,Berry Street,Brooklyn,New York,Kings,NY,United States,US,USA,11249,1,3,3,20
+MAC001211,40.720428,-73.961609,111,Kent Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11249,1,2,2,15
+MAC005431,40.720703,-73.954933,170,North 12th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11249,1,2,3,15
+MAC003268,40.722397,-73.959129,43,North 11th Street,Brooklyn,New York,Kings,NY,United States,US,USA,11249,1,4,4,25
+MAC002076,40.698025,-73.970779,"",South Street,Brooklyn,New York,Kings,NY,United States,US,USA,11251,1,3,3,20
+MAC002205,40.698833,-73.979866,2,1st Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11251,1,3,3,20
+MAC004432,40.699825,-73.971443,"","",Brooklyn,New York,Kings,NY,United States,US,USA,11251,1,0,1,5
+MAC000357,40.705250,-73.971077,"",Railroad Avenue,Brooklyn,New York,Kings,NY,United States,US,USA,11251,1,4,5,25
+MAC002445,40.785812,-73.948677,183,East 97th Street,Carnegie Hill,New York,New York,NY,United States,US,USA,10029,1,2,2,15
+MAC001926,40.787788,-73.953407,50,East 97th Street,Carnegie Hill,New York,New York,NY,United States,US,USA,10029,1,1,2,10
+MAC004884,40.780632,-73.952324,201,East 89th Street,Carnegie Hill,New York,New York,NY,United States,US,USA,10128,1,2,2,15
+MAC004903,40.781322,-73.955894,101,East 88th Street,Carnegie Hill,New York,New York,NY,United States,US,USA,10128,1,2,3,15
+MAC003678,40.782127,-73.951942,172,East 91st Street,Carnegie Hill,New York,New York,NY,United States,US,USA,10128,1,2,2,15
+MAC004425,40.782471,-73.948875,244,East 93rd Street,Carnegie Hill,New York,New York,NY,United States,US,USA,10128,1,0,1,5
+MAC005156,40.783077,-73.959267,1071,5th Avenue,Carnegie Hill,New York,New York,NY,United States,US,USA,10128,1,1,1,10
+MAC000308,40.783592,-73.955421,74,East 91st Street,Carnegie Hill,New York,New York,NY,United States,US,USA,10128,1,3,4,20
+MAC003746,40.784813,-73.950546,172,East 95th Street,Carnegie Hill,New York,New York,NY,United States,US,USA,10128,1,0,0,5
+MAC002930,40.785763,-73.957291,1115,5th Avenue,Carnegie Hill,New York,New York,NY,United States,US,USA,10128,1,0,0,5
+MAC002821,40.798656,-73.952042,10,Lenox Avenue,Central Harlem,New York,New York,NY,United States,US,USA,10026,1,2,3,15
+MAC001078,40.799767,-73.956078,207,West 110th Street,Central Harlem,New York,New York,NY,United States,US,USA,10026,1,4,4,25
+MAC002394,40.801456,-73.950005,100,Lenox Avenue,Central Harlem,New York,New York,NY,United States,US,USA,10026,1,0,0,5
+MAC005516,40.801735,-73.956932,297,West 112th Street,Central Harlem,New York,New York,NY,United States,US,USA,10026,1,0,1,5
+MAC003633,40.802383,-73.953239,1890,Adam Clayton Powell Junior Boulevard,Central Harlem,New York,New York,NY,United States,US,USA,10026,1,1,2,10
+MAC001816,40.802521,-73.949226,142,Lenox Avenue,Central Harlem,New York,New York,NY,United States,US,USA,10026,1,1,1,10
+MAC001749,40.803883,-73.956200,301,West 115th Street,Central Harlem,New York,New York,NY,United States,US,USA,10026,1,3,4,20
+MAC002820,40.804375,-73.951576,1951-1955,Adam Clayton Powell Junior Boulevard,Central Harlem,New York,New York,NY,United States,US,USA,10026,1,2,2,15
+MAC004490,40.805206,-73.954796,2173,Frederick Douglass Boulevard,Central Harlem,New York,New York,NY,United States,US,USA,10026,1,0,0,5
+MAC004510,40.804184,-73.945930,1,Mount Morris Park West,Central Harlem,New York,New York,NY,United States,US,USA,10027,1,2,3,15
+MAC002443,40.807785,-73.949089,2061,Adam Clayton Powell Junior Boulevard,Central Harlem,New York,New York,NY,United States,US,USA,10027,1,0,1,5
+MAC001455,40.808426,-73.945099,317,Lenox Avenue,Central Harlem,New York,New York,NY,United States,US,USA,10027,1,2,3,15
+MAC001839,40.809315,-73.947968,2105,Adam Clayton Powell Junior Boulevard,Central Harlem,New York,New York,NY,United States,US,USA,10027,1,2,2,15
+MAC001466,40.809624,-73.953033,270,Saint Nicholas Avenue,Central Harlem,New York,New York,NY,United States,US,USA,10027,1,2,3,15
+MAC001650,40.810341,-73.957588,123,Morningside Drive,Central Harlem,New York,New York,NY,United States,US,USA,10027,1,3,3,20
+MAC003330,40.810760,-73.943214,400,Lenox Avenue,Central Harlem,New York,New York,NY,United States,US,USA,10027,1,2,2,15
+MAC004955,40.811306,-73.951767,327,West 126th Street,Central Harlem,New York,New York,NY,United States,US,USA,10027,1,4,4,25
+MAC004891,40.812290,-73.945786,2201,Adam Clayton Powell Junior Boulevard,Central Harlem,New York,New York,NY,United States,US,USA,10027,1,3,3,20
+MAC004530,40.812965,-73.949127,2410,Frederick Douglass Boulevard,Central Harlem,New York,New York,NY,United States,US,USA,10027,1,2,3,15
+MAC001891,40.819649,-73.946770,574,Saint Nicholas Avenue,Central Harlem,New York,New York,NY,United States,US,USA,10030,1,0,1,5
+MAC000239,40.765926,-73.976196,"",Center Drive,Central Park,New York,New York,NY,United States,US,USA,10023,1,2,2,15
+MAC001495,40.773468,-73.977974,77,Central Park West,Central Park,New York,New York,NY,United States,US,USA,10023,1,1,1,10
+MAC001576,40.775871,-73.976219,115,Central Park West,Central Park,New York,New York,NY,United States,US,USA,10023,1,0,0,5
+MAC005054,40.779121,-73.973854,170,Central Park West,Central Park,New York,New York,NY,United States,US,USA,10024,1,2,3,15
+MAC003261,40.784771,-73.969734,251,Central Park West,Central Park,New York,New York,NY,United States,US,USA,10024,1,0,1,5
+MAC004949,40.791355,-73.964928,360,Central Park West,Central Park,New York,New York,NY,United States,US,USA,10025,1,1,2,10
+MAC002504,40.794361,-73.962738,405,Central Park West,Central Park,New York,New York,NY,United States,US,USA,10025,1,0,1,5
+MAC005061,40.795296,-73.962051,418,Central Park West,Central Park,New York,New York,NY,United States,US,USA,10025,1,2,3,15
+MAC004078,40.738205,-73.996681,100,West 15th Street,Chelsea,New York,New York,NY,United States,US,USA,10011,1,3,22,29
+MAC000030,40.739368,-73.999512,200,West 15th Street,Chelsea,New York,New York,NY,United States,US,USA,10011,1,3,19,29
+MAC001632,40.741734,-73.994049,100,West 21st Street,Chelsea,New York,New York,NY,United States,US,USA,10011,1,3,22,29
+MAC005533,40.741768,-74.001373,300,West 17th Street,Chelsea,New York,New York,NY,United States,US,USA,10011,1,3,22,29
+MAC002417,40.742355,-73.997307,201,West 20th Street,Chelsea,New York,New York,NY,United States,US,USA,10011,1,2,20,15
+MAC001245,40.742798,-74.007584,460,West 15th Street,Chelsea,New York,New York,NY,United States,US,USA,10011,1,5,24,57
+MAC002220,40.742966,-74.006065,437,West 16th Street,Chelsea,New York,New York,NY,United States,US,USA,10011,1,2,18,15
+MAC003054,40.743225,-74.003708,112,9th Avenue,Chelsea,New York,New York,NY,United States,US,USA,10011,1,2,19,15
+MAC001460,40.743572,-74.000206,300,West 20th Street,Chelsea,New York,New York,NY,United States,US,USA,10011,1,6,22,71
+MAC000537,40.743649,-74.004021,411,West 18th Street,Chelsea,New York,New York,NY,United States,US,USA,10011,1,4,21,43
+MAC004235,40.744720,-73.999199,301,West 22nd Street,Chelsea,New York,New York,NY,United States,US,USA,10011,1,4,21,43
+MAC002595,40.745491,-74.002045,186,9th Avenue,Chelsea,New York,New York,NY,United States,US,USA,10011,1,3,20,29
+MAC004591,40.746628,-74.007362,550,West 20th Street,Chelsea,New York,New York,NY,United States,US,USA,10011,1,3,22,29
+MAC002877,40.746944,-74.004471,493,West 22nd Street,Chelsea,New York,New York,NY,United States,US,USA,10011,1,3,20,29
+MAC004942,40.714104,-73.996719,15,Division Street,Chinatown,New York,New York,NY,United States,US,USA,10002,1,0,1,5
+MAC002161,40.714642,-74.002449,60,Centre Street,Chinatown,New York,New York,NY,United States,US,USA,10007,1,0,0,5
+MAC004950,40.716061,-73.999718,95,Bayard Street,Chinatown,New York,New York,NY,United States,US,USA,10013,1,4,5,25
+MAC003761,40.713051,-73.998390,56,Saint James Place,Chinatown,New York,New York,NY,United States,US,USA,10038,1,4,5,25
+MAC000917,40.747379,-73.997490,301,West 26th Street,Clinton,New York,New York,NY,United States,US,USA,10001,1,3,3,20
+MAC003500,40.749336,-73.999245,303,9th Avenue,Clinton,New York,New York,NY,United States,US,USA,10001,1,2,3,15
+MAC002048,40.749702,-74.003044,501,West 26th Street,Clinton,New York,New York,NY,United States,US,USA,10001,1,1,2,10
+MAC005504,40.750950,-74.002113,500,West 28th Street,Clinton,New York,New York,NY,United States,US,USA,10001,1,2,3,15
+MAC000260,40.751507,-74.005424,601,West 27th Street,Clinton,New York,New York,NY,United States,US,USA,10001,1,2,2,15
+MAC004726,40.752666,-74.002403,501,West 30th Street,Clinton,New York,New York,NY,United States,US,USA,10001,1,2,3,15
+MAC004912,40.754688,-73.997307,444,West 35th Street,Clinton,New York,New York,NY,United States,US,USA,10001,1,0,0,5
+MAC000801,40.755360,-74.000999,539,West 34th Street,Clinton,New York,New York,NY,United States,US,USA,10001,1,2,3,15
+MAC003550,40.756729,-73.998322,505,West 37th Street,Clinton,New York,New York,NY,United States,US,USA,10018,1,2,3,15
+MAC002307,40.761017,-74.002167,451,12th Avenue,Clinton,New York,New York,NY,United States,US,USA,10018,1,3,4,20
+MAC001268,40.762234,-73.987915,313,West 49th Street,Clinton,New York,New York,NY,United States,US,USA,10019,1,0,1,5
+MAC002699,40.763588,-73.989159,401,West 50th Street,Clinton,New York,New York,NY,United States,US,USA,10019,1,3,4,20
+MAC001388,40.765812,-73.986717,359,West 54th Street,Clinton,New York,New York,NY,United States,US,USA,10019,1,2,2,15
+MAC004369,40.766842,-73.991066,500,West 53rd Street,Clinton,New York,New York,NY,United States,US,USA,10019,1,0,1,5
+MAC004068,40.767239,-73.993942,600,West 52nd Street,Clinton,New York,New York,NY,United States,US,USA,10019,1,2,3,15
+MAC003002,40.768269,-73.988625,455,West 56th Street,Clinton,New York,New York,NY,United States,US,USA,10019,1,0,0,5
+MAC003627,40.771297,-73.990700,860,11th Avenue,Clinton,New York,New York,NY,United States,US,USA,10019,1,1,2,10
+MAC003610,40.757488,-73.992455,347,West 41st Street,Clinton,New York,New York,NY,United States,US,USA,10036,1,1,2,10
+MAC003398,40.758911,-73.993782,424,West 42nd Street,Clinton,New York,New York,NY,United States,US,USA,10036,1,2,2,15
+MAC000056,40.759258,-73.988609,301,West 45th Street,Clinton,New York,New York,NY,United States,US,USA,10036,1,1,1,10
+MAC004358,40.760098,-73.991409,628,9th Avenue,Clinton,New York,New York,NY,United States,US,USA,10036,1,0,1,5
+MAC004581,40.760136,-73.994583,460,West 43rd Street,Clinton,New York,New York,NY,United States,US,USA,10036,1,1,1,10
+MAC002216,40.760311,-73.999146,601,West 41st Street,Clinton,New York,New York,NY,United States,US,USA,10036,1,1,2,10
+MAC003961,40.762657,-73.992790,468,West 47th Street,Clinton,New York,New York,NY,United States,US,USA,10036,1,0,0,5
+MAC001263,40.763519,-73.996780,600,West 46th Street,Clinton,New York,New York,NY,United States,US,USA,10036,1,4,4,25
+MAC002541,40.712513,-74.038994,131,Dudley Street,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,4,5,25
+MAC004157,40.715050,-74.037750,226,Washington Street,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,0,1,5
+MAC003536,40.716431,-74.041260,163,York Street,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,3,4,20
+MAC000138,40.717739,-74.043976,277,Grove Street,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,2,3,15
+MAC004460,40.718376,-74.039314,56,Christopher Columbus Drive,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,2,2,15
+MAC005083,40.718491,-74.047859,469,Jersey Avenue,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,4,4,25
+MAC003454,40.718845,-74.051231,295,Monmouth Street,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,1,2,10
+MAC000148,40.719658,-74.043404,103,Christopher Columbus Drive,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,4,5,25
+MAC000317,40.721199,-74.037926,110,1st Street,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,4,4,25
+MAC000991,40.721272,-74.046333,538,Jersey Avenue,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,1,2,10
+MAC003933,40.721672,-74.043022,211,1st Street,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,3,4,20
+MAC004120,40.723412,-74.046341,265,3rd Street,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,0,0,5
+MAC003308,40.725300,-74.045464,621,Jersey Avenue,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,1,1,10
+MAC005401,40.725574,-74.048813,449,Monmouth Street,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,4,4,25
+MAC000691,40.727737,-74.044113,25,McWilliams Place,Downtown Jersey City,Jersey City,Hudson,NJ,United States,US,USA,07302,1,0,0,5
+MAC001726,40.786358,-73.945541,1922,2nd Avenue,East Harlem,New York,New York,NY,United States,US,USA,10029,1,2,2,15
+MAC001285,40.786915,-73.941574,405,East 102nd Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,4,4,25
+MAC004574,40.787838,-73.947426,1802,3rd Avenue,East Harlem,New York,New York,NY,United States,US,USA,10029,1,2,2,15
+MAC005095,40.788147,-73.952286,42,East 98th Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,2,2,15
+MAC002887,40.789104,-73.943542,2014,2nd Avenue,East Harlem,New York,New York,NY,United States,US,USA,10029,1,1,2,10
+MAC000090,40.789730,-73.940315,348,East 106th Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,0,0,5
+MAC001491,40.790108,-73.952065,1445,Madison Avenue,East Harlem,New York,New York,NY,United States,US,USA,10029,1,3,3,20
+MAC003936,40.790161,-73.947327,151,East 103rd Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,2,2,15
+MAC003408,40.790630,-73.950378,60,East 102nd Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,0,1,5
+MAC003801,40.792118,-73.945976,154,East 106th Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,3,3,20
+MAC003684,40.792267,-73.952591,1216,5th Avenue,East Harlem,New York,New York,NY,United States,US,USA,10029,1,2,2,15
+MAC004288,40.792305,-73.938477,348,East 110th Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,0,1,5
+MAC005452,40.793346,-73.943375,1980,3rd Avenue,East Harlem,New York,New York,NY,United States,US,USA,10029,1,4,4,25
+MAC001005,40.793354,-73.949699,1545,Madison Avenue,East Harlem,New York,New York,NY,United States,US,USA,10029,1,2,2,15
+MAC000179,40.794518,-73.935928,405,East 114th Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,4,5,25
+MAC000989,40.794903,-73.933266,299,Pleasant Avenue,East Harlem,New York,New York,NY,United States,US,USA,10029,1,1,2,10
+MAC000277,40.795498,-73.944099,144,East 111th Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,2,3,15
+MAC005048,40.795925,-73.941498,2060,3rd Avenue,East Harlem,New York,New York,NY,United States,US,USA,10029,1,0,1,5
+MAC005374,40.796375,-73.948120,8,East 110th Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,4,4,25
+MAC004373,40.796795,-73.937279,307,East 116th Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,0,0,5
+MAC003205,40.798069,-73.942451,135,East 115th Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,2,2,15
+MAC004767,40.799042,-73.944771,57,East 115th Street,East Harlem,New York,New York,NY,United States,US,USA,10029,1,4,5,25
+MAC004951,40.797562,-73.935043,345,East 118th Street,East Harlem,New York,New York,NY,United States,US,USA,10035,1,1,1,10
+MAC000780,40.797756,-73.931549,446,East 120th Street,East Harlem,New York,New York,NY,United States,US,USA,10035,1,1,2,10
+MAC005244,40.799133,-73.938774,200,East 118th Street,East Harlem,New York,New York,NY,United States,US,USA,10035,1,1,2,10
+MAC004979,40.800377,-73.941719,111,East 118th Street,East Harlem,New York,New York,NY,United States,US,USA,10035,1,2,2,15
+MAC000358,40.800709,-73.935066,2375,2nd Avenue,East Harlem,New York,New York,NY,United States,US,USA,10035,1,2,3,15
+MAC003738,40.801075,-73.939461,150,East 120th Street,East Harlem,New York,New York,NY,United States,US,USA,10035,1,2,2,15
+MAC004449,40.801514,-73.944397,20,East 118th Street,East Harlem,New York,New York,NY,United States,US,USA,10035,1,4,4,25
+MAC002991,40.802853,-73.942795,1839,Madison Avenue,East Harlem,New York,New York,NY,United States,US,USA,10035,1,1,2,10
+MAC005541,40.802872,-73.937912,157,East 123rd Street,East Harlem,New York,New York,NY,United States,US,USA,10035,1,2,2,15
+MAC003115,40.802917,-73.933975,255,East 125th Street,East Harlem,New York,New York,NY,United States,US,USA,10035,1,1,2,10
+MAC003865,40.804588,-73.939598,1800,Park Avenue,East Harlem,New York,New York,NY,United States,US,USA,10035,1,1,1,10
+MAC001484,40.805508,-73.934090,200,East 128th Street,East Harlem,New York,New York,NY,United States,US,USA,10035,1,0,0,5
+MAC000921,40.805550,-73.936569,2101,Lexington Avenue,East Harlem,New York,New York,NY,United States,US,USA,10035,1,0,0,5
+MAC004247,40.806557,-73.936646,105,East 128th Street,East Harlem,New York,New York,NY,United States,US,USA,10035,1,1,1,10
+MAC002895,40.806896,-73.941895,2037A,5th Avenue,East Harlem,New York,New York,NY,United States,US,USA,10035,1,0,0,5
+MAC001229,40.807556,-73.939018,39,East 128th Street,East Harlem,New York,New York,NY,United States,US,USA,10035,1,3,3,20
+MAC004812,40.809929,-73.939690,2122,5th Avenue,East Harlem,New York,New York,NY,United States,US,USA,10037,1,4,4,25
+MAC003441,40.809975,-73.936928,42,East 132nd Street,East Harlem,New York,New York,NY,United States,US,USA,10037,1,3,3,20
+MAC002795,40.812386,-73.937889,2196,5th Avenue,East Harlem,New York,New York,NY,United States,US,USA,10037,1,4,5,25
+MAC004900,40.813400,-73.939178,23,West 135th Street,East Harlem,New York,New York,NY,United States,US,USA,10037,1,1,1,10
+MAC004783,40.814362,-73.935516,10,East 138th Street,East Harlem,New York,New York,NY,United States,US,USA,10037,1,3,3,20
+MAC005271,40.726288,-73.989685,84,East 4th Street,East Village,New York,New York,NY,United States,US,USA,10003,1,2,2,15
+MAC005256,40.727753,-73.985680,79,Saint Marks Place,East Village,New York,New York,NY,United States,US,USA,10003,1,3,3,20
+MAC004444,40.728374,-73.987144,41,Saint Marks Place,East Village,New York,New York,NY,United States,US,USA,10003,1,1,2,10
+MAC002352,40.729458,-73.990891,64,Cooper Square,East Village,New York,New York,NY,United States,US,USA,10003,1,1,2,10
+MAC004765,40.729504,-73.984306,344,East 11th Street,East Village,New York,New York,NY,United States,US,USA,10003,1,3,3,20
+MAC004941,40.730728,-73.987213,232,East 11th Street,East Village,New York,New York,NY,United States,US,USA,10003,1,4,4,25
+MAC000186,40.732254,-73.988838,126,East 12th Street,East Village,New York,New York,NY,United States,US,USA,10003,1,3,4,20
+MAC004558,40.732662,-73.990044,114,4th Avenue,East Village,New York,New York,NY,United States,US,USA,10003,1,1,2,10
+MAC000724,40.720829,-73.978119,20,Avenue D,East Village,New York,New York,NY,United States,US,USA,10009,1,2,3,15
+MAC003465,40.720947,-73.980896,262,East 2nd Street,East Village,New York,New York,NY,United States,US,USA,10009,1,0,0,5
+MAC001952,40.722317,-73.976494,870,East 6th Street,East Village,New York,New York,NY,United States,US,USA,10009,1,1,1,10
+MAC000961,40.722988,-73.979973,653,East 5th Street,East Village,New York,New York,NY,United States,US,USA,10009,1,2,2,15
+MAC004248,40.723991,-73.975822,118,Avenue D,East Village,New York,New York,NY,United States,US,USA,10009,1,2,2,15
+MAC000534,40.724606,-73.981926,543 1/2,East 6th Street,East Village,New York,New York,NY,United States,US,USA,10009,1,3,3,20
+MAC000472,40.725037,-73.977386,709,East 9th Street,East Village,New York,New York,NY,United States,US,USA,10009,1,4,5,25
+MAC003503,40.725697,-73.974564,170,Avenue D,East Village,New York,New York,NY,United States,US,USA,10009,1,4,5,25
+MAC003028,40.726135,-73.983742,135,East 7th Street,East Village,New York,New York,NY,United States,US,USA,10009,1,1,2,10
+MAC001863,40.726234,-73.985748,405,East 6th Street,East Village,New York,New York,NY,United States,US,USA,10009,1,2,2,15
+MAC004740,40.727322,-73.977158,637,East 12th Street,East Village,New York,New York,NY,United States,US,USA,10009,1,1,1,10
+MAC005192,40.727486,-73.981361,311,East 10th Street,East Village,New York,New York,NY,United States,US,USA,10009,1,1,2,10
+MAC004832,40.727562,-73.979706,549,East 11th Street,East Village,New York,New York,NY,United States,US,USA,10009,1,2,2,15
+MAC005522,40.729568,-73.980476,501,East 13th Street,East Village,New York,New York,NY,United States,US,USA,10009,1,3,4,20
+MAC002657,40.716900,-74.032692,2,Christopher Columbus Drive,Exchange Place,Jersey City,Hudson,NJ,United States,US,USA,07302,1,3,3,20
+MAC001261,40.701160,-74.012436,"",Ferry Terminal,Financial District,New York,New York,NY,United States,US,USA,10004,1,2,3,15
+MAC002499,40.701908,-74.013985,"",Admiral George Dewey,Financial District,New York,New York,NY,United States,US,USA,10004,1,3,3,20
+MAC001122,40.702568,-74.012566,2,Water Street,Financial District,New York,New York,NY,United States,US,USA,10004,1,0,1,5
+MAC000650,40.703613,-74.006599,"",Wall Street Pier,Financial District,New York,New York,NY,United States,US,USA,10004,1,2,2,15
+MAC002306,40.703911,-74.011589,90,Broad Street,Financial District,New York,New York,NY,United States,US,USA,10004,1,0,0,5
+MAC004507,40.704552,-74.013618,54,Bowling Green,Financial District,New York,New York,NY,United States,US,USA,10004,1,3,3,20
+MAC003525,40.704380,-74.006447,120,Wall Street,Financial District,New York,New York,NY,United States,US,USA,10005,1,2,3,15
+MAC003385,40.704620,-74.009354,110,Pearl Street,Financial District,New York,New York,NY,United States,US,USA,10005,1,3,3,20
+MAC004519,40.705025,-74.005760,90,Pine Street,Financial District,New York,New York,NY,United States,US,USA,10005,1,2,3,15
+MAC001605,40.707100,-74.008873,60,William Street,Financial District,New York,New York,NY,United States,US,USA,10005,1,4,5,25
+MAC002474,40.708923,-74.010048,70,Liberty Street,Financial District,New York,New York,NY,United States,US,USA,10005,1,3,4,20
+MAC003559,40.711403,-74.010117,172,Fulton Street,Financial District,New York,New York,NY,United States,US,USA,10007,1,3,4,20
+MAC000114,40.713200,-74.010712,75,Barclay Street,Financial District,New York,New York,NY,United States,US,USA,10007,1,1,2,10
+MAC000235,40.713409,-74.009583,33,Park Place,Financial District,New York,New York,NY,United States,US,USA,10007,1,2,3,15
+MAC001053,40.714855,-74.011200,85,Murray Street,Financial District,New York,New York,NY,United States,US,USA,10007,1,4,4,25
+MAC005279,40.714886,-74.012848,140,Park Place,Financial District,New York,New York,NY,United States,US,USA,10007,1,2,3,15
+MAC001856,40.707081,-74.007294,90,Maiden Lane,Financial District,New York,New York,NY,United States,US,USA,10038,1,1,2,10
+MAC000709,40.708332,-74.005035,29,Cliff Street,Financial District,New York,New York,NY,United States,US,USA,10038,1,0,1,5
+MAC000389,40.708366,-74.006721,85,John Street,Financial District,New York,New York,NY,United States,US,USA,10038,1,2,2,15
+MAC002746,40.735565,-73.988495,109,East 16th Street,Flatiron,New York,New York,NY,United States,US,USA,10003,1,2,2,15
+MAC005213,40.736969,-73.990013,27,East 17th Street,Flatiron,New York,New York,NY,United States,US,USA,10003,1,0,1,5
+MAC000182,40.737160,-73.992294,1,East 16th Street,Flatiron,New York,New York,NY,United States,US,USA,10003,1,3,3,20
+MAC005021,40.740341,-73.989449,933,Broadway,Flatiron,New York,New York,NY,United States,US,USA,10010,1,1,1,10
+MAC004214,40.740692,-73.985504,100,East 24th Street,Flatiron,New York,New York,NY,United States,US,USA,10010,1,1,1,10
+MAC001493,40.742947,-73.989182,1115,Broadway,Flatiron,New York,New York,NY,United States,US,USA,10010,1,2,3,15
+MAC003406,40.743919,-73.991249,48,West 25th Street,Flatiron,New York,New York,NY,United States,US,USA,10010,1,1,1,10
+MAC001100,40.739502,-73.994186,45,West 18th Street,Flatiron,New York,New York,NY,United States,US,USA,10011,1,3,3,20
+MAC001201,40.749466,-73.988129,1286,Broadway,Garment District,New York,New York,NY,United States,US,USA,10001,1,0,1,5
+MAC002038,40.750191,-73.990845,136,West 33rd Street,Garment District,New York,New York,NY,United States,US,USA,10001,1,3,4,20
+MAC002606,40.751839,-73.993729,460,8th Avenue,Garment District,New York,New York,NY,United States,US,USA,10001,1,4,5,25
+MAC001449,40.750984,-73.987747,1350,Broadway,Garment District,New York,New York,NY,United States,US,USA,10018,1,0,1,5
+MAC003319,40.751842,-73.987572,1364,Broadway,Garment District,New York,New York,NY,United States,US,USA,10018,1,0,1,5
+MAC001501,40.753025,-73.987274,1400,Broadway,Garment District,New York,New York,NY,United States,US,USA,10018,1,4,4,25
+MAC001129,40.754608,-73.991379,277,West 38th Street,Garment District,New York,New York,NY,United States,US,USA,10018,1,1,1,10
+MAC002477,40.734169,-73.987144,145,East 15th Street,Gramercy,New York,New York,NY,United States,US,USA,10003,1,3,4,20
+MAC002058,40.735786,-73.981720,304,East 20th Street,Gramercy,New York,New York,NY,United States,US,USA,10003,1,1,2,10
+MAC005060,40.736122,-73.984329,210,East 19th Street,Gramercy,New York,New York,NY,United States,US,USA,10003,1,1,2,10
+MAC000972,40.738167,-73.987381,8,Gramercy Park South,Gramercy,New York,New York,NY,United States,US,USA,10003,1,2,2,15
+MAC001289,40.738876,-73.979248,309,East 25th Street,Gramercy,New York,New York,NY,United States,US,USA,10010,1,3,4,20
+MAC004116,40.741512,-73.983299,81,Lexington Avenue,Gramercy,New York,New York,NY,United States,US,USA,10016,1,4,4,25
+MAC003437,40.742802,-73.977036,542,2nd Avenue,Gramercy,New York,New York,NY,United States,US,USA,10016,1,4,5,25
+MAC003222,40.743103,-73.982117,136,Lexington Avenue,Gramercy,New York,New York,NY,United States,US,USA,10016,1,2,2,15
+MAC001893,40.743237,-73.974358,377,East 33rd Street,Gramercy,New York,New York,NY,United States,US,USA,10016,1,3,4,20
+MAC000737,40.744122,-73.980217,142,East 31st Street,Gramercy,New York,New York,NY,United States,US,USA,10016,1,2,2,15
+MAC003726,40.729202,-73.994133,2,Washington Place,Greenwich Village,New York,New York,NY,United States,US,USA,10003,1,2,3,15
+MAC000997,40.729897,-73.991379,454,Lafayette Street,Greenwich Village,New York,New York,NY,United States,US,USA,10003,1,1,1,10
+MAC003721,40.731403,-73.994942,13,University Place,Greenwich Village,New York,New York,NY,United States,US,USA,10003,1,4,4,25
+MAC003511,40.733288,-73.995148,1,East 10th Street,Greenwich Village,New York,New York,NY,United States,US,USA,10003,1,0,0,5
+MAC004236,40.734627,-73.990829,853,Broadway,Greenwich Village,New York,New York,NY,United States,US,USA,10003,1,4,4,25
+MAC004196,40.734810,-73.992027,126,University Place,Greenwich Village,New York,New York,NY,United States,US,USA,10003,1,3,3,20
+MAC001115,40.732189,-74.000259,89,Washington Place,Greenwich Village,New York,New York,NY,United States,US,USA,10011,1,3,4,20
+MAC000015,40.732586,-73.998283,171,Macdougal Street,Greenwich Village,New York,New York,NY,United States,US,USA,10011,1,1,1,10
+MAC000508,40.735218,-73.997879,73,West 11th Street,Greenwich Village,New York,New York,NY,United States,US,USA,10011,1,3,4,20
+MAC000949,40.735256,-74.000320,32,Greenwich Avenue,Greenwich Village,New York,New York,NY,United States,US,USA,10011,1,0,0,5
+MAC004133,40.735535,-73.994568,6,West 13th Street,Greenwich Village,New York,New York,NY,United States,US,USA,10011,1,0,0,5
+MAC002025,40.737728,-73.999870,175,West 13th Street,Greenwich Village,New York,New York,NY,United States,US,USA,10011,1,1,2,10
+MAC000783,40.739147,-74.002640,122,Greenwich Avenue,Greenwich Village,New York,New York,NY,United States,US,USA,10011,1,1,2,10
+MAC001077,40.727123,-73.996483,207,Mercer Street,Greenwich Village,New York,New York,NY,United States,US,USA,10012,1,4,5,25
+MAC000020,40.727432,-73.993935,6,Great Jones Street,Greenwich Village,New York,New York,NY,United States,US,USA,10012,1,3,4,20
+MAC001451,40.728989,-73.998161,550,Laguardia Place,Greenwich Village,New York,New York,NY,United States,US,USA,10012,1,3,4,20
+MAC003315,40.730362,-73.999115,250,Sullivan Street,Greenwich Village,New York,New York,NY,United States,US,USA,10012,1,2,2,15
+MAC002464,40.727718,-74.011391,"",West Street Service Road,Greenwich Village,New York,New York,NY,United States,US,USA,10014,1,2,2,15
+MAC004361,40.730408,-74.002205,11,Carmine Street,Greenwich Village,New York,New York,NY,United States,US,USA,10014,1,3,3,20
+MAC003814,40.731697,-74.006866,91,Barrow Street,Greenwich Village,New York,New York,NY,United States,US,USA,10014,1,4,5,25
+MAC001946,40.732895,-74.007393,132,Christopher Street,Greenwich Village,New York,New York,NY,United States,US,USA,10014,1,0,1,5
+MAC004311,40.733986,-74.002899,226,West 4th Street,Greenwich Village,New York,New York,NY,United States,US,USA,10014,1,1,2,10
+MAC003324,40.735325,-74.004776,87,Perry Street,Greenwich Village,New York,New York,NY,United States,US,USA,10014,1,4,4,25
+MAC002993,40.735901,-74.000908,1,Perry Street,Greenwich Village,New York,New York,NY,United States,US,USA,10014,1,3,3,20
+MAC002530,40.736164,-74.008553,142,Bank Street,Greenwich Village,New York,New York,NY,United States,US,USA,10014,1,2,3,15
+MAC001765,40.736488,-74.006180,99,Bank Street,Greenwich Village,New York,New York,NY,United States,US,USA,10014,1,3,4,20
+MAC004576,40.739201,-74.008064,802,Washington Street,Greenwich Village,New York,New York,NY,United States,US,USA,10014,1,4,4,25
+MAC004280,40.739441,-74.004791,1,Gansevoort Street,Greenwich Village,New York,New York,NY,United States,US,USA,10014,1,1,2,10
+MAC000797,40.819698,-73.952057,502,West 136th Street,Hamilton Heights,New York,New York,NY,United States,US,USA,10031,1,2,3,15
+MAC000919,40.726334,-74.050377,183,Brunswick Street,Hamilton Park,Jersey City,Hudson,NJ,United States,US,USA,07302,1,2,2,15
+MAC004195,40.719017,-74.033951,210,Hudson Street,Harborside,Jersey City,Hudson,NJ,United States,US,USA,07311,1,4,4,25
+MAC004843,40.745796,-74.056877,137,Sherman Place,Hudson City,Jersey City,Hudson,NJ,United States,US,USA,07307,1,0,0,5
+MAC003795,40.711094,-74.078819,363,Martin Luther King Junior Drive,Jackson Hill-North,Jersey City,Hudson,NJ,United States,US,USA,07305,1,1,2,10
+MAC000322,40.730698,-74.063301,91,Sip Avenue,Journal Square,Jersey City,Hudson,NJ,United States,US,USA,07306,1,3,3,20
+MAC005513,40.733742,-74.062653,73,Van Reipen Avenue,Journal Square,Jersey City,Hudson,NJ,United States,US,USA,07306,1,4,4,25
+MAC000404,40.734932,-74.059639,678,Newark Avenue,Journal Square,Jersey City,Hudson,NJ,United States,US,USA,07306,1,2,3,15
+MAC005031,40.711140,-74.055496,265,Johnston Avenue,Lafayette,Jersey City,Hudson,NJ,United States,US,USA,07304,1,3,4,20
+MAC003322,40.713436,-74.062828,121,Lafayette Street,Lafayette,Jersey City,Hudson,NJ,United States,US,USA,07304,1,3,3,20
+MAC005335,40.714317,-74.066513,14,Berry Lane,Lafayette,Jersey City,Hudson,NJ,United States,US,USA,07304,1,4,5,25
+MAC002200,40.766659,-73.953285,500,East 72nd Street,Lenox Hill,New York,New York,NY,United States,US,USA,10021,1,1,2,10
+MAC004833,40.768559,-73.958527,1357,2nd Avenue,Lenox Hill,New York,New York,NY,United States,US,USA,10021,1,3,4,20
+MAC000461,40.768761,-73.961304,1213,3rd Avenue,Lenox Hill,New York,New York,NY,United States,US,USA,10021,1,4,4,25
+MAC003498,40.768951,-73.954651,401,East 74th Street,Lenox Hill,New York,New York,NY,United States,US,USA,10021,1,0,1,5
+MAC002745,40.770111,-73.960342,1250,3rd Avenue,Lenox Hill,New York,New York,NY,United States,US,USA,10021,1,0,1,5
+MAC005249,40.771111,-73.957794,234,East 75th Street,Lenox Hill,New York,New York,NY,United States,US,USA,10021,1,2,2,15
+MAC000895,40.770790,-73.988503,517,West 59th Street,Lincoln Square,New York,New York,NY,United States,US,USA,10019,1,1,2,10
+MAC003932,40.771904,-73.991112,625,West 59th Street,Lincoln Square,New York,New York,NY,United States,US,USA,10019,1,1,1,10
+MAC000692,40.769337,-73.982224,1841,Broadway,Lincoln Square,New York,New York,NY,United States,US,USA,10023,1,2,3,15
+MAC002448,40.771580,-73.982628,40,Sesame Street,Lincoln Square,New York,New York,NY,United States,US,USA,10023,1,1,2,10
+MAC004496,40.774494,-73.984642,120,Amsterdam Avenue,Lincoln Square,New York,New York,NY,United States,US,USA,10023,1,2,3,15
+MAC002452,40.775059,-73.983086,129,West 67th Street,Lincoln Square,New York,New York,NY,United States,US,USA,10023,1,4,4,25
+MAC003071,40.777092,-73.979027,249,Columbus Avenue,Lincoln Square,New York,New York,NY,United States,US,USA,10023,1,3,4,20
+MAC005493,40.777466,-73.983002,201,West 70th Street,Lincoln Square,New York,New York,NY,United States,US,USA,10023,1,1,2,10
+MAC001059,40.778599,-73.977516,54,West 74th Street,Lincoln Square,New York,New York,NY,United States,US,USA,10023,1,3,4,20
+MAC003331,40.779606,-73.980896,280,Amsterdam Avenue,Lincoln Square,New York,New York,NY,United States,US,USA,10023,1,3,3,20
+MAC001815,40.780533,-73.985588,1,Riverside Drive,Lincoln Square,New York,New York,NY,United States,US,USA,10023,1,2,2,15
+MAC002257,40.775158,-73.989189,"",Thelonius Monk Circle,Lincoln Square,New York,New York,NY,United States,US,USA,10069,1,2,2,15
+MAC001788,40.777672,-73.988739,160,Riverside Boulevard,Lincoln Square,New York,New York,NY,United States,US,USA,10069,1,4,4,25
+MAC003697,40.718864,-73.995926,213,Grand Street,Little Italy,New York,New York,NY,United States,US,USA,10013,1,3,3,20
+MAC002050,40.741398,-73.937553,3002,48th Avenue,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,0,1,5
+MAC004143,40.742161,-73.956772,5101,5th Street,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,1,1,10
+MAC001832,40.742279,-73.954025,5011,Vernon Boulevard,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,0,0,5
+MAC002753,40.742455,-73.948853,2102,49th Avenue,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,0,1,5
+MAC001220,40.743027,-73.935333,3102,47th Avenue,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,2,2,15
+MAC001089,40.743259,-73.935753,4502,31st Street,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,2,3,15
+MAC002700,40.744171,-73.940956,2616,Skillman Avenue,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,3,3,20
+MAC004743,40.744923,-73.953362,4718,Vernon Boulevard,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,0,0,5
+MAC003523,40.745171,-73.947403,2201,Jackson Avenue,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,4,4,25
+MAC001044,40.746895,-73.948929,1101,45th Road,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,2,2,15
+MAC002511,40.747208,-73.954391,529,46th Avenue,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,0,0,5
+MAC001800,40.747360,-73.943756,2314,44th Drive,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,4,5,25
+MAC004792,40.747864,-73.945854,2145,44th Drive,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,0,1,5
+MAC000639,40.748821,-73.941109,4257,27th Street,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,1,2,10
+MAC001700,40.749676,-73.952141,4429,9th Street,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,0,0,5
+MAC004014,40.750286,-73.945992,4310,21st Street,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,1,1,10
+MAC003923,40.751064,-73.937889,4111,28th Street,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,2,3,15
+MAC003147,40.751163,-73.940704,2411,Queens Plaza North,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,4,4,25
+MAC003099,40.751854,-73.933548,"","",Long Island City,New York,Queens,NY,United States,US,USA,11101,1,2,2,15
+MAC000539,40.752388,-73.947525,4229,11th Street,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,2,3,15
+MAC001277,40.752399,-73.940094,4102,24th Street,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,2,3,15
+MAC002250,40.753094,-73.928177,3701,35th Street,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,4,5,25
+MAC003171,40.753326,-73.943069,4150,21st Street,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,3,3,20
+MAC000100,40.753613,-73.938187,2411,40th Avenue,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,4,5,25
+MAC001950,40.754738,-73.933807,2817,38th Avenue,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,2,2,15
+MAC001628,40.755241,-73.948479,4114,Vernon Boulevard,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,2,2,15
+MAC002662,40.756790,-73.921867,3401,38th Street,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,0,0,5
+MAC003325,40.757462,-73.945267,815,40th Avenue,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,2,2,15
+MAC002527,40.757626,-73.938950,3744,21st Street,Long Island City,New York,Queens,NY,United States,US,USA,11101,1,2,2,15
+MAC003703,40.744595,-73.956184,495,48th Avenue,Long Island City,New York,Queens,NY,United States,US,USA,11109,1,2,3,15
+MAC005168,40.744717,-73.958008,4809,Center Boulevard,Long Island City,New York,Queens,NY,United States,US,USA,11109,1,0,0,5
+MAC004687,40.745213,-73.957512,4731,Center Boulevard,Long Island City,New York,Queens,NY,United States,US,USA,11109,1,4,4,25
+MAC004269,40.710819,-73.994186,166,Market Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,2,2,15
+MAC001437,40.711754,-73.992149,45,Pike Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,4,4,25
+MAC002388,40.712261,-73.979492,447,Cherry Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,3,4,20
+MAC001591,40.712845,-73.987595,227,Madison Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,4,4,25
+MAC002348,40.713100,-73.984756,305,Madison Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,2,2,15
+MAC002379,40.714085,-73.992973,2,Pike Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,3,3,20
+MAC004739,40.714172,-73.981621,327,Henry Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,2,2,15
+MAC003124,40.714439,-73.990341,26,Canal Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,1,1,10
+MAC002833,40.715546,-73.986961,175,Clinton Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,4,5,25
+MAC002933,40.715858,-73.994102,36,Forsyth Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,2,2,15
+MAC002259,40.716080,-73.991859,38,Allen Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,3,4,20
+MAC004631,40.716278,-73.982635,31,Willett Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,0,1,5
+MAC002759,40.717098,-73.980217,71,Columbia Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,4,4,25
+MAC005316,40.717194,-73.987991,65,Norfolk Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,2,3,15
+MAC004155,40.717911,-73.976234,293,Stanton Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,3,3,20
+MAC002158,40.718437,-73.982979,203,Rivington Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,3,4,20
+MAC001528,40.719025,-73.992516,110,Forsyth Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,0,0,5
+MAC002796,40.719444,-73.991447,53,Delancey Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,0,1,5
+MAC005398,40.719509,-73.982109,219,Stanton Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,4,5,25
+MAC004570,40.720257,-73.989967,139,Allen Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,4,4,25
+MAC002978,40.720631,-73.985237,164,Suffolk Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,2,3,15
+MAC000411,40.720890,-73.986641,127,Stanton Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,2,3,15
+MAC002230,40.721302,-73.992401,17,Rivington Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,1,2,10
+MAC005219,40.722023,-73.989128,189,Allen Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,1,1,10
+MAC002842,40.722485,-73.991913,19,Stanton Street,Lower East Side,New York,New York,NY,United States,US,USA,10002,1,0,1,5
+MAC004791,40.708649,-74.002739,299,Pearl Street,Lower East Side,New York,New York,NY,United States,US,USA,10038,1,4,5,25
+MAC005184,40.709644,-74.006561,100,Fulton Street,Lower East Side,New York,New York,NY,United States,US,USA,10038,1,1,2,10
+MAC002241,40.710915,-73.996651,78,Catherine Street,Lower East Side,New York,New York,NY,United States,US,USA,10038,1,0,1,5
+MAC004259,40.711010,-74.000496,5,Saint James Place,Lower East Side,New York,New York,NY,United States,US,USA,10038,1,0,1,5
+MAC002041,40.711193,-74.005318,12,Spruce Street,Lower East Side,New York,New York,NY,United States,US,USA,10038,1,1,2,10
+MAC001322,40.711880,-74.006226,39,Park Row,Lower East Side,New York,New York,NY,United States,US,USA,10038,1,4,5,25
+MAC000167,40.794983,-73.964653,55,West 100th Street,Manhattan Valley,New York,New York,NY,United States,US,USA,10025,1,1,2,10
+MAC002862,40.797028,-73.964478,850,Columbus Avenue,Manhattan Valley,New York,New York,NY,United States,US,USA,10025,1,2,2,15
+MAC003196,40.798336,-73.960709,36,West 106th Street,Manhattan Valley,New York,New York,NY,United States,US,USA,10025,1,2,2,15
+MAC000501,40.799259,-73.966965,201,West 104th Street,Manhattan Valley,New York,New York,NY,United States,US,USA,10025,1,4,4,25
+MAC005014,40.799740,-73.961945,70,West 107th Street,Manhattan Valley,New York,New York,NY,United States,US,USA,10025,1,0,1,5
+MAC005260,40.800705,-73.966339,203,West 106th Street,Manhattan Valley,New York,New York,NY,United States,US,USA,10025,1,2,3,15
+MAC002351,40.724270,-74.034012,2,6th Street,Metroplaza,Jersey City,Hudson,NJ,United States,US,USA,07310,1,1,1,10
+MAC004562,40.749985,-73.968979,777,United Nations Plaza,Midtown East,New York,New York,NY,United States,US,USA,10017,1,0,1,5
+MAC000645,40.750221,-73.971046,309,East 43rd Street,Midtown East,New York,New York,NY,United States,US,USA,10017,1,0,0,5
+MAC005336,40.752354,-73.968407,327,East 47th Street,Midtown East,New York,New York,NY,United States,US,USA,10017,1,0,0,5
+MAC000431,40.752411,-73.972366,210,East 45th Street,Midtown East,New York,New York,NY,United States,US,USA,10017,1,2,2,15
+MAC002366,40.753494,-73.971085,225,East 47th Street,Midtown East,New York,New York,NY,United States,US,USA,10017,1,2,2,15
+MAC003224,40.754890,-73.972435,160,East 48th Street,Midtown East,New York,New York,NY,United States,US,USA,10017,1,0,1,5
+MAC004426,40.746136,-73.988602,1200,Broadway,Midtown South,New York,New York,NY,United States,US,USA,10001,1,1,1,10
+MAC000538,40.746696,-73.993988,200,West 27th Street,Midtown South,New York,New York,NY,United States,US,USA,10001,1,4,4,25
+MAC003218,40.748829,-73.988495,901,Avenue of the Americas,Midtown South,New York,New York,NY,United States,US,USA,10001,1,0,0,5
+MAC004308,40.748844,-73.991402,157,West 31st Street,Midtown South,New York,New York,NY,United States,US,USA,10001,1,4,4,25
+MAC004253,40.750736,-73.994522,441,8th Avenue,Midtown South,New York,New York,NY,United States,US,USA,10001,1,0,0,5
+MAC005558,40.744877,-73.995453,200,West 24th Street,Midtown South,New York,New York,NY,United States,US,USA,10011,1,4,5,25
+MAC000007,40.744457,-73.982948,100,East 30th Street,Midtown South,New York,New York,NY,United States,US,USA,10016,1,3,3,20
+MAC001152,40.745132,-73.986969,261,5th Avenue,Midtown South,New York,New York,NY,United States,US,USA,10016,1,3,4,20
+MAC001086,40.745461,-73.981483,114,East 32nd Street,Midtown South,New York,New York,NY,United States,US,USA,10016,1,1,1,10
+MAC001000,40.747673,-73.984779,2,East 33rd Street,Midtown South,New York,New York,NY,United States,US,USA,10016,1,2,3,15
+MAC002125,40.752262,-73.980034,24,East 41st Street,Midtown,New York,New York,NY,United States,US,USA,10017,1,4,5,25
+MAC003086,40.753963,-73.979958,1,East 43rd Street,Midtown,New York,New York,NY,United States,US,USA,10017,1,4,5,25
+MAC003265,40.754936,-73.974495,100,East 47th Street,Midtown,New York,New York,NY,United States,US,USA,10017,1,4,4,25
+MAC001410,40.756989,-73.977409,6,East 48th Street,Midtown,New York,New York,NY,United States,US,USA,10017,1,1,1,10
+MAC004423,40.750507,-73.983566,2,West 37th Street,Midtown,New York,New York,NY,United States,US,USA,10018,1,4,5,25
+MAC004750,40.752510,-73.982544,8,West 40th Street,Midtown,New York,New York,NY,United States,US,USA,10018,1,1,2,10
+MAC002397,40.760292,-73.977470,21,West 52nd Street,Midtown,New York,New York,NY,United States,US,USA,10019,1,3,4,20
+MAC000762,40.760700,-73.984528,1606,Broadway,Midtown,New York,New York,NY,United States,US,USA,10019,1,1,2,10
+MAC005544,40.761620,-73.980621,123,West 52nd Street,Midtown,New York,New York,NY,United States,US,USA,10019,1,4,5,25
+MAC000642,40.762310,-73.983475,1658,Broadway,Midtown,New York,New York,NY,United States,US,USA,10019,1,2,2,15
+MAC001259,40.763222,-73.978561,101,West 55th Street,Midtown,New York,New York,NY,United States,US,USA,10019,1,1,2,10
+MAC001380,40.763470,-73.982803,1700,Broadway,Midtown,New York,New York,NY,United States,US,USA,10019,1,4,5,25
+MAC003375,40.763683,-73.985100,875,8th Avenue,Midtown,New York,New York,NY,United States,US,USA,10019,1,2,3,15
+MAC003596,40.764267,-73.973869,1,Grand Army Plaza,Midtown,New York,New York,NY,United States,US,USA,10019,1,0,0,5
+MAC001999,40.765224,-73.982056,1745,Broadway,Midtown,New York,New York,NY,United States,US,USA,10019,1,1,2,10
+MAC004831,40.766682,-73.979233,925,7th Avenue,Midtown,New York,New York,NY,United States,US,USA,10019,1,1,1,10
+MAC001567,40.757195,-73.972069,122,East 51st Street,Midtown,New York,New York,NY,United States,US,USA,10022,1,1,2,10
+MAC004569,40.759621,-73.973930,31,East 53rd Street,Midtown,New York,New York,NY,United States,US,USA,10022,1,4,4,25
+MAC004020,40.761383,-73.972290,58,East 56th Street,Midtown,New York,New York,NY,United States,US,USA,10022,1,0,0,5
+MAC002318,40.763134,-73.972282,18,East 58th Street,Midtown,New York,New York,NY,United States,US,USA,10022,1,0,1,5
+MAC002802,40.763477,-73.971146,35,East 59th Street,Midtown,New York,New York,NY,United States,US,USA,10022,1,4,4,25
+MAC004420,40.754955,-73.980392,1,West 44th Street,Midtown,New York,New York,NY,United States,US,USA,10036,1,0,0,5
+MAC004853,40.755066,-73.984619,100,West 42nd Street,Midtown,New York,New York,NY,United States,US,USA,10036,1,0,1,5
+MAC004624,40.755165,-73.986618,1456,Broadway,Midtown,New York,New York,NY,United States,US,USA,10036,1,4,4,25
+MAC002084,40.756332,-73.989708,260,West 41st Street,Midtown,New York,New York,NY,United States,US,USA,10036,1,4,5,25
+MAC001886,40.757099,-73.983528,102,West 45th Street,Midtown,New York,New York,NY,United States,US,USA,10036,1,4,4,25
+MAC003445,40.758499,-73.982933,133,West 47th Street,Midtown,New York,New York,NY,United States,US,USA,10036,1,1,2,10
+MAC005323,40.802132,-73.961861,401,West 110th Street,Morningside Heights,New York,New York,NY,United States,US,USA,10025,1,1,1,10
+MAC000122,40.804478,-73.967415,610,West 110th Street,Morningside Heights,New York,New York,NY,United States,US,USA,10025,1,4,5,25
+MAC002557,40.805908,-73.964897,562,West 113th Street,Morningside Heights,New York,New York,NY,United States,US,USA,10025,1,0,1,5
+MAC000562,40.806633,-73.960579,435,West 116th Street,Morningside Heights,New York,New York,NY,United States,US,USA,10027,1,2,3,15
+MAC000883,40.808254,-73.964455,607,West 116th Street,Morningside Heights,New York,New York,NY,United States,US,USA,10027,1,0,1,5
+MAC001892,40.808578,-73.959778,1195,Amsterdam Avenue,Morningside Heights,New York,New York,NY,United States,US,USA,10027,1,4,5,25
+MAC000977,40.809902,-73.955078,97,Morningside Avenue,Morningside Heights,New York,New York,NY,United States,US,USA,10027,1,2,3,15
+MAC001655,40.810760,-73.962616,600,Reinhold Niebuhr Place,Morningside Heights,New York,New York,NY,United States,US,USA,10027,1,4,4,25
+MAC002771,40.812229,-73.960960,3081,Broadway,Morningside Heights,New York,New York,NY,United States,US,USA,10027,1,0,0,5
+MAC001002,40.813637,-73.956558,501,West 125th Street,Morningside Heights,New York,New York,NY,United States,US,USA,10027,1,4,5,25
+MAC003830,40.814548,-73.953659,475,West 129th Street,Morningside Heights,New York,New York,NY,United States,US,USA,10027,1,4,5,25
+MAC004971,40.814556,-73.958984,3150,Broadway,Morningside Heights,New York,New York,NY,United States,US,USA,10027,1,1,2,10
+MAC000406,40.816303,-73.954147,1470,Amsterdam Avenue,Morningside Heights,New York,New York,NY,United States,US,USA,10027,1,3,4,20
+MAC002335,40.818291,-73.951050,141,Convent Avenue,Morningside Heights,New York,New York,NY,United States,US,USA,10027,1,0,1,5
+MAC000468,40.818329,-73.960152,2282,12th Avenue,Morningside Heights,New York,New York,NY,United States,US,USA,10027,1,3,3,20
+MAC000699,40.747505,-73.978905,267,Lexington Avenue,Murray Hill,New York,New York,NY,United States,US,USA,10016,1,2,3,15
+MAC001714,40.749001,-73.976151,158,East 39th Street,Murray Hill,New York,New York,NY,United States,US,USA,10016,1,3,4,20
+MAC005087,40.751728,-73.977791,125,Park Avenue,Murray Hill,New York,New York,NY,United States,US,USA,10017,1,4,5,25
+MAC000679,40.727619,-74.034370,540,Washington Boulevard,Newport,Jersey City,Hudson,NJ,United States,US,USA,07310,1,2,2,15
+MAC005456,40.729389,-74.034370,40,Newport Parkway,Newport,Jersey City,Hudson,NJ,United States,US,USA,07310,1,3,4,20
+MAC004491,40.725060,-73.990669,29,East 2nd Street,NoHo,New York,New York,NY,United States,US,USA,10003,1,4,4,25
+MAC002211,40.722130,-73.983704,194,East 2nd Street,NoHo,New York,New York,NY,United States,US,USA,10009,1,2,2,15
+MAC003668,40.723202,-73.986267,137,East 2nd Street,NoHo,New York,New York,NY,United States,US,USA,10009,1,2,3,15
+MAC004834,40.723183,-73.994835,242,Mott Street,Nolita,New York,New York,NY,United States,US,USA,10012,1,1,2,10
+MAC000096,40.724567,-73.995720,293,Lafayette Street,Nolita,New York,New York,NY,United States,US,USA,10012,1,0,1,5
+MAC004163,40.734882,-74.050842,12,Beacon Avenue,Palisade,Jersey City,Hudson,NJ,United States,US,USA,07306,1,4,5,25
+MAC004344,40.712387,-74.036545,1,Greene Street,Palus Hook,Jersey City,Hudson,NJ,United States,US,USA,07302,1,3,4,20
+MAC001883,40.714096,-74.033562,8,Sussex Street,Palus Hook,Jersey City,Hudson,NJ,United States,US,USA,07302,1,4,4,25
+MAC004399,40.714603,-74.042915,216,Marin Boulevard,Palus Hook,Jersey City,Hudson,NJ,United States,US,USA,07302,1,1,1,10
+MAC000641,40.695419,-73.902931,1612,Norman Street,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,1,1,10
+MAC001737,40.697441,-73.906563,1612,Hancock Street,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,4,4,25
+MAC004367,40.698231,-73.903008,975,Cypress Avenue,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,1,1,10
+MAC001822,40.699062,-73.900482,1812,Stephen Street,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,1,2,10
+MAC001996,40.699295,-73.898178,7320,Forest Avenue,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,2,2,15
+MAC003428,40.699936,-73.901894,1811,Centre Street,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,2,2,15
+MAC004286,40.700710,-73.907455,1683,Madison Street,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,1,1,10
+MAC004675,40.701416,-73.908394,712,Cypress Avenue,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,4,4,25
+MAC003764,40.701832,-73.906303,1746,Madison Street,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,1,1,10
+MAC001358,40.703892,-73.904213,1896,Madison Street,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,2,2,15
+MAC002429,40.704071,-73.907372,675,Onderdonk Avenue,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,2,2,15
+MAC001908,40.704884,-73.910332,1812,Menahan Street,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,3,3,20
+MAC005023,40.705334,-73.902748,2012,Madison Street,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,4,4,25
+MAC005094,40.705696,-73.913025,1740,Harman Street,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,2,2,15
+MAC002437,40.705791,-73.909409,1862,Menahan Street,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,2,2,15
+MAC005267,40.706890,-73.906197,618,Fairview Avenue,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,4,4,25
+MAC001106,40.707970,-73.910950,466,Woodward Avenue,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,1,1,10
+MAC003185,40.708591,-73.915009,315,Onderdonk Avenue,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,2,3,15
+MAC001459,40.709518,-73.907974,2041,Greene Avenue,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,4,4,25
+MAC004527,40.709949,-73.917046,1852,Willoughby Avenue,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,4,4,25
+MAC005408,40.710045,-73.911003,2002,Stanhope Street,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,0,0,5
+MAC001503,40.712814,-73.919182,34,Woodward Avenue,Ridgewood,New York,Queens,NY,United States,US,USA,11385,1,3,3,20
+MAC000353,40.725216,-74.067787,6,Foye Place,Saint Aedens,Jersey City,Hudson,NJ,United States,US,USA,07306,1,4,4,25
+MAC001189,40.731354,-74.057968,537,Pavonia Avenue,Saint Joes,Jersey City,Hudson,NJ,United States,US,USA,07306,1,2,3,15
+MAC000027,40.724815,-74.078842,172,Kensington Avenue,Saint Pete,Jersey City,Hudson,NJ,United States,US,USA,07306,1,1,2,10
+MAC001468,40.727688,-74.071243,90,Glenwood Avenue,Saint Pete,Jersey City,Hudson,NJ,United States,US,USA,07306,1,0,0,5
+MAC001133,40.722126,-73.997292,226,Lafayette Street,SoHo,New York,New York,NY,United States,US,USA,10012,1,3,4,20
+MAC002805,40.723583,-73.999451,103,Mercer Street,SoHo,New York,New York,NY,United States,US,USA,10012,1,4,4,25
+MAC002224,40.724911,-74.001633,414,West Broadway,SoHo,New York,New York,NY,United States,US,USA,10012,1,0,1,5
+MAC001476,40.726334,-74.000420,464,West Broadway,SoHo,New York,New York,NY,United States,US,USA,10012,1,3,4,20
+MAC004630,40.727043,-74.002930,31,Macdougal Street,SoHo,New York,New York,NY,United States,US,USA,10012,1,3,4,20
+MAC003403,40.719109,-73.999680,5,Howard Street,SoHo,New York,New York,NY,United States,US,USA,10013,1,2,3,15
+MAC005314,40.721779,-74.002518,75,Grand Street,SoHo,New York,New York,NY,United States,US,USA,10013,1,2,2,15
+MAC001216,40.722431,-74.006042,417,Canal Street,SoHo,New York,New York,NY,United States,US,USA,10013,1,2,3,15
+MAC004105,40.724297,-74.004738,121,Avenue of the Americas,SoHo,New York,New York,NY,United States,US,USA,10013,1,2,3,15
+MAC000747,40.728008,-74.008743,561,Greenwich Street,SoHo,New York,New York,NY,United States,US,USA,10014,1,3,3,20
+MAC003450,40.730755,-73.974190,309,Avenue C,Stuyvesant Town,New York,New York,NY,United States,US,USA,10009,1,3,4,20
+MAC000391,40.732216,-73.981705,266,1st Avenue,Stuyvesant Town,New York,New York,NY,United States,US,USA,10009,1,2,3,15
+MAC001499,40.733112,-73.975777,540,East 20th Street,Stuyvesant Town,New York,New York,NY,United States,US,USA,10009,1,2,3,15
+MAC004511,40.733940,-73.980446,310,1st Avenue,Stuyvesant Town,New York,New York,NY,United States,US,USA,10009,1,0,0,5
+MAC001868,40.736485,-73.977959,390,East 23rd Street,Stuyvesant Town,New York,New York,NY,United States,US,USA,10010,1,3,4,20
+MAC002134,40.737839,-73.976852,425,East 25th Street,Stuyvesant Town,New York,New York,NY,United States,US,USA,10010,1,4,4,25
+MAC000728,40.739353,-73.976776,462,1st Avenue,Stuyvesant Town,New York,New York,NY,United States,US,USA,10016,1,4,5,25
+MAC005490,40.741447,-73.975220,516,1st Avenue,Stuyvesant Town,New York,New York,NY,United States,US,USA,10016,1,0,1,5
+MAC003689,40.758892,-73.962212,401,East 58th Street,Sutton Place,New York,New York,NY,United States,US,USA,10022,1,4,4,25
+MAC000607,40.759071,-73.959244,"",Koch Bridge Pedestrian & Bike Path,Sutton Place,New York,New York,NY,United States,US,USA,10022,1,3,3,20
+MAC000594,40.759171,-73.962875,353,East 58th Street,Sutton Place,New York,New York,NY,United States,US,USA,10022,1,3,4,20
+MAC000486,40.761055,-73.967346,198,East 58th Street,Sutton Place,New York,New York,NY,United States,US,USA,10022,1,4,4,25
+MAC002949,40.761185,-73.960831,1123,1st Avenue,Sutton Place,New York,New York,NY,United States,US,USA,10065,1,2,3,15
+MAC000295,40.763165,-73.965401,1045,3rd Avenue,Sutton Place,New York,New York,NY,United States,US,USA,10065,1,3,3,20
+MAC002272,40.763924,-73.964455,200,East 63rd Street,Sutton Place,New York,New York,NY,United States,US,USA,10065,1,4,5,25
+MAC001621,40.764717,-73.962448,220,East 65th Street,Sutton Place,New York,New York,NY,United States,US,USA,10065,1,4,5,25
+MAC002944,40.764931,-73.958092,1245,1st Avenue,Sutton Place,New York,New York,NY,United States,US,USA,10065,1,3,4,20
+MAC002864,40.766979,-73.961983,205,East 68th Street,Sutton Place,New York,New York,NY,United States,US,USA,10065,1,0,1,5
+MAC001858,40.714359,-74.005142,35,Reade Street,Tribeca,New York,New York,NY,United States,US,USA,10007,1,3,4,20
+MAC003371,40.716354,-74.009186,13,Hudson Street,Tribeca,New York,New York,NY,United States,US,USA,10013,1,4,5,25
+MAC003484,40.717434,-74.010422,187,Duane Street,Tribeca,New York,New York,NY,United States,US,USA,10013,1,1,2,10
+MAC000770,40.717583,-74.005585,65,Leonard Street,Tribeca,New York,New York,NY,United States,US,USA,10013,1,4,5,25
+MAC005330,40.718662,-74.009125,2,Harrison Street,Tribeca,New York,New York,NY,United States,US,USA,10013,1,3,3,20
+MAC004257,40.718910,-74.006683,130,Franklin Street,Tribeca,New York,New York,NY,United States,US,USA,10013,1,3,4,20
+MAC005543,40.719311,-74.002396,65,Lispenard Street,Tribeca,New York,New York,NY,United States,US,USA,10013,1,1,1,10
+MAC001843,40.720093,-74.009926,71,North Moore Street,Tribeca,New York,New York,NY,United States,US,USA,10013,1,2,3,15
+MAC003540,40.721924,-74.007690,38,Laight Street,Tribeca,New York,New York,NY,United States,US,USA,10013,1,0,0,5
+MAC005065,40.724098,-74.009651,131,Watts Street,Tribeca,New York,New York,NY,United States,US,USA,10013,1,4,5,25
+MAC000580,40.744152,-73.971184,"",Ferry Terminal,Tudor City,New York,New York,NY,United States,US,USA,10016,1,4,4,25
+MAC004037,40.747772,-73.973251,300,East 39th Street,Tudor City,New York,New York,NY,United States,US,USA,10016,1,1,1,10
+MAC005536,40.754589,-73.965912,351,East 51st Street,Turtle Bay,New York,New York,NY,United States,US,USA,10022,1,2,3,15
+MAC004201,40.755306,-73.967613,306,East 51st Street,Turtle Bay,New York,New York,NY,United States,US,USA,10022,1,1,1,10
+MAC000707,40.757870,-73.965935,301,East 55th Street,Turtle Bay,New York,New York,NY,United States,US,USA,10022,1,4,4,25
+MAC000078,40.757973,-73.970070,153,East 53rd Street,Turtle Bay,New York,New York,NY,United States,US,USA,10022,1,4,4,25
+MAC003834,40.759075,-73.966843,222,East 56th Street,Turtle Bay,New York,New York,NY,United States,US,USA,10022,1,3,3,20
+MAC003576,40.771225,-73.964119,56,East 72nd Street,Upper East Side,New York,New York,NY,United States,US,USA,10021,1,2,2,15
+MAC004131,40.772823,-73.966766,912,5th Avenue,Upper East Side,New York,New York,NY,United States,US,USA,10021,1,3,4,20
+MAC003962,40.773869,-73.962357,56,East 76th Street,Upper East Side,New York,New York,NY,United States,US,USA,10021,1,0,1,5
+MAC003824,40.774757,-73.954353,247,East 81st Street,Upper East Side,New York,New York,NY,United States,US,USA,10028,1,0,1,5
+MAC005305,40.775723,-73.956635,176,East 81st Street,Upper East Side,New York,New York,NY,United States,US,USA,10028,1,2,2,15
+MAC003978,40.776768,-73.959106,101,East 81st Street,Upper East Side,New York,New York,NY,United States,US,USA,10028,1,4,5,25
+MAC000456,40.777790,-73.961044,1075,Madison Avenue,Upper East Side,New York,New York,NY,United States,US,USA,10028,1,0,0,5
+MAC005222,40.777962,-73.954079,205,East 85th Street,Upper East Side,New York,New York,NY,United States,US,USA,10028,1,2,3,15
+MAC003979,40.778683,-73.957748,100,East 84th Street,Upper East Side,New York,New York,NY,United States,US,USA,10028,1,1,1,10
+MAC002703,40.766273,-73.971519,811,5th Avenue,Upper East Side,New York,New York,NY,United States,US,USA,10065,1,4,5,25
+MAC001855,40.767799,-73.965881,109,East 67th Street,Upper East Side,New York,New York,NY,United States,US,USA,10065,1,1,1,10
+MAC005070,40.768124,-73.968597,22,East 66th Street,Upper East Side,New York,New York,NY,United States,US,USA,10065,1,4,4,25
+MAC000517,40.769135,-73.967110,33,East 68th Street,Upper East Side,New York,New York,NY,United States,US,USA,10065,1,0,1,5
+MAC003013,40.772747,-73.955780,271,East 78th Street,Upper East Side,New York,New York,NY,United States,US,USA,10075,1,0,1,5
+MAC002663,40.773094,-73.958542,179,East 77th Street,Upper East Side,New York,New York,NY,United States,US,USA,10075,1,2,3,15
+MAC003920,40.776218,-73.964294,969,5th Avenue,Upper East Side,New York,New York,NY,United States,US,USA,10075,1,4,5,25
+MAC005371,40.780159,-73.977287,102,West 76th Street,Upper West Side,New York,New York,NY,United States,US,USA,10023,1,4,5,25
+MAC002071,40.782837,-73.971519,2,West 82nd Street,Upper West Side,New York,New York,NY,United States,US,USA,10024,1,4,6,78
+MAC001207,40.782879,-73.978523,389,Amsterdam Avenue,Upper West Side,New York,New York,NY,United States,US,USA,10024,1,3,5,78
+MAC000570,40.783787,-73.981575,381,West End Avenue,Upper West Side,New York,New York,NY,United States,US,USA,10024,1,2,4,78
+MAC002638,40.784134,-73.983528,51,Riverside Drive,Upper West Side,New York,New York,NY,United States,US,USA,10024,1,0,2,94
+MAC002381,40.785038,-73.972832,66,West 84th Street,Upper West Side,New York,New York,NY,United States,US,USA,10024,1,3,5,86
+MAC002243,40.785290,-73.976768,461,Amsterdam Avenue,Upper West Side,New York,New York,NY,United States,US,USA,10024,1,3,5,90
+MAC002621,40.786686,-73.976715,208,West 84th Street,Upper West Side,New York,New York,NY,United States,US,USA,10024,1,3,5,88
+MAC001363,40.787243,-73.981194,103,Riverside Drive,Upper West Side,New York,New York,NY,United States,US,USA,10024,1,3,5,76
+MAC004770,40.788166,-73.970146,66,West 89th Street,Upper West Side,New York,New York,NY,United States,US,USA,10024,1,0,2,86
+MAC004448,40.788651,-73.975204,220,West 87th Street,Upper West Side,New York,New York,NY,United States,US,USA,10024,1,0,2,72
+MAC005051,40.789761,-73.977844,300,West 87th Street,Upper West Side,New York,New York,NY,United States,US,USA,10024,1,1,3,92
+MAC004029,40.790108,-73.972839,175,West 90th Street,Upper West Side,New York,New York,NY,United States,US,USA,10024,1,1,3,94
+MAC001857,40.791946,-73.968185,701,Columbus Avenue,Upper West Side,New York,New York,NY,United States,US,USA,10025,1,4,4,25
+MAC004351,40.792015,-73.973846,2473,Broadway,Upper West Side,New York,New York,NY,United States,US,USA,10025,1,1,1,10
+MAC000966,40.793133,-73.976715,194,Riverside Drive,Upper West Side,New York,New York,NY,United States,US,USA,10025,1,4,4,25
+MAC001036,40.793701,-73.971619,214,West 95th Street,Upper West Side,New York,New York,NY,United States,US,USA,10025,1,4,4,25
+MAC003358,40.794273,-73.973930,711,West End Avenue,Upper West Side,New York,New York,NY,United States,US,USA,10025,1,4,4,25
+MAC001274,40.797462,-73.970505,250,West 100th Street,Upper West Side,New York,New York,NY,United States,US,USA,10025,1,1,1,10
+MAC004849,40.801159,-73.970863,320,Riverside Drive,Upper West Side,New York,New York,NY,United States,US,USA,10025,1,3,4,20
+MAC003679,40.802193,-73.968178,953,West End Avenue,Upper West Side,New York,New York,NY,United States,US,USA,10025,1,1,1,10
+MAC000614,40.716599,-74.049385,339,Grand Street,Van Vorst Park,Jersey City,Hudson,NJ,United States,US,USA,07302,1,2,2,15
+MAC005232,40.721821,-74.050293,243,Christopher Columbus Drive,Village,Jersey City,Hudson,NJ,United States,US,USA,07302,1,1,2,10
+MAC001723,40.724163,-74.050720,141,Brunswick Street,Village,Jersey City,Hudson,NJ,United States,US,USA,07302,1,1,1,10
+MAC003942,40.843132,-73.942749,700,West 169th Street,Washington Heights,New York,New York,NY,United States,US,USA,10032,1,0,0,5
+MAC002514,40.744354,-74.044075,459,Palisade Avenue,Washington Village,Jersey City,Hudson,NJ,United States,US,USA,07307,1,3,4,20
+MAC003127,40.748737,-74.040413,14,Congress Street,Washington Village,Jersey City,Hudson,NJ,United States,US,USA,07307,1,3,4,20
+MAC000369,40.737553,-74.052223,74,Jefferson Avenue,Waverly,Jersey City,Hudson,NJ,United States,US,USA,07306,1,3,4,20
+MAC004655,40.742603,-74.051712,228,Central Avenue,Waverly,Jersey City,Hudson,NJ,United States,US,USA,07307,1,0,0,5
+MAC005172,40.735550,-74.046371,100,Hoboken Avenue,Waverly,Jersey City,Hudson,NJ,United States,US,USA,07310,1,3,3,20
+MAC005461,40.737740,-74.067001,47,Dey Street,West End,Jersey City,Hudson,NJ,United States,US,USA,07306,1,4,5,25
+MAC005022,40.718117,-74.083328,325,Union Street,West Side,Jersey City,Hudson,NJ,United States,US,USA,07304,1,2,2,15
+MAC002990,40.772346,-73.946640,605,East 82nd Street,Yorkville,New York,New York,NY,United States,US,USA,10028,1,0,0,5
+MAC000967,40.772892,-73.949913,450,East 81st Street,Yorkville,New York,New York,NY,United States,US,USA,10028,1,4,4,25
+MAC001241,40.775230,-73.944595,144,East End Avenue,Yorkville,New York,New York,NY,United States,US,USA,10028,1,3,4,20
+MAC004137,40.775425,-73.948036,446,East 85th Street,Yorkville,New York,New York,NY,United States,US,USA,10028,1,0,1,5
+MAC004788,40.775776,-73.950851,350,East 84th Street,Yorkville,New York,New York,NY,United States,US,USA,10028,1,4,4,25
+MAC002531,40.771351,-73.953400,1485,1st Avenue,Yorkville,New York,New York,NY,United States,US,USA,10075,1,1,1,10
+MAC004033,40.778152,-73.946411,438,East 89th Street,Yorkville,New York,New York,NY,United States,US,USA,10128,1,4,4,25
+MAC000275,40.778336,-73.948807,360,East 88th Street,Yorkville,New York,New York,NY,United States,US,USA,10128,1,1,1,10
+MAC002277,40.781715,-73.945847,1811,1st Avenue,Yorkville,New York,New York,NY,United States,US,USA,10128,1,4,5,25
+MAC001689,40.784012,-73.947258,1850,2nd Avenue,Yorkville,New York,New York,NY,United States,US,USA,10128,1,1,2,10
