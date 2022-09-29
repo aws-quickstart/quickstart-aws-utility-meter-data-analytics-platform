@@ -137,6 +137,7 @@ Resources:
                 - sagemaker:DeleteEndpointConfig
                 - sagemaker:DeleteEndpoint
                 - sagemaker:UpdateEndpoint
+                - sagemaker:AddTags
                 - sagemaker:ListTags
               Resource:
                 - !Sub "arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:training-job/*"
