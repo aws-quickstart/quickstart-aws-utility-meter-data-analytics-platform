@@ -1,7 +1,3 @@
-## Utility Meter Data Analytics on the AWS Cloud—Quick Start
+## [Defunct] Utility Meter Data Analytics on AWS
 
-For architectural details, step-by-step instructions, and customization options, see the [deployment guide](https://aws-quickstart.github.io/quickstart-aws-utility-meter-data-analytics-platform/).
-
-To post feedback, submit feature ideas, or report bugs, use the **Issues** section of this GitHub repo. 
-
-To submit code for this Quick Start, see the [AWS Quick Start Contributor's Kit](https://aws-quickstart.github.io/).
+This repository for Utility Meter Data Analytics is no longer maintained or supported. For the currently supported repository, refer to [Guidance for Meter Data Analytics on AWS](https://github.com/aws-solutions-library-samples/guidance-for-meter-data-analytics-on-aws).
